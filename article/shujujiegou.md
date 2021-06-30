@@ -440,6 +440,15 @@ q->front=q->rear;
 }
 }
 ```
+### 串
+
+有零个或多个字符组成的有限序列`S='a1a2a3a4a5....'`
+
+- 串的长度：串中字符的个数
+- 子串：串中任意个连续的字符串组成的子序列；
+- 串中的位置：该字节在串中的序号，子串在主串中的位置以子串的第一个字符在主串中的位置来表示
+- 空格串：有一个或多个空格组成的串
+- 空串
 
 ### 递归
 
@@ -692,11 +701,94 @@ return 0;
 - 无向图中连通且n个顶点n-1条边称为生成树。有向图中一顶点入度为0其余顶点入度为1的叫有向树。一个有向图由若干棵有向树构成生成森林。
 
 ### 图的存储结构
+
 - 邻接矩阵
 
 用两个数组来表示图，一个一维数组里储存着顶点的信息，一个二维数组储存着图中的边或弧的信息。
 
+>无向图的邻接矩阵是对称的
 
+>有向图的邻接矩阵可能是不对称的，顶点的度=顶点的出度+顶点的入度；
+
+
+```
+#define MVNum 100	//最大顶点数
+typedef char VerTexType;	//设顶点的数据类型为字符型
+typedef int ArcType;		//假设边的权值类型为整型
+typedef struct{
+VerTexType Vexs[MVNum];		//顶点数组
+ArcType arcs[MVNum][MVNum]	//邻接矩阵
+}AMGraph;	
+
+//在顶点数组中查找顶点
+int LocateVex(AMGraph G,VertexType u){
+//查找顶点u，返回下标
+int i;
+for (i=0;i<G.vexnum;++i){
+if(U==G.vexs[i]){
+return i;
+}
+}
+reruen -1;
+}
+status CreateUDN(AMGraph &G){
+//创建无向网G
+cin>>G.vexnum>>G.arcnum;	//输入总顶点数，总边数
+for(i=0;i<G.vexnum;++i)
+cin>>G.vexs[i];		//依次输入点的信息
+for(i=0;i<G.vexnum;++i)	//初始化邻接矩阵
+for (j=0;j<G.vexnum;++j)
+G.arcs[i][j]=MaxInt;	//边的权值均为最大值
+fof(k=0;k<G.arcnum;++k){	//构造邻接矩阵
+cin>>v1>>v2>>w;			//输入一条边所依附的顶点及边的权值
+i=LocateVex(G,v1);
+j=LocateVex(G,v2);	//确定v1和v2在G中的位置
+G.arcs[i][j]=w;		//边<v1,v2>的权值置为w
+G.arcs[j][i]=G.arcs[i][j];	//<v1,v2>的对称边<v2,v1>的权值为w
+}
+return 0;
+}
+
+```
+
+
+- 邻接表
+
+
+| |缺点|改进方法|
+|-|-|-|
+|有向图|求各结点的度困难|十字链表|
+|无向图|每条边都要存储两遍|邻接多重表|
+
+
+```
+typedef struct VNode{
+VerTexType data;	//顶点信息
+ArcNode *firstarc;	//指向第一条依附该顶点的边的指针
+}VNode，AdjList[MVNum];	//AdjList表示邻接表类型
+
+status CreateUDG(ALGragh &G){	//创建无向图G
+cin>>G.vexnum>>G.arcnum;	//输入图G的顶点，边个数
+for(int i=0;i<G.vexnum;++i){
+cin>>Gvertices[i].data;		//输入顶点值
+G.vertices[i].firsarc=NULL;	//初始化表头结点的指针域
+}
+for(k=0;k<G.arcnum;++k){	//输入各边
+cin>>v1>>v3;
+i=LocateVex(G,v1);
+j=LocateVex(G,v2);
+p1=new ArcNode;		//生成一个新的边结点*p1
+p1->adjvex=j;		//邻接点序号为j
+p1->nextarc=G.vertices[i].firstarc;
+G.vertices[i].firstarc=p1;;		//将新结点*p1插入顶点vi的边表头部
+p2=new ArcNode;		//生成另一个对称的新的边结点*p2
+p2->adjvex=i;		//邻接点序号为i
+p2->nextarc=G.vertices[j].firstarc;
+G.vertices[j].firstarc=p2;	//将新结点*p2插入顶点vj的边表头部
+}
+return OK;
+}
+```
 ## 遍历方法
 
 - 深度优先遍历
