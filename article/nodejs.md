@@ -7,6 +7,42 @@ catergories:
 
 # NodeJs
 
+## Node.js模块化开发
+
+Node.js规定一个Javascript文件就是一个模块，模块内部定义的变量和函数默认情况下外部无法得到。
+模块内部可以使用exports对象进行成员导出，使用require方法导入其他模块。
+
+### 模块成员导出
+
+```
+//a.js
+//在模块中定义变量
+let version=1.0;
+//模块中定义方法
+const sayHi=name=>`hello！${name}`	//es6新语法
+//向模块外部导出数据
+exports.version=version;
+exports.sayHi=sayHi;
+```
+
+### 模块成员的导入
+
+```
+//b.js
+//在b.js模块中导入模块a
+let a=require('./b.js');
+//输出b模块中的version变量
+console.log(a.version);
+//调用b模块中的sayHi方法
+console.log(a.sayHi('XiaoMing'));
+```
+模块成员导出的另一种方法
+```
+module.exports.version=version;
+module.exports.sayHi=sayHi;
+```
+exports是module.exports的别名，导出对象最终以module.exports为准；
+
 
 ## package.json文件的作用
 
@@ -54,6 +90,99 @@ require("find");
    5. 如没有，则查看该文件夹中的package.json中的main选项确定模块的入口文件
    6. 若都没有，则报错
 
+## 系统模块:Node运行环境提供的API
+
+### fs文件操作
+
+`const fs=require('fs');`
+
+读取文件内容:`fs.readFile('文件路径/文件名'[,'文件编码'],callback);`(括号内为可选项)
+
+实例：
+
+```
+//读取上一级css目录下的base.css
+fs.readFile('../css/base.css','utf-8',(err,doc)=>{
+//如果读取错误参数err的值为错误对象，否则err的值为null
+//doc参数为文件内容
+if(err==null){
+//控制台中输出文件内容
+console.log(doc);
+}
+});
+
+```
+
+写入文件内容：`fs.writeFile('文件路径/文件名称','数据',callback);
+
+实例：
+
+```
+const conetent='<h3>!!!!!!!!!!</h3>';
+fs.writeFile('../index.html',content,err=>{
+if(err!=null){
+console.log(err);
+return;
+}
+console.log('文件写入成功');
+});
+
+```
+
+### 路径拼接
+
+`path.join('路径','路径',..);
+
+```
+//导入path模块
+const path=require('path');
+//路径拼接
+let finialPath=path.join('itcast','a,'css','test.css');
+//输出
+console.log(finialPath);
+//用__dirname获取绝对路径
+const fs=require('fs');
+fs.readFile(path.join(__dirname,'test.css'),'utf-8',(err,doc)=>{
+console.log(err);
+console.log(doc);
+});
+```
+
+## 第三方模块
+
+npm(node package manager):node的第三方模块管理工具
+
+- 下载：`npm install 模块名`
+- 卸载：`npm uninstall package 模块名`
+
+全局安装和本地安装：一般命令行工具全局安装，库文件本地安装
+
+### 第三方模块Gulp
+
+功能：项目上线，HTML、CSS、JS文件压缩合并，语法转换（es6、less）
+
+使用：
+- 使用`npm install gulp`下载gulp库文件
+- 在项目根目录下建立gulpfile.js文件
+- 重构项目的文件夹结构src目录放置源代码文件，dist目录放置构建后文件
+- 在gulpfile.js文件中编写任务
+- 在命令行工具中执行gulp任务
+
+gulp提供的方法：
+- gulp.src():获取任务要处理的文件
+- gulp.dest():输出文件
+- gulp.task():建立gulp任务
+- gulp.watch():监控文件的变化
+
+gulp插件：
+- gulp-htmlminn: html文件压缩
+- gulp-csso:  css文件压缩
+- gulp-babel: javascript语法转化
+- gulp-less: less 语法转化
+- gulp-uglify: 压缩混淆JavaScript
+- gulp-file-include:公共文件包含
+- browsersync:浏览器实时同步
+
 ## HTTP协议
 
 超文本传输协议。规定了客户端（浏览器）与服务器（网站服务器）之间请求和应答的标准
@@ -74,6 +203,8 @@ req.url		//请求地址
 req.method	//请求方法
 });
 ```
+   3. 请求参数
+
 
 
 - 响应报文
@@ -86,6 +217,22 @@ req.method	//请求方法
       - image/jpeg
       - application/json
 
+### 路由
+
+指客户端请求地址,如：`http://localhost:8080/index`与服务端程序代码的对应关系，即请求什么响应什么；
+
+```
+app.on('request',(req,res)=>{
+//获取客户端的请求路径
+let {pathname}=url.parse(rep.url);
+if(pathname=='/'||pathname=='/index'){
+res.end('欢迎来到首页');
+}
+else
+{
+res.end('页面不存在');
+}
+});
 
 ## 创建web服务器
 
@@ -97,7 +244,59 @@ const app = http.createServer();
 //当客户端发送请求的时候
 app.on('request',(req,res)=>{
 //响应
+
 res.end('hello');
+
+//返回状态码和相关信息
+
+res.writeHead(400,{'content-type':'text/html;charset=utf8'});
+
+});
+
+//监听端口
+app.listen(3000);
+console.log("Server is running....");
+```
+
+
+完善：
+
+
+```
+//引用系统模块
+const http =require('http');
+const url=require('url');	//处理url地址模块
+const querystring=require('querystring');	//处理参数模块
+
+//创建web服务器
+const app = http.createServer();
+
+
+//当客户端发送请求的时候
+app.on('request',(req,res)=>{
+//post参数是通过事件的方式接受的
+//data当请求参数传递的时候发出data事件
+//end当参数传递完成的时候时发出end事件
+//获取POST参数需要使用data事件和end事件；
+let postParams='';
+req.on('data',(params)=>{
+postParams+=params;	//接收的数据不是一次性发完的
+});
+req.on('end',()=>{
+console.log(postParams);
+console.log(querystring.parse(postParams));	//将参数转换为对象格式
+});
+
+//响应
+res.end('hello');
+
+//返回状态码和相关信息
+
+res.writeHead(400,{'content-type':'text/plain'});
+
+//调用url模块方法parse();第一个参数为要处理的地址，第二个参数为是否处理为对象格式，true为是；
+console.log(url.parse(res.url,true));
+
 });
 
 //监听端口
