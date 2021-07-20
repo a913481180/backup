@@ -126,12 +126,11 @@ return;
 }
 console.log('文件写入成功');
 });
-
 ```
 
 ### 路径拼接
 
-`path.join('路径','路径',..);
+`path.join('路径','路径',..);`
 
 ```
 //导入path模块
@@ -140,7 +139,7 @@ const path=require('path');
 let finialPath=path.join('itcast','a,'css','test.css');
 //输出
 console.log(finialPath);
-//用__dirname获取绝对路径
+//用__dirname获取当前文件的绝对路径
 const fs=require('fs');
 fs.readFile(path.join(__dirname,'test.css'),'utf-8',(err,doc)=>{
 console.log(err);
@@ -156,6 +155,11 @@ npm(node package manager):node的第三方模块管理工具
 - 卸载：`npm uninstall package 模块名`
 
 全局安装和本地安装：一般命令行工具全局安装，库文件本地安装
+
+### 第三方模块mine
+
+其中mine.getType(路径);可根据路径返回请求的文件类型;可用于res.writeHead(200,{'content-type':'text/css;charset=utf8'})
+
 
 ### 第三方模块Gulp
 
@@ -203,6 +207,7 @@ req.url		//请求地址
 req.method	//请求方法
 });
 ```
+
    3. 请求参数
 
 
@@ -224,7 +229,9 @@ req.method	//请求方法
 ```
 app.on('request',(req,res)=>{
 //获取客户端的请求路径
-let {pathname}=url.parse(rep.url);
+let {pathname}=url.parse(req.url);
+//或写成
+//let pathname=url.parse(req.url).pathname;
 if(pathname=='/'||pathname=='/index'){
 res.end('欢迎来到首页');
 }
@@ -235,7 +242,9 @@ res.end('页面不存在');
 });
 ```
 
+
 ## 创建web服务器
+
 
 ```
 //引用系统模块
@@ -248,7 +257,7 @@ app.on('request',(req,res)=>{
 
 res.end('hello');
 
-//返回状态码和相关信息
+//返回状态码和返回资源类型,若无，低级浏览器可能出问题
 
 res.writeHead(400,{'content-type':'text/html;charset=utf8'});
 
@@ -293,7 +302,7 @@ res.end('hello');
 
 //返回状态码和相关信息
 
-res.writeHead(400,{'content-type':'text/plain'});
+res.writeHead(400,{'content-type':'text/html;charset=utf8'});
 
 //调用url模块方法parse();第一个参数为要处理的地址，第二个参数为是否处理为对象格式，true为是；
 console.log(url.parse(res.url,true));
@@ -305,3 +314,9 @@ app.listen(3000);
 console.log("Server is running....");
 ```
 
+
+## Node.js异步编程
+
+同步api
+
+异步api
