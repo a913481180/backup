@@ -355,7 +355,7 @@ div{
 }
 ```
 ---
-### 盒子模型
+### 盒子
 
 - 边框:`border`
 
@@ -389,20 +389,138 @@ padding-left:
 margin-left:
 nargin-bottom:
 *复合写法与padding一致
-
-*让块级盒子居中：盒子有宽度，左右设为auto；
-margin：0，auto；
-行内元素只需要在父级元素添加text-align:center即可；
-
-- 嵌套元素塌陷问题：
-父元素与子元素有上外边距时，父元素会塌陷较大的外边距值
- 解决方法：触发BFC（块格式上下文）
-为父元素设置：上边框或上内边距
-为父元素添加overflow：hidden；
-为父元素添加dispaly:inline-block/tabl-cell;或float:left;或positon:absolute/fixed;
 ```
 
-- 清除内外边距
+### 盒子居中
+
+* 让块级盒子水平居中：
+
+   1. 通过手动计算 margin 左右边距
+	 父盒子的定宽的，子盒子指定 margin-left 即可
+   2. 盒子有宽度，左右设为auto；
+	`margin：0，auto；`// 让子盒子左右自动适应，想当于 `left:auto; right:auto`
+   3. 先让盒子左右边缘和父盒子垂直的中心线垂直，然后把子盒子往回移动自身宽度的一半
+
+```
+	/* 通过 transform 实现*/
+	//子盒子
+	margin-left: 50%;                // 先移动父盒子的一半
+        transform: translateX(-50%);     // 再移动自身盒子一半,transform中translate使用百分比时相对的是自己的长宽，不是父盒子的。
+
+
+
+	/*通过 定位实现*/
+	//父盒子
+	position: relative;
+	//子盒子
+	position: absolute;
+        left: 50%;                       // 向右移动父盒子一半
+        margin-left: -100px;             // 向左移动自身盒子一半
+```
+
+   4. 把盒子转成行内块,行内元素只需要在父级元素添加text-align:center即可；
+
+```
+	//父盒子
+	text-align: center;               // 让父盒子设置水平居中
+
+	//子盒子
+	display: inline-block;            // 让子盒子显示为行内块模式
+```
+
+- 盒子垂直居中的方法
+
+   1. 知道父盒子的高度，可以使用 margin 计算盒子的上下边距，来使盒子居中
+
+```
+	margin-top: 149px;         // 根据父盒子的高度指定子盒子 margin-top 即可
+```
+
+   2. 先让盒子的上下边缘和父盒子的水平中心线重叠，，然后再让子盒子往回移动自身一半的距离
+
+```
+/* 通过 transform 属性来移动*/
+	//子盒子
+	margin-top: 50%;                  // 向下移动父盒子的一半
+        transform: translateY(-50%);      // 向上移动自身盒子的一半
+
+/* 通过 定位来移动*/
+	//父盒子
+	position: relative;
+	//子盒子
+	position: absolute;
+        top: 50%;                  // 先向下移动父盒子的一半
+        margin-top: -100px;        // 再向上移动自身盒子的一半
+```
+
+   3. 使用表格的 vertical-align :middle 属性来实现盒子垂直居中
+
+```
+	//父盒子
+	display: table-cell;         // 显示形式为表格
+        vertical-align: middle;      // 里面内容为居中对齐
+```
+   4. 把盒子转成行内块
+
+```
+line-height:500px 与 子盒子的vertical-align:middel共同作用使子盒子垂直居中。
+.parent-box {
+line-height: 500px;
+text-align:center;
+}
+.child-box {
+display:inline-block;
+vertical-align:middle;
+line-height:1rem;
+color:white;
+}
+```
+
+- 利用flex布局
+
+flex布局，设置水平与竖直方向的内容居中。
+
+```
+.parent-box {
+display: flex;
+justify-content: center;
+align-items: center;
+}
+```
+
+-  position:absolute 配合定位与margin：auto
+
+```
+//不兼容低版本的IE浏览器
+.parent-box {
+position: relative;
+}
+.child-box {
+position: absolute;
+left: 0;
+top: 0;
+right: 0;
+bottom:0;
+margin: auto;
+}
+```
+
+- 使用JS的思路大概给大家说下：
+
+1、js中只要获取到当前盒子具体的left/top值即可
+
+2、一屏幕的宽高-盒子的宽高，最后除以2，获取的值就是它应该具备的left/top(这个值可以使盒子处于页面中间)
+
+###  嵌套元素塌陷问题：
+
+父元素与子元素有上外边距时，父元素会塌陷较大的外边距值
+
+- 解决方法：触发BFC（块格式上下文）
+   - 为父元素设置：上边框或上内边距
+   - 为父元素添加overflow：hidden；
+   - 为父元素添加dispaly:inline-block/tabl-cell;或float:left;或positon:absolute/fixed;
+
+### 清除内外边距
 
 >(body会默认有个边距)
 
