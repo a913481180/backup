@@ -450,6 +450,50 @@ q->front=q->rear;
 - 空格串：有一个或多个空格组成的串
 - 空串
 
+采用顺序存储称为顺序串，
+
+```
+#define MAXLEN 255
+typedef struct{
+char ch[MAXLEN+1];	//存储串的一维数组
+int length;	//串的当前长度
+}SString;
+```
+
+
+采用链式存储称为链串；
+
+```
+#define CHUNKSIZE 80 	//块大小
+typedef struct Chunk{
+char ch[CHUNKSIZE];
+struct Chunk *next;
+}Chunk;
+
+typedef struct{
+Chunk *head *tail;	//串的头尾指针
+int curlen;		//串的当前长度
+}LString;	//字符串的块链结构
+```
+
+
+#### 串的模式匹配算法
+
+确定主串中子串（模式串）第一次出现的位置
+
+- BF算法(暴力破解法）
+
+先匹配第一个元素，再匹配第二个元素.....
+
+- KMP算法
+
+主串的指针i不用回溯，子串的指针j不一定回到开头；
+
+next[j]:j的下一个位置
+
+当j=1时，next[j]=0;
+其他情况，next[j]=1;
+next[j]=max{1\<k\<j且从头开始的k-1个元素等于j前面的k-1个元素"P1...P(k-1)"="P(j-k+1)....P(j-1)"}
 ### 递归
 
 方法或函数调用自身的方式称为递归调用，调用称为递，返回称为归。

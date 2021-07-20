@@ -248,12 +248,19 @@ display:none
 标签语义化指根据网页中的内容结构，选择适合的标签进行编写。
 
 ```
-<header>; 
-<nav>;
-<article>;
-<setcion>;
-<footer>;
-<aside>
+<article>
+<aside>		元素页面主内容之外的某些内容（比如侧栏）
+<details>	定义用户能够查看或隐藏的额外细节。
+<figcaption> 	定义 <figure> 元素的标题。
+<figure>	规定自包含内容，比如图示、图表、照片、代码清单等。
+<footer>
+<header>
+<main>
+<mark>	定义重要的或强调的文本。
+<nav>
+<section>	定义文档中的节。
+<summary>	定义 <details> 元素的可见标题。
+<time>
 ```
 
 #### 2.新增多媒体标签
