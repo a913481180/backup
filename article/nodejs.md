@@ -317,6 +317,6 @@ console.log("Server is running....");
 
 ## Node.js异步编程
 
-同步api
+同步api:当前api执行完成后，才能继续执行下一个api
 
-异步api
+异步api:当前api的执行，不会阻塞后续代码的执行
