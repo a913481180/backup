@@ -209,6 +209,7 @@ a{
    float:none|left|right；
 }
 ```
+>注意:假如某个div元素A是浮动的，如果A元素上一个元素也是浮动的，那么A元素会跟随在上一个元素的后边(如果一行放不下这两个元素，那么A元素会被挤到下一行)；如果A元素上一个元素是标准流中的元素，那么A的相对垂直位置不会改变，也就是说A的顶部总是和上一个元素的底部对齐。
 
 ### 常用标准流约束浮动位置
 
@@ -217,12 +218,71 @@ a{
 ```
 //父元素清除浮动影响
 选择器{
-   clear:left|right|both；
+   clear:none|left(该元素左边不允许出现浮动元素)|right|both；
 }
 ```
+>注意:对于CSS的清除浮动(clear)，一定要牢记：这个规则只能影响使用清除的元素本身，不能影响其他元素。
+
+
 
   1. 额外标签法：在浮动元素的末尾添加一个空标签如`<div style="clear:both"></div>`
   2. 父级添加`overflow:hidden|auto|scroll;` 设置为auto时会出现滚动条，可选择隐藏`overflow-x:hidden;`或`overflow-y:auto`
+
+- 修改滚动条样式
+
+```
+【1】IE
+ 
+　　IE浏览器支持通过CSS样式来改变滚动条的部件的自定义颜色
+ 
+　　scrollbar-face-color滚动条凸出部分的颜色
+ 
+　　scrollbar-shadow-color立体滚动条阴影的颜色
+ 
+　　scrollbar-highlight-color滚动条空白部分的颜色
+ 
+　　scrollbar-3dlight-color滚动条亮边的颜色
+ 
+　　scrollbar-darkshadow-color滚动条强阴影的颜色
+ 
+　　scrollbar-track-color滚动条的背景颜色
+ 
+　　scrollbar-arrow-color上下按钮上三角箭头的颜色
+ 
+　　scrollbar-base-color滚动条的基本颜色
+
+【2】webkit
+::-webkit-scrollbar 滚动条整体部分
+::-webkit-scrollbar-thumb  滚动条里面的小方块，能向上向下移动（或往左往右移动，取决于是垂直滚动条还是水平滚动条）
+::-webkit-scrollbar-track  滚动条的轨道（里面装有Thumb）
+::-webkit-scrollbar-button 滚动条的轨道的两端按钮，允许通过点击微调小方块的位置。
+::-webkit-scrollbar-track-piece 内层轨道，滚动条中间部分（除去）
+::-webkit-scrollbar-corner 边角，即两个滚动条的交汇处
+::-webkit-resizer 两个滚动条的交汇处上用于通过拖动调整元素大小的小控件
+
+/////////////////////////////////////////////////////////////////////
+/* 定义滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: rgba(240, 240, 240, 1);
+}
+ 
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 0px rgba(240, 240, 240, .5);
+  border-radius: 10px;
+  background-color: rgba(240, 240, 240, .5);
+}
+ 
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  box-shadow: inset 0 0 0px rgba(240, 240, 240, .5);
+  background-color: rgba(240, 240, 240, .5);
+}
+```
+
   3. 父级添加伪元素法`:after`
 
   ```
@@ -463,7 +523,7 @@ nargin-bottom:
    4. 把盒子转成行内块
 
 ```
-line-height:500px 与 子盒子的vertical-align:middel共同作用使子盒子垂直居中。
+//父盒子line-height:500px 与 子盒子的vertical-align:middel共同作用使子盒子垂直居中。
 .parent-box {
 line-height: 500px;
 text-align:center;

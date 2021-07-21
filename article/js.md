@@ -1304,6 +1304,9 @@ Math.max()	//求最大
 Math.min()	//求最小值
 Math.pow(x,y) 	//x的y次幂
 Math.round()	//四舍五入
+Math.random()	//获取随机数
+Math.ceil()	// 向上取整,有小数就整数部分加1
+Math.floor()	// 向下取整,丢弃小数部分
 ```
 
 - 获取当前时间
@@ -1589,6 +1592,7 @@ function myFunction() {
    2. 避免全局变量污染
    3. 可以声明私有成员
 
+```
 var moduleA=(function(mod){
 var conut=10;	//私有变量
 function showA(){	//私有函数
@@ -1904,7 +1908,7 @@ var lis=oOl.getElementsByTagName("li");
 //返回的是数组
 ```
 
-- node.getElementByClassName(class名);		
+- node.getElementsByClassName(class名);		
 通过class名字获取符合条件的元素节点；(IE8以下不兼容）
 
 - document.getElementByName(name属性的值);
@@ -1926,7 +1930,7 @@ var node =document.querySelector(".box");
 node.style.backgroundColor='red';
 }
 ```
-- document.querySelectorall(CSS选择器格式字符串);
+- document.querySelectorAll(CSS选择器格式字符串);
 返回一个数组
 
 
