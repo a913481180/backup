@@ -191,6 +191,9 @@ gulp插件：
 
 超文本传输协议。规定了客户端（浏览器）与服务器（网站服务器）之间请求和应答的标准
 
+- 静态资源：服务器不需要处理，可以直接响应给客户端的资源，如：css，JavaScript，image文件
+- 动态资源：相同的请求地址，不同的响应资源
+
 ### 报文
 
 在HTTP请求和响应的过程中传递的数据块叫做报文
@@ -317,6 +320,231 @@ console.log("Server is running....");
 
 ## Node.js异步编程
 
-同步api:当前api执行完成后，才能继续执行下一个api
+#### 同步api:当前api执行完成后，才能继续执行下一个api;同步代码执行完后才开始执行异步代码，再执行回调函数
 
-异步api:当前api的执行，不会阻塞后续代码的执行
+```
+//同步api可以从返回值中拿到api执行结果，而异步api不行
+
+funciotn sum(x,y){
+return x+y;
+}
+
+const re=sum(2,1);
+
+//异步
+function getMsg(){
+setTimeout(function(){
+return {msg:'hello'},1000);
+}
+const res=getMsg();	//undefined
+
+```
+
+#### 异步api:当前api的执行，不会阻塞后续代码的执行;异步api通过回调函数获取返回值；
+
+- 回调函数：自己定义函数让别人去调用
+
+```
+function getData(callback){
+callback('XiaoMing');
+}
+
+getData(function(n){ console.log('hello'+n);});
+```
+
+- promise解决回调地狱问题
+
+```
+ler promise=new Promise((resolve,reject)=>{
+setTimeout(()=>{
+if(true){
+resolve({name:'xiaoming'});
+}else{
+reject('error');
+}
+},2000);
+}):
+promise.then(result=>console.log(result);//{name:'xioaming'}).catch(error=>console.log(error);//error);
+```
+
+- 异步函数：终极方案，让异步代码写成同步代码形式，让代码不再有回调函数嵌套
+
+```
+//在普通函数定义前加上async关键字
+//异步函数默认返回的时promise对象
+//在异步函数使用throw关键字进行错误抛出，之后的代码将不会执行
+const fn=async()=>{};
+async function fn(){
+throw 'error';
+
+return ok;
+}
+
+console.log(fn());
+fn().then(function(data){
+console.log(data);
+})
+
+//awaite关键字只能出现在异步函数中
+//awaite promise对象； 暂停异步函数的执行，等待promise对象返回结果后在向下执行
+async function run(){
+await p1();
+await p2();
+await p3();
+}
+```
+
+
+返回promise对象
+
+```
+//使用util模块的promisify方法
+const fs=require('fs');
+const promisify=require('util').promisify;
+const readFile=pronisify(fs.readFile);
+async function run(){
+
+let r1=awaite readFile('./1.txt','utf8');
+let r2=awaite readFile('./2.txt','utf8');
+console.log(r1,r2);
+}
+run();
+```
+
+
+
+## 全局对象global
+
+在浏览器中全局对象时window,在node中全局对象是global
+
+Node中的全局对象有以下方法，可省略global：`console.log()`,`setTimeout()`,clearEimeout()`,`setInternal()`,`clearInterval`
+
+
+## 数据库
+
+存储数据的仓库：mysql、MongoDB、Oracle
+
+
+相关概念：
+
+|术语|说明|
+|-|-|
+|database|数据仓库,可建立多个数据库|
+|collection|集合，一组数据的集合|
+|document|文档，一条具体的数据|
+|field|字段,文档中的属性名称|
+
+
+### 第三方包Mongoose
+
+使用node.js操作MongoDB数据库,下载`npm install mongoose`
+
+- 数据库的连接
+
+```
+const mongoose=require('mongoose');
+mongoose.connect('mongodb://localhost/test')
+.then(()=>console.log('数据库连接成功'))
+.catch(err=>console.log('fail!',err));
+```
+
+- 创建数据库
+
+在MongoDB中不需要显示创建数据库，如果使用的数据库不存在，MongoDB会自动创建。
+
+
+#### MongoDB增删查改操作
+
+- 创建集合
+
+```
+//对集合设定规则
+const courseSchema= new mongoose.Schema({
+name: String,
+author: String,
+isPublished: Boolean
+});
+//创建集合并合并规则
+const Course=mongoose.model('Course',courseSchema);//返回构造函数
+```
+
+
+- 创建文档
+
+即向集合中插入元素
+
+第一种方法:
+```
+//创建集合实例
+const course=new Course({
+name: 'tset',
+author: 'xiaoming'
+isPubulished: true
+});
+//保存数据
+course.save();
+```
+
+第二种方法：
+```
+Course.create({
+name: 'tset',
+author: 'xiaoming'
+isPubulished: true
+},
+(err,doc)=>{
+//错误对象
+console.log(err);
+//当前文档
+console.log(doc);
+}
+);
+
+//create返回的也是promise对象
+Course.create({
+name: 'tset',
+author: 'xiaoming'
+isPubulished: true
+}).then(doc=>console.log(doc)).catch(err=>console.log(err));
+```
+
+- 导入数据
+
+shell 命令：`mongoimport -d 数据库名称 -c 集合名称 -file 要导入的数据文件（josn格式）`
+
+
+- 查询文档
+
+```
+//根据条件查询文档，若为空则查询所有文档
+Course.find().then(result=>console.log(result));	//返回的是文档的集合数组
+
+//实例
+Course.find({name:'xiaoming'}).then(result=>console.log(result));
+User.find({age:{$gt:20,$lt:50}}).then(result=>console.log(result));	//查询大于20小于50
+User.find({hobbies:{$in:['运动']}}).then(result=>console.log(result));	//查询包含运动的
+```
+
+```
+//只查询一条数据
+Course.findOne({name:'xiaoming'}).then(result=>console.log(result));	
+```
+
+```
+//选择要查询的字段
+User.find().select('name age -_id').then(result=>console.log(result)).catch(err=>console.log(err));	//只返回查询的字段，不查询的字段前加-
+```
+
+
+```
+//将查询出来的数据进行升序排序(从小到大）
+User.find().sort('age').then(result=>console.log(result));	
+
+//将查询出来的数据进行降序排序(从大到小）
+User.find().sort('-age').then(result=>console.log(result));	
+```
+
+```
+//skip跳过多条数据，limit限制查询数量
+User.find().skip(2).limit(2).then(result=>console.log(result));		//分页查询时常用
+```
