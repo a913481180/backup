@@ -1970,6 +1970,7 @@ odiv.innerHTML="<h1>jjjjjjjj</h1>";
 
 console.log(odiv.innerText);
 console.log(odiv.outerHTML);
+```
 
 ### 获取子节点
 
@@ -1988,9 +1989,9 @@ console.log(odiv.outerHTML);
 
 >上面这些属性都包含文本节点
 
--children
--firstElementChild
--lastElementChild
+- children
+- firstElementChild
+- lastElementChild
 - nextElementSibling
 - previousElementSibling
 
@@ -2102,16 +2103,15 @@ box1的父节点.Child(box1);
 实例
 
 ```
- window.onload=function(){
-
+window.onload=function(){
                 var oDiv=document.getElementById("div1");	//div
                var newP=document.createElement('p');		//创建一个新的p标签节点
                 var newText=document.createTextNode('jjjj');	//创建一个字符节点
                 newP.appendChild(newText);			//将字符节点插入到p节点中
                 oDiv.appendChild(newP);				//将p节点插入到div节点中
-var newb=document.createElement('input');		//新建一个input节点
+		var newb=document.createElement('input');		//新建一个input节点
                 oDiv.insertBefore(newb,newP);			//将input节点添加到p节点前面
-//doument.body.insertBefore(oP,oDiv);	//将oP节点插入到oDiv 前面
+		//doument.body.insertBefore(oP,oDiv);	//将oP节点插入到oDiv 前面
         }
 
 ```
@@ -2246,7 +2246,9 @@ console.log(w);
 }
 }
 ```
+
 - charCode		键码		//区分大小写，只支持字符键，只在keypress下支持,可用 which兼容
+
 
 ```
 window.onload=function(){
@@ -2452,6 +2454,7 @@ return d;
 }
 document.cookie="user='xxx';expires="+afterOffDate(7);
 ```
+
    2. path 限制访问路径，如果不设置默认加载当前.html文件的路径；
    3. domain 限制访问域名，如果不设置默认加载当前文件.html文件的服务器域名
    4. secure 加入这个字段后只能设置https协议加载cookie；
@@ -2477,6 +2480,7 @@ console.log(decodeURIComponent(document.cookie);	//解码读取
 #### HTML5 新特性
 
 - 中括号解析
+
 ```
 var [x,y,z]=[1,"dd",false];
 //相当与
@@ -2492,6 +2496,7 @@ return ["jj",3,true];
 }
 var [a,b,c]=xxx();
 ```
+
 - 大括号解析
 
 ```
@@ -2533,7 +2538,9 @@ imgs.add("ddd");
 imgs.add(new String("ddd"));
 console.log(imgs);
 ```
+
 遍历集合`for....of`
+
 ```
 for(let item of imgs.keys()){	//遍历键
 console.log(item);
@@ -2584,6 +2591,7 @@ console.log(key,value);
    1. 当前函数中的this指向新创建的对象
    2. 自动完成原料和出厂操作
 这种通过new调用函数，叫做构造函数(首字母一般大写)，其可构造对象，
+
 ```
 function createPerson(name,sex){
 var obj=new Object();	//原料
@@ -2676,7 +2684,6 @@ oDiv.onmousedown=function(ev){
 var e=ev||window.event;
 var offsetX=e.clientX-oDiv.offsetLeft;
 var offsetY=e.clientY-oDiv.offsetTop;
-
 
 document.onmousemove=function(ev){
 	var e=ev||window.event;

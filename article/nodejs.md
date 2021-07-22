@@ -508,6 +508,73 @@ isPubulished: true
 }).then(doc=>console.log(doc)).catch(err=>console.log(err));
 ```
 
+- mongoose验证
+
+在创建集合规则时，可以设置当前字段的验证规则，验证失败则输入插入失败
+
+```
+const postSchema=new mongoose.Schema({
+	title:{
+		type: String,		//字段类型
+		required: true		//true时代表该字段必填,不能为空
+		default: '默认title'	//默认值
+		validate:{		//自定义验证器
+		validator: v=>{
+			//返回布尔值，true代表验证成功
+			//v要验证的值
+			return v.length>4
+		}
+			masseage: 'error!!!!!';
+		}
+		},
+	authod:{
+		type: String,		//字段类型
+		trim:true	//自动去除字符串两边的空格
+		required: [true,'错误信息'],	//自定义错误信息
+		minlength: 2,		//字符串最小长度
+		maxlength: [10,'长度错误'],		//字符串最大长度
+		
+		},
+	age:{
+		type: Number,
+		min: 2,		//数值的最小值
+		max: 100	//数值的最大值	
+	},
+	category:{
+		type:String,
+		enum:['html','css','js']		//枚举,输入的值必须在其中,否则报错
+		/*
+		enum:{
+			values: ['html','css','js'],		
+			message: 'error message'
+		}
+		*/
+	}
+	
+});
+
+const Post=mongoose.model('Post',postSchema);
+post.create({}).then(re=>console.log(re)).catch(err=>console.log(err));
+```
+
+- 集合关联
+
+   1. 使用id对集合进行关联
+   2. 使用populate方法进行关联集合查询
+```
+//用户集合
+const User=mongoose.model('User',new mongoose.Schema({name:{type: String}}));
+//文章集合
+const Post=mongoose.model('Post',new mongoose.Schema({
+	title:{type: String},
+//使用id将文章集合和作者集合进行关联
+	author:{type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+})):
+
+//联合查询
+Post.find().populate('author').then((err,result)=>console.log(result));
+```
+
 - 导入数据
 
 shell 命令：`mongoimport -d 数据库名称 -c 集合名称 -file 要导入的数据文件（josn格式）`
@@ -548,3 +615,31 @@ User.find().sort('-age').then(result=>console.log(result));
 //skip跳过多条数据，limit限制查询数量
 User.find().skip(2).limit(2).then(result=>console.log(result));		//分页查询时常用
 ```
+
+- 删除文档
+
+```
+//删除第一个文档
+Course.findOndeAndDelete({}).then(result=>console.log(result));		//返回删除的文档
+```
+
+
+```
+//删除多个文档
+User.deleteMany({}).then(result=>console.log(result));
+```
+
+- 更新文档
+
+```
+//更新单个
+User.updateOne({查询条件},{要修改的值}).then(re=>console.log(re));
+```
+
+```
+//更新多个
+User.updateMany({查询条件},{要修改的值}).then(re=>console.log(re));
+```
+
+
+
