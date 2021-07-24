@@ -160,6 +160,278 @@ npm(node package manager):node的第三方模块管理工具
 
 其中mine.getType(路径);可根据路径返回请求的文件类型;可用于res.writeHead(200,{'content-type':'text/css;charset=utf8'})
 
+### 第三方模块art-template模板引擎
+
+1. 下载：`npm install art-template`
+
+2. 引入：`const template = require('art-template');`
+
+3. 告诉模板引擎要拼接的数据和模板地址:`const html=template('模板数据',数据);`
+
+实例
+```
+//导入模块
+const template = require('art-template');
+//拼接
+const html=template('./index.art',{
+data:{
+name: 'xioaming',
+age: 29
+}
+});
+
+//index.art
+<div>
+	<span>{{data.name}}</span>
+	<span>{{data.age}}</span>
+</div>
+```
+
+- 模板语法
+
+   - 数据输出
+标准语法：`{{数据}}`
+原始语法：`<%=数据%>`
+
+   - 原文输出：数据中带有HTML标签，默认情况下模板引擎不会解析标签,会转义后输出,若要解析则
+标准语法：`{{@数据}}`
+原始语法：`<%-数据%>`
+
+   - 条件判断
+标准语法：`{{if 条件}}....{{else if 条件}}....{{/if}}`
+原始语法：`<%if (条件) {%>....<%} else if(条件) {%>....<%}  %>`
+
+   - 循环
+标准语法：`{{each 数据}} {{$index}} {{$value}}  {{/each}}`
+原始语法：`<% for() {%> ....<%} %>`
+
+- 子模板
+
+将网站的公共区域（头部、页脚）抽离到单独文件中
+标准语法：`{include '模板路径/footer.art'}`
+原始语法：`<%include('模板路径')%>`
+
+- 模板继承
+
+将网站HTML骨架抽离到单独文件中，其他页面模板可以继承
+```
+!<DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>骨架模板</title>
+	{{block 'head'}} {{/block}}
+</head>
+<body>
+	{{block 'content'}} {{/block}}	<!--预留位置-->
+</body>
+</html>
+```
+模板继承
+```
+	{{extend './test.art'}}
+	{{block 'head'}} <link rel="stylesheet" href="test.css"> {{/block}}
+```
+
+
+- 模板配置
+
+   1. 向模板中导入变量`template.default.imports.变量名=变量值(第三方模板的方法);`  在模板test.art中使用`{{dateFormat(time,'yyyy-mm-dd')}}`
+   2. 设置模板根目录`template.defaults.root=模板目录`
+   3. 设置模板默认后缀`template.defaults.extname='.art'`
+
+
+
+### 第三方模块router
+
+功能：实现路由
+使用步骤：获取路由对象；调用路由对象提供的方法创建路由；启用路由；
+
+```
+const getRouter=require('router');
+const router=getRounter();
+router.get('/add',(req,res)=>{
+	res.end('hello world!');
+});
+server.on('request',(req,res)=>{
+router(req,res);
+});
+```
+
+
+### 第三方模块serve-static
+
+功能：静态资源访问服务
+
+```
+const serverStatic=require('serve-static');
+const serve=serverStatic('./pulic');
+serve.on('request',()=>{
+serve(req,res);
+});
+server.listen(3000);
+```
+
+
+### 第三方模块Express 框架
+
+基于node平台的web应用开发框架，可使用`npm install express`下载
+
+```
+//引用框架
+const express=require('express');
+//创建网站服务器
+const app=express();
+
+//当客户端以get方式访问/时
+app.get('/',(req.res)=>{
+//获取get参数
+console.log(req.query);
+//响应:sen方法会自动设置http状态码，响应头部,类型
+res.send('hello!!!!');
+});
+//当客户端以post方式访问/add时
+app.post('/add',(req.res)=>{
+//获取post参数：需要第三方模块body-parser
+console.log(req.body);
+res.send('hello!!!!');
+});
+
+app.listen(3000);
+console.log('server is runningn ...');
+```
+
+- 第三方模块body-parser
+
+const bodyParser=require('body-parser');
+//配置body-parser模块
+app.use(bodyParser.urlencoded({ extender: false }));
+//接收请求
+app.post('/add',(req,res)=>{
+
+console.log(req.body);
+
+});
+
+- 构建模块化路由
+
+```
+const express=require('express');
+//创建路由对象
+const home=express.Router();
+//将路由和请求路径进行匹配
+app.use('/home',home);
+//在home路由下继续创建路由
+home.get('/index',()=>{
+// 响应/home/index
+res.send('welcome');
+});
+```
+
+参数路由
+
+```
+//服务端
+app.get('/find/:id',(req,res)=>{
+	console.log(req.params);	//{id:124}
+});
+
+//客户端
+localhost:3000/find/124
+
+```
+
+- 中间件:将客户端发来的请求进行拦截处理
+
+如：
+
+```
+app.get('请求地址','处理函数');
+app.post('请求地址','处理函数');
+```
+针对一个请求可设置多个中间件：
+
+```
+app.get('/',(req,res,next)=>{	//next方法：该中间件处理后会将请求的控制权交给下一个中间件
+req.name='xiaoming';
+});
+app.get('/',(req,res)=>{
+console.log(req.name);
+});
+
+```
+
+- app.use中间件用法
+
+会匹配所有的请求方法,直接传入请求处理函数代表接收所有请求
+
+```
+app.use((req,res)=>{
+console.log(req.url);
+next();
+});
+```
+
+   - 用于错误处理
+
+```
+app.get('/index',(req,res)=>{
+	throw new Error('程序发生未知错误');	//易出现错误的地方
+});
+app.use((err,req,res,next)=>{
+	res.status(500).send(err.message);	//只能用于处理同步代码错误
+});
+
+//异步代码错误需要手动触发错误
+app.get('/index',(req,res,next)=>{
+	fs.readFile('./test.c','utf-8',(err,data)=>{
+	if(err){
+	next(err);	//易出现错误的地方
+}
+}});
+app.use((err,req,res,next)=>{
+	res.status(500).send(err.message);	//只能用于处理同步代码错误
+});
+
+
+```
+
+- 静态资源的处理
+
+通过express内置的express.static托管静态文件
+
+```
+app.use(express.static('./pulic'));
+```
+
+- express模板引擎
+
+在原art-template模板引擎的基础上进行封装:`npm install art-template express-art-template`
+
+```
+//当渲染后缀为art的模板时，使用express-art-template
+app.engine('art',require('express-art-template'));
+//设置模板存放目录
+app.set('views',path.jon(__dirname,'views'));
+//渲染模板时不写后缀，默认拼接art后缀
+app.set('view engine','art');
+//渲染模板
+app.get('/',(req,res)=>{
+res.render('index',{ mes:'模板数据'});
+});
+```
+
+将变量设置到app.locals对象下，则所有的模板都可以获取到
+
+```
+app.locals.users=[{	//users是自定义的
+	name: 'xiaoming',
+	age: 22
+},{
+	name: 'xiaomei',
+	age:20
+}]
+```
 
 ### 第三方模块Gulp
 
@@ -411,6 +683,22 @@ console.log(r1,r2);
 run();
 ```
 
+捕获错误:
+
+`try catch`可以捕获异步函数以及其他同步代码在执行过程中发生的错误，但不能捕获其他类型api发生的错误。
+
+```
+app.get('/',async(req,res,next)=>{
+try{
+await User.fid({name:'xiaoming'});
+}
+catch(er){
+next(er);
+}
+});
+```
+
+
 
 
 ## 全局对象global
@@ -640,6 +928,23 @@ User.updateOne({查询条件},{要修改的值}).then(re=>console.log(re));
 //更新多个
 User.updateMany({查询条件},{要修改的值}).then(re=>console.log(re));
 ```
+
+
+##### 综合案例
+
+```
+//301代表重定向
+//location 跳转地址
+req.on('end',()=>{
+res.writeHead(301,{
+Location: '/list'
+});
+res.end();
+})
+```
+
+
+
 
 
 

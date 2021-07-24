@@ -2118,12 +2118,18 @@ window.onload=function(){
 
 ### offset
 
-offsetWidth
-offsetHeight
+- offsetWidth
+- offsetHeight
 
 
-offsetLeft
-offsetTop
+- offsetLeft
+- offsetTop
+
+   1. 在父元素均不设置position属性时，在Chrome，opera和IE浏览器中offsetLeft是*元素边框外侧*到*浏览器窗口内侧*的距离且body.offsetLeft=0,在firefox浏览器中offsetLeft是元素边框外侧到body内侧的距离body.offsetLeft=-边框宽度
+
+   2. 如果父元素是body且body设置了position属性，在Chrome和opera浏览器中offsetLeft是元素边框外侧到body边框外侧的距离，在IE和fireForx浏览器中offsetLeft是元素边框外侧到body边框内侧的距离
+
+   3. 如果父元素不是body元素且设置了position属性时，offsetLeft为元素边框外侧到父元素边框内侧的距离（各浏览器情况一致）。
 
 ```
 window.onload=function(){
@@ -2179,6 +2185,7 @@ clientX    clientY		//可视窗口的左上角
 pageX    pageY			//整个页面的左上角（滚动也包括）
 screenX    screenY		//电脑屏幕的左上角
 */
+
 oBtn.onclick=function(e){
 //事件对象获取的方式，固定写法
 var ev=e||window.event;
@@ -2187,6 +2194,18 @@ console.log(ev);
 //console.log(ev.clientX);
 }
 }
+```
+
+循环添加
+```
+var Oblock=document.querySelectorAll('div');
+			//console.log(Oblock);
+			for (var i=0 ;i< Oblock.length;i++){
+				Oblock[i].index=i;
+				Oblock[i].onmousedown=function(e){
+				console.log(this.index);
+				}
+			}
 ```
 
 - window事件
@@ -2659,6 +2678,7 @@ console.log(arr1.sum==arr2.sum);
 记录鼠标按下的位置和被拖拽物体相对距离
 
 ```
+//clientX为鼠标位置，offsetLeft为盒子位置
 var offsetX=e.clientX-node.offsetLeft;
 var offsetY=e.clientY-node.offsetTop;
 ```
@@ -2666,9 +2686,8 @@ var offsetY=e.clientY-node.offsetTop;
 
 - mousemove
 
-一致保持，相对距离
-
 ```
+//鼠标移动的距离减去相对距离=盒子移动的距离
 node.style.left=e.clientX-offsetX+'px';
 node.style.top=e.clientY-offsetY+'px';
 ```
@@ -2677,7 +2696,10 @@ node.style.top=e.clientY-offsetY+'px';
 
 取消拖拽
 
+*实例：*
+
 ```
+//父盒子与子盒子要有定位
 window.onload=function(){
 var oDiv=document.getElementById("div1");
 oDiv.onmousedown=function(ev){
