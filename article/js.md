@@ -2323,37 +2323,20 @@ e.cancelBubble=true;
 - addEventListerner();
 语法
 element.addEventListener(event, function, useCapture);
-第一个参数是事件的类型（比如 "click" 或 "mousedown"）。
-
-第二个参数是当事件发生时我们需要调用的函数。
-
-第三个参数是布尔值，指定使用事件冒泡还是事件捕获,默认false事件冒泡,此参数是可选的。
-
-注意：请勿对事件使用 "on" 前缀；请使用 "click" 代替 "onclick"。
+第一个参数是事件的类型（比如 "click" 或 "mousedown"）。第二个参数是当事件发生时我们需要调用的函数。第三个参数是布尔值，指定使用事件冒泡还是事件捕获,默认false事件冒泡,此参数是可选的。
+>注意：请勿对事件使用 "on" 前缀；请使用 "click" 代替 "onclick"。
 
 实例
-添加当用户点击按钮时触发的事件监听器：
 
 ```
+//添加当用户点击按钮时触发的事件监听器：
 document.getElementById("myBtn").addEventListener("click", displayDate);
 ```
-addEventListener() 方法为指定元素指定事件处理程序。
+addEventListener() 方法为指定元素指定事件处理程序。addEventListener() 方法为元素附加事件处理程序而不会覆盖已有的事件处理程序。您能够向一个元素添加多个事件处理程序。您能够向一个元素添加多个相同类型的事件处理程序，例如两个 "click" 事件。传统事件绑定重复添加会覆盖。您能够向任何 DOM 对象添加事件处理程序而非仅仅 HTML 元素，例如 window 对象。addEventListener() 方法使我们更容易控制事件如何对冒泡作出反应。当使用 addEventListener() 方法时，JavaScript 与 HTML 标记是分隔的，已达到更佳的可读性；即使在不控制 HTML 标记时也允许您添加事件监听器。
 
-addEventListener() 方法为元素附加事件处理程序而不会覆盖已有的事件处理程序。
+您能够通过使用 `removeEventListener()` 方法轻松地删除事件监听器。
 
-您能够向一个元素添加多个事件处理程序。
-
-您能够向一个元素添加多个相同类型的事件处理程序，例如两个 "click" 事件。传统事件绑定重复添加会覆盖。
-
-您能够向任何 DOM 对象添加事件处理程序而非仅仅 HTML 元素，例如 window 对象。
-
-addEventListener() 方法使我们更容易控制事件如何对冒泡作出反应。
-
-当使用 addEventListener() 方法时，JavaScript 与 HTML 标记是分隔的，已达到更佳的可读性；即使在不控制 HTML 标记时也允许您添加事件监听器。
-
-您能够通过使用 removeEventListener() 方法轻松地删除事件监听器。
-
-格式：node.removeEvenetListener
+格式：`node.removeEvenetListener()`
 参数：第一个为事件类型，第二个为删除函数的名字；
 
 
@@ -2586,6 +2569,7 @@ console.log(arr);
 
 - Map();映射
 
+```
 let map=new Map();
 //添加数据
 map.set("Tom","fishman");
@@ -2599,7 +2583,7 @@ console.log(map.get("Tom"));
 for(let [key,value] of map){
 console.log(key,value);
 }
-
+```
 >遍历：数组[for循环、for...in、foreach、for...of],对象[for...in]，set[for...of],map[for...pf];
 
 

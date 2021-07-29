@@ -303,6 +303,7 @@ console.log('server is runningn ...');
 
 - 第三方模块body-parser
 
+```
 const bodyParser=require('body-parser');
 //配置body-parser模块
 app.use(bodyParser.urlencoded({ extender: false }));
@@ -312,6 +313,7 @@ app.post('/add',(req,res)=>{
 console.log(req.body);
 
 });
+```
 
 - 构建模块化路由
 
