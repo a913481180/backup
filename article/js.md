@@ -1432,6 +1432,28 @@ document.getElementById("demo").innerHTML = text;
 - clearInterval(定时器编号);
 取消定时器
 
+### 延时器
+    只执行一次
+- 创建延时器
+    `window.setTimeout(函数类型，延迟时间)`
+    返回值timeoutID是一个正整数，表示定时器的编号需要注意的是setTimeout()和setInterval()共用一个编号池，技术上，clearTimeout()和 clearInterval() 可以互换。但是，为了避免混淆，不要混用取消定时函数。
+    
+```
+    var timer1=window.setTimeout(function (){
+                    console.log("你好啊！！！");
+                },3000);
+```
+- 清除延时器
+    
+`window.clearTimeout(延时器名称)`
+
+```
+    function func(){
+                    //清除延时器
+                    window.clearTimeout(timer1);
+                }
+```
+
 ### JS this 关键词指的是它所属的对象。
 
 它拥有不同的值，具体取决于它的使用位置：
@@ -1592,6 +1614,37 @@ function myFunction() {
    2. 避免全局变量污染
    3. 可以声明私有成员
 
+JavaScript 变量属于本地或全局作用域。
+
+全局变量能够通过闭包实现局部（私有）。
+闭包指的是有权访问父作用域的函数，即使在父函数关闭之后
+
+>拥有相同名称的全局变量和局部变量是不同的变量。修改一个，不会改变其他。不通过关键词 var 创建的变量总是全局的，即使它们在函数中创建。
+
+```
+var add = (function () {
+    var counter = 0;
+    return function () {return counter += 1;}
+})();
+
+add();
+add();
+add();
+
+// 计数器目前是 3 
+/*
+第一次调用add()，相当于执行了function(){return (++counter)}一次；第二次调用add()，相当于又执行了function(){return (++counter)}一次；又由于function(){return (++counter)}是闭包，引用了其父函数的变量counter，所以在函数调用完毕counter依然存在，没有清零。
+    而且只在第一次给add赋值时，将counter设置为0。以后每次调用add()，counter都自增一次，没有重置。也就是前文说的，父函数只执行一次，每次调用都只执行了子函数。
+    这是为什么呢？因为只有执行下面这个函数，counter才重置。而这个函数只在第一次给add赋值时执行过一次。以后每次调用add()，都相当于调用function(){return(++counter)}。
+    function(){
+       var counter = 0;
+       return function(){
+          return (++counter);
+       }
+    }
+*/
+```
+
 ```
 var moduleA=(function(mod){
 var conut=10;	//私有变量
@@ -1620,26 +1673,6 @@ return mod;
 mouleA.outA();
 mouleA.outB();
 mouleA.outC();
-```
-
-JavaScript 变量属于本地或全局作用域。
-
-全局变量能够通过闭包实现局部（私有）。
-闭包指的是有权访问父作用域的函数，即使在父函数关闭之后
-
->拥有相同名称的全局变量和局部变量是不同的变量。修改一个，不会改变其他。不通过关键词 var 创建的变量总是全局的，即使它们在函数中创建。
-
-```
-var add = (function () {
-    var counter = 0;
-    return function () {return counter += 1;}
-})();
-
-add();
-add();
-add();
-
-// 计数器目前是 3 
 ```
 
 - 立即执行函数写法
@@ -2767,23 +2800,4 @@ var w1=new worker("Tom","man",22,"driver");
 ```
 
 
-### 轮播图
-
-```
-window.onload()=function(){
-var oUl1=document.getElementById("ul1");
-var oDiv1=document.getElementById("div1");
-//将图片添加到末尾
-oUl1.innerHTML+=oUl1.innerHTML;
-//重新设置一下ul的宽
-oUl1.style.width=220*8+"px";
-setInterval(function(){
-//让ul向左运动一个图片位置
-startMove(oUl1,{left:oUl1.offsetLeft-220},function(){
-if(oUl1.offsetLeft<=-oUl1.offsetWidth/2){
-oUl1.style.left="opx";
-}
-})
-},2000);
-```
 
