@@ -35,10 +35,11 @@ xhr.open("get","./get.php?name=yyyy&age=22&password=342",true);
 3. 调用send
 
 ```
+//get方法
 xhr.send();
 //post方法，将数据放在send()里提交
 xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');	//声明发送的数据类型
-xhr.sen("name=yyy&age=33&password=124564");	//无需编码
+xhr.send("name=yyy&age=33&password=124564");	//无需编码
 //post没有缓存问题
 ```
 
@@ -75,8 +76,20 @@ alert("error:"+xhr.status);
 }
 }
 ```
+###  传输格式
 
->ajax 只能下载同源的数据，跨源的数据禁止下载
+- xml数据
+优点：种类丰富，传输量非常大
+缺点：解析麻烦，不适合轻量数据
+
+- json数据
+
+优点：轻量级数据，解析轻松
+缺点：种类少，传输数据量少
+
+`JSON.parse();`  `JSON.stringify();`
+
+### ajax 只能下载同源的数据，跨源的数据禁止下载
 
 - 同源策略
 
@@ -92,24 +105,69 @@ alert("error:"+xhr.status);
    2. 委托php文件进行跨源
    3. JSONP
 
-- JSONP跨域的使用流程
+### JSONP跨域的使用流程
    1. 先去声明一个函数，这个函数有一个形参，这个形参会拿到我们想要下载的数据，
    2. 在需要下载数据的时候，动态创建script标签，将标签src属性设置成下载数据的链接
    3. 当script插入到页面的时候，就会调用号已经封装好的函数，将数据传过来
 
+index.html
 ```
 <script>
 function download(data){
 console.log(data);
 }
 </script>
-<script src="test.js"></script>
+<script src="test.js">	//浏览器一运行就会显示</script>
+<script>
+//动态生成script标签
+window.onload=function(){
+var Obtn=document.getElementById('btn1');
+Obtn.onclick=function(){
+	var oScript=document.createElement("script");	//创建script标签
+	oScript.src='test.js';
+	document.body.appendChild(oScript);		//插入到页面
+}
+}
+</script>
 ```
 
-- test.js
-
+ test.js
 ```
 download("hello!!!!!!!!!");
+```
+
+实例：
+```
+<script>
+function download(data){
+console.log(data);
+ var oInfo=documenet.getElementById("oinfo");
+ var oTi=..;
+	oInfo.innerHTML=`${data.city}`
+		
+	var str='';
+	for (var i=0;i<arr.length;i++){
+	str+=`
+		<tr>
+			<td>${arr[i].data}</td>
+		</tr>
+			`
+		}
+
+	oTi.innerHTML=str;
+}
+</script>
+<script>
+//动态生成script标签
+window.onload=function(){
+var Obtn=document.getElementById('btn1');
+Obtn.onclick=function(){
+	var oScript=document.createElement("script");	//创建script标签
+	oScript.src='https:.....&callback=download';
+	document.body.appendChild(oScript);		//插入到页面
+}
+}
+</script>
 ```
 
 ### 表单提交

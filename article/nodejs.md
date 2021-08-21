@@ -949,4 +949,5 @@ res.end();
 
 
 
-
+`npm i nodemon -g `
+`nodemon test.js`

@@ -1,5 +1,5 @@
 --- 
-title: Vue2.0+Vue3.0
+title:  Vue
 date: 2021-01-01 20:11:33
 catergories:
 - study
@@ -22,11 +22,11 @@ catergories:
         Vue.config.productionTip=false;         //阻止vue启动时的生成的提醒
         ///创建vue实例
        const vu= new Vue({
-        el:'#root',     //指定容器,可写类名，第二种写法可用vu.$mount('#root');代替
+        el:'#root',     //挂载点，指定容器,可写类名，不能用在html和body上；第二种写法可用vu.$mount('#root');代替
         data:{
                 msg:'hello',
                 name:'xiaomi',
-                }
+		test(){...}	//不建议在data中写函数，因为会data中的属性会进行数据代理，而方法并不需要进行数据代理
 	//data第二种写成函数式,由Vue管理的函数不能写成箭头函数，对象里的方法可省略:function
 	/*
 	data:function(){
@@ -226,7 +226,7 @@ vue中的事件修饰符：
 
    - 渲染文本
 
-   `v-text` 指令,向其所在的节点中渲染文本内容,其会替换掉节点中的内容，`{{xxx}}`插值语法则不会。
+   `v-text` 指令,向其所在的节点中渲染文本内容,其会替换掉节点中的内容，`{{xxx}}`插值语法则不会,可以替换指定内容。
 ```
 <h3 v-text="keyword"></h3>
 ```
@@ -334,7 +334,9 @@ Vue.directive(指令名，回调函数);
 
 ## 计算属性
 
-内部有缓存机制，效率更高,不能开启异步任务如:`setTimeout()`
+要用的属性不存在，利用已有属性计算而得来
+
+内部有缓存机制，多次调用时只运行一次，效率更高,但不能开启异步任务如:`setTimeout()`
 
 ```
 new Vue({
@@ -345,7 +347,7 @@ hoby:'reading'
 },
 computed:{
 fullName:{
-//初次读取fullName时，get会被调用;所依赖的数据改变时会调用
+//初次读取fullName时，get会被调用;所依赖的数据改变时会调用,即data中的属性被改变时。
 get(){
 return this.name+'-'+this.hoby;
 },
@@ -356,7 +358,7 @@ set(){}
 
 /*
 //当数据只读不修改时，可采用简写
-fullName:function(){
+fullName(){
 return this.name+'-'+this.hoby;
 }
 */
@@ -365,7 +367,7 @@ return this.name+'-'+this.hoby;
 ```
 
 
-## 侦听属性
+## 监听属性
 
 能开启异步操作如:`setTimeout(()=>{},1000)`;所有不被vue所管理的函数最好写成箭头函数，这样this的指向才是vm
 
@@ -1169,7 +1171,8 @@ export default {
 	},
 	error=>{
 	console.log('请求fail',message);	
-	})
+	});
+//aioxs.post(地址,{key:value,key2:value2}).then(function(response){},function(error){})
 	}
 	},
 }
@@ -1242,6 +1245,674 @@ App.vue
 
 专门在vue中实现集中式状态（数据）管理的一个vue插件,对vue应用中多个组件的共享状态进行集中式的管理（读与写），也是一种组件间通信的方式，适用于任意组件间的通信。
 
-使用时机：多个组件依赖于同一状态；来自不同组件的行为需要变更同一状态
+使用时机：多个组件需要共享数据时
+
+[![fJo8ZF.png](https://z3.ax1x.com/2021/08/10/fJo8ZF.png)](https://imgtu.com/i/fJo8ZF)
+
+### store
+
+创建文件：src/store/index.js
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+//使用vuex插件
+Vue.use(Vuex);
+
+//action--用于响应组件中的动作
+const actions={}
+//mutations--用于操作数据state
+const mutations={}
+//state--用于储存数据
+const state={}
+
+//创建store
+const store =new Vuex.Store({
+actions,
+mutatuons,
+state,
+});
+
+//暴露store
+expore default store
+```
+
+在main.js中创建vm时传入store配置项
+```
+import Vue form 'vue'
+import App from '/App.vue'
+//引用插件
+import vueResource from 'vue-resource'
+import Vuex form 'vuex'
+import store form  './store'
+
+//使用插件
+Vue.use(vueResource);
+
+new Vue({
+el:'#app',
+render:h=>h(App),
+store,
+beforeCreate(){
+Vue.prototype.$bus=this
+}
+});
+```
+
+#### 基本使用
+
+初始化数据、配置actions、mutations，操作文件store.js
+```
+import Vue from 'vue'
+import Vuex form 'vuex'
+Vue.use (Vuex);
+
+const actions={
+//响应组件中的动组
+jia(context,value){
+context.commit('JIA',value);
+}
+}
+
+const mutations={
+//执行jia
+JIA(state,value){
+state.sum+=value;
+}
+}
+
+//初始化数据
+const state={sum=0;
+}
+
+//创建并暴露store
+export default new Vuex.store({
+actions,
+mutations,
+state,
+});
+```
+
+组件中读取vuex中的数据：`$store.state.sum`
+组件中修改vuex中的数据：`$store.dispatch('actions中的方法名',数据)`或`$store.commit('mutatuins中的方法名',数据)`
+>若没有网络请求或其他业务逻辑，组件中也可以越过actions，即不写dispatch,直接编写commit
 
 
+#### 四个map方法的使用
+
+- mapState:用于帮助我们映射state中的数据为计算属性
+
+```
+computed:{
+//借助mapState生成计算属性，对象写法
+...mapState({sum:'sum',school:'shchool',subject:'subject'});
+//借助mapState生成计算属性，对象写法
+...mapState(['sum','shchool','subject']);
+}
+```
+
+- mapGetters: 帮助我们映射getters中的数据为计算属性
+
+```
+computed:{
+...mapGetters({b:'b'});
+...mapGetters(['b']);
+}
+```
+
+- mapActions方法：帮助我们生成与action对法的方法，即包含`$store.dispatch(xxx)`的函数
+
+```
+methods:{
+...mapActions({inicrementOdd:'jiaOdd',incrementWait:'jiaWait'})
+...mapActions(['jiaOdd','jiaWait'])
+
+- mapMutations方法：用于帮助我们生成与mutations对话的方法，即：包含$store.commit(xxx)的函数
+
+```
+methods:{
+...mapMutations({increment:'JIA',decrement:'JIAN'})
+...mapMutations(['JIA','JIAN'])
+}
+```
+
+>mapActions与mapMutations使用时，若需要传递参数需要在模板中绑定事件时传递好参数，否则参数是事件对象
+}
+```
+
+
+### store
+
+index.js
+```
+//创建store
+import vue from 'vue'
+import vuex from 'vuex'
+//应用vuex插件
+Vue.use(vuex);
+
+const test={
+//namespaced:true,
+action:{},
+mutations:{},
+state:{},
+getters:{}
+}
+//store：actions、mutations、state、getters
+
+//创建暴露store
+export default new Vuex.store{
+	modules:{
+	a:test,
+	b:xxx	
+}
+}
+```
+
+test.vue
+```
+<template>
+,,,
+</template>
+
+<script>
+import {mapState,mapGetters,mapMutations,mapActions } form 'vuex'
+export default {
+name:'test'
+data(){},
+computed:{
+personList(){
+	return this.$store.state.personAbout
+}
+}
+
+}
+</script>
+```
+
+
+### 模块化+命名空间
+
+为了让代码更好维护，让多种数据分类更加明确
+
+修改store.js
+```
+const countAbout={
+namespaced:true,	//开启命名空间
+state:{x:1},
+mutatuions:{.........},
+actions:{..},
+getters:{
+
+bigSum(state){
+	return state.sum+1;
+
+}
+}
+}
+
+const personAbout={
+namespaced:true,
+state:{..},
+mutations:{},
+actions:{},
+}
+
+const store=new Vuex.Store({
+modules:{
+countAbout,
+personAbout
+}
+
+});
+
+```
+
+开启命名空间后，组件读取state数据
+```
+this.$store.state.personAbout.list
+//借助mapState读取
+...mapState('countAbout',['sum,'school','subject']);
+```
+
+开启命名空间后，组件读取getters数据
+```
+this.$store.getters('personAbout/firstPersonName')
+//借助mapGetters读取
+...mapGetters('countAbout',['bigSum']);
+```
+
+开启命名空间后，组件读取dispatch数据
+```
+this.$store.dispatch('personAbout/addPersonWang'person`)
+//借助mapActions读取
+...mapActions('countAbout',{incrementOdd:'jiaOdd',incrementWait:'jiaWait'});
+```
+
+开启命名空间后，组件读取commit数据
+```
+this.$store.commit('personAbout/ADD_PERSON',person)
+...mapMutations('countAbout',{increment:"JIA",decrement:"JIAN"})
+```
+
+
+## 路由
+
+路由就是一组映射（key-value）的对应关系,key为路径，value是function或Component
+
+- 后端路由:value是function,用于处理客户端提交的请求，即服务端根据请求路径找到匹配的函数处理数据后，返回响应数据
+
+>路由组件一般放在pages文件夹，一般组件则放在Component文件夹；通过切换，隐藏了的路由组件，默认是被销毁的，需要的时候在去挂载；每个组件都有$route属性，里面存储着自己的路由信息
+；整个应用只有一个route，可通过组件的$router属性获取到。
+
+#### vue-router：vue的一个插件库，用来实现SPA应用（单个web应用，整个页面只有一个完整页面，只会做页面的局部更新，数据需要通过ajax请求获取）
+
+index.js
+```
+//引入路由
+import VueRouter from 'vue-router'
+//引入组件
+import About form '../components/About.vue'
+import Home form '../components/Home.vue'
+
+//创建并暴露一个路由器
+export default new VueRouter({
+
+routes:[
+{path:"/about",
+component:About
+},
+{
+path:"/home"
+component:Home
+children:[	//多级路由
+{
+path:'news',	//不能写‘/news’
+component:News,
+},
+
+
+]
+}
+]
+
+})
+```
+
+main.js
+```
+//引入Vue
+import Vue from 'vue'
+//引入APP
+import App form './App.vue'
+//引入VueRouter 
+import VueRouter from 'vue-router'
+//引入路由器
+import router form './router'
+
+//应用插件
+Vue.use(VueRouter)
+
+//创建vm
+new Vue({
+el:"#app",
+render:h=>h(App),
+router:router
+})
+
+```
+
+index.js跳转
+```
+<template>
+//active-class可配置高亮样式
+<router-link  class="" active-class="active" to="/about">About</router-link>
+<router-link  class="" to="/home">Home</router-link>
+<router-link  class="" to="/home/news">Home</router-link>
+<!--跳转路由并携带query参数（字符串写法）-->
+<router-link  class="" to="/home/news?id=xxx&titel=xxx">Home</router-link>
+<!--跳转路由并携带query参数（对象写法）-->
+<router-link  class="" to="
+{path:'/home/news',
+query:{id:xxx,titel:xxx}
+}"></router-link>
+
+```
+
+接收query参数
+```
+$route.query.id
+```
+
+
+
+#### 命名路由
+
+简化路由跳转
+
+```
+{
+path:'/demo',
+component:Demo,
+children:[
+{
+	path:'test'
+	component:Test,
+	chilren:[
+		{
+		name:'hello'	//给路由命名
+		path:'welcome',
+		component:Hello
+		}
+		]
+},
+{
+name:weather
+path:'weather/:id/:title',	//使用占位符声明接收params参数
+component:Weather
+}
+]
+}
+```
+
+跳转
+```
+<router-link :to="name:hello">test</router-link>
+<router-link :to="
+{
+name:hello,
+query:{id:xxx,title:xxx}
+}">test</router-link>
+<!--跳转路由并携带params参数（字符串写法）-->
+<router-link  class="" to="/home/news/id/title">Home</router-link>
+<!--跳转路由并携带params参数（对象写法）-->
+<router-link  class="" to="
+{name:'weather',
+params:{id:xxx,titel:xxx}
+}"></router-link>
+</template>
+```
+>携带params参数时，若使用to的对象写法，则不能使用path配置项，必须用name配置下
+
+接收params参数
+```
+$route.params.id
+```
+
+### 路由的props配置
+
+index.js
+
+```
+export default new VueRouter({
+
+routes:[
+{
+path:'/home',
+component:Home,
+children:[
+{
+name:'test',
+path:'detail/:id/:title',
+compomemt:Detail,
+//props的第一种写法，值为对象，该对象中的所有key-value都会以props的形式传给Detail组件
+props:{a:1,b:'hello'}
+//props的第二种写法，值为布尔值，若布尔值为真，就会把该路由组件收到的所有params参数，以props的形式传给detail组件。
+props：true
+//props的第三种写法，值为函数,该函数返回的对象中每一组key-value都会通过props传给Detail组件
+props($route){
+return {id:$route.query.id,title:$route.query.title}
+}
+}
+]
+}
+]
+})
+```
+
+Detail.vue
+```
+<template>
+<ul>
+	<li></li>
+	<li></li>
+</ul>
+</template>
+
+<script>
+export default{
+name:'Detail',
+props:['id','title'],
+computed:{xxx},
+mounted(){xxx}
+
+}
+</script>
+```
+
+
+- <router-link>的replace属性
+   - 作用：控制路由跳转时操作的浏览器历史记录的模式
+   - 历史记录的写入方式：`push`追加历史记录，`replace`替换当前记录；路由跳转时默认为`push`
+   - <router-link replace >test</router-link>
+
+message.vue
+```
+<script>
+name:'massage',
+data(){},
+methods:{
+pushShow(m){
+this.$router.push({
+
+	name:'test',
+	query:{
+		id:m.id,
+		title:m.title	
+	}
+})
+}
+}
+```
+
+Banner.vue
+```
+<script>
+
+export default {
+    name:'Banner'
+	methods:{
+	back(){this.$router.back()},
+	forward(){this.$router.forward()}
+	}
+}
+```
+
+### 编程式路由导航
+
+```
+this.$router.push({
+	name:'test',
+	params:{id:xxx,title:xxx}
+	})
+
+this.$router.replace({
+	name:'test',
+	params:{id:xxx,title:xxx}
+	})
+```
+
+### 缓存路由组件
+
+让不展示的路由组件保持挂载，不被销毁
+```
+<keep-alive include="News">
+<router-view></router-view>
+</keep-alive>
+```
+
+home.vue
+```
+<template>
+<div>
+	<ul>
+		<li>
+			<router-link to="/home/new">news</router-link>
+		</li>
+		<li>
+			<router-link to="/home/message">message</router-link>
+		</li>
+	</ul>
+<!--缓存多个路由组件-->
+<!-- <keep-alive :include="['','']">-->
+<!--缓存一个路由组价-->
+<keep-alive include="News">
+	<router-view></router-view>
+</keep-alive>
+</div>
+</template>
+
+<script>
+export default{
+ name:'Home',
+}
+</script>
+```
+
+New.vue
+```
+<script>
+ export default{
+	name:'News',
+	data(){
+		return{
+		opacity:1
+		}
+		},
+	//路由组件所独有的两个钩子，用于捕获路由组件的激活状态
+	activated(){console.log('News组件被激活了')}	
+	deactivated(){console.log('News组件失活了')}	
+}
+```
+
+### 路由守卫
+
+对路由进行权限控制
+
+- 全局守卫
+
+index.js
+```
+...
+const router=new VueRounter({
+	routes:[
+		{
+		name:'test',
+		path:'/about',
+		component:About
+		meta:{isAuth:true,title:'新闻'},
+		},
+	]
+//全局前置路由守卫---初始化时被调用，每次路由切换之前被调用
+router.beforeEach((to,from,next)=>{
+if(to.meta.isAuth){//判断当前路由是否需要进行权限控制
+	if(localStorage.getItem('shool')==='test'){next();}
+	else{alert('学校名不对')}
+}else{
+next();	//放行
+}
+})
+
+//全局前置路由守卫---初始化时被调用，每次路由切换之后被调用
+router.afterEach((to,from,next)=>{
+console.log('后置路由守卫');
+dovument.title=to.meta.title||'testTitle'
+
+})
+})
+export default router;
+```
+
+- 独享守卫
+
+index.js
+```
+......
+name:'news',
+path:'news',
+component:News,
+meta:{isAuth:true,title:'新闻'},
+beforeEnter:(to,from,next)=>{
+if(to.meta.isAuth){//判断当前路由是否需要进行权限控制
+	if(localStorage.getItem('shool')==='test'){next();}
+	else{alert('学校名不对')}
+}else{
+next();	//放行
+}
+}
+```
+
+- 组件内守卫
+
+```
+//进入守卫：进入该组件时被调用
+beforeRouteEnter(to,from,next){},
+//离开守卫：离开该组件时被调用
+beforeRouteLeave(to,from,next){}
+```
+
+
+### 路由器工作模式
+
+对于一个url来说`#`及其后的内容就是hash值;hash值不会包含在http请求中，即hash值不会带给服务器。
+
+- hash模式:
+
+地址中永远带着#号，不美观；通过第三方手机app分享时可能会标记为不合法；但其兼容性好；
+
+- history模式:
+
+地址干净，兼容比hash略差，应用部署上线时需要后端人员支持，解决刷新页面服务端404的问题；
+
+## Vue UI组件库
+
+移动端：`Vant`,`Cube UI`,`Mint UI`
+
+PC端：`Element UI`, `IView UI`
+
+main.js
+```
+import Vue from 'vue'
+import App from './App.vue'
+//引入ElementUI组件库
+import ElementUI from 'element-ui'
+//引入ElementUI全部样式
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.ues(ElementUI);
+
+new Vue({
+	el:'#app'
+	render:h=>h(App),
+})
+```
+
+balel.config.js
+```
+module.exports={
+presets:[
+	'@vue/cli-plugin-babel/preset',
+	["@babel/present-env",{"modules":false}],
+],
+plugins:[
+[
+	"component",
+	{
+	"libraryName":'element-ui',
+	"styleLibraryName":"theme-chalk"
+	}
+]
+]
+
+
+}
+```

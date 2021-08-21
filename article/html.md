@@ -49,8 +49,13 @@ div*3快速生成3个<div></div>
 </html>
 
 ```
+- base
+
+`<base href="" target="_top">`所有链接标签的默认链接
 
 - meta视口标签
+
+常用于指定网页描述、关键词、作者、事件等
 
 `<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0">`
 
@@ -94,6 +99,7 @@ p {color:blue;}
 当样式需要被应用到很多页面的时候，外部样式表将是理想的选择。
 使用外部样式表，你就可以通过更改一个文件来改变整个站点的外观。
 <head>
+<!--定义了文档与外部资源的关系-->
 <link rel="stylesheet" type="text/css" href="mystyle.css">
 </head>
 ```
@@ -265,7 +271,7 @@ display:none
 
 #### 2.新增多媒体标签
 
-- \<video>
+- \\\<video>
 
 `<video src="" controls="controls" ></video>`
 
@@ -281,7 +287,7 @@ display:none
 |poster|imgurl(加载等待图片)|
 |muted|静音播放|
 
-- \<audio>
+- \\\<audio>
 
 `<audio src="" ></audio>`
 
@@ -313,3 +319,19 @@ display:none
 |multiple|可多选文件提交|
 |autofocus|自动聚焦|
 |required|不能为空，必填|
+
+### 5. canvas
+
+使用js在网页上绘制图像
+`<canvas id=''  width='' height=''></canvas>`
+
+### 本地存储localStorage
+
+无时间限制，5M，只存储字符串
+
+### 地理定位Geolocation
+
+### socket通信：webscoket
+
+### 后台js：webworkers
+

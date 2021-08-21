@@ -326,3 +326,49 @@ output:{...},
 
 - 打包构建速度
 - 代码运行的性能
+
+
+
+source-map:一种提供源代码到构建后代码映射的技术，用于检测源代码的错误
+种类：
+
+>内联和外部的区别：外部生成了文件而内联没有，内联的构建速度更快；
+
+- source-map:外部
+错误代码准确信息和源代码的错误位置
+- inline-source-map:内联
+只生成一个内联source-map
+错误代码的准确信息和源代码的错误位置
+- hidden-source-map:外部
+错误代码的错误原因，但没有错误位置
+不能追踪源代码错误，只能提示到构建后代码的错误位置
+- eval-source-map:内联
+每一个文件都生成对应的source-map，都在eval
+- nosources-source-map:外部
+错误代码的准确信息,但没有任何源代码信息
+- cheap-souce-map:外部
+错误代码准确信息和源代码的错误位置,只能精确到行
+- cheap-module-souce-map:外部
+错误代码准确信息和源代码的错误位置
+
+开发环境：速度快(eval>inline>cheap>..)，调试友好(souce-map,cheap-module-souce-map,cheap-spuce-map)
+所以应选择eval-source-map/eval-cheap-module-souce-amp
+
+生产环境：内联会让代码体积变大，所以不用内联，源代码要不要隐藏（nosource-source-map全部隐藏，hidden-source-map只隐藏源代码，会提示构建后代码错误信息）
+所以选择source-map/cheap-module-souce-map
+
+
+## oneOf
+
+```
+//以下loader只会匹配一个
+//注意：不能有两个配置处理同一个类型文件
+oneOf:[
+{
+test:/\.css$/,
+use:[...commonCssLoadder]
+},
+
+{}
+]
+```

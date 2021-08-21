@@ -773,7 +773,7 @@ var myChildren = myGirls.concat(myBoys,"jjjj",11);   // 连接 myGirls 和 myBoy
 
 - join() 方法
 
-会将数组内的所有元素结合为一个字符串。当然您还可以规定分隔符：`array.join(",")`
+会将数组内的所有元素结合为一个字符串。当然您还可以规定分隔符(默认以逗号分割)：`array.join(",")`
 
 - 裁剪数组
 slice(start,end) 方法用数组的某个片段切出新数组。原数组不会发生改变
