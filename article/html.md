@@ -61,12 +61,9 @@ div*3快速生成3个<div></div>
 
 |属性|说明|
 |-|-|
-|width|设置的是viewport宽度，可设置device-width特殊值|
-|initial-scale|初始缩放比，大于0的数字|
-|maximum-scale|最大缩放比，大于0的数字|
-|minimum-scale|最小缩放比，大于0的数字|
-|user-scalable|用户是否可以缩放
-
+|name="viewport"|content="width=(设置的是viewport宽度,可设置device-width特殊值),initial-scale=(初始缩放比，大于0的数字小于10),maximum-scale=（最大缩放比，大于0的数字)，minimum-scale=(最小缩放比，大于0的数字)，user-scalable=(用户是否可以缩放)"|
+|name="http-equiv"|额外添加头部内容|
+|charset|编码|
 
 
 ### 常用标签

@@ -11,11 +11,15 @@ categories:
 响应式布局：在不同设备之间缩放网页
 
 
-
+- 媒介查询
 ```
+//大范围在上面
 @media screen and (max-width:768px){
 当屏幕小于该尺寸时采用如下布局
 ...
+}
+@media screen and(max-width:1020px){
+   ...
 }
 ```
 
@@ -27,7 +31,7 @@ categories:
    - 利用rem单位
 
 ```
-.html{font-size:100px;}
+.htmlfont-size:100px;}
 .item{width: 0.4rem;}
 ```
    - dpr=物理像素/设备独立像素
@@ -125,9 +129,13 @@ input:focus{点击时获取焦点}
 
 ```
 ----------------------------
-xxx:nth-of-type(even){选择序号（同类型）为偶数的xxx元素}
-xxx:nth-of-type(odd){选择序号（同类型）为奇数的xxx元素}
+li:nth-of-type(2n){选择序号（同类型）为偶数的xxx元素}
+xxx:nth-of-type(2n+1){选择序号（同类型）为奇数的xxx元素}
 xxx:nth-child(n){选择序号为n的xxx元素}
+li:first-of-type{第一个元素}
+li:last-of-type{最后一个元素}
+li:only-of-type{只属于li节点}
+li:nth-child(3){}
 ```
 - before/after
 
@@ -165,6 +173,8 @@ xxx[attr(属性名称)=val(属性值)]{xxx}
 1. 行内样式表
 2. 内部样式表
 3. 外部样式表`<link rel="stylesheet" href="css文件路径">`
+
+>css继承:可继承文字相关的样式;而不能继承布局相关的样式
 
 *一般情况下，优先级如下：*
 
@@ -362,12 +372,30 @@ a{
 
 ### 布局
 
-- flex
-属性：
-   - flex-wrap:nowrap/wrap/wrap-reverse;
-   - align-items:stretch/center/flex-start/flex-end/baseline;
-   - flex-grow: 数字;
-   - flex-shrink:数字;
+- flex弹性布局
+   - 采用Flex布局的元素，称为Flex容器（flex container），简称”容器”。它的所有子元素自动成为容器成员，称为Flex项目（flex item），简称”项目”。
+   - 容器默认存在两根轴：水平的主轴（main axis）和垂直的交叉轴（cross axis）。
+   - 主轴的开始位置（与边框的交叉点）叫做main start，结束位置叫做main end；
+   - 交叉轴的开始位置叫做cross start，结束位置叫做cross end。
+   - 项目默认沿主轴排列。单个项目占据的主轴空间叫做main size，占据的交叉轴空间叫做cross size。
+
+|容器属性|说明|
+|-|-|
+|flex-direction:row/row-reverse|colunm|colunm-reverse|决定主轴的方向|
+|flex-wrap:nowrap/wrap/wrap-reverse（最开始的一行在下面，新的在上面）;|如果一条轴线排不下，是否换行以及如何换行|
+|flex-flow:<flex-direction><flex-wrap>|flex-direction与flex-wrap的简写形式|
+|justify-content:flex-start/flex-end/center/space-between（两端对齐，项目间的间隔相等)/space-around（每个项目间的间隔相等，项目与边框的间隔较小）|定义项目在主轴上的对齐方式|
+|align-items:stretch（项目无高度或设为auto时，将会占满整个容器高度）/center/flex-start/flex-end/baseline（项目的第一行文字的基线对齐）;|定义项目在交叉轴上的对齐方式|
+|align-content:stretch（项目无高度或设为auto时，将会占满整个容器高度）/center/flex-start/flex-end/space-between/space-around|定义项目在多根轴线上的对齐方式，如果项目只有一根轴线则不起作用|
+
+|项目属性|说明|
+|-|-|
+|flex-grow: 数字;|定义项目的放大比例，默认0；若全部设为1，则平分空间|
+|flex-shrink:数字;|定义缩小比例，默认1，都设为1，空间不足，则都等比例缩小；若设为0则不会|
+|flex-basis:宽高/auto;|定义项目占主轴的空间，默认auto|
+|flex:none/[<flex-grow>,flex-shrink，<flex-basis>];|flex-grow,flex-shrink，flex-basis简写，后两个可选，默认0,1，auto|
+|order:数字;|定义项目的排列顺序，越小越靠前，默认0|
+|align-self:auto / flex-start / flex-end / center / baseline / stretch;|允许单个项目有与其他项目不一样的对齐方式，可覆盖align-items属性。默认值为auto，表示继承父元素的align-items属性，如果没有父元素，则等同于stretch。|
 
 ```
 .box{

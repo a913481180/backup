@@ -1,9 +1,10 @@
---- 
-title:  Vue
-date: 2021-01-01 20:11:33
-catergories:
-- study
 ---
+title: Vue 
+date: 2021-06-01 20:00:00
+categories:
+- study 
+---
+
 
 # Vue2.0
 
@@ -53,7 +54,6 @@ catergories:
 
 - 数据代理
 
-通过一个对象对另一个对象中的属性的操作
 `Object.defineproperty()`第一个参数为对象，第二个为对象的属性，第三个为配置项
 
 如添加属性：
@@ -81,6 +81,30 @@ set:function(value){
 age=value;
 }
 })
+```
+通过一个对象对另一个对象中的属性的操作
+```
+var object={
+    name:'xiaomei',
+    sex:'female',
+}
+var test={
+    age:3,
+    hobby:'swing'
+}
+Object.defineProperty(object,'age',{
+//默认情况下添加的属性不可枚举，即无法遍历出来
+
+get(){
+
+    console.log('getter')
+    return test.age;		//通过object中的age控制test中的age,即数据代理
+},
+set(n){
+console.log("set",n)
+test.age=n;
+}
+});
 ```
 
 vue中的数据代理：通过vm对象来代理data对象中属性的操作
@@ -216,17 +240,20 @@ vue中的事件修饰符：
 
    - 条件渲染
 
-      `<h2 v-show="false"> test</h2>	<!--元素还存在-->`
+语法： `<h2 v-show="false"> test</h2>	<!--元素还存在-->`
 	
+v-if与v-show的区别：
 ```
-   <h2 v-if="false"> test</h2>	<!--元素直接消失,中间不能被打断-->
-   <template v-else-if="true"> <a>test</a></template>	<!--template不影响结构，但必须和v-if配合使用-->
-   <h2 v-else> test</h2>	
-```        
+ <h2 v-if="false"> test</h2>	<!--元素直接消失,中间不能被打断-->
+<template v-else-if="true"> <a>test</a></template>	<!--template不影响结构，但必须和v-if配合使用-->
+ <h2 v-else> test</h2>	
+```
+
 
    - 渲染文本
 
    `v-text` 指令,向其所在的节点中渲染文本内容,其会替换掉节点中的内容，`{{xxx}}`插值语法则不会,可以替换指定内容。
+
 ```
 <h3 v-text="keyword"></h3>
 ```
@@ -288,14 +315,12 @@ data:{
 [v-cloak]{display:none;}
 </style>
 <h2 v-cloak> {{keyword}}</h2>
-
 ```
 
    `v-once`指令，其所在的节点在初次渲染后，就视为静态内容了，以后即使数据变化了，其也不再变化
 
 ```
 <h2 v-once> {{keyword}}</h2>
-
 ```
 
    `v-pre`指令，跳过其所在节点的编译过程，可用于跳过没有指令语法、插值语法的节点，加快编译速度。
@@ -482,8 +507,8 @@ Vue.filter('myName',function(value){return value;});
 
 - 非单文件组件：一个文件中包含有n个组件
 
-```
 创建school组件
+```
 //简写
 const school={};
 //标准写法
@@ -496,8 +521,7 @@ name:'xuexiao',
 template:`
 <div>
 <h3>test</h3>
-</div>
-`,
+</div>`,
 
 data(){	//data必须写成函数，为避免组件被复用时，数据存在引用关系
 return {
@@ -506,11 +530,15 @@ return {
 }
 }
 });
+```
 
-//定义app组件
+定义app组件
+```
 const app=Vue.extend({});
+```
 
-//创建vm
+创建vm
+```
 new Vue({
 el:'#root',
 template:'<app></app>',
@@ -523,13 +551,16 @@ components:{
 
 //全局注册组件
 Vue.component('xuexiao',school);
+```
 
-//使用组件
+使用组件
+
+```
 <xuexiao></xuexiao>
 <xuexiao /><!--需要脚手架支持，否则多个组件时，后续组件将不能渲染-->
 ```
 
-关于VueComponent，组件本质是一个名为VueComponent的构造函数，是由Vue.extend生成的。当我们写<xuexiao></xuexiao>，Vue解析时会帮我们创建school组件的实例对象，即vue帮我们执行`new VueComponent();`。当我们每次调用Vue.extend()时,返回的都是一个全新的VueComponent。在组件配置中，data函数、methods中的函数、watch中的函数等，它们的this都指向VueComponent实例对象。
+关于VueComponent，组件本质是一个名为VueComponent的构造函数，是由Vue.extend生成的。当我们写`<xuexiao></xuexiao>`，Vue解析时会帮我们创建school组件的实例对象，即vue帮我们执行`new VueComponent();`。当我们每次调用Vue.extend()时,返回的都是一个全新的VueComponent。在组件配置中，data函数、methods中的函数、watch中的函数等，它们的this都指向VueComponent实例对象。
 
 ```
 //定义一个构造函数
@@ -550,6 +581,7 @@ Demo.prototype.e=21;
 
 - 单文件组件：一个文件中只包含有一个组件
    - school.vue组件
+
 ```
 <template>
 <!--组件的结构-->
@@ -585,7 +617,9 @@ background-color:red;
 }
 </style>
 ```
+
    - App.vue组件
+
 ```
 <template>
 <div>
@@ -606,7 +640,9 @@ components:{School}
 <style>
 </style>
 ```
+
    - main.js
+
 ```
 import App from './App.vue'
 new Vue({
@@ -614,7 +650,9 @@ el:'#root',
 components:{App},
 });
 ```
+
    - index.html
+
 ```
 <!DOCTYPE html>
 <html>
@@ -642,6 +680,7 @@ components:{App},
 
 
 - main.js项目的入口文件
+
 ```
 //引入vue.runtime.xxx.js，其是运行版的vue,只包含核心功能，没有模板解析器,而完整版的Vue才有。
 import Vue from 'vue'		
@@ -661,6 +700,7 @@ render:h=>h(app),	//没有模板解析器，不能使用template配置项，需�
 - vue.config.js配置
 
 使用vue.config.js可以对脚手架进行个性化定制
+
 ```
 module.exports={
 	pages:{
@@ -675,6 +715,7 @@ module.exports={
 
 - 脚手架文件结构
 
+```
 |--node_modules
 |--public
 |--src
@@ -686,7 +727,7 @@ module.exports={
 |--babel.config.js 
 |--package.json: 应用包配置文件
 |--package-lock.json: 包版本控制文件
-
+```
 
 - ref属性
 
@@ -728,6 +769,7 @@ export default {
 >v-modle绑定的值不应是props传过来的值，当其为对象类型时，修改对象中的属性时，vue无法发现
 
 子组件
+
 ```
 new Vue({
 data:{},
@@ -750,6 +792,7 @@ name:{
 ```
 
 父组件
+
 ```
 <template>
 <div>
@@ -773,6 +816,7 @@ export default{
 
 适用于子组件与父组件通信
 App.vue
+
 ```
 <template>
 <!-- 通过父组件给子组件绑定一个自定义事件：用于子给父传递数据 -->
@@ -812,6 +856,7 @@ methods:{
 ```
 
 Student.vue
+
 ```
 <template>
 <h2>{{name}}</h2>
@@ -851,6 +896,7 @@ this.$destroy();	//销毁当前student组件的实例，销毁后所有student�
 
 
 main.js
+
 ```
 import Vue from 'vue'
 import App from './App.vue'
@@ -865,6 +911,7 @@ new Vue({
 ```
 
 School.vue
+
 ```
 <template>
 </template>
@@ -893,6 +940,7 @@ export default{
 ```
 
 School.vue
+
 ```
 <temlate>
 </template>
@@ -923,6 +971,7 @@ export default({
 适用于任意组件间通信
 
 School.vue
+
 ```
 <template>
 </template>
@@ -956,6 +1005,7 @@ export default{
 ```
 
 student.vue
+
 ```
 <script>
 import pubsub from 'pubsub-js'
@@ -986,6 +1036,7 @@ export default ({
 	
 可以把多个组件共用的配置提取成一个混入对象
 school组件
+
 ```
 <template>
 <div>
@@ -1013,6 +1064,7 @@ export default{
 ```
 
 mixin.js
+
 ```
 //定义混合
 export const test={
@@ -1036,6 +1088,7 @@ export const test2={
 - 插件:用于增强Vue
 
 main.js
+
 ```
 //引入Vue
 import Vue from 'vue'
@@ -1055,6 +1108,7 @@ new Vue({
 ```
 
 plugins.js
+
 ```
 //定义插件
 export default{
@@ -1119,8 +1173,9 @@ Vue.prototype.$myMethod=function(){..}
 
 
 vue.config.js
+
 ```
-module.export={
+module.exports={
 
 	pages:{
 		index:{
@@ -1156,6 +1211,7 @@ pathRewrite:{'^/test2':''},	//清除地址前面的协议域名端口http://loca
 ```
 
 App.vue
+
 ```
 <template>
 </template>
@@ -1185,6 +1241,7 @@ export default {
 用于父组件与子组件的通信
 
 Category.vue
+
 ```
 <template>
 <div class="category">
@@ -1214,6 +1271,7 @@ export default{
 ```
 
 App.vue
+
 ```
 <template>
 <Category>
@@ -1252,6 +1310,7 @@ App.vue
 ### store
 
 创建文件：src/store/index.js
+
 ```
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -1277,6 +1336,7 @@ expore default store
 ```
 
 在main.js中创建vm时传入store配置项
+
 ```
 import Vue form 'vue'
 import App from '/App.vue'
@@ -1301,6 +1361,7 @@ Vue.prototype.$bus=this
 #### 基本使用
 
 初始化数据、配置actions、mutations，操作文件store.js
+
 ```
 import Vue from 'vue'
 import Vuex form 'vuex'
@@ -1365,6 +1426,7 @@ computed:{
 methods:{
 ...mapActions({inicrementOdd:'jiaOdd',incrementWait:'jiaWait'})
 ...mapActions(['jiaOdd','jiaWait'])
+```
 
 - mapMutations方法：用于帮助我们生成与mutations对话的方法，即：包含$store.commit(xxx)的函数
 
@@ -1376,13 +1438,12 @@ methods:{
 ```
 
 >mapActions与mapMutations使用时，若需要传递参数需要在模板中绑定事件时传递好参数，否则参数是事件对象
-}
-```
 
 
 ### store
 
 index.js
+
 ```
 //创建store
 import vue from 'vue'
@@ -1409,6 +1470,7 @@ export default new Vuex.store{
 ```
 
 test.vue
+
 ```
 <template>
 ,,,
@@ -1435,6 +1497,7 @@ personList(){
 为了让代码更好维护，让多种数据分类更加明确
 
 修改store.js
+
 ```
 const countAbout={
 namespaced:true,	//开启命名空间
@@ -1464,10 +1527,10 @@ personAbout
 }
 
 });
-
 ```
 
 开启命名空间后，组件读取state数据
+
 ```
 this.$store.state.personAbout.list
 //借助mapState读取
@@ -1475,6 +1538,7 @@ this.$store.state.personAbout.list
 ```
 
 开启命名空间后，组件读取getters数据
+
 ```
 this.$store.getters('personAbout/firstPersonName')
 //借助mapGetters读取
@@ -1482,6 +1546,7 @@ this.$store.getters('personAbout/firstPersonName')
 ```
 
 开启命名空间后，组件读取dispatch数据
+
 ```
 this.$store.dispatch('personAbout/addPersonWang'person`)
 //借助mapActions读取
@@ -1489,6 +1554,7 @@ this.$store.dispatch('personAbout/addPersonWang'person`)
 ```
 
 开启命名空间后，组件读取commit数据
+
 ```
 this.$store.commit('personAbout/ADD_PERSON',person)
 ...mapMutations('countAbout',{increment:"JIA",decrement:"JIAN"})
@@ -1507,6 +1573,7 @@ this.$store.commit('personAbout/ADD_PERSON',person)
 #### vue-router：vue的一个插件库，用来实现SPA应用（单个web应用，整个页面只有一个完整页面，只会做页面的局部更新，数据需要通过ajax请求获取）
 
 index.js
+
 ```
 //引入路由
 import VueRouter from 'vue-router'
@@ -1539,6 +1606,7 @@ component:News,
 ```
 
 main.js
+
 ```
 //引入Vue
 import Vue from 'vue'
@@ -1562,6 +1630,7 @@ router:router
 ```
 
 index.js跳转
+
 ```
 <template>
 //active-class可配置高亮样式
@@ -1579,6 +1648,7 @@ query:{id:xxx,titel:xxx}
 ```
 
 接收query参数
+
 ```
 $route.query.id
 ```
@@ -1615,6 +1685,7 @@ component:Weather
 ```
 
 跳转
+
 ```
 <router-link :to="name:hello">test</router-link>
 <router-link :to="
@@ -1631,9 +1702,11 @@ params:{id:xxx,titel:xxx}
 }"></router-link>
 </template>
 ```
+
 >携带params参数时，若使用to的对象写法，则不能使用path配置项，必须用name配置下
 
 接收params参数
+
 ```
 $route.params.id
 ```
@@ -1670,6 +1743,7 @@ return {id:$route.query.id,title:$route.query.title}
 ```
 
 Detail.vue
+
 ```
 <template>
 <ul>
@@ -1696,6 +1770,7 @@ mounted(){xxx}
    - <router-link replace >test</router-link>
 
 message.vue
+
 ```
 <script>
 name:'massage',
@@ -1715,6 +1790,7 @@ this.$router.push({
 ```
 
 Banner.vue
+
 ```
 <script>
 
@@ -1744,6 +1820,7 @@ this.$router.replace({
 ### 缓存路由组件
 
 让不展示的路由组件保持挂载，不被销毁
+
 ```
 <keep-alive include="News">
 <router-view></router-view>
@@ -1751,6 +1828,7 @@ this.$router.replace({
 ```
 
 home.vue
+
 ```
 <template>
 <div>
@@ -1779,6 +1857,7 @@ export default{
 ```
 
 New.vue
+
 ```
 <script>
  export default{
@@ -1801,6 +1880,7 @@ New.vue
 - 全局守卫
 
 index.js
+
 ```
 ...
 const router=new VueRounter({
@@ -1835,6 +1915,7 @@ export default router;
 - 独享守卫
 
 index.js
+
 ```
 ......
 name:'news',
@@ -1880,6 +1961,7 @@ beforeRouteLeave(to,from,next){}
 PC端：`Element UI`, `IView UI`
 
 main.js
+
 ```
 import Vue from 'vue'
 import App from './App.vue'
@@ -1897,6 +1979,7 @@ new Vue({
 ```
 
 balel.config.js
+
 ```
 module.exports={
 presets:[

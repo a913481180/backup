@@ -87,7 +87,15 @@ alert("error:"+xhr.status);
 优点：轻量级数据，解析轻松
 缺点：种类少，传输数据量少
 
-`JSON.parse();`  `JSON.stringify();`
+`JSON.parse();`:将JSON字符串转为一个对象。
+你的字符串必须符合JSON格式，即键值都必须使用双引号包裹：
+```
+let a = '["1","2"]';
+let b = "['1','2']";
+console.log(JSON.parse(a));// Array [1,2]
+console.log(JSON.parse(b));// 报错
+```
+`JSON.stringify();`:将 JavaScript 对象转换为 JSON 字符串
 
 ### ajax 只能下载同源的数据，跨源的数据禁止下载
 
