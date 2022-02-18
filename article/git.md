@@ -2,7 +2,7 @@
 title: git
 date: 2020-12-12 12:12:12
 categories:
-- linux
+- blog 
 ---
 
 ## 安装git
@@ -13,6 +13,7 @@ git config --global user.name "用户名"               //个人账号
 git config --global user.email 123456@qq.com         //个人邮箱地址
 上面的--global选项,表示以后管理git库时,默认使用上面的用户信息,也可以通过git config -l 来查看配置信息
 ```
+
 ## git命令
 
 对当前目录进行git管理,该目录便会成为工作区,并在当前目录下会出现个.git隐藏目录.
@@ -64,23 +65,4 @@ git config --global user.email 123456@qq.com         //个人邮箱地址
 - `git pull`
 从远程仓库中同步代码
 
-## ssh key
-
-首先通过ls ~/.ssh命令,查看是否已有ssh key,若有的话,先备份,然后通过rm -rf ~/.ssh来删除
-1. 输入,创建密钥
-`ssh-keygen -t rsa -C "...."    // "..."里输入邮箱号`
-2. 然后会提示设置密码,直接连按3个回车,表示密码为空
-
-3. 将新生成的key添加到ssh-agent中
-
-`eval  "ssh-agent -s"`
-`ssh-add ~/.ssh/id_rsa`
-4. 若显示Could not open a connection to your authentication agent.,则继续输入
-`ssh-agent bash`
-`ssh-add ~/.ssh/id_rsa`
-出现Identity added字段,则表示写入成功,ssh key公钥便保存在id_rsa.pub文件中了
-5. 将复制的ssh key公钥添加到github中
-6. 测试ssh key
-`ssh git@github.com`
-显示Hi  youname! ,则表示成功,后面的提示不用管；
 

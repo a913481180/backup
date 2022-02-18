@@ -1,8 +1,8 @@
 ---
 title: JavaScript
-date: 2020-09-22 21:22:11
-catergories:
-- study
+date: 2021-05-22 21:22:11
+categories:
+- web 
 ---
 
 ### JavaScript
@@ -41,6 +41,7 @@ js引擎：js解释器
 - alert(msg):浏览器弹窗提示
 - console.log(msg):控制台打印信息
 - innerHTML:写入HTML元素
+>innerHTML 和 outerHTML 的区别：1）innerHTML:从对象的起始位置到终止位置的全部内容, 不包括HTML标签。2）outerHTML:除了包含innerHTML的全部内容外, 还包含对象标签本身。       
 >如需访问 HTML 元素，JavaScript 可使用 document.getElementById(id) 方法。如：`document.getElementById("demo").innerHTML = 5 + 6;`
 - document.write()：写入HTML输出
 >注意：在 HTML 文档完全加载后使用 document.write() 将会删除所有的标签 ;
@@ -2512,7 +2513,7 @@ console.log(decodeURIComponent(document.cookie);	//解码读取
 *sessionStorage(结合后台使用)*
 
 
-#### HTML5 新特性
+#### ES6 新特性
 
 - 中括号解析
 
@@ -2688,53 +2689,6 @@ console.log(arr1.sum==arr2.sum);
 多态侧重的是子一级自己重写和新增的属性和方法;
 
 
-### 拖拽
-
-- mousedown 
-
-记录鼠标按下的位置和被拖拽物体相对距离
-
-```
-//clientX为鼠标位置，offsetLeft为盒子位置
-var offsetX=e.clientX-node.offsetLeft;
-var offsetY=e.clientY-node.offsetTop;
-```
-
-
-- mousemove
-
-```
-//鼠标移动的距离减去相对距离=盒子移动的距离
-node.style.left=e.clientX-offsetX+'px';
-node.style.top=e.clientY-offsetY+'px';
-```
-
-- mouseup
-
-取消拖拽
-
-*实例：*
-
-```
-//父盒子与子盒子要有定位
-window.onload=function(){
-var oDiv=document.getElementById("div1");
-oDiv.onmousedown=function(ev){
-var e=ev||window.event;
-var offsetX=e.clientX-oDiv.offsetLeft;
-var offsetY=e.clientY-oDiv.offsetTop;
-
-document.onmousemove=function(ev){
-	var e=ev||window.event;
-oDiv.style.left=e.clientX-offsetX+"px";
-oDiv.style.top=e.clientY-offsetY+"px";
-}}
-
-document.onmouseup=function(){
-document.onmousemove=null;
-}
-}
-```
 
 #### ECMA6 class语法
 
@@ -2799,5 +2753,25 @@ console.log(this.job);
 var w1=new worker("Tom","man",22,"driver");
 ```
 
+---
+## 触发input-file的click事件：`document.querySelector('#file').click()`
+## 清空input-file值:
+```
+//1.###
+var test = document.getElementById('test');
+test.value = '';  //test的value不能设为有字符的值，但是可以设置为空值
 
-
+//2.###
+var test = document.getElementById('test');
+test.outerHTML = test.outerHTML; //重新初始化了test的html
+```
+## switch case语句:
+```
+switch (value){
+    case value1:  xxxxx  // 当表达式的结果等于 value1 时，则执行该代码
+        break;
+    default :  xxxxxxxx // 如果没有与表达式相同的值，则执行该代码
+}
+```
+## js时间戳转换成日期的方法：`(new Date(parseInt(n))).toLocaleDateString() `
+##  获取地址栏地址：window.location.href。

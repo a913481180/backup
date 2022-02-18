@@ -1,8 +1,8 @@
 ---
 title: Vue 
-date: 2021-06-01 20:00:00
+date: 2021-06-07 20:00:00
 categories:
-- study 
+- web 
 ---
 
 
@@ -709,7 +709,27 @@ module.exports={
 		entry:'src/main.js',
 		}
 		},
-	lintOnSave:false	//关闭语法检查
+	lintOnSave:false,	//关闭语法检查
+	//代理
+	devServer:{
+		proxy:{
+			'/api'::{
+				target:'http://xxxx'
+				changeOrigin:true,
+				pathRewrite:{
+					'^/api':'/api'
+				}
+			}
+		}
+	}
+	configureWebpack:(config)=>{//地址
+		config.resolve={
+			extensions:['.js','.json','.vue'],
+			alias:{
+				'@':path.resolve(__dirname,'./src')
+			}
+		}
+	}
 }
 ```
 
@@ -765,7 +785,7 @@ export default {
 - props配置项
 
 让组件接收外部传来的数据,props是只读的，Vue底层会监测(非深度监测)props，若发生修改会发出警告。若要修改数据，请复制一份到data中,再修改。
-
+> Vue 使用 props时父组件给子组件传值后，子组件可用props配置项接收，但不要忘了加引号！！！！！！！否则使用它会出现undefined！
 >v-modle绑定的值不应是props传过来的值，当其为对象类型时，修改对象中的属性时，vue无法发现
 
 子组件
@@ -814,6 +834,7 @@ export default{
 
 ## 自定义事件
 
+子组件跟父组件通信可使用Vue的自定义事件，父组件通过@xxx=“function(){}”给子组件绑定自定义事件，然后子组件通过$emit触发事件，第一个参数为触发的事件，第二个为要传递的数据，便可实现子与父的通信。
 适用于子组件与父组件通信
 App.vue
 
@@ -1249,11 +1270,13 @@ Category.vue
 <!--定义插槽-->
 <!-- 默认插槽 -->
 <slot >默认 当没有传递具体结构时，会显示</slot>
+
 <!-- 具名插槽 -->
 <slot name="center">默认 当没有传递具体结构时，会显示</slot>
 <slot name="footer">默认 当没有传递具体结构时，会显示</slot>
+
 <!-- 作用域插槽:数据在组件的自身，但根据数据生成的结构需要组件的使用者来决定 -->
-<slot :games="test">默认 当没有传递具体结构时，会显示</slot>
+<slot :games="test"  :games2:'list'>默认 当没有传递具体结构时，会显示</slot>
 <div>
 </template>
 
@@ -1262,7 +1285,8 @@ export default{
 	name:'Category',
 	data(){
 	return {
-	test:['xxx','0989','33']	
+	test:['xxx','0989','33'],
+	list:['','','','']	
 	}	
 	},
 	props:['listData','title']
@@ -1280,7 +1304,8 @@ App.vue
 </Category>
 <Category>
 <template scope="test1">
-<h1>{{test1.test}}</h1>
+<h1>{{test1.games}}</h1>
+<h1>{{test1.games2}}</h1>
 </template>
 </Category>
 </template>
@@ -1291,7 +1316,7 @@ App.vue
 存储内容大小一般支持5MB左右
 浏览器端通过Window.sessionStorage和Window.localStorage属性来实现本地存储。
 相关api：
-   1. xxx.Storage.setItem('key','value');接受一个键和值作为参数，把键值添加到存储中，若存在则更新。
+   1. xxxxStorage.setItem('key','value');接受一个键和值作为参数，把键值添加到存储中，若存在则更新。
    2. xxxxStorage.getItem('person');接受一个键名作为参数,返回键名对应的值。
    3. xxxStorage.removeItem('key);接受一个键名作为参数,删除键名和其对应的值。
    4. xxxStorage.clear();清空存储中的所有数据。
@@ -1369,14 +1394,15 @@ Vue.use (Vuex);
 
 const actions={
 //响应组件中的动组
-jia(context,value){
+jia:function(context,value){
+	//context里中存放着一些方法
 context.commit('JIA',value);
 }
 }
 
 const mutations={
 //执行jia
-JIA(state,value){
+JIA:function(state,value){
 state.sum+=value;
 }
 }
@@ -1387,7 +1413,7 @@ const state={sum=0;
 
 //创建并暴露store
 export default new Vuex.store({
-actions,
+actions:actions,
 mutations,
 state,
 });
@@ -1572,7 +1598,7 @@ this.$store.commit('personAbout/ADD_PERSON',person)
 
 #### vue-router：vue的一个插件库，用来实现SPA应用（单个web应用，整个页面只有一个完整页面，只会做页面的局部更新，数据需要通过ajax请求获取）
 
-index.js
+src/router/index.js
 
 ```
 //引入路由
@@ -1633,7 +1659,8 @@ index.js跳转
 
 ```
 <template>
-//active-class可配置高亮样式
+<!--用route-link代替a标签去跳转-->
+<!--active-class属性：该元素激活时触发样式，可配置高亮样式-->
 <router-link  class="" active-class="active" to="/about">About</router-link>
 <router-link  class="" to="/home">Home</router-link>
 <router-link  class="" to="/home/news">Home</router-link>
@@ -1645,6 +1672,9 @@ index.js跳转
 query:{id:xxx,titel:xxx}
 }"></router-link>
 
+
+<router-view></route-view>	<!--指定组件呈现的位置-->
+</template>
 ```
 
 接收query参数
@@ -1729,7 +1759,7 @@ path:'detail/:id/:title',
 compomemt:Detail,
 //props的第一种写法，值为对象，该对象中的所有key-value都会以props的形式传给Detail组件
 props:{a:1,b:'hello'}
-//props的第二种写法，值为布尔值，若布尔值为真，就会把该路由组件收到的所有params参数，以props的形式传给detail组件。
+//props的第二种写法，值为布尔值，若布尔值为真，就会把该路由组件收到的所有params参数，以props的形式传给detail组件。只能传params参数
 props：true
 //props的第三种写法，值为函数,该函数返回的对象中每一组key-value都会通过props传给Detail组件
 props($route){
@@ -1999,3 +2029,33 @@ plugins:[
 
 }
 ```
+
+---
+##  vue刷新当前页面：用vue-router重新路由到当前页面，页面是不进行刷新的
+
+```
+//###ctrl+F5刷新
+location.reload()；
+//或
+this.router.go(0);
+
+//局部刷新
+1. 跳转到一个空白页，再跳转回来
+2. v-if控制router-view的存亡来实现刷新 
+```
+
+## 在vue中checkbox用法：通过v-model来判断当前checkbox是否被选中， 它绑定一个数组，选中项的值会自动添加到数组中
+
+```
+                <input type="checkbox" v-model="hobby2" value="游泳">游泳
+		<input type="checkbox" v-model="hobby2" value="健身">健身
+		<input type="checkbox" v-model="hobby2" value="旅游">旅游
+```
+## VUE 实现checkbox的勾选：给选择按钮绑定v-mode变量，值为true时就是选中状态，绑定点击事件，执行勾选操作
+## 自定义checkbox样式：通过label标签将input包裹住，通过label for绑定input id，
+将input设置opacity: 0;不可见，再通过给设置lable标签或其中div来设置checkbox的默认样式及选中状态样式
+## 特殊符号（Unicode）：`https://www.cnblogs.com/Whikiey/archive/2011/01/05/1926220.html`
+## vue中`native`修饰符只对组件有效
+## v-model 双向绑定 computed属性， 若不同时加 get 和 set 则报错
+## 当一层flex布局的时候，设置子元素的width:100%就没有问题；当页面中多层flex布局嵌套的时候，设置其中子元素的width：100%会不起作用。可把元素设置为绝对定位来解决该问题。
+## 动态修改样式，可通过v-bind 绑定style+配合模板字符串或者`<h2 :style="{key(属性名):value(属性值)}">`或者`<h2 :style="'key(属性名):'+value(值)+'px'">`来实现。

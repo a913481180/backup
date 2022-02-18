@@ -1,8 +1,8 @@
 ---
 title: JS实例
-date: 2020-11-22 20:22:11
-catergories:
-- study
+date: 2021-05-22 20:22:11
+categories:
+- web 
 ---
 
 # 实例
@@ -48,4 +48,54 @@ oUl1.style.left="opx";
 })
 },2000);
 ```
+
+
+### 拖拽
+
+- mousedown 
+
+记录鼠标按下的位置和被拖拽物体相对距离
+
+```
+//clientX为鼠标位置，offsetLeft为盒子位置
+var offsetX=e.clientX-node.offsetLeft;
+var offsetY=e.clientY-node.offsetTop;
+```
+
+
+- mousemove
+
+```
+//鼠标移动的距离减去相对距离=盒子移动的距离
+node.style.left=e.clientX-offsetX+'px';
+node.style.top=e.clientY-offsetY+'px';
+```
+
+- mouseup
+
+取消拖拽
+
+*实例：*
+
+```
+//父盒子与子盒子要有定位
+window.onload=function(){
+var oDiv=document.getElementById("div1");
+oDiv.onmousedown=function(ev){
+var e=ev||window.event;
+var offsetX=e.clientX-oDiv.offsetLeft;
+var offsetY=e.clientY-oDiv.offsetTop;
+
+document.onmousemove=function(ev){
+	var e=ev||window.event;
+oDiv.style.left=e.clientX-offsetX+"px";
+oDiv.style.top=e.clientY-offsetY+"px";
+}}
+
+document.onmouseup=function(){
+document.onmousemove=null;
+}
+}
+```
+
 

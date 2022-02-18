@@ -1,8 +1,8 @@
 ---
 title: CSS
-date: 2020-11-11 20:22:22
+date: 2021-01-11 20:22:22
 categories:
-- study
+- web 
 ---
 --- 
 
@@ -243,7 +243,6 @@ a{
 
 - 清除浮动： 父级盒子不设置高度时，子盒子浮动，脱标不占位置，则父级盒子高度为0；
 
->子元素高度大于父元素且子元素设置了浮动，那子元素将溢出
 
 ```
 //父元素清除浮动影响
@@ -343,7 +342,22 @@ a{
   .clear{
      *zoom:1;
   }
-  ```
+
+ ###  边距折叠问题：
+
+块的上外边距(margin-top)和下外边距(margin-bottom)有时合并(折叠)为单个边距，其大小为单个边距的最大值(或如果它们相等，则仅为其中一个)，这种行为称为边距折叠
+有三种情况会形成外边距重叠：
+
+- 同一层相邻元素之间，上下外边距合并
+- 没有内容将父元素和后代元素分开；如果没有边框border，内边距padding，行内内容，则就会出现父块元素和其内后代块元素外边界重叠，重叠部分最终会溢出到父级块元素外面。
+-空的块级元素：当一个块元素上边界margin-top 直接贴到元素下边界margin-bottom时也会发生边界折叠。 
+
+- 解决方法：触发BFC（块格式上下文）
+   - 为父元素设置：上边框或上内边距
+   - 为父元素添加overflow：hidden；
+   - 为父元素添加dispaly:inline-block/tabl-cell;或float:left;或positon:absolute/fixed;
+
+ ```
 ---
 
 ### 定位
@@ -370,7 +384,6 @@ a{
 >行内元素添加绝对或固定定位，可直接设置宽高；块级元素添加后不设置宽高则默认是内容大小；
 >浮动元素可以压住标准流盒子；但不会压住标准流盒子里的文字和图片；
 
-### 布局
 
 - flex弹性布局
    - 采用Flex布局的元素，称为Flex容器（flex container），简称”容器”。它的所有子元素自动成为容器成员，称为Flex项目（flex item），简称”项目”。
@@ -381,9 +394,9 @@ a{
 
 |容器属性|说明|
 |-|-|
-|flex-direction:row/row-reverse|colunm|colunm-reverse|决定主轴的方向|
+|flex-direction:row/row-reverse/column/column-reverse|决定主轴的方向|
 |flex-wrap:nowrap/wrap/wrap-reverse（最开始的一行在下面，新的在上面）;|如果一条轴线排不下，是否换行以及如何换行|
-|flex-flow:<flex-direction><flex-wrap>|flex-direction与flex-wrap的简写形式|
+|flex-flow:\<flex-direction>\<flex-wrap>|flex-direction与flex-wrap的简写形式|
 |justify-content:flex-start/flex-end/center/space-between（两端对齐，项目间的间隔相等)/space-around（每个项目间的间隔相等，项目与边框的间隔较小）|定义项目在主轴上的对齐方式|
 |align-items:stretch（项目无高度或设为auto时，将会占满整个容器高度）/center/flex-start/flex-end/baseline（项目的第一行文字的基线对齐）;|定义项目在交叉轴上的对齐方式|
 |align-content:stretch（项目无高度或设为auto时，将会占满整个容器高度）/center/flex-start/flex-end/space-between/space-around|定义项目在多根轴线上的对齐方式，如果项目只有一根轴线则不起作用|
@@ -415,6 +428,7 @@ align-items:stretch/center/flex-start/flex-end/baseline;
 - visibility:visible(可视)|hidden；
 >visibility:隐藏元素后，继续占有原来的位置；
 
+- opacity:0; 
 ---
 
 #### 字体属性
@@ -619,14 +633,117 @@ margin: auto;
 
 2、一屏幕的宽高-盒子的宽高，最后除以2，获取的值就是它应该具备的left/top(这个值可以使盒子处于页面中间)
 
-###  嵌套元素塌陷问题：
+### 布局
 
-父元素与子元素有上外边距时，父元素会塌陷较大的外边距值
+- 单列布局
+- 两列布局
+ 两栏布局（左侧宽度固定，右侧自适应）：左浮动或absoulute，右margin-left调位置或者触发BFC；使用flex布局；使用网格布局
 
-- 解决方法：触发BFC（块格式上下文）
-   - 为父元素设置：上边框或上内边距
-   - 为父元素添加overflow：hidden；
-   - 为父元素添加dispaly:inline-block/tabl-cell;或float:left;或positon:absolute/fixed;
+- 三栏布局
+   - 圣杯布局
+
+```
+
+
+    .content {
+        padding: 30px 15%;
+    }
+
+    .fld {
+        float: left;
+        margin-left: -15%;
+        width: 15%;
+        height: 10rem;
+
+    }
+
+    .fcd {
+        float: left;
+        width: 100%;
+
+    }
+
+    .frd {
+        float: right;
+        margin-right: -15%;
+        width: 15%;
+        height: 10rem;
+    }
+
+```
+   - 双飞翼布局
+
+```
+
+    .container {
+        min-width: 600px;//确保中间内容可以显示出来，两倍left宽+right宽
+    }
+    .left {
+        float: left;
+        width: 200px;
+        height: 400px;
+        background: red;
+        margin-left: -100%;
+    }
+    .center {
+        float: left;
+        width: 100%;
+        height: 500px;
+        background: yellow;
+    }
+    .center .inner {
+        margin: 0 200px; //中间新增部分
+    }
+    .right {
+        float: left;
+        width: 200px;
+        height: 400px;
+        background: blue;
+        margin-left: -200px;
+    }
+```
+
+>两种布局实现方式对比:两种布局方式都是把主列放在文档流最前面，使主列优先加载。两种布局方式在实现上也有相同之处，都是让三列浮动，然后通过负外边距形成三列布局。两种布局方式的不同之处在于如何处理中间主列的位置：圣杯布局是利用父容器的左、右内边距+两个从列相对定位；双飞翼布局是把主列嵌套在一个新的父级块中利用主列的左、右外边距进行布局调整
+
+- 粘连布局
+
+特点：有一块内容<main>，当<main>的高康足够长的时候，紧跟在\<main>后面的元素\<footer>会跟在\<main>元素的后面。当\<main>元素比较短的时候(比如小于屏幕的高度),我们期望这个\<footer>元素能够“粘连”在屏幕的底部
+
+```
+
+   * {
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;//高度一层层继承下来
+      }
+      #content {
+        min-height: 100%;
+        background: pink;
+        text-align: center;
+        overflow: hidden;
+      }
+      #content .main {
+        padding-bottom: 50px;
+      }
+      #footer {
+        height: 50px;
+        line-height: 50px;
+        background: deeppink;
+        text-align: center;
+        margin-top: -50px;
+      }
+
+
+<div id="content">
+<div class="main">
+</div>
+</div>
+<footer></footer>
+```
+>(1)footer必须是一个独立的结构，与wrap没有任何嵌套关系；(2)wrap区域的高度通过设置min-height，变为视口高度；(3)footer要使用margin为负来确定自己的位置；(4)在main区域需要设置 padding-bottom。这也是为了防止负 margin 导致 footer 覆盖任何实际内容。
 
 ### 清除内外边距
 
@@ -639,12 +756,15 @@ margin: auto;
 }
 ```
 
+## CSS3
+
 - 透明：`opacity:0.5`子元素也会跟着变化
 - 圆角边框：`border-radius:10px|10%|顺时针四个参数`;
 - 盒子阴影：`box-shadow:3px水平阴影 0px垂直阴影 5px模糊距离 0px阴影尺寸 #fff颜色 inset（内阴影）`不占空间
 - 文字阴影：`text-shadow:水平阴影 垂直阴影 模糊距离 颜色`
 - 渐变背景：`background:linear-gradient(to bottom|to top|to right|to left,#fff(开始颜色),#000(结束颜色));
-- 过渡动画：`transion: width(要过渡的属性) 1s(过渡时间) ease-in(过渡方式) 2s(延迟时间)`
+- 过渡动画：`transition: width(要过渡的属性) 1s(过渡时间) ease-in(过渡方式) 2s(延迟时间)`
+>transition过渡方式 ：ease：慢速开始，然后变快，然后慢速结束；ease-in：以慢速开始的过渡效果；ease-out：以慢速结束的过渡效果；ease-in-out：以慢速开始和结束的过渡
 - 位移属性：`transform:translateX|translateY|translateZ(20px);`位移时默认是元素的中心位置
 - 缩放：`transform:scale(1.5);`默认为1正常大小；`transform-origin:50% 50%;`元素缩放中心点位置
 - 旋转：`transform:rotateX|rotateY|rotateZ(30deg);`
@@ -667,9 +787,16 @@ span.heart{
 animation:beat(动画名称) 1.5s(动画时长) infinite(循环动画);
 }	
 ```
+---
 
-
-
+-  box-shadow可同时设置多个阴影，如
+```
+box-shadow:    #fff 22px -15px 0 6px,   #fff 57px -6px 0 2px,   #fff 87px 4px 0 -4px,    #fff 33px 6px 0 6px
+```
+- 使用clip-path可快速裁剪盒子形状，使用shape-outsizes可实现文字不规则环绕效果（注意兼容问题）
+- transform中的rotate属性旋转后，其内部内容会随之旋转。
+- 设置字间距可使用letter-spacing属性增加或减少字符间的空白（字符间距）。该属性定义了在文本字符框之间插入多少空间(允许使用负值)
+- CSS中用于设置过渡特效的属性是 transition，但是其不能同时使用在多个属性身上。
 
 
 ### 精灵图 

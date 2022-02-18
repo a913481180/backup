@@ -1,5 +1,5 @@
 ---
-title: 英语模板
+title: English example 
 date: 2018-01-01
 categories:
 - study

@@ -1,8 +1,8 @@
 ---
 title: AJax
-date: 2020-11-12 20:11:33
-catergories:
-- study
+date: 2021-02-12 20:11:33
+categories:
+- web
 ---
 
 # Ajax
@@ -264,3 +264,10 @@ mysql_close($link);
 
 ?>
 ```
+---
+##   post/put/patch请求传参格式有 formData 形式 、query 形式 、JSON形式三种；
+## axios设置token到请求头：
+加一个http request拦截器；通过window.localStorage.getItem("accessToken") 来获取token的value；通过config.headers.accessToken = token;将token放到请求头发送给服务器，放在请求头中
+##form表单提交是单向的：
+只能给服务器发送数据，但是无法获取服务器返回的数据，也就是无法读取HTTP应答包。
+

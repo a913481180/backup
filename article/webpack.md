@@ -1,8 +1,8 @@
 ---
 title: Webpack
-date: 2020-11-22 20:44:11
-catergories:
-- study
+date: 2021-04-22 20:44:11
+categories:
+- web
 ---
 
 # Webpack
@@ -372,3 +372,8 @@ use:[...commonCssLoadder]
 {}
 ]
 ```
+---
+1. webpack打包后打开index.html无内容出现空白页面：修改webpack配置，在util.js中的`fallback:'vue-style-loader',`下面增加publicPath:'../../'，修改config/index.js，增加build：{ assetsPublicPath:'./'}。另外，！路由模式改为hash模式
+2. 界面正常显示但出现cannot read property xxx of undefined（不能读取xxx属性）的问题：在渲染页面时，则会直接读取初始时的数据，若数据初始时为空，则容易出现错误。而请求是异步的，请求的数据会在页面首次渲染后才会发起
+- webpack设置服务器代理在config目录下的index.js中配置
+1. 保留eslint的语法检测把不符合自己习惯的规则去掉，可配置文件在项目根目录里以 .eslintrc.* 命名的文件。关闭方法，则是把 build/webpack.base.conf.js 配置文件中的eslint rules注释掉即可

@@ -1,8 +1,8 @@
 ---
 title:  NodeJs
-date: 2020-11-12 20:11:33
-catergories:
-- study
+date: 2021-06-12 20:11:33
+categories:
+- web 
 ---
 
 # NodeJs
@@ -930,7 +930,7 @@ User.updateOne({查询条件},{要修改的值}).then(re=>console.log(re));
 //更新多个
 User.updateMany({查询条件},{要修改的值}).then(re=>console.log(re));
 ```
-
+#### mysql
 
 ##### 综合案例
 

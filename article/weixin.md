@@ -2,7 +2,7 @@
 title: 微信小程序
 date: 2021-01-11 20:22:22
 categories:
-- study
+- web
 ---
 
 ## 结构
@@ -450,6 +450,73 @@ wxss:
 
 wx.request发起 HTTPS 网络请求,data请求的参数,success接口调用成功的回调函数	
 
-
 AudioContext对象用于与audio组件绑定，通过它可以在逻辑层操作视图层的audio组件。可以用wx.createAudioContext(audioId)接口创建并返回audio的上下文对象AudioContext。
 
+
+## 跳转
+
+1. 利用小程序提供的 API 跳转：
+
+```
+// 保留当前页面，跳转到应用内的某个页面，使用wx.navigateBack可以返回到原页面。
+// 注意：调用 navigateTo 跳转时，调用该方法的页面会被加入堆栈，但是 redirectTo 
+wx.navigateTo({
+  url: 'page/home/home?user_id=111'
+})
+复制代码
+// 关闭当前页面，返回上一页面或多级页面。可通过 getCurrentPages() 获取当前的页面栈，决定需要返回几层。
+
+wx.navigateTo({
+  url: 'page/home/home?user_id=111'　　// 页面 A
+})
+wx.navigateTo({
+  url: 'page/detail/detail?product_id=222'　　// 页面 B
+})
+// 跳转到页面 A
+wx.navigateBack({
+  delta: 2
+})
+复制代码
+// 关闭当前页面，跳转到应用内的某个页面。
+wx.redirectTo({
+  url: 'page/home/home?user_id=111'
+})
+// 跳转到tabBar页面（在app.json中注册过的tabBar页面），同时关闭其他非tabBar页面。
+wx.switchTab({
+  url: 'page/index/index'
+})
+// 关闭所有页面，打开到应用内的某个页面。
+wx.reLanch({
+  url: 'page/home/home?user_id=111'
+})
+```
+
+原理：wxml中不能直接使用较高级的js语法，如‘.toFixed’，‘toString()’，但可以通过引入wxs模块实现效果
+
+```
+1.新建`filter.wxs`
+var filters = {    
+    toFix: function (value) {       
+        return value.toFixed(2) // 此处2为保留两位小数，保留几位小数，这里写几    
+    },
+    toStr: function (value) {       
+        return value.toString()
+    },
+    toNum: function (value) {       
+        return value.toNumber()
+    },
+}
+ 
+module.exports = {   
+    toFix: filters.toFix,
+    toStr: filters.toStr,
+    toNum: filters.toNum,//暴露接口调用
+}
+2.WXML中引入WXS
+<wxs module="filters" src="../../utils/filters.wxs"></wxs>
+3.在WXML中使用
+<view>
+{{ filters.toFix(price) }}
+</view>
+　　其他如toString(),toNumber()也可用此类似方法
+```
