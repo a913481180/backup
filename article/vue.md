@@ -45,7 +45,7 @@ categories:
 </html>
 ```
 
-- MVVM模型
+## MVVM模型
 一种软件架构
 
    - M:模型model:对应data中的数据
@@ -111,7 +111,7 @@ vue中的数据代理：通过vm对象来代理data对象中属性的操作
 
 通过Object.defineProperty()把data对象中所有属性添加到vm上，为每一个添加到vm上的属性，都指定一个getter/setter方法,在它们内部去对data中的数据进行操作
 
-- 数据监听
+## 数据监听
 
 
 通过`vm._data`也可以访问到data中的数据,但其是经过加工的,即形成getter、setter形式
@@ -151,7 +151,7 @@ console.log('数据被修改了');
 
 
 
-##模板语法
+## 模板语法
 
 - 插值语法
 用于解析标签体内容
@@ -2031,7 +2031,8 @@ plugins:[
 ```
 
 ---
-##  vue刷新当前页面：用vue-router重新路由到当前页面，页面是不进行刷新的
+###  vue刷新当前页面：
+用vue-router重新路由到当前页面，页面是不进行刷新的
 
 ```
 //###ctrl+F5刷新
@@ -2044,18 +2045,24 @@ this.router.go(0);
 2. v-if控制router-view的存亡来实现刷新 
 ```
 
-## 在vue中checkbox用法：通过v-model来判断当前checkbox是否被选中， 它绑定一个数组，选中项的值会自动添加到数组中
+### 在vue中checkbox用法：
+通过v-model来判断当前checkbox是否被选中， 它绑定一个数组，选中项的值会自动添加到数组中
 
 ```
                 <input type="checkbox" v-model="hobby2" value="游泳">游泳
 		<input type="checkbox" v-model="hobby2" value="健身">健身
 		<input type="checkbox" v-model="hobby2" value="旅游">旅游
 ```
-## VUE 实现checkbox的勾选：给选择按钮绑定v-mode变量，值为true时就是选中状态，绑定点击事件，执行勾选操作
-## 自定义checkbox样式：通过label标签将input包裹住，通过label for绑定input id，
+### VUE 实现checkbox的勾选：
+给选择按钮绑定v-mode变量，值为true时就是选中状态，绑定点击事件，执行勾选操作
+### 自定义checkbox样式：
+通过label标签将input包裹住，通过label for绑定input id，
 将input设置opacity: 0;不可见，再通过给设置lable标签或其中div来设置checkbox的默认样式及选中状态样式
-## 特殊符号（Unicode）：`https://www.cnblogs.com/Whikiey/archive/2011/01/05/1926220.html`
-## vue中`native`修饰符只对组件有效
-## v-model 双向绑定 computed属性， 若不同时加 get 和 set 则报错
-## 当一层flex布局的时候，设置子元素的width:100%就没有问题；当页面中多层flex布局嵌套的时候，设置其中子元素的width：100%会不起作用。可把元素设置为绝对定位来解决该问题。
-## 动态修改样式，可通过v-bind 绑定style+配合模板字符串或者`<h2 :style="{key(属性名):value(属性值)}">`或者`<h2 :style="'key(属性名):'+value(值)+'px'">`来实现。
+### 特殊符号（Unicode）：
+`https://www.cnblogs.com/Whikiey/archive/2011/01/05/1926220.html`
+### vue中`native`修饰符只对组件有效
+### v-model 双向绑定 computed属性， 若不同时加 get 和 set 则报错
+### 当一层flex布局的时候，设置子元素的width:100%就没有问题；
+当页面中多层flex布局嵌套的时候，设置其中子元素的width：100%会不起作用。可把元素设置为绝对定位来解决该问题。
+### 动态修改样式，
+可通过v-bind 绑定style+配合模板字符串或者`<h2 :style="{key(属性名):value(属性值)}">`或者`<h2 :style="'key(属性名):'+value(值)+'px'">`来实现。
