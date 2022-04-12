@@ -174,7 +174,38 @@ wx:if='条件'
 wx:else
 wx:elif='条件'
 ```
+### 微信小程序 bindtap 传参
+```
+//index.wxml
+<view bindtap="changeIndex" data-src1="我固定参数1" data-src2="我是固定参数2" >
+  
+</view>
+//index.js
+page({
+ data:{
+  
+ },
+ changeIndex(e){
+ console.log(e.currentTarget.dataset.src1); //我是固定参数1
+ console.log(e.currentTarget.dataset.src2); //我是固定参数2
+ }
+});
 
+////如果需要传递动态的参数 例如遍历渲染时 想传递 index 给 changeIndex方法
+//index.wxml
+<view wx:for="{{lists}}" wx:for-index="index" wx:key="index" data-index="{{index}}" >
+{{item.title}}
+</view>
+//index.js
+page({
+ data:{
+ lists:[{title:'参数1',id:1},{title:'参数2',id:2}]
+ },
+ changeIndex(e){
+ console.log(e.currentTarget.dataset.index);
+ }
+})
+```
 ---
 ### 布局
 
@@ -241,13 +272,13 @@ page({
 
 在index.wxml文件中
 ```
-<input bindinput="first" placeholder="文字"></input>
-<input value="second" placeholder="文字"disabled></input>
+\<input bindinput="first" placeholder="文字">\</input>
+\<input value="second" placeholder="文字"disabled>\</input>
 //placeholder：提示
 //bindiniput:输入
 //bindconfirm:回车触发事件
 //value:输入框内容
-<input class="search_input" placeholder="Search" bindinput="text_input" bindconfirm="searchtap"value="{{search_key}}"/>
+\<input class="search_input" placeholder="Search" bindinput="text_input" bindconfirm="searchtap"value="{{search_key}}"/>
 
 .....
 ```
@@ -257,7 +288,7 @@ page({
 ```
 //auto-focus: 自动聚焦
 //maxlength="-1":不限长度
- <textarea auto-focus placeholder="Text"maxlength="-1" bindinput="text_input" value="{{record}}"/>
+ \<textarea auto-focus placeholder="Text"maxlength="-1" bindinput="text_input" value="{{record}}"/>
 ```
 
 - 选择照片
@@ -300,7 +331,7 @@ page({
 wx:for控制属性绑定一个数组进行列表渲染。
 >（当前项的下标变量名默认为 index，数组当前项的变量名默认为 item，改名：使用 wx:for-item=“jjj" 可以指定数组当前元素的变量名，
 >使用 wx:for-index =”aa“可以指定数组当前下标的变量名。
-这个注意了。wx:key还是要加上的，不然一直报这个提示错误：如果列表中项目的位置会动态改变或者有新的项目添加到列表中，并且希望列表中的项目保持自己的特征和状态（如 <input/> 中的输入内容，<switch/> 的选中状态），需要使用 wx:key 来指定列表中项目的唯一的标识符。
+这个注意了。wx:key还是要加上的，不然一直报这个提示错误：如果列表中项目的位置会动态改变或者有新的项目添加到列表中，并且希望列表中的项目保持自己的特征和状态（如 \<input/> 中的输入内容，\<switch/> 的选中状态），需要使用 wx:key 来指定列表中项目的唯一的标识符。
 
 >wx:key 的值以两种形式提供
 字符串，代表在 for 循环的 array 中 item 的某个 property，该 property 的值需要是列表中唯一的字符串或数字，且不能动态改变。
@@ -519,4 +550,207 @@ module.exports = {
 {{ filters.toFix(price) }}
 </view>
 　　其他如toString(),toNumber()也可用此类似方法
+```
+
+## 虚拟列表
+
+- wxml
+```
+<scroll-view id='scrollView' style="margin-top:80rpx;height:calc(100% - 180rpx);" scroll-y="true"
+  scroll-with-animation="true" enable-back-to-top="true" refresher-enabled="true" refresher-background="#f6f6f6"
+  refresher-triggered="true" bindscrolltolower="listScrollBottom" bindscrolltoupper="listScrollTop"
+  upper-threshold="{{listEmptyView+100}}" lower-threshold="100" scroll-top="{{currentListPosition}}">
+
+  <view wx:if="{{list.length==0}}" style="text-align:center;color:gray;padding:40rpx;">还没有动态哦，快去发一条吧(。・∀・)ノ</view>
+  <view id="listContainer{{index}}" wx:for="{{list}}" wx:key="index">
+    <view wx:if="{{item.length==undefind}}" style="height:{{item.height}}px"></view>
+    <view wx:else>
+      <view class="main_container" wx:for="{{item}}" wx:key="i">
+        <image style="width:100rpx;height:100rpx;border-radius:50%;" src="{{item.avatar}}">
+        </image>
+        <view class="main_container_right">
+          <view>
+            <view class="main_container_name">{{item.userName}} </view>
+            <view style="display:inline-block;1font-size:30rpx;font-weight:400;color:#536471;"> • {{item.createTime}}
+            </view>
+          </view>
+          <!-- 文字 -->
+
+          <view style="padding-left:20rpx;"><text>{{item.content}}</text>
+            <!-- 视频 -->
+            <view data-src="{{item.url}}" wx:if="{{item.hasVideo&&item.url.length!=0}}" bindtap="videoPreview"
+              class="main_container_video">
+              <text style="font-size:100rpx;" class="iconfont icon-play"></text>
+            </view>
+
+            <image wx:if="{{!item.hasVideo&&item.url.length==1}}" bindtap="imgPreview" data-src="{{item.url}}"
+              data-current="0" mode="aspectFill" class="main_container_img1" src="{{item.url[0]}}">
+            </image>
+            <view wx:elif="{{item.url.length==2}}" class="main_container_img2">
+              <image bindtap="imgPreview" data-src="{{item.url}}" data-current="0" mode="aspectFill"
+                src="{{item.url[0]}}">
+              </image>
+              <image bindtap="imgPreview" data-src="{{item.url}}" data-current="1" mode="aspectFill"
+                src="{{item.url[1]}}">
+              </image>
+            </view>
+            <view wx:elif="{{item.url.length==3}}" class="main_container_img3">
+              <image bindtap="imgPreview" data-src="{{item.url}}" data-current="0" mode="aspectFill"
+                src="{{item.url[0]}}">
+              </image>
+              <view class="main_container_img3_item">
+                <image bindtap="imgPreview" data-src="{{item.url}}" data-current="1" mode="aspectFill"
+                  src="{{item.url[1]}}"></image>
+                <image bindtap="imgPreview" data-src="{{item.url}}" data-current="2" mode="aspectFill"
+                  src="{{item.url[2]}}"></image>
+              </view>
+            </view>
+            <view wx:elif="{{item.url.length==4}}" class="main_container_img4">
+              <view class="main_container_img4_item">
+                <image bindtap="imgPreview" data-src="{{item.url}}" data-current="0" mode="aspectFill"
+                  style=" border-radius:  16rpx 0 0 0;" src="{{item.url[0]}}"></image>
+                <image bindtap="imgPreview" data-src="{{item.url}}" data-current="1" mode="aspectFill"
+                  style=" border-radius:   0 16rpx 0 0;" src="{{item.url[1]}}"></image>
+              </view>
+              <view class="main_container_img4_item">
+                <image bindtap="imgPreview" data-src="{{item.url}}" data-current="2" mode="aspectFill"
+                  style=" border-radius:   0 0 0 16rpx ;" src="{{item.url[2]}}"></image>
+                <image bindtap="imgPreview" data-src="{{item.url}}" data-current="3" mode="aspectFill"
+                  style=" border-radius:   0  0 16rpx 0;" src="{{item.url[3]}}"></image>
+              </view>
+            </view>
+            <!--位置-->
+            <view style="margin-top:30rpx;" wx:if="{{item.location}}"><text
+                style="font-size:25rpx;color:#536471">位于：</text><text
+                style="font-size:25rpx;color:#1d9bf0">{{item.location}}</text></view>
+
+          </view>
+          <view class="main_container_bottom">
+            <view data-id="{{item.id}}"><text class="iconfont icon-comment"></text>{{item.comments?item.comments:''}}
+            </view>
+            <view data-id="{{item.id}}"><text class="iconfont icon-favorite"></text></view>
+            <view bindtap="likesUpgrade" data-id="{{item.id}}" data-likes="{{item.likes?item.likes:0}}"><text
+                class="iconfont icon-fabulous"></text>{{item.likes?item.likes:''}}</view>
+            <view data-id="{{item.id}}"><text class="iconfont icon-share"></text></view>
+          </view>
+        </view>
+
+      </view>
+    </view>
+  </view>
+</scroll-view>
+```
+
+-js 
+
+```
+...
+    list: [
+      [],
+      [],
+      []
+    ],
+    keyword: '',
+    pageNo: 1,
+    pageSize: 8,
+    total: 0,
+    listEmptyView: 0,
+    currentListPosition: 0,
+    scrollContainerHeight: 0,
+...
+...
+  listScrollTop(e) {
+    let pageNo = this.data.pageNo - 2;
+    if (pageNo > 0) {
+      this.getList(pageNo, this.data.pageSize);
+    }
+  },
+  listScrollBottom(e) {
+    let pageNo = this.data.pageNo + 1;
+    if (pageNo <= Math.ceil(this.data.total / this.data.pageSize)) {
+      this.getList(pageNo, this.data.pageSize);
+    }
+  },
+  getList(pageNo, pageSize) {
+    //获取列表
+    axios({
+      method: "get",
+      header: {
+        'Authorization': wx.getStorageSync('Authorization'),
+      },
+      url: "/updates/public?pageNo=" + pageNo + "&pageSize=" + pageSize + "&keyword="
+    }).then(res => {
+      console.log(pageNo, pageSize, res);
+      if (res.data.code == 200) {
+        var that = this
+        this.setData({
+          total: res.data.data.total,
+        })
+        if (pageNo >= this.data.pageNo) { //向后翻页
+          // wx.createSelectorQuery().select('#listContainer1').boundingClientRect(function (rect) {}).exec(function (re) {
+          //   console.log(that.data.scrollContainerHeight);
+          //   that.setData({
+          //     currentListPosition: that.data.listEmptyView  + re[0].height-that.data.scrollContainerHeight+50
+          //   })
+          // })
+          if (pageNo > 2) { //大于两页清除前面
+            wx.createSelectorQuery().select('#listContainer' + (pageNo - 1)).boundingClientRect(function (rect) {}).exec(function (re) { //空view替代删除的条目
+              that.setData({
+                listEmptyView: that.data.listEmptyView + re[0].height,
+                pageNo: pageNo,
+                [`list[${pageNo-2}]`]: {
+                  height: re[0].height
+                },
+                [`list[${pageNo}]`]: res.data.data.records,
+              })
+            })
+          } else {
+            this.setData({
+              pageNo: pageNo,
+              [`list[${pageNo}]`]: res.data.data.records,
+            })
+          }
+        } else { //向前翻页
+          if (this.data.list.length > (pageNo + 1)) {
+            this.setData({
+              [`list[${pageNo}]`]: res.data.data.records,
+              [`list[${pageNo+2}]`]: [],
+              pageNo: this.data.pageNo - 1
+            })
+          } else {
+            this.setData({
+              [`list[${pageNo}]`]: res.data.data.records,
+              pageNo: this.data.pageNo - 1
+            })
+          }
+          wx.createSelectorQuery().select('#listContainer' + (pageNo)).boundingClientRect(function (rect) {}).exec(function (res) { //缩短占位view高度
+      
+            that.setData({
+              listEmptyView: that.data.listEmptyView - res[0].height
+            });
+          })
+
+        }
+
+      } else {
+        wx.showToast({
+          title: res.data.message,
+          duration: 1000,
+          icon: 'none'
+        })
+      }
+    }, err => {
+      if (err == 201) {
+        wx.redirectTo({
+          url: '/pages/login/login',
+        })
+      }
+    })
+  },
+```
+微信小程序中局部更新对象或者数组中的某个数据
+```
+this.setData({
+['list[0][1].a']:0
+})
 ```
