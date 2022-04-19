@@ -1,5 +1,5 @@
 ---
-title: Vue
+title: Vue2
 date: 2021-06-07 20:00:00
 categories:
   - web
@@ -10,17 +10,20 @@ categories:
 > 一套用于构建用户界面的渐进式 javascrip 框架
 
 ```
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"> //引入 Vue</script>
+```
 
-                <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"> //引入 Vue</script>
-                <script>
-                window.onload=function(){
-        Vue.config.productionTip=false;         //阻止vue启动时的生成的提醒
-        ///创建vue实例
-       const vu= new Vue({
-        el:'#root',     //挂载点，指定容器,可写类名，不能用在html和body上；第二种写法可用vu.$mount('#root');代替
-        data:{
-                msg:'hello',
-                name:'xiaomi',
+```
+ window.onload=function(){
+ Vue.config.productionTip=false;//阻止vue启动时的生成的提醒
+//创建vue实例
+const vu= new Vue({
+   el:'#root', //挂载点，指定容器,可写类名，不能用在html和body上；第二种写法可用vu.$mount('#root');代替
+    data:{
+           msg:'hello',
+           name:'xiaomi',
+          });
+                }
   test(){...} //不建议在data中写函数，因为会data中的属性会进行数据代理，而方法并不需要进行数据代理
  //data第二种写成函数式,由Vue管理的函数不能写成箭头函数，对象里的方法可省略:function
  /*
@@ -30,12 +33,10 @@ categories:
  }
  }
 */
-                });
-        }
-                </script>
-                <body>
-                <div id='root'>{{msg}} {{name}} </div>  <!-- {{}}中可写js表达式-->
-                </body>
+```
+
+```
+<div id='root'>{{msg}} {{name}} </div>  <!-- {{}}中可写js表达式-->
 
 ```
 
