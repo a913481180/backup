@@ -388,3 +388,128 @@ console.log('xxx')
 }
 
 ```
+
+## 路由
+
+安装 Vue Router：`npm install vue-router@4`
+
+- router/index.js
+
+```
+// history模式
+import {
+    createRouter,
+    createWebHashHistory,
+} from 'vue-router'
+
+import Home from '../pages/Home.vue'
+import About from '../pages/About.vue'
+
+const routes = [
+// 路由的默认路径
+    {
+        path:'/',
+        redirect:"/home"
+    },
+    {
+        path: '/home',
+         component: () => import('…/pages/Home.vue')
+    },
+    {
+        path: '/about',
+        component: About
+    },
+]
+
+// 创建路由对象
+const router = createRouter({
+    history: createWebHashHistory(),
+    routes
+})
+export default router;
+
+```
+
+- main.js
+
+```
+import {
+    createApp
+} from 'vue'
+import App from './App.vue'
+import router from './router'
+createApp(App).use(router).mount('#app')
+```
+- 使用
+```
+import { useRouter } from 'vue-router';
+  setup() {
+    const router = useRouter();
+    function goto(){
+      router.push("/about");
+    }
+    return{
+       goto  //一定要要放在return里才能在模板上面使用
+    }
+  }
+```
+## vuex
+
+  npm 安装 vuex。`npm install vuex@next --save`
+- store/index.js
+```
+import { createStore } from 'vuex'
+export default createStore({
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {},
+  modules: {}
+})
+```
+
+## less
+安装：`npm i less-loader less --save-dev`
+## antdesign
+安装antdesign
+
+`npm i --save ant-design-vue@next`
+
+```
+import { createApp } from 'vue'
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
+
+const app = createApp(App) 
+app.use(Antd);
+```
+
+vue3引用ant-design-vue编译运行时，可能会报错can't read property undefine错误
+
+执行下面命令就行
+
+`npm i --save ant-design-vue@next -S`
+
+```
+vue3解析component: router-view失败  
+
+解决：
+
+//app.use(router) 需放在app.mount('#app')前面  不然加载时router-view、router-link等未被渲染
+```
+
+### 清空数组的几个方式
+```
+//使用ref()
+const array = ref([1,2,3]);
+array.value = [];
+
+//使用slice,不过需要注意要使用ref
+array.value = array.value.slice(0,0);
+
+//length赋值为0,支持reactive,而且，这种只会触发一次watch
+array.value.length = 0;
+
+//使用splice,可以使用reactive,不过要注意，watch会触发多次
+array.splice(0,array.length)
+```

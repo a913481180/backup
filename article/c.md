@@ -589,3 +589,210 @@ fscanf(fp,"%d,%f",&i,&t);
 左移：`<<`高位左移溢出后舍弃,未溢出时左移一位相当与乘于2,  
 右移：`>>`未溢出时，右移n位相当与除于2^n  
 
+---
+
+- malloc||realloc
+```
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+ 
+int main()
+{
+   char *str;
+ 
+   /* 最初的内存分配 */
+   str = (char *) malloc(15);
+   strcpy(str, "runoob");
+   printf("String = %s,  Address = %u\n", str, str);
+ 
+   /* 重新分配内存 */
+   str = (char *) realloc(str, 25);
+   strcat(str, ".com");
+   printf("String = %s,  Address = %u\n", str, str);
+ 
+   free(str);
+ 
+   return(0);
+}
+```
+
+- 字符串拼接
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+    char *firstName = "Theo";
+    char *lastName = "Tsao";
+    char *name = (char *) malloc(strlen(firstName) + strlen(lastName));
+    strcpy(name, firstName); // 把firstName复制到name中
+    strcat(name, lastName); // 把lastName追加到name中
+    printf("%s\n", name);
+    return 0;
+}
+//、、、、、、、、、、、、、、、
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+    char *firstName = "Theo";
+    char *lastName = "Tsao";
+    char *name = (char *) malloc(strlen(firstName) + strlen(lastName));
+    // 发送格式化输出到name指定的字符串
+    sprintf(name, "%s%s", firstName, lastName); 
+    printf("%s\n", name);
+    return 0;
+}
+```
+-- 数字与字符串互转
+
+```
+int String2Int(char *str)//字符串转数字 
+{
+    char flag = '+';//指示结果是否带符号 
+    long res = 0;
+    
+    if(*str=='-')//字符串带负号 
+    {
+        ++str;//指向下一个字符 
+        flag = '-';//将标志设为负号 
+    } 
+    //逐个字符转换，并累加到结果res 
+    while(*str>=48 && *str<57)//如果是数字才进行转换，数字0~9的ASCII码：48~57 
+    {
+        res = 10*res+  *str++-48;//字符'0'的ASCII码为48,48-48=0刚好转化为数字0 
+    } 
+ 
+    if(flag == '-')//处理是负数的情况
+    {
+        res = -res;
+    }
+ 
+    return (int)res;
+}
+char *Int2String(int num, char *str) // 10进制
+{
+    int i = 0;   //指示填充str
+    if (num < 0) //如果num为负数，将num变正
+    {
+        num = -num;
+        str[i++] = '-';
+    }
+    //转换
+    do
+    {
+        str[i++] = num % 10 + 48; //取num最低位 字符0~9的ASCII码是48~57；简单来说数字0+48=48，ASCII码对应字符'0'
+        num /= 10;                //去掉最低位
+    } while (num);                // num不为0继续循环
+
+    str[i] = '\0';
+
+    //确定开始调整的位置
+    int j = 0;
+    if (str[0] == '-') //如果有负号，负号不用调整
+    {
+        j = 1; //从第二位开始调整
+        ++i;   //由于有负号，所以交换的对称轴也要后移1位
+    }
+    //对称交换
+    for (; j < i / 2; j++)
+    {
+        //对称交换两端的值 其实就是省下中间变量交换a+b的值：a=a+b;b=a-b;a=a-b;
+        str[j] = str[j] + str[i - 1 - j];
+        str[i - 1 - j] = str[j] - str[i - 1 - j];
+        str[j] = str[j] - str[i - 1 - j];
+    }
+
+    return str; //返回转换后的值
+}
+```
+-- 管道
+
+```
+/*********写管道进程*****************/
+
+#include <stdio.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
+char *Int2String(int num, char *str); //函数声明
+int String2Int(char *str);//函数声明 
+int main()
+{
+    char c[10] = {"0,pipe1"};
+    char *line = &c[0];
+    char buf[128];
+    int fd;
+    int r, w;
+    mknod("mypipe", S_IFIFO, 0);
+    fd = open("mypipe", O_RDWR | O_NONBLOCK);
+    int n = 0;
+    while (n < 10)
+    {
+        Int2String(n, c);
+        n++;
+        r = read(fd, buf, 128);
+        printf("pipe1_r=%d,\n", r);
+        if (r > 0)
+        {
+            printf("pip1收到内容：%s\n", buf);
+            memset(buf, 0, 128);
+        }
+        else
+        {
+            w = write(fd, line, strlen(line));
+            if (w < 0)
+            {
+                printf("w=%d,没有写入\n", w);
+            }
+            printf("%d,pipe1写入内容：%s\n", w, line);
+        }
+        sleep(1);
+    }
+    close(fd);
+}
+```
+```
+
+/*********读管道进程*****************/
+
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <string.h>
+
+int main()
+{
+    char buf[128];
+    char *line = "pipe2";
+    int fd = open("mypipe", O_RDWR | O_NONBLOCK);
+    int r, w, n = 0;
+    while (n < 10)
+    {
+        n++;
+        r = read(fd, buf, 128);
+        printf("pipe2_r=%d\n", r);
+        if (r > 0)
+        {
+            printf("@@pipe2收到内容：%s\n", buf);
+            memset(buf, 0, 128);
+        }
+        else
+        {
+            w = write(fd, line, strlen(line));
+            printf("@@pipe2,w=%d,内容：%s\n", w, line);
+        }
+        sleep(2);
+    }
+    close(fd);
+}
+
+```
+
