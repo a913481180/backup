@@ -271,13 +271,13 @@ ALTER USER 'root'@'localhost' IDENTIFIED BY 'password' PASSWORD EXPIRE NEVER;这
 ```
 ### MySQL分页查询的5种方法
 
-方式1：
+方式1：直接使用数据库提供的SQL语句
 
 select * from table order by id limit m, n;
 
-很简单，该语句的意思就是查询m+n条记录，去掉前m条，返回后n条。无疑该查询能够实现分页，但m越大，查询性能就越低，因为MySQL需要扫描全部m+n条记录。
+适应场景: 适用于数据量较少的情况(元组百/千级)。很简单，该语句的意思就是查询m+n条记录，去掉前m条，返回后n条。无疑该查询能够实现分页，但m越大，查询性能就越低，因为MySQL需要扫描全部m+n条记录。
 
-方式2：
+方式2：基于索引再排序
 
 select * from table where id > #max_id# order by id limit n;
 
@@ -287,7 +287,7 @@ select * from table where id > #max_id# order by id limit n;
 
 
 
-方式3：
+方式3：基于索引再排序
 
 为了避免方式2不能实现的跨页查询，就需要结合方式1。
 
@@ -312,3 +312,23 @@ select * from table as a inner join (select id from table order by id limit m, n
 select * from table where id > (select id from table order by id limit m, 1) limit n;
 
 该查询同样是通过子查询扫描字段id，效果同方式4。但方式5的性能会略好于方式4，因为它不需要进行表的关联，而是一个简单的比较，在不知道上一页最大id的情况下，是比较推荐的用法。
+
+方法6: 基于索引使用prepare
+（第一个问号表示pageNum，第二个？表示每页元组数）
+
+—语句样式: MySQL中,可用如下方法:
+
+代码如下:
+
+PREPARE stmt_name FROM SELECT * FROM 表名称 WHERE id_pk > (？* ？) ORDER BY id_pk
+ASC LIMIT M
+—适应场景: 大数据量。
+
+—原因: 索引扫描,速度会很快. prepare语句又比一般的查询语句快一点。
+
+方法7:利用MySQL支持ORDER操作可以利用索引快速定位部分元组,避免全表扫描
+—比如: 读第1000到1019行元组(pk是主键/唯一键)。
+
+代码如下:
+
+—SELECT * FROM your_table WHERE pk>=1000 ORDER BY pk ASC LIMIT 0,20

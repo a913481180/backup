@@ -40,3 +40,7 @@ categories:
 
 ## 点击时获取列表的值，可通过给节点添加data自定义属性，通过点击事件e.currentTarget.dataset获取属性值
 ## element获取table表格行数据，可通过template设置slot-scope=“scope”属性，在传参时使用scope.row.xxxx拿到当前行的数据
+## 当只有⼀个el-input的时候，可以⽤elementUI的⾃带的回车键触发提交事件但是有时候会同时触发刷新页⾯，这样可以在el-form上添加@submit.native.prevent来解决
+
+## element el-input的autofocus失效问题解决
+>autofocus是input的原生属性,饿了么组件也支持这种方法, 但是input外面还有其他组件, 导致autofocus失效, 只能手动调用focus方法:组件上绑定ref，手动调用focus()
