@@ -15,7 +15,10 @@ categories:
 2. vite 创建：`vue init vite-app test`
    - `vue install`
    - `npm run dev`
-
+或者`npm init vite@latest`输入工程名称,选择框架为vue
+   - `vue install`
+   - `npm run dev`
+>https://vitejs.cn/
 ## main.js
 
 ```
@@ -391,7 +394,7 @@ console.log('xxx')
 
 ## 路由
 
-安装 Vue Router：`npm install vue-router@4`
+安装 Vue Router：`npm install vue-router`
 
 - router/index.js
 
@@ -467,10 +470,89 @@ export default createStore({
   modules: {}
 })
 ```
+首先从vuex中引入useStore函数，他的返回值就是一个vuex实例
+```
+<template>
+  <h1>vuex中的数据{{ store.state.count }}</h1>
+</template>
+<script lang="ts">
+import { defineComponent } from "vue"
+import { useStore } from "vuex"
+export default defineComponent({
+  name: "index",
+  setup() {
+    const store = useStore()
+    return { store }
+  },
+})
+</script>
+```
+
+- vue3的router文件引入vuex 
+```
+//错误引入
+
+import { useStore } from 'vuex'
+const $store = useStore();
+console.log($store) //undefined
+1
+2
+3
+//正确引入
+
+import myStore from '@/store/index.js'
+const $store = myStore;
+console.log($store)
+```
+
 
 ## less
 安装：`npm i less-loader less --save-dev`
+## sass
+安装：`npm install node-sass sass-loader --save-dev`
+文件使用scss后缀写style时声明lang=scss
+
+```
+<style scoped lang="scss">
+//这里是scss不是sass，这个是因为scss是sass3引入进来的，scss语法有"{}",";"而sass没有，所以sass-loader对他们的解析是不一样的
+# 这里写样式
+</style>
+```
+
+可以声明使用变量
+
+```
+ $color:black;
+ .container{
+   a {
+     color:$color;
+   }
+ }
+```
+
+可以封装函数，通过 @mixin 声明函数，该函数创建颜色style,不传参默认黑色
+
+```
+@mixin create_color($color:black){
+  color:$color;
+}
+```
+
+通过@import引入封装函数的文件，通过@include调用函数
+
+```
+<style lang="scss" scoped>
+     @import "src/assets/sass/mixin.scss";
+    .container{
+      a {
+        @include create_color(red);
+     }
+    }
+</style>   
+```
+
 ## antdesign
+
 安装antdesign
 
 `npm i --save ant-design-vue@next`
@@ -479,7 +561,6 @@ export default createStore({
 import { createApp } from 'vue'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
-
 const app = createApp(App) 
 app.use(Antd);
 ```
@@ -492,9 +573,7 @@ vue3引用ant-design-vue编译运行时，可能会报错can't read property und
 
 ```
 vue3解析component: router-view失败  
-
 解决：
-
 //app.use(router) 需放在app.mount('#app')前面  不然加载时router-view、router-link等未被渲染
 ```
 
@@ -513,3 +592,86 @@ array.value.length = 0;
 //使用splice,可以使用reactive,不过要注意，watch会触发多次
 array.splice(0,array.length)
 ```
+### Vue3中废弃了$set的概念
+
+原因就是 Vue2 中的数据响应式是利用 object.definedProperty()实现的，它是无法深层监听数据的变化的。
+
+而Vue3，用的是ES6的proxy，对数据响应式进行一个数据的代理。这个就厉害了啊，结合Vue3的 composition API。
+
+Vue3 中的 reactivity API：
+```
+reactive
+readonly
+ref
+computed
+```
+如果想要让一个对象变为响应式数据，可以使用reactive或ref
+
+### vue3.0中使用nextTick 
+
+ nextTick 是将回调推迟到下一个 DOM 更新周期之后执行。在更改了一些数据以等待 DOM 更新后立即使用它
+
+```
+import { nextTick } from 'vue'
+...
+ setup () {    
+    let otherParam = reactive({
+      showA:false
+    })
+    nextTick(()=>{
+      otherParam.showA = true
+    })
+  return {
+      otherParam
+ 
+    }
+ 
+ 
+}
+```
+
+## vue3使用ref获取元素
+
+```
+<template>
+  <div ref="hello">xxxx</div>
+</template>
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
+const hello = ref<any>(null);
+onMounted(() => {
+  console.log(hello.value); });
+</script>
+```
+变量名称必须要与 ref 命名的属性名称一致。
+通过 hello.value 的形式获取 DOM 元素。
+必须要在 DOM 渲染完成后才可以获取 hello.value，否则就是 null
+
+- v-for 中使用 ref
+
+```
+<template>
+  <div v-for='i in 10' ref="hello">xxxx</div>
+</template>
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
+const hello = ref([]);
+onMounted(() => {
+  console.log(hello.value); });
+</script>
+```
+
+- ref 绑定函数 
+
+```
+<template>
+  <div v-for='i in 10' :ref="(el)=>{hello(el,i)}">xxxx</div>
+</template>
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
+const hello = (el,index)=>{
+
+};
+</script>
+```
+

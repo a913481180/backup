@@ -22,4 +22,23 @@ categories:
 * PowerToys Run
 * Shortcut Guide
 ---
-### snipaster截图工具
+### chrome
+插件：
+- [油猴](https://wwn.lanzouy.com/i6eOx0bmd9ub)
+- [adblockPlus](https://wwn.lanzouy.com/iXH250bmd0li)
+- [ublock](https://wwn.lanzouy.com/ineO40bme6qf)
+- [草料二维码](https://wwn.lanzouy.com/ineO40bme6qf)
+
+### other
+
+- [截图工具snipaste](https://wwn.lanzouy.com/i0Lmyxe5nwh)
+- [鼠标右键管理工具](https://wwn.lanzouy.com/iujpA0bm9jda)
+- [window系统激活工具](https://wwn.lanzouy.com/itsc00bm73p)
+- 无广告输入法[手心输入法](http://www.xinshuru.com/)
+- [解压工具bandizip破解版](https://wwn.lanzouy.com/izNvH0bm9j9g)
+- [解压工具7-zip](https://wwn.lanzouy.com/iR7jo0bmclsf)
+- 字体：[inconsolata](https://wwn.lanzouy.com/ifuCp0bm9jah)、[droidsansmono](https://wwn.lanzouy.com/i5xTI0bm9jbi)、[monaco](https://wwn.lanzouy.com/iOqD50bm9jcj)
+- 免费简洁思维导图[blumind](https://wwn.lanzouy.com/iEtBj0bm9hfa)
+- 精简小巧屏幕录制工具[FSCature](https://wwn.lanzouy.com/ium4t0bmagsd)
+- 电脑控制手机[scrcpy](https://wwn.lanzouy.com/iCzdu0bmc0cd)
+

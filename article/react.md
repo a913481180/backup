@@ -9,10 +9,13 @@ categories:
 ## 浏览器中编写
 
 - 准备容器
+
 ```
 <div id="test"></div>
 ```
+
 - 引入库
+
 ```
 <!--react核心库-->
 <script type="text/javascript" src="react.development.js"></script>
@@ -22,6 +25,7 @@ categories:
 <script type="text/javascript" src="babel.min.js"></script>
 ```
 - JSX
+
 ```
 <script type="text/babel>/*此处要写babel*/
 //创建虚拟dom
@@ -32,6 +36,7 @@ ReactDOM.render(Vdom,document.getElementById('test'));
 ```
 - js
 >jsx最终会翻译成js写法
+
 ```
 <script type="text/javascript">
 //创建虚拟dom
@@ -55,22 +60,30 @@ xml：早期用于存储和传输数据的格式
 ```
 
 ### jsx语法规则
+
 - 定义虚拟dom，不要写引号
 - 标签中混入js表达式要用｛｝，js表达式会产生一个值(返回值)，可以放在任何需要值的地方，如`a`、`a+b`、`demo(1)`、`arr.map()`、`function test(){}`。js语句：`if(){}`,`for(){}`,`switch(){}`
+
 ```
 const a=1;
 const Vdom=(
 <span id={a}>{a.toString()}</span>
 )
 ```
+
 - 样式的类型指定不要用class，要用className
+
 ```
 const Vdom=(
 <span className="test" >xxx</span>
 )
 ```
-- 内联样式要用style={{fontSize:"20px"}}的写法
+
+- 内联样式
+要用`style={{fontSize:"20px"}}`的写法
+
 - 虚拟dom只有一个根标签
+
 ```
 const Vdom=(
 <div>
@@ -79,6 +92,7 @@ const Vdom=(
 </div>
 )
 ```
+
 - 标签首字符为小写则直接转为html中同名元素，若为大写则去渲染对应组件
 
 ## 组件和模块

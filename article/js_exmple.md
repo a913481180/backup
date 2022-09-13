@@ -97,7 +97,7 @@ document.onmousemove=null;
 }
 }
 ```
-- 动态创建表单并提交
+### 动态创建表单并提交
 ```
 // JavaScript 构建一个 form 
 function MakeForm() 
@@ -126,5 +126,248 @@ function MakeForm()
   document.body.removeChild(form1); 
 } 
 ```
+
+### 虚拟列表
+
+```
+<template>
+  <div class="cube-recycle-list" id="container">
+    <!-- 可见区域列表 -->
+    <div :style="{ height: heights + 'px' }">
+      <div
+        v-for="(item, index) in visibleItems"
+        :key="index"
+        class="cube-recycle-list-item"
+        :style="{ transform: 'translate(0,' + item.top + 'px)' }"
+      >
+      <!-- 内容 -->
+        <div
+          :style="
+            'height: ' +
+            (index + startIndex + 1) * 10 +
+            'px; width: 100%; background-color: aqua'
+          "
+        >
+          {{ index + startIndex }}
+        </div>
+      </div>
+    </div>
+
+      <!-- 预加载,用于动态获取宽高 -->
+    <div
+      class="cube-recycle-list-item"
+      v-for="(item, index) in preItems"
+      :ref="(el) => itemDom(el, item.index, index)"
+    >
+      <!-- 内容 -->
+      <div
+        :style="
+          'height: ' +
+          (item.index + 1) * 10 +
+          'px; width: 100%; background-color: aqua'
+        "
+      >
+        {{ item.index }}
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { nextTick, ref, computed, onMounted, onBeforeUnmount } from "vue";
+
+export default {
+  name: "List",
+  setup() {
+    let n = 0;
+    let items = ref([]);
+    let list = ref([]);
+    let loadings = ref(false);
+    let heights = ref(0);
+    let pageNo = ref(0);
+    let startIndex = ref(0);
+    let refs = ref([]);
+    let itemDom = (el, index, i) => {//获取预加载的元素节点
+      if (i == 0) {
+        refs.value = [];
+      }
+      refs.value.push({ index, el });
+    };
+    let size = ref(15); //每页
+    let visibleItems = computed(() => {
+      return items.value.slice(
+        Math.max(0, startIndex.value - size.value),
+        Math.min(items.value.length, startIndex.value + size.value)
+      );
+    });
+    let preItems = computed(() => {//先加载元素获取其宽高，然后过滤去掉元素
+      return items.value.filter(function (item) {
+        return !item.height;
+      });
+    });
+    //更新每个item顶部距离和 整个列表的高
+    let updateItemTop = () => {
+      let height = 0;
+      let pre;
+      let current;
+      // loop all items to
+      for (let i = 0; i < items.value.length; i++) {
+        pre = items.value[i - 1];
+        current = items.value[i];
+        // it is empty in array
+        /* istanbul ignore if */
+        if (!items.value[i]) {
+          height += 0;
+        } else {
+          current.top = pre ? pre.top + pre.height : 0;
+          height += current.height;
+        }
+      }
+      heights.value = height;
+    };
+    //更新可见区域的起始序号
+    let updateStartIndex = () => {
+      // update visible items start index
+      let top = document.getElementById("container").scrollTop;
+      let item;
+      for (let i = 0; i < items.value.length; i++) {
+        item = items.value[i];
+        if (!item || item.top > top) {
+          startIndex.value = Math.max(0, i - 1);
+          break;
+        }
+      }
+    };
+    ///加载每一页数据的高度
+    let loadItemsByIndex = () => {
+      const start = (pageNo.value - 1) * size.value;
+      const end = pageNo.value * size.value;
+      let promiseTasks = [];
+      let item;
+      for (let i = start; i < end; i++) {
+        //处理原数据
+        item = items.value[i];
+        if (!item) {
+          items.value[i] = {
+            index: i,
+            data: list.value[i] || {},
+            height: 0,
+            top: -1000,
+          };
+          promiseTasks.push(
+            nextTick().then(() => {
+              /////  动态获取每个item的高
+              for (let j = 0; j < refs.value.length; j++) {
+                if (refs.value[j].index == i) {
+                  let node = refs.value[j].el;
+                  if (node) {
+                    items.value[i].height = node.offsetHeight;
+                  } else {
+                    items.value[i].height = 0;
+                  }
+                  break;
+                }
+              }
+            })
+          );
+        }
+      }
+      //加载一页的高和item的顶
+      window.Promise.all(promiseTasks).then(() => {
+        console.log(items.value);
+        updateItemTop();
+        updateStartIndex();
+      });
+    };
+
+    //获取数据
+    let load = () => {
+      if (!loadings.value) {
+        console.log("load");
+        let arr = [];
+        const promiseFetch = new Promise((resolve) => {
+          setTimeout(() => {
+            arr = [];
+            for (let i = 0; i < size.value; i++) {
+              arr.push({ n: n++ });
+            }
+            resolve(arr);
+          }, 1000);
+        });
+        pageNo.value++;
+        loadings.value = true; //加载中
+        promiseFetch.then((res) => {
+          loadings.value = false; //取消加载中
+          //追加数据
+          list.value.push(...res);
+          ///加载item的高度
+          loadItemsByIndex();
+          //if (res.length < size.value) {
+          //没有更多数据
+          // updateItemTop();
+          //updateStartIndex();
+          // }
+        });
+      }
+    };
+    let _onScroll = () => {
+      if (
+        document.getElementById("container").scrollTop +
+          document.getElementById("container").offsetHeight >
+        heights.value - 100
+      ) {
+        //判断是否到底
+        load();
+      }
+      //不停更新可见区域索引
+      updateStartIndex();
+    };
+    let _onResize = () => {
+      //重新加载全部数据的高度
+      items.value.forEach((item) => {
+        item.loaded = false;
+      });
+    };
+    onMounted(() => {
+      let node = document.getElementById("container");
+
+      console.log(node);
+      node.addEventListener("scroll", _onScroll);
+      window.addEventListener("resize", _onResize);
+      load();
+    });
+    onBeforeUnmount(() => {
+      document
+        .getElementById("container")
+        .removeEventListener("scroll", _onScroll);
+      window.removeEventListener("resize", _onResize);
+    });
+    return {
+      items,
+      heights,
+      startIndex,
+      itemDom,
+      size,
+      visibleItems,
+      preItems,
+    };
+  },
+};
+</script>
+<style scoped>
+.cube-recycle-list {
+  position: relative;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.cube-recycle-list-item {
+  width: 100%;
+  position: absolute;
+  box-sizing: border-box;
+}
+</style>
+
+``` 
 
 
