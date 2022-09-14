@@ -269,13 +269,23 @@ client does not support authentication protocol requested by server
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'password' PASSWORD EXPIRE NEVER;这里的password是你正在使用的密码
 ```
 
+<<<<<<< HEAD
+方式1：直接使用数据库提供的SQL语句
+=======
 ### MySQL 分页查询的 5 种方法
+>>>>>>> 3c5cfeb51abb6cea4e5e0de711a8fed595408289
 
 方式 1：
 
+<<<<<<< HEAD
+适应场景: 适用于数据量较少的情况(元组百/千级)。很简单，该语句的意思就是查询m+n条记录，去掉前m条，返回后n条。无疑该查询能够实现分页，但m越大，查询性能就越低，因为MySQL需要扫描全部m+n条记录。
+
+方式2：基于索引再排序
+=======
 select \* from table order by id limit m, n;
 
 很简单，该语句的意思就是查询 m+n 条记录，去掉前 m 条，返回后 n 条。无疑该查询能够实现分页，但 m 越大，查询性能就越低，因为 MySQL 需要扫描全部 m+n 条记录。
+>>>>>>> 3c5cfeb51abb6cea4e5e0de711a8fed595408289
 
 方式 2：
 
@@ -417,7 +427,11 @@ select * from student right join sc on student.sid = sc.sid;
 
 
 
+<<<<<<< HEAD
+方式3：基于索引再排序
+=======
 ## 数据库备份与还原
+>>>>>>> 3c5cfeb51abb6cea4e5e0de711a8fed595408289
 
 1. 备份原文件
 MySQL中的每一个数据库和数据表分别对应文件系统中的目录和其下的文件。在Linux下数据库文件的存放目录一般为/var/lib/mysql。在Windows下这个目录视MySQL的安装路径而定。备份文件前，需要将MySQL服务停止，然后将数据库目录拷贝即可。恢复数据数据库时，需要先创建好一个数据库(不一定同名)，然后将备份出来的文件(注意，不是目录)复制到对应的MySQL数据库目录中。使用这一方法备份和恢复数据库时，需要新旧的MySQL版本一致，否则可能会出现错误。
@@ -427,5 +441,45 @@ MySQL中的每一个数据库和数据表分别对应文件系统中的目录和
 备份数据库：
 `mysqldump –user=root –password=root密码 –lock-all-tables 数据库名 > 备份文件.sql`
 
+<<<<<<< HEAD
+该方式就部分解决了方式2的问题，但如果当前在第2页，要查第1000页，性能仍然较差。
+
+
+
+方式4：
+
+select * from table as a inner join (select id from table order by id limit m, n) as b on a.id = b.id order by a.id;
+
+该查询同方式1一样，m的值可能很大，但由于内部的子查询只扫描了id字段，而非全表，所以性能要强于方式1，并且能够解决跨页查询问题。
+
+
+
+方式5：
+
+select * from table where id > (select id from table order by id limit m, 1) limit n;
+
+该查询同样是通过子查询扫描字段id，效果同方式4。但方式5的性能会略好于方式4，因为它不需要进行表的关联，而是一个简单的比较，在不知道上一页最大id的情况下，是比较推荐的用法。
+
+方法6: 基于索引使用prepare
+（第一个问号表示pageNum，第二个？表示每页元组数）
+
+—语句样式: MySQL中,可用如下方法:
+
+代码如下:
+
+PREPARE stmt_name FROM SELECT * FROM 表名称 WHERE id_pk > (？* ？) ORDER BY id_pk
+ASC LIMIT M
+—适应场景: 大数据量。
+
+—原因: 索引扫描,速度会很快. prepare语句又比一般的查询语句快一点。
+
+方法7:利用MySQL支持ORDER操作可以利用索引快速定位部分元组,避免全表扫描
+—比如: 读第1000到1019行元组(pk是主键/唯一键)。
+
+代码如下:
+
+—SELECT * FROM your_table WHERE pk>=1000 ORDER BY pk ASC LIMIT 0,20
+=======
 恢复数据库：
 `mysql -u root –password=root密码 数据库名 < 备份文件.sql`
+>>>>>>> 3c5cfeb51abb6cea4e5e0de711a8fed595408289

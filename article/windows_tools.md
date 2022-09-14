@@ -7,7 +7,7 @@ categories:
 # window10实用软件
 ---
 ### internet download manager
-
+`https://wwn.lanzouy.com/iduIc0bmfhcd`
 ---
 
 ### PowerToys
@@ -34,7 +34,7 @@ categories:
 - [截图工具snipaste](https://wwn.lanzouy.com/i0Lmyxe5nwh)
 - [鼠标右键管理工具](https://wwn.lanzouy.com/iujpA0bm9jda)
 - [window系统激活工具](https://wwn.lanzouy.com/itsc00bm73p)
-- 无广告输入法[手心输入法](http://www.xinshuru.com/)
+- 无广告输入法：[手心输入法](http://www.xinshuru.com/)
 - [解压工具bandizip破解版](https://wwn.lanzouy.com/izNvH0bm9j9g)
 - [解压工具7-zip](https://wwn.lanzouy.com/iR7jo0bmclsf)
 - 字体：[inconsolata](https://wwn.lanzouy.com/ifuCp0bm9jah)、[droidsansmono](https://wwn.lanzouy.com/i5xTI0bm9jbi)、[monaco](https://wwn.lanzouy.com/iOqD50bm9jcj)
