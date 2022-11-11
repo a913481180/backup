@@ -17,7 +17,7 @@ categories:
 
 ### 换源
 
-`npm config set registry https://registry.npm.taobao.org  //添加淘宝源`
+`npm config set registry https://registry.npmmirror.com  //添加国内源`
 
 使用nrm切换镜像源
 
