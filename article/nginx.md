@@ -5,6 +5,88 @@ categories:
 - linux
 ---
 
+- 常用命令
+```
+nginx -v
+nginx -V
+nginx -t //查看配置是否有问题
+nginx -s reload //重新加载配置
+nginx -s stop //强行停止
+nginx -s quit //安全退出
+ps -ef|grep nginx //查看进程
+systemctl enable nginx //开机自动启动
+//防火墙
+[root@rhel7 ~]# systemctl status firewalld.service
+[root@rhel7 ~]# systemctl stop firewalld.service
+[root@rhel7 ~]# systemctl disable firewalld.service
+[root@rhel7 ~]# systemctl status firewalld.service
+```
+
+- 开启GZIP压缩
+```
+server{
+    gzip on;
+    gzip_type application/javascript;#压缩类型，文本文件压缩效果最好
+    gzip_min_length 1k;#最小压缩单位，小于1k压缩意义不大
+    gzip_comp_level 5;压缩级别，1-9，数字越大压缩效果越好，但会加大cpu压力，高并发场景不建议调太高
+    gzip_very on;#在响应头添加very:accept-encoding,让代理服务器根据请求头识别是否启用了gzip压缩
+    gzip_http_version 1.1;#启用gzip压缩的最低http版本，默认1.1
+    gzip_buffers 2 4k;#设置压缩所需的缓冲区大小，以4k为单位，例如文件为7k，则申请2*4k的缓存区
+    gzip_static on;#静态压缩，也就是提前已准备好了压缩文件在同目录下会有一个.gz的压缩包，避免动态压缩，提高性能
+    gzip_disable MSIE[1-6]\.;设置禁用浏览器进行Gzip压缩，ie6对gzip压缩支持不好，会造成假死。
+    listen 8080;
+    server_name localhost;
+    location / {
+        root /opt/test/;
+    }
+}
+```
+
+- 开启Brotli
+>比gzip性能高，ie浏览器不支持，仅支持https，无法使用时，会降级为gzip
+- 下载源码
+- 下载算法
+- 重新编译，`./configure --prefix=安装目录 --with-http_ssl_module --add-module=brotli的安装目录`
+- 安装好后，将 objs文件夹中nginx执行文件替换掉sbin中的执行文件
+- 编辑文件
+```
+server{
+    ...
+brotli on；
+brotli_type application/javascript;
+}
+```
+
+ 
+
+- 防盗链
+```
+server{
+    listen 8080;
+    server_name localhost;
+    location / {
+        root /opt/test/;
+    }
+    location ~* .*\.(gif|jpg|png)${
+        root /opt/test/img/;
+        valid_referers none blocked xxx.com;
+        if($invalid_referer){
+            #return 403;返回错误页面
+            rewrite ^/ http://xxxx/error;
+            break;
+        }
+    }
+
+}
+```
+破解方法
+```
+<header>
+<meta name="referrer" content='no-referrer' />
+</header>
+
+```
+
 - 如何利用Nginx代理获取真实IP
 ```
 server {

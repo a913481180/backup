@@ -5,9 +5,7 @@ categories:
 - tool
 ---
 # window10实用软件
----
-### internet download manager
-`https://wwn.lanzouy.com/iduIc0bmfhcd`
+
 ---
 
 ### PowerToys
@@ -27,13 +25,20 @@ categories:
 - [油猴](https://wwn.lanzouy.com/i6eOx0bmd9ub)
 - [adblockPlus](https://wwn.lanzouy.com/iXH250bmd0li)
 - [ublock](https://wwn.lanzouy.com/ineO40bme6qf)
-- [草料二维码](https://wwn.lanzouy.com/ineO40bme6qf)
+- [草料二维码](https://wwbk.lanzoue.com/iRIjx0bme6uj)
+- [vue2](https://wwbk.lanzoue.com/i2ykx0ht4wfi)
+- [vue3](https://wwbk.lanzoue.com/iOqHN0ht4xaj)
+- [react](https://wwbk.lanzoue.com/i8wch0ht4xed)
+- [redux](https://wwbk.lanzoue.com/i5baZ0ht4wwf)
+- [vimiumC](https://wwbk.lanzoue.com/iBCXa0ht4wgj)
+- [editThisCookie](https://wwbk.lanzoue.com/isrNg0ht4wle)
 
 ### other
 
+- [IDM下载工具](https://wwbk.lanzoue.com/iduIc0bmfhcd)
+- [winscp+putty](https://wwbk.lanzoue.com/i7IKb0hsyaid)
 - [截图工具snipaste](https://wwn.lanzouy.com/i0Lmyxe5nwh)
 - [鼠标右键管理工具](https://wwn.lanzouy.com/iujpA0bm9jda)
-- [window系统激活工具](https://wwn.lanzouy.com/itsc00bm73p)
 - 无广告输入法：[手心输入法](http://www.xinshuru.com/)
 - [解压工具bandizip破解版](https://wwn.lanzouy.com/izNvH0bm9j9g)
 - [解压工具7-zip](https://wwn.lanzouy.com/iR7jo0bmclsf)
