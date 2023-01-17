@@ -44,3 +44,13 @@ categories:
 
 ## element el-input的autofocus失效问题解决
 >autofocus是input的原生属性,饿了么组件也支持这种方法, 但是input外面还有其他组件, 导致autofocus失效, 只能手动调用focus方法:组件上绑定ref，手动调用focus()
+
+## elementUI选择器select获取选中对象
+
+```
+有些情况下需要获取选中对象的全部数据，添加 value-key="id" ，value-key 为唯一性标识, 将 value 绑定为item
+<el-select v-model="area" value-key="id" placeholder="请选择区域">
+    <el-option v-for="item in areaLsit" :key="item.id" :label="item.areaName" :value="item">
+    </el-option>
+</el-select>
+```

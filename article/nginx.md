@@ -5,7 +5,11 @@ categories:
 - linux
 ---
 
-- 常用命令
+# Nginx
+>负载均衡、反向代理、动静结合
+## 配置文件匹配顺序
+/etc/nginx/conf.d/多个配置文件时，会优先匹配配置了server_name且值不是localhost，接着是localhost，再接着是没有配置的。若端口号和server_name都一样则优先选择该目录下的第一个配置文件。
+## 常用命令
 ```
 nginx -v
 nginx -V
@@ -16,13 +20,13 @@ nginx -s quit //安全退出
 ps -ef|grep nginx //查看进程
 systemctl enable nginx //开机自动启动
 //防火墙
-[root@rhel7 ~]# systemctl status firewalld.service
-[root@rhel7 ~]# systemctl stop firewalld.service
-[root@rhel7 ~]# systemctl disable firewalld.service
-[root@rhel7 ~]# systemctl status firewalld.service
+systemctl status firewalld.service
+systemctl stop firewalld.service
+systemctl disable firewalld.service
+systemctl status firewalld.service
 ```
 
-- 开启GZIP压缩
+## 开启GZIP压缩
 ```
 server{
     gzip on;
@@ -42,7 +46,7 @@ server{
 }
 ```
 
-- 开启Brotli
+## 开启Brotli
 >比gzip性能高，ie浏览器不支持，仅支持https，无法使用时，会降级为gzip
 - 下载源码
 - 下载算法
@@ -57,9 +61,62 @@ brotli_type application/javascript;
 }
 ```
 
- 
+## 请求限流
+```
+语法：limit_req zone=name [burst=number][nodelay|delay=number];
+上下文：http,server,location
+```  
 
-- 防盗链
+示例：
+```
+http:{
+limit_req_zone $binary_remote_addr zone=ip_limit:10m rate=1r/s;
+...
+}
+```
+`$binary_remote_addr`->通过remote_addr这个标识来做限制，限制的是同一客户端的ip地址，在这里，客户端ip地址作为关键。注意，不是`$ remote_addr`,`$ remote_addr`变量的大小可以从7到15个字节不等，存储状态在32位平台上占用32或64字节，在64位平台上总是64字节。对于ipv4地址，`$binary_remote_addr`变量始终是4个字节，对于ipv6地址则为16个字节，
+`zone=ip_limit:10m`->生成一个10MB大小，名字为ip_limitd的内存区域，主要用来存储访问频次信息。
+`rate=1r/s`->标识允许相同标识客户端的一个访问频次，1r即1次
+```
+server{
+    ...
+location / {
+limit_req zone=ip_limit burst=5 nodelay;
+...
+}}
+```
+`zone`->表示使用哪个区域来做限制
+`burst`->设置了一个大小为5的缓存区，当有大量请求即burst时，超过访问频次限制的请求可以先放到此缓存区。
+`nodelay`->超过访问频次且缓存区也满了的时候，直接返回503，若无设置，则请求会等待排队。
+
+## 连接限流
+```
+语法：limit_conn zone number;
+上下文：http,server,location
+```  
+
+示例：
+```
+http:{
+limit_conn_zone $binary_remote_addr zone=addr:10m;
+...
+}
+```
+`$binary_remote_addr`->通过remote_addr这个标识来做限制，限制的是同一客户端的ip地址.
+`zone=addr:10m`->生成一个10MB大小，名字为addr的内存区域，主要用来存储访问频次信息。
+`server{
+    ...
+location / {``
+limit_conn addr 1;
+...
+}
+}
+```
+`zone`->表示使用哪个区域来做限制
+`1`->允许相同标识客户端的一个访问频次，1代表只允许每个ip地址1个连接。
+
+
+## 防盗链
 ```
 server{
     listen 8080;
@@ -87,7 +144,7 @@ server{
 
 ```
 
-- 如何利用Nginx代理获取真实IP
+## 如何利用Nginx代理获取真实IP
 ```
 server {
    listen 80;

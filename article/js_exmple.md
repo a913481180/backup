@@ -127,7 +127,6 @@ function MakeForm()
 } 
 ```
 
-<<<<<<< HEAD
 ### 虚拟列表
 
 ```
@@ -370,7 +369,6 @@ export default {
 </style>
 
 ``` 
-=======
 ## js获取选择的文本
 ```
 ⾮IE浏览器获取选中⽂本：
@@ -799,6 +797,74 @@ var a = [1,2,3,4,5,2,3,5,5,5,5]
 let list = [...new Set(a)]
 console.log(list); // 输出结果 [1, 2, 3, 4, 5]
 ```
->>>>>>> 77a1cdbe76c8faf0484db29b454bda031f30e7c0
 
+## 树
+列表数据转树型结构
+```
+话不多说，直接进入正题~
+
+列表数据中字段如下：
+
+[
+    {
+        id: 1,
+        text: '节点1',
+        parentId: 0 //这里用0表示为顶级节点
+    },
+    {
+        id: 2,
+        text: '节点1_1',
+        parentId: 1 //通过这个字段来确定子父级
+    }
+    ...   
+]
+
+我们预期的结果：
+
+[
+    {
+        id: 1,
+        text: '节点1',
+        parentId: 0,
+        children: [
+            {
+                id:2,
+                text: '节点1_1',
+                parentId:1
+            }
+        ]
+    }
+]
+
+先说一下实现的思路：
+1、先把列表数据转成以id为key，节点本身为value的对象temp；
+2、定义空列表treeData，然后遍历temp对象
+2-1、如果当前节点不是顶级节点（parentId不为0），那找到以parentId作为key的节点，并把当前节点push到该节点的children中；
+2-2、如果当前节点是顶级节点，只需把该节点push到treeData中,当temp遍历结束后，treeData就是最后的树型数据。
+
+具体代码：
+
+var temp = {};
+var treeData = [];
+for(var i=0; i<data.length; i++){
+    temp[data[i].id] = data[i];
+}
+for(var i in temp){
+     if(temp[i].parentId != "") {
+         if(!temp[temp[i].parentId].children) {
+             temp[temp[i].parentId].children = new Array();
+         }
+         temp[temp[i].parentId].children.push(temp[i]);
+     } else {
+         treeData.push(temp[i]);
+     }
+}
+
+这里特别说一下有个稍微底层一点的东东，也是该方法实现的关键所在。。
+大家想一想，逐步跟一下这个过程，在遍历temp时，假如顶级节点1先被push到了treeData中，而后面又有子节点被添加到了节点1中，那么这个子节点最后能不能被带入到treeData中的节点1里呢？
+
+答案是可以的~
+
+因为节点1本身是个Object对象，它指向了一个内存地址，而无论后续节点1怎么改变，被push到treeData中的节点1都会指向同一个地址，所以节点1被什么时候push都没有关系，最后就是完整的数据。
+```
 
