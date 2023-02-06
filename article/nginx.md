@@ -26,14 +26,15 @@ systemctl enable nginx //开机自动启动
 ```
 server{
     gzip on;
-    gzip_type application/javascript;#压缩类型，文本文件压缩效果最好
+    gzip_type application/javascript;#压缩类型，文本文件压缩效果最好,图片视频资源压缩作用不大，大文件资源会消耗大量cpu资源不推荐
     gzip_min_length 1k;#最小压缩单位，小于1k压缩意义不大
-    gzip_comp_level 5;压缩级别，1-9，数字越大压缩效果越好，但会加大cpu压力，高并发场景不建议调太高
+    gzip_comp_level 5;#压缩级别，1-9，数字越大压缩效果越好，但会加大cpu压力，高并发场景不建议调太高,建议5左右
     gzip_very on;#在响应头添加very:accept-encoding,让代理服务器根据请求头识别是否启用了gzip压缩
     gzip_http_version 1.1;#启用gzip压缩的最低http版本，默认1.1
-    gzip_buffers 2 4k;#设置压缩所需的缓冲区大小，以4k为单位，例如文件为7k，则申请2*4k的缓存区
-    gzip_static on;#静态压缩，也就是提前已准备好了压缩文件在同目录下会有一个.gz的压缩包，避免动态压缩，提高性能
-    gzip_disable MSIE[1-6]\.;设置禁用浏览器进行Gzip压缩，ie6对gzip压缩支持不好，会造成假死。
+    gzip_buffers 4 4k;#设置压缩所需的缓冲区大小和申请内存的倍率，如4 4k代表以4k为单位，按照原始数据大小以4k为单位的4倍申请内存。默认是申请跟原始数据相同大小的内存空间。
+    gzip_static on;#静态压缩，若提前已准备好了压缩文件.gz的压缩包或者提供静态文件服务，可以启用。它可避免动态压缩，提高性能
+    gzip_proxied off;#nginx作为反向代理时，开启或关闭后端服务器返回的结果（前提是后端必须返回包含Via的请求头）。off-关闭所有代理结果数据的压缩。expired-若请求头包含‘Expires’信息，则启用。no-cache-若请求头包含‘Cache-Control:no-cache’信息，则启用。no-store-若请求头包含‘Cache-Control:no-store’信息，则启用。private->若请求头包含‘Cache-Control:private’信息，则启用。no_last_modified->若请求头不包含‘Last-Modified’信息，则启用。no_etag->若请求头不包含‘Etag’信息，则启用。auth->若请求头包含“Authorization"信息，则启用。any->无条件启用压缩
+    gzip_disable MSIE[1-6]\.;#设置禁用浏览器进行Gzip压缩，ie6对gzip压缩支持不好，会造成假死。
     listen 8080;
     server_name localhost;
     location / {
