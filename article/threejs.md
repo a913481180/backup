@@ -195,3 +195,34 @@ FogExp2( color : Integer, density : Float )
 - .density : Float
 定义雾的密度将会增长多块。
 默认值是0.00025.
+
+
+## 全屏
+
+```
+window.addEventListener('dblclick',()=>{
+
+  let isFull=document.fullscreenElement;
+  if(!isFull){
+    renderer.domElement.requestFullscreen(); 
+  }else{
+
+    document.exitFullscreen(); 
+  }else{
+  }
+})
+```
+## 自适应屏幕
+
+```
+window.addEventListener('resize',()=>{
+  //更新摄像头
+  camera.aspect=window.innerWidth/window.innerHeight
+  //更新摄像机投影矩阵
+  camera.updateProjectionMatrix();
+  //更新渲染器
+  renderer.setSize(window.innerWidth,window.innerHeight)
+  //设置渲染器的像素比
+  renderer.setPixelRatio(window.devicePixelRatio)
+  }
+```
