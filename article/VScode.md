@@ -36,3 +36,28 @@ categories:
 3 )本项目不需要【自动保存延迟】的设定值，此值也会被忽略
 
 在【Settings】画面中修正值后，不点击追加保存按钮，自动保存设定的内容。
+
+## vscode好用的插件系列
+
+
+git相关插件：gitLens、Git History、Git History Diff
+汉化插件： Chinese (Simplified)
+开发提示相关插件： Tabnine AI（强推）、Path Intellisense（路径提示）、Vetur、Volar、Auto Close Tag、Auto Complete Tag、Auto Rename Tag、HTML Snippets、Wrap Console Log Lite
+浏览器调试插件： JavaScript Debugger、Debug Visualizer、scode-js-debug
+静态服务器：Live Server
+代码运行器： Code Runner
+正则提示插件： any-rule、Regex Previewer（辅助验证正则结果）
+Docker插件： Docker
+格式化类插件： EditorConfig for VS Code、ESLint
+进制文件查看： Hex Editor
+TODO提示： Todo Tree
+流程图绘制： drawio
+PDF查看： vscode-pdf
+Markdown预览：Markdown Preview Enhanced
+SVG文件预览：SVG Viewer
+图片预览（在html或者css写地址的时候可直接预览）：Image Preview
+文件依赖分析（如：.vue文件可以通过该插件看到引用了哪些依赖）：Dependency Cruiser Extension
+颜色选择、设置：Color Highlight、Color Picker
+快速生成注释：vscode-fileheader 和 koroFileHeader 
+npm模块导入智能提示： npm Intellisense
+接口请求：REST Client
