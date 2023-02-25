@@ -805,6 +805,8 @@ navigate(-1)//后退
 
 > 状态管理 js 库，集中式管理 react 应用中多个组件共享的状态
 
+
+
 ##### 简单
 
 - store.js
@@ -1034,6 +1036,271 @@ count2:countReducer2
 })
 export default createStore(allReducer)
 ```
+##### 使用Redux Toolkit简化Redux
+
+`npm install @reduxjs/toolkit react-redux`
+react-redux 也需要单独安装
+
+- configureStore
+configureStore替代 createStore
+配置简单,设置默认值也方便
+src/store/index.js
+
+```
+// 引入
+import {configureStore} from '@reduxjs/toolkit'
+import counterSlice from "../pages/basic/counterSlice"
+import mySlice from "../pages/mySlice"
+
+export default configureStore({
+  reducer:{
+    rootCounter:counterSlice,
+    rootMy:mySlice
+  }
+})
+```
+这里 reduer直接合并成一个唯一的 根root了
+原有的combineReducers这个合并函数就用不到了
+注意自己配置的 reducer的 key值 和 对应的value值
+我这里把单独的 reducer 放到和页面同级了,这个根据自己的习惯,放到 store下面新建目录存放所有的reducer也行
+- 根组件配置 store
+
+```
+入口index.js
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import store from './store'
+import {Provider} from 'react-redux'
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+   <Provider store={store}>
+         <App />
+    </Provider>
+  </React.StrictMode>
+);
+```
+- createAction
+创建一个action，传入动作类型字符串，返回动作函数。
+createAction语法： function createAction(type, prepareAction?)
+1，type：Redux中的actionTypes
+2，prepareAction：Redux中的actions
+
+- createReducer
+创建一个reducer，action type 映射到 case reducer 函数中，不用写switch-case，并集成immer。
+Builder提供了三个方法：
+1，addCase： 根据action添加一个reducer case的操作。
+2，addMatcher： 在调用actions前，使用matcher function过滤
+3，addDefaultCase： 默认值，等价于switch的default case;
+
+- createSlice reducer编写
+>createSlice对actions、Reducer的一个封装。
+  1. 创建slice
+使用createSlice方法创建一个slice。每一个slice里面包含了reducer和actions，可以实现模块化的封装。
+所有的相关操作都独立在一个文件中完成。
+
+  1. 关键属性:
+name
+命名空间，可以自动的把每一个action进行独立，解决了action的type出现同名的文件。在使用的时候默认会把使用name/actionName
+initialState
+state数据的初始值
+  3. reducers
+定义的action。由于内置了immutable插件，可以直接使用赋值的方式进行数据的改变，不需要每一次都返回一个新的state数据。
+  4. 导出
+counterSlice.actions 导出所有的修改函数方便页面使用
+counterSlice.reducer 导出reducer在 store里面使用
+具体reducer 函数的参数
+参数1: 当前slice的state数据
+参数2: 对象{type:"",payload:传参}
+
+type:counterSpace/decrement
+type就是之前的 actions用switc/case来匹配很麻烦,现在简洁了
+type构成 slice的 name命名空间/具体的修改函数
+
+payload 要和传的时候保持一致
+```
+import { createSlice } from "@reduxjs/toolkit";
+const initialState = {
+  counter: 100,
+  user: {
+    name: "yzs",
+    job: "全栈",
+  },
+};
+/* 
+reducer切片
+createSlice函数的作用：生成分片的reducer
+内部调用的市createAction和createReducer 
+creatSlice可以帮助我们用更少的代码去生成配套的reducer和action,而且有很好的维护性
+*/
+export const counterSlice = createSlice({
+  name: "counterSpace", // 命名空间，在调用action的时候会默认的设置为action的前缀,保证唯一.不重名
+  initialState,
+  reducers: {
+// reducer函数 state当前组件的数据 
+//第二个参数为{payload:{},type:"""} 想想就写法或者vuex
+    increment(state) {
+      state.counter += 100;
+    },
+    decrement(state, actions) {
+      // actions == {payload:{},type:"""}
+      console.log("decrement---actions", actions);
+      state.counter -= actions.payload;
+    },
+    updateUser(state, { payload }) {
+      console.log("updateUser-------payload", payload);
+// 引用类型 注意 赋值的写法
+      state.user = {
+        ...state.user,
+        ...payload,
+      };
+    },
+  },
+});
+/* 
+切片对象会自动地帮助我们生成action
+切片对象会根据我们地reducers方法来自动地创建action对象，这些action对象会保存到切片对象的actions中
+{type:name/函数名，payload:函数的参数}
+*/
+export const { increment, decrement, updateUser } = counterSlice.actions;
+export const selectCount = (state) => state.rootCounter.counter;
+export const selectUser = (state) => state.rootCounter.user;
+
+export default counterSlice.reducer;
+
+```
+
+
+- 页面使用
+  1. useSelector()
+返回指定的 state
+```
+// 这样写太长了 麻烦
+ const counter = useSelector(state=>state.rootCouter.counter);
+ ```
+rootCouter这个key 来源于 根 store里面配置的reducer，这样写太长了，麻烦。在这个 slice里面我做了统一处理
+```
+export const selectCount = (state) => state.rootCounter.counter;
+export const selectUser = (state) => state.rootCounter.user;
+```
+页面使用
+```
+import { useSelector, useDispatch } from "react-redux";
+import {
+  increment,
+  decrement,
+  updateUser,
+  selectCount,
+  selectUser,
+} from "./normalSlice";
+export default function Counter() {
+  const dispatch = useDispatch();
+
+  // let counter = useSelector(state=>state.rootCouter.counter)
+  const counter = useSelector(selectCount);
+  console.log("页面---counter:", counter);
+  const user = useSelector(selectUser);
+
+// 这样可以直接解构出当前 slice所有的 state
+// 具体用哪种 看自己心情
+ const { counter } = useSelector((state) => state.rootCouter);
+
+return ( <div> 布局看下面 </div>)
+
+```
+- useDispatch()
+payload传参和 reducer保持一致
+引用类型的 修改注意
+```
+const dispatch = useDispatch(); 修改函数
+  return (
+    <div>
+      <h1>reduxjs/toolkit 基础用法</h1>
+      <hr />
+      <button onClick={() => dispatch(increment())}>+</button>
+      <span>{counter}</span>
+      <button onClick={() => dispatch(decrement(666))}>-</button>
+      <hr />
+      <h1>姓名:{user.name} ---职业:{user.job}</h1>
+      <button onClick={()=>{dispatch(updateUser({name:'Michael'}))}}>改名</button>
+      <button onClick={()=>{
+        dispatch(updateUser({job:'自由职业者'}))}
+        }>转行</button>
+    </div>
+  );
+}
+
+```
+- 异步 createAsyncThunk()
+内置了redux-thunk 处理异步 , 足够解决绝大部分的问题. 还有其他中间件比如:redux-saga 、redux-observable。
+异步请求处理三种状态的action :pending\fulfilled\rejected；
+这三种状态的action自动触发, 防止外部手动调用,则使用属性 extraReducers , 则不会生成对外的的action creator .
+
+```
+接受一个动作类型字符串和一个返回Promise函数，并生成一个pending/fulfilled/rejected基于该Promise分派动作类型的 thunk
+用 fetch请求模拟一个异步
+3.createAsyncThunk("counterSpace/getList",()=>{})
+参数1: slice的name/命名空间/函数名
+
+// return 不要忘记
+export const getList = ( ) => {
+return fetch("https://.XX.cn/api/news").then(res=>res.json());
+};
+export const  getListAsync =  createAsyncThunk("counterSpace/getList",async()=>{
+  const res = await getList()
+  return res// 此处的返回结果会在 .fulfilled中作为payload的值
+});
+
+
+```
+
+- extraReducers
+异步函数配置
+```
+createSlice({
+    name: "counterSpace",
+    initialState,
+    reducers:{},
+    extraReducers: (builder) => {
+    builder
+      .addCase(getListAsync.pending, (state) => {
+         console.log("pending",state);
+      })
+      .addCase(getListAsync.rejected, (state, err) => {
+        console.log("rejected 失败",err);
+
+      })
+      .addCase(getListAsync.fulfilled, (state, action) => {
+         console.log("fulfilled 成功",state);
+        console.log("fulfilled action",action);
+
+        state.list = action.payload
+      });
+  },
+});
+这个配置基本就是套路
+只需要把函数名字改为通过createAsyncThunk()创建的函数名
+根据自己的业务场景 写赋值逻辑就行
+```
+页面使用异步函数
+```
+<button onClick={()=>dispatch(getListAsync('异步模拟'))}>异步</button>
+      <ul>
+        {
+          listData.map((news)=>{
+            return <li key={news.id}>{news.title}</li>
+          })
+        }
+      </ul>
+```
+
+
+
+
+
+
 
 ##### 解构赋值
 

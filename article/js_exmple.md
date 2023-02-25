@@ -729,10 +729,13 @@ v-for="(value,key,index) in obj"
 方法1：先排序后去重
 
 1）对数组进行双重循环；如果外循环的值大于内循环的值；就利用第三方变量对其交换值 ；这儿也可以用 sort
+
 ```
 a.sort((a,b)=>{return a-b}); // 排序
 ```
+
 2）当排序完成以后；再次循环进行比较相邻的两个值
+
 ```
 var a =[1,2,3,4,5,2,3,5,5,5,5]
 function info(a){
@@ -755,7 +758,8 @@ function info(a){
  }
         let list = info(a)
         console.log(list); // 输出结果 [1, 2, 3, 4, 5]
-        ```
+```
+
 方法2：indexOf去重
 
 此去重主要是利用 indexOf 去查找是否有相同的值；如果没有就返回-1
@@ -787,10 +791,11 @@ for(let i=0;i<a.length;i++){
             }
      }
   console.log(a); // 输出结果 [1, 2, 3, 4, 5]
-  ```
-方法4：Set去重
+```
 
+方法4：Set去重
 set去重应该说是简单的去重方式了
+
 ```
 var a = [1,2,3,4,5,2,3,5,5,5,5]
 let list = [...new Set(a)]
@@ -799,11 +804,10 @@ console.log(list); // 输出结果 [1, 2, 3, 4, 5]
 
 ## 树
 列表数据转树型结构
-```
+
 话不多说，直接进入正题~
-
 列表数据中字段如下：
-
+```
 [
     {
         id: 1,
@@ -817,9 +821,11 @@ console.log(list); // 输出结果 [1, 2, 3, 4, 5]
     }
     ...   
 ]
+```
 
 我们预期的结果：
 
+```
 [
     {
         id: 1,
@@ -834,7 +840,7 @@ console.log(list); // 输出结果 [1, 2, 3, 4, 5]
         ]
     }
 ]
-
+```
 先说一下实现的思路：
 1、先把列表数据转成以id为key，节点本身为value的对象temp；
 2、定义空列表treeData，然后遍历temp对象
@@ -843,6 +849,7 @@ console.log(list); // 输出结果 [1, 2, 3, 4, 5]
 
 具体代码：
 
+```
 var temp = {};
 var treeData = [];
 for(var i=0; i<data.length; i++){
@@ -858,23 +865,49 @@ for(var i in temp){
          treeData.push(temp[i]);
      }
 }
-
-这里特别说一下有个稍微底层一点的东东，也是该方法实现的关键所在。。
-大家想一想，逐步跟一下这个过程，在遍历temp时，假如顶级节点1先被push到了treeData中，而后面又有子节点被添加到了节点1中，那么这个子节点最后能不能被带入到treeData中的节点1里呢？
-
-答案是可以的~
-
-因为节点1本身是个Object对象，它指向了一个内存地址，而无论后续节点1怎么改变，被push到treeData中的节点1都会指向同一个地址，所以节点1被什么时候push都没有关系，最后就是完整的数据。
 ```
 
+这里特别说一下有个稍微底层一点的东东，也是该方法实现的关键所在。。
+大家想一想，逐步跟一下这个过程，在遍历temp时，假如顶级节点1先被push到了treeData中，而后面又有子节点被添加到了节点1中，那么这个子节点最后能不能被带入到treeData中的节点1里呢？答案是可以的~为节点1本身是个Object对象，它指向了一个内存地址，而无论后续节点1怎么改变，被push到treeData中的节点1都会指向同一个地址，所以节点1被什么时候push都没有关系，最后就是完整的数据。
+
 ## 前端实现吸顶的三种方式
+
 一、position: sticky
 设置粘性定位并且添加某个方位才可生效，但是兼容性较差。
+
 二、动态修改元素的position
 监听页面的滚动，比较 元素初始状态距离顶部的高度offsetTop 与 页面此时的滚动高度 。当后者大于前者时，修改元素的position方式为fixed。
+
 三、障眼法
 复制一个相同的元素，将其固定于顶部并让其先隐藏。
 监听页面的滚动，比较 元素初始状态距离顶部的高度offsetTop 与 页面此时的滚动高度 ，当后者数值大于前者数值时，原来的元素刚刚好触顶，且正与新元素的位置重合。
 此时我们在监听方法中，让这个新元素显示。
 当页面继续滚动的时候，原来的元素已经被滚上去了，而新的元素一直被固定在顶部并且此时已经显示出来，所以这个过程发生的时候，会让人有一种元素改变了定位方式的错觉。
 
+
+## 如何强制完全重新加载,location.reload（true）已弃用
+由于该forceReload参数已被弃用，它也已经被一些浏览器忽略了。
+
+location.reload();如果您想执行强制重新加载（如使用Ctrl+完成F5）以便从服务器而不是浏览器缓存重新加载所有资源，则使用 only不是解决方案。
+
+```
+执行POST对当前位置的请求，因为这总是会使浏览器重新加载所有内容。
+location.reload()只是执行一个GET请求。于是，我来到了解决办法将一个空的形式对角应用与method="POST"和action="https://example.org/"，然后提交从代码隐藏表单想要当。
+forceReload() {
+    if(environment.production) {
+        const form = document.createElement('form');
+        form.method = "POST";
+        form.action = location.href;
+        document.body.appendChild(form);
+        form.submit();
+    } else {
+        window.location.reload();
+    }
+}
+```
+
+```
+由于window.location.reload(true)已被弃用。您可以使用：
+window.location.href = window.location.href,
+强制重新加载并清除缓存。
+```
