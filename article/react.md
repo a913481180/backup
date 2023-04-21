@@ -11,13 +11,13 @@ categories:
 
 - 准备容器
 
-```
+```jsx
 <div id="test"></div>
 ```
 
 - 引入库
 
-```
+```jsx
 <!--react核心库-->
 <script type="text/javascript" src="react.development.js"></script>
 <!--react-dom，用于支持react操纵dom-->
@@ -28,7 +28,7 @@ categories:
 
 - JSX
 
-```
+```jsx
 <script type="text/babel>/*此处要写babel*/
 //创建虚拟dom
 const Vdom=(<h1>hello</h1>)/*不用引号*/
@@ -40,7 +40,7 @@ ReactDOM.render(Vdom,document.getElementById('test'));
 - js
   > jsx 最终会翻译成 js 写法
 
-```
+```jsx
 <script type="text/javascript">
 //创建虚拟dom
 const Vdom=React.createElement('h1',{id:'title'},React.createElement('span',{},'hello'))
@@ -57,7 +57,7 @@ ReactDOM.render(Vdom,document.getElementById('test'));
 
 xml：早期用于存储和传输数据的格式
 
-```
+```xml
 <student>
 <name>XIAOMI</name>
 <age>19</age>
@@ -69,19 +69,15 @@ xml：早期用于存储和传输数据的格式
 - 定义虚拟 dom，不要写引号
 - 标签中混入 js 表达式要用｛｝，js 表达式会产生一个值(返回值)，可以放在任何需要值的地方，如`a`、`a+b`、`demo(1)`、`arr.map()`、`function test(){}`。js 语句：`if(){}`,`for(){}`,`switch(){}`
 
-```
-const a=1;
-const Vdom=(
-<span id={a}>{a.toString()}</span>
-)
+```jsx
+const a = 1;
+const Vdom = <span id={a}>{a.toString()}</span>;
 ```
 
 - 样式的类型指定不要用 class，要用 className
 
-```
-const Vdom=(
-<span className="test" >xxx</span>
-)
+```jsx
+const Vdom = <span className="test">xxx</span>;
 ```
 
 - 内联样式
@@ -460,18 +456,18 @@ key 是虚拟 Dom 对象的标识，当状态中的数据变化时，react 会�
 
 - 入口文件 index.js
 
-```
+```jsx
 //核心库
-import React from 'react'
+import React from "react";
 //渲染
-import ReactDOM from 'react-dom'
-import App from './App'
-ReactDOM.render(<App/>,document.getElementById('root'))
+import ReactDOM from "react-dom";
+import App from "./App";
+ReactDOM.render(<App />, document.getElementById("root"));
 ```
 
 - App.js
 
-```
+```jsx
 import React from 'react'
 Class App extends React.Component{
 
@@ -487,11 +483,13 @@ export default App
 
 index.module.css
 
-```
-.title{color:red}
+```css
+.title {
+  color: red;
+}
 ```
 
-```
+```jsx
 import hello form './index.module.css'
 
 export default calss Test extends Compont{
@@ -507,7 +505,7 @@ return (
 
 setupProxy.js
 
-```
+```js
 const proxy=require('http-proxy-middleware');
 module.exports=function (app) {
 app.use(
@@ -542,7 +540,7 @@ pathRewrite:{'^/api2':''}
 
 - react-router-dom
 
-```
+```jsx
 //要统一由一个router管理，可包围在App外侧
 <BrowserRouter>
 <Link to='/test'></Link>
@@ -558,21 +556,21 @@ pathRewrite:{'^/api2':''}
 - 路由组件
   > 接受的 props 默认有 history，location，match
 
-```
+```jsx
 <Route path="/test" component={Test}>
 ```
 
 - 一般组件
   props 传什么有什么
 
-```
-<Test/>
+```jsx
+<Test />
 ```
 
 - NavLink
   > 可以通过 activeClassName 指定样式名,标签体内容是个特殊属性，通过 this.props.children 获取
 
-```
+```jsx
 <NavLink activeClassName="active_color">test
 </NavLink>
 <NavLink activeClassName="active_color" children='test'>
@@ -582,7 +580,7 @@ pathRewrite:{'^/api2':''}
 - Switch
   > 路由默认会全部匹配完，加上 switch 可实现单一匹配，提高效率
 
-```
+```jsx
 <Switch>
 <Route path="/test" component={Test}>
 <Route path="/test" component={Test}>
@@ -594,13 +592,13 @@ pathRewrite:{'^/api2':''}
 - Redirect
   > 重定向，写在路由最下方，当路由都不匹配时，跳转到 redirect 指定的路由
 
-```
+```jsx
 <Redirect to="/test" >
 ```
 
 - 二级路由
 
-```
+```jsx
 <Switch>
 <Route path="/test" component={Test}>
 <Route path="/test/a" component={Test}>
@@ -610,7 +608,7 @@ pathRewrite:{'^/api2':''}
 
 - 路由参数
 
-```
+```jsx
 //params参数，this.props.match.params
 <HashRouter>
 <Link to=`/test/${123}/${123}`></Link>
@@ -618,7 +616,7 @@ pathRewrite:{'^/api2':''}
 </HashRouter>
 ```
 
-```
+```jsx
 //search参数(为urlencoded编码字符串，需借助querystring解析)，this.location.match.search
 import qs from 'querystring'
 <HashRouter>
@@ -628,7 +626,7 @@ import qs from 'querystring'
 </HashRouter>
 ```
 
-```
+```jsx
 //state参数(不在地址栏显示，browser刷新页面不丢失，hashRouter刷新丢失)，this.props.location.state
 <HashRouter>
 <Link to={{pathname:'/test'state:{a=123,b=123}}}></Link>
@@ -638,7 +636,7 @@ import qs from 'querystring'
 
 - 编程式路由
 
-```
+```jsx
 goto(){
 this.props.history.push('/test',{
 xx:'xx'
@@ -652,12 +650,12 @@ xx:'xx'
 - withRouter
   > 加工一般组件，让一般组件用上路由 api
 
-```
-import {withRouter} from 'react-router-dom'
+```jsx
+import { withRouter } from "react-router-dom";
 
 class Test extends Component {}
 
-export default withRouter(Test)//返回的是全新的组件
+export default withRouter(Test); //返回的是全新的组件
 ```
 
 #### React Router 6
@@ -669,7 +667,7 @@ export default withRouter(Test)//返回的是全新的组件
 - Routers
   > 必须用 Routers 包裹，不会匹配多个
 
-```
+```jsx
 import {Routers,Route} form 'react-router-dom'
 <Routers>
 <Route path="/test" element={<Test/>}>
@@ -680,7 +678,7 @@ import {Routers,Route} form 'react-router-dom'
 - Navigate
   > 重定向,只要被渲染，就会切换路由
 
-```
+```jsx
 import {Routers,Route,Navigate} form 'react-router-dom'
 <Routers>
 <Route path="/test" element={<Test/>}>
@@ -691,13 +689,13 @@ import {Routers,Route,Navigate} form 'react-router-dom'
 
 - NavLink
 
-```
+```jsx
 <NaviLink className={()=>return 'activeColor'}></NaviLink>
 ```
 
 - 路由表
 
-```
+```jsx
 import {lazy} from 'react'
 import {useRoutes,Navigate} from 'react-router-dom'
 //生成路由
@@ -736,7 +734,7 @@ return (
 
 - Outlet
 
-```
+```jsx
 
 // 若要显示子路由，需在父级路由组件中引入Outlet！！！
 render(){
@@ -752,7 +750,7 @@ return (
 
 - 路由参数
 
-```
+```jsx
 //params参数，this.props.match.params
 <Link to=`/test/${123}/${123}`></Link>
 ...
@@ -765,7 +763,7 @@ return ({a+b})
 }
 ```
 
-```
+```jsx
 <Link to=`/test?a=${123}&b=${123}`></Link>
 import {useSearchParams,useLocation} from 'react-router-dom'
 export default function Demo(){
@@ -777,7 +775,7 @@ return ({a})
 }
 ```
 
-```
+```jsx
 <Link to='/test' state={{a=123,b=123}}></Link>
 import {useLocation} from 'react-router-dom'
 export default function Demo(){
@@ -788,7 +786,7 @@ return ({obj.a})
 
 - 编程式路由
 
-```
+```jsx
 import {useNavigate} from 'react-router-dom'
 const navigate=userNavigate()
 goto(){
@@ -805,13 +803,11 @@ navigate(-1)//后退
 
 > 状态管理 js 库，集中式管理 react 应用中多个组件共享的状态
 
-
-
 ##### 简单
 
 - store.js
 
-```
+```jsx
 import {createStore}form 'redux'
 import countReducer from './countReducer'
 const store=createStore(countReducer)
@@ -820,7 +816,7 @@ export default store
 
 - countReducer.js
 
-```
+```jsx
 //创建一个为count组件服务的reducer，reducer本质是一个函数
 第一次调用时是store自动触发的，传递的preState是undefin
 export default function (preState,action){
@@ -831,7 +827,7 @@ return preState
 
 - test.jsx
 
-```
+```jsx
 import store from '../store/store.js'
 
 componentDidMount(){
@@ -853,39 +849,39 @@ return （<div>{{store.getState()}}</div>）
 
 - countAction.js
 
-```
+```js
 //创建一个为count组件服务的action，
-export  function test(data){
-return {type:'xxxx',data}
+export function test(data) {
+  return { type: "xxxx", data };
 }
 ```
 
 - countReducer.js
 
-```
+```js
 //创建一个为count组件服务的reducer，reducer本质是一个函数
 //第一次调用时是store自动触发的，传递的preState是undefin
 //必须是纯函数（同样输入必定得到同样输出）不要在reducer中发起网络请求、改写prestate、使用Date.now() , Math.random()
-export default function (preState,action){
-const {type,data}=action
-switch(type){
-case 0:
-return preState//当preState没有变化时，不会引起页面刷新（浅比较）
-case 1:
-return preState+1
-}
+export default function (preState, action) {
+  const { type, data } = action;
+  switch (type) {
+    case 0:
+      return preState; //当preState没有变化时，不会引起页面刷新（浅比较）
+    case 1:
+      return preState + 1;
+  }
 }
 ```
 
 - constants.js
 
-```
-export const ADD='add'
+```js
+export const ADD = "add";
 ```
 
 - test.jsx
 
-```
+```jsx
 import store from '../store/store.js'
 import {test} from '../store/countAction.js'
 
@@ -910,7 +906,7 @@ return （<div>{{store.getState()}}</div>）
 
 - store.js
 
-```
+```js
 import {createStore,applyMiddleware}form 'redux'
 import countReducer from './countReducer'
 //引入异步action中间件
@@ -922,7 +918,7 @@ export default store
 
 - action.js
 
-```
+```js
 import store from './store'
 export const add=data=({type:'add',data})//同步action
 export const addAsync=(data,a,b,c)=>{
@@ -945,36 +941,38 @@ dispatch(add(data)})
 - 容器组件
   /containers/test/index.jsx
 
-```
+```jsx
 //yran add react-redux
-import testUI from '../../components/test.jsx'
+import testUI from "../../components/test.jsx";
 //引入connect用于连接UI组件与redux
-import {connect} from 'react-redux'
+import { connect } from "react-redux";
 
-let mapStateToProps=(state)=>{
-//通过props传给UI组件状态
-return {
-a:1,b:state
-}}
+let mapStateToProps = (state) => {
+  //通过props传给UI组件状态
+  return {
+    a: 1,
+    b: state,
+  };
+};
 
-let mapDisoatchToProps=(dispatch)=>{
-//通过props传给UI操作方法
-return {
-d:(data)=>{
-dispatch({type:'xxx',data})
-},
-c:()=>{}
-}}
+let mapDisoatchToProps = (dispatch) => {
+  //通过props传给UI操作方法
+  return {
+    d: (data) => {
+      dispatch({ type: "xxx", data });
+    },
+    c: () => {},
+  };
+};
 
+const testContainer = connect(mapStateToProps, mapDisoatchToProps)(testUI);
 
-const testContainer=connect(mapStateToProps,mapDisoatchToProps)(testUI)
-
-export default testContainer
+export default testContainer;
 ```
 
 App.jsx
 
-```
+```jsx
 import store form '../../redux/store.js'
 import Test from '../../containers/test'
 
@@ -987,30 +985,37 @@ return (
 
 简写
 
-```
-import {createIncreamentAction} from '../store/action.js'
-const testContainer=connect(
-state=>{a:state},
-{
-add:createIncreamentAction
-}
-)(testUI)
+```jsx
+import { createIncreamentAction } from "../store/action.js";
+const testContainer = connect(
+  (state) => {
+    a: state;
+  },
+  {
+    add: createIncreamentAction,
+  }
+)(testUI);
 ```
 
 ##### provide
 
 index.js
 
-```
-import store from './store'
-import {Provider} from 'react-redux'
+```js
+import store from "./store";
+import { Provider } from "react-redux";
 //自动匹配容器组件，添加上store
-ReactDOM.render(<ProVider store={store}><App/></ProVider>,document)
+ReactDOM.render(
+  <ProVider store={store}>
+    <App />
+  </ProVider>,
+  document
+);
 ```
 
 ##### 整合容器和 UI 组件
 
-```
+```js
 import {createIncreamentAction} from '../store/action.js'
 
 class Test extend Componet{}
@@ -1026,7 +1031,7 @@ add:createIncreamentAction
 
 - store.js
 
-```
+```js
 import {createStore，applyMiddleware,combineReducers}form 'redux'
 import countReducer1 from './reducer/count1'
 import countReducer2 from './reducer/count2'
@@ -1036,36 +1041,39 @@ count2:countReducer2
 })
 export default createStore(allReducer)
 ```
-##### 使用Redux Toolkit简化Redux
+
+##### 使用 Redux Toolkit 简化 Redux
 
 `npm install @reduxjs/toolkit react-redux`
 react-redux 也需要单独安装
 
 - configureStore
-configureStore替代 createStore
-配置简单,设置默认值也方便
-src/store/index.js
+  configureStore 替代 createStore
+  配置简单,设置默认值也方便
+  src/store/index.js
 
-```
+```js
 // 引入
-import {configureStore} from '@reduxjs/toolkit'
-import counterSlice from "../pages/basic/counterSlice"
-import mySlice from "../pages/mySlice"
+import { configureStore } from "@reduxjs/toolkit";
+import counterSlice from "../pages/basic/counterSlice";
+import mySlice from "../pages/mySlice";
 
 export default configureStore({
-  reducer:{
-    rootCounter:counterSlice,
-    rootMy:mySlice
-  }
-})
+  reducer: {
+    rootCounter: counterSlice,
+    rootMy: mySlice,
+  },
+});
 ```
-这里 reduer直接合并成一个唯一的 根root了
-原有的combineReducers这个合并函数就用不到了
-注意自己配置的 reducer的 key值 和 对应的value值
-我这里把单独的 reducer 放到和页面同级了,这个根据自己的习惯,放到 store下面新建目录存放所有的reducer也行
+
+这里 reduer 直接合并成一个唯一的 根 root 了
+原有的 combineReducers 这个合并函数就用不到了
+注意自己配置的 reducer 的 key 值 和 对应的 value 值
+我这里把单独的 reducer 放到和页面同级了,这个根据自己的习惯,放到 store 下面新建目录存放所有的 reducer 也行
+
 - 根组件配置 store
 
-```
+```js
 入口index.js
 
 import React from 'react';
@@ -1082,45 +1090,49 @@ root.render(
   </React.StrictMode>
 );
 ```
+
 - createAction
-创建一个action，传入动作类型字符串，返回动作函数。
-createAction语法： function createAction(type, prepareAction?)
-1，type：Redux中的actionTypes
-2，prepareAction：Redux中的actions
+  创建一个 action，传入动作类型字符串，返回动作函数。
+  createAction 语法： function createAction(type, prepareAction?)
+  1，type：Redux 中的 actionTypes
+  2，prepareAction：Redux 中的 actions
 
 - createReducer
-创建一个reducer，action type 映射到 case reducer 函数中，不用写switch-case，并集成immer。
-Builder提供了三个方法：
-1，addCase： 根据action添加一个reducer case的操作。
-2，addMatcher： 在调用actions前，使用matcher function过滤
-3，addDefaultCase： 默认值，等价于switch的default case;
+  创建一个 reducer，action type 映射到 case reducer 函数中，不用写 switch-case，并集成 immer。
+  Builder 提供了三个方法：
+  1，addCase： 根据 action 添加一个 reducer case 的操作。
+  2，addMatcher： 在调用 actions 前，使用 matcher function 过滤
+  3，addDefaultCase： 默认值，等价于 switch 的 default case;
 
-- createSlice reducer编写
->createSlice对actions、Reducer的一个封装。
-  1. 创建slice
-使用createSlice方法创建一个slice。每一个slice里面包含了reducer和actions，可以实现模块化的封装。
-所有的相关操作都独立在一个文件中完成。
+- createSlice reducer 编写
+
+  > createSlice 对 actions、Reducer 的一个封装。
+
+  1. 创建 slice
+     使用 createSlice 方法创建一个 slice。每一个 slice 里面包含了 reducer 和 actions，可以实现模块化的封装。
+     所有的相关操作都独立在一个文件中完成。
 
   1. 关键属性:
-name
-命名空间，可以自动的把每一个action进行独立，解决了action的type出现同名的文件。在使用的时候默认会把使用name/actionName
-initialState
-state数据的初始值
-  3. reducers
-定义的action。由于内置了immutable插件，可以直接使用赋值的方式进行数据的改变，不需要每一次都返回一个新的state数据。
-  4. 导出
-counterSlice.actions 导出所有的修改函数方便页面使用
-counterSlice.reducer 导出reducer在 store里面使用
-具体reducer 函数的参数
-参数1: 当前slice的state数据
-参数2: 对象{type:"",payload:传参}
+     name
+     命名空间，可以自动的把每一个 action 进行独立，解决了 action 的 type 出现同名的文件。在使用的时候默认会把使用 name/actionName
+     initialState
+     state 数据的初始值
+  1. reducers
+     定义的 action。由于内置了 immutable 插件，可以直接使用赋值的方式进行数据的改变，不需要每一次都返回一个新的 state 数据。
+  1. 导出
+     counterSlice.actions 导出所有的修改函数方便页面使用
+     counterSlice.reducer 导出 reducer 在 store 里面使用
+     具体 reducer 函数的参数
+     参数 1: 当前 slice 的 state 数据
+     参数 2: 对象{type:"",payload:传参}
 
 type:counterSpace/decrement
-type就是之前的 actions用switc/case来匹配很麻烦,现在简洁了
-type构成 slice的 name命名空间/具体的修改函数
+type 就是之前的 actions 用 switc/case 来匹配很麻烦,现在简洁了
+type 构成 slice 的 name 命名空间/具体的修改函数
 
 payload 要和传的时候保持一致
-```
+
+```js
 import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   counter: 100,
@@ -1129,17 +1141,17 @@ const initialState = {
     job: "全栈",
   },
 };
-/* 
+/*
 reducer切片
 createSlice函数的作用：生成分片的reducer
-内部调用的市createAction和createReducer 
+内部调用的市createAction和createReducer
 creatSlice可以帮助我们用更少的代码去生成配套的reducer和action,而且有很好的维护性
 */
 export const counterSlice = createSlice({
   name: "counterSpace", // 命名空间，在调用action的时候会默认的设置为action的前缀,保证唯一.不重名
   initialState,
   reducers: {
-// reducer函数 state当前组件的数据 
+// reducer函数 state当前组件的数据
 //第二个参数为{payload:{},type:"""} 想想就写法或者vuex
     increment(state) {
       state.counter += 100;
@@ -1159,7 +1171,7 @@ export const counterSlice = createSlice({
     },
   },
 });
-/* 
+/*
 切片对象会自动地帮助我们生成action
 切片对象会根据我们地reducers方法来自动地创建action对象，这些action对象会保存到切片对象的actions中
 {type:name/函数名，payload:函数的参数}
@@ -1172,21 +1184,25 @@ export default counterSlice.reducer;
 
 ```
 
-
 - 页面使用
   1. useSelector()
-返回指定的 state
-```
+     返回指定的 state
+
+```js
 // 这样写太长了 麻烦
  const counter = useSelector(state=>state.rootCouter.counter);
- ```
-rootCouter这个key 来源于 根 store里面配置的reducer，这样写太长了，麻烦。在这个 slice里面我做了统一处理
 ```
+
+rootCouter 这个 key 来源于 根 store 里面配置的 reducer，这样写太长了，麻烦。在这个 slice 里面我做了统一处理
+
+```js
 export const selectCount = (state) => state.rootCounter.counter;
 export const selectUser = (state) => state.rootCounter.user;
 ```
+
 页面使用
-```
+
+```jsx
 import { useSelector, useDispatch } from "react-redux";
 import {
   increment,
@@ -1210,10 +1226,12 @@ export default function Counter() {
 return ( <div> 布局看下面 </div>)
 
 ```
+
 - useDispatch()
-payload传参和 reducer保持一致
-引用类型的 修改注意
-```
+  payload 传参和 reducer 保持一致
+  引用类型的 修改注意
+
+```jsx
 const dispatch = useDispatch(); 修改函数
   return (
     <div>
@@ -1233,12 +1251,13 @@ const dispatch = useDispatch(); 修改函数
 }
 
 ```
-- 异步 createAsyncThunk()
-内置了redux-thunk 处理异步 , 足够解决绝大部分的问题. 还有其他中间件比如:redux-saga 、redux-observable。
-异步请求处理三种状态的action :pending\fulfilled\rejected；
-这三种状态的action自动触发, 防止外部手动调用,则使用属性 extraReducers , 则不会生成对外的的action creator .
 
-```
+- 异步 createAsyncThunk()
+  内置了 redux-thunk 处理异步 , 足够解决绝大部分的问题. 还有其他中间件比如:redux-saga 、redux-observable。
+  异步请求处理三种状态的 action :pending\fulfilled\rejected；
+  这三种状态的 action 自动触发, 防止外部手动调用,则使用属性 extraReducers , 则不会生成对外的的 action creator .
+
+```js
 接受一个动作类型字符串和一个返回Promise函数，并生成一个pending/fulfilled/rejected基于该Promise分派动作类型的 thunk
 用 fetch请求模拟一个异步
 3.createAsyncThunk("counterSpace/getList",()=>{})
@@ -1257,8 +1276,9 @@ export const  getListAsync =  createAsyncThunk("counterSpace/getList",async()=>{
 ```
 
 - extraReducers
-异步函数配置
-```
+  异步函数配置
+
+```js
 createSlice({
     name: "counterSpace",
     initialState,
@@ -1284,8 +1304,10 @@ createSlice({
 只需要把函数名字改为通过createAsyncThunk()创建的函数名
 根据自己的业务场景 写赋值逻辑就行
 ```
+
 页面使用异步函数
-```
+
+```jsx
 <button onClick={()=>dispatch(getListAsync('异步模拟'))}>异步</button>
       <ul>
         {
@@ -1296,15 +1318,9 @@ createSlice({
       </ul>
 ```
 
-
-
-
-
-
-
 ##### 解构赋值
 
-```
+```js
 let obj={a:{b:1}}
 const {a}=obj;
 const {a:{b}}=obj;//连续解构赋值
@@ -1318,7 +1334,7 @@ const {a:{b:value}}=obj;//连续解构赋值+重命名
 - 若 a 函数，调用的返回值依然是一个函数，那么 a 就可以称为高阶函数
   如 promise setTimeOut arr.map()
 
-```
+```jsx
 test=(type){
 return (e)=>{
 arr.push( {[type]:e.target.value})
@@ -1332,7 +1348,7 @@ arr.push( {[type]:e.target.value})
 
 通过函数调用继续返回函数的方式，实现多次接收参数最后统一处理的函数编码形式
 
-```
+```js
 test=(type){
 return (e)=>{
 arr.push( {[type]:e.target.value})
@@ -1340,7 +1356,7 @@ arr.push( {[type]:e.target.value})
 }
 ```
 
-```
+```js
 function sum(a,b,c){return a+b+c}
 
 function sum2(a){
@@ -1373,7 +1389,7 @@ return res.json()
 
 写法
 
-```
+```js
 state={a:1}
 
 对象式setState
@@ -1392,7 +1408,7 @@ return {a:1}},()=>{})
 
 > 路由组件懒加载
 
-```
+```jsx
 import {lazy,COmponent,Suspense} form 'react'
 const Home=lazy(()=>{import ('./Home')})
 export default class Demo extend Component{
@@ -1413,7 +1429,7 @@ export default class Demo extend Component{
 
 ##### state
 
-```
+```jsx
 import React form 'react'
 function Test(){
 const [a,set]=React.useState(123) //初始化会调用一次，下次调用时，会缓存数据，不会覆盖
@@ -1426,7 +1442,7 @@ return (<div>a</div>)}
 
 > 函数组件里使用生命周期
 
-```
+```jsx
 import React form 'react'
 function Test(){
 const [count,setCount]=React.useState(123)
@@ -1441,7 +1457,7 @@ return (<div>a</div>)
 
 ```
 
-```
+```jsx
 在React通知到Renderer渲染器后，渲染器又分了三个子阶段来处理：
 
 beforeMutation阶段（渲染视图前）
@@ -1460,7 +1476,7 @@ componentDidMount()完全等价于useLayoutEffect( fn , [ ] )，但是不等价�
 
 ##### ref
 
-```
+```jsx
 import React form 'react'
 function Test(){
 const myRef=React.useRef()
@@ -1473,7 +1489,7 @@ return (<div ref={myRef}>a</div>)
 
 > 可以不用必须有一个真实 DOM 根标签，编译后会移除
 
-```
+```jsx
 render(){
 
 return (
@@ -1492,7 +1508,7 @@ return (
 
 类式组件
 
-```
+```jsx
 const CountContext=React.createContext()//创建一个上下文,必须所有组件都访问得到
 class A extends Component{
 state={a:1}
@@ -1512,7 +1528,7 @@ return (this.context)}
 
 - 所有组件
 
-```
+```jsx
 const CountContext=React.createContext()//创建一个上下文,必须所有组件都访问得到
 const {Consumer,Provider}=CountContext
 class A extends Component{
@@ -1541,7 +1557,7 @@ return (<div><Consumer>{value=>{return (<span>value</span>)}</Consumer></div>)}
 
 - 手动比较新旧值,不一样更新，否则禁止更新
 
-```
+```jsx
 shouldComponentUpdate(nextProps,nextState){//新的
 console.log(this.props,this.state)//旧的
 return true
@@ -1549,7 +1565,7 @@ return false
 }
 ```
 
-```
+```jsx
 import {PureComponent} from 'react'
 
 class Test extends PureComponent {
@@ -1567,7 +1583,7 @@ this.setState(obj)//浅比较，数据不会更新
 
 > vue 中的插槽
 
-```
+```jsx
 class A extends Component{
 state={a:1}
 render(){
@@ -1596,7 +1612,7 @@ return (<div><Consumer>{value=>{return (<span>value</span>)}</Consumer></div>)}
 > 防止子组件出错导致整个页面出错,只能在生产环境使用
 > 只能捕获后代组件生命周期产生的错误，不能捕获自己的
 
-```
+```jsx
 state={error:''}
 //生命周期函数
 static getDerivedStateFromError(err){//它的子组件出现报错时会调用
@@ -1616,42 +1632,43 @@ return (
 
 - props
 
-```
+```js
 children props
 render props
 ```
 
 - 消息订阅-发布
 
-```
+```js
 pubs-sub event
 ```
 
 - 集中式管理
 
-```
+```js
 redux、dva
 ```
 
 - conText
 
-```
+```js
 生产者-消费者模式
-``
+```
 
 - 搭配
 父子：props
 兄弟: 集中式管理、消息订阅发布
 祖孙: 集中式管理、消息订阅发布、context（开发用的少，封装插件用得多）
 
-
 ### 关闭eslint
+
 第一步：执行以下命令：
+
 `npm run eject`
+
 第二步：在package.json 中修改代码
 
-```
-
+```json
 "eslintConfig": {
 "extends": [
 "react-app",
@@ -1665,13 +1682,13 @@ redux、dva
 },
 
 ```
+
 第三步：重启项目
 
-```
 
 ### 常见错误
 
-##### 并发模式下在 dev 时 render-phase 会执行两次
+#### 并发模式下在 dev 时 render-phase 会执行两次
 
 这个是 react 的一个用来突出显示应用程序中潜在问题的工具（严格模式）
 
@@ -1679,18 +1696,20 @@ redux、dva
 
 注意：这仅适用于开发模式。生产模式下生命周期不会被调用两次。strictMode，故意在开发环境中执行多次，暴雷出代码隐藏的 bug,把标签去掉即可
 
-#####  antd+form，initialValue值变化后不更新
-当我们第一次点开Modal的时候， 会得到一个initialValue,但是这个值只在组件挂载的时候执行了一次，后续数据的更新并不会造成重新渲染，所以当我们再次打开Modal窗口的时候并不会更新。
+#### antd+form，initialValue 值变化后不更新
+
+当我们第一次点开 Modal 的时候， 会得到一个 initialValue,但是这个值只在组件挂载的时候执行了一次，后续数据的更新并不会造成重新渲染，所以当我们再次打开 Modal 窗口的时候并不会更新。
 
 解决方案：
-方法一：使用form.resetFields()
-使用resetFields方法会直接重置为initialValue的值，这样再次打开编辑表单就是我们想要的数据啦。
+方法一：使用 form.resetFields()
+使用 resetFields 方法会直接重置为 initialValue 的值，这样再次打开编辑表单就是我们想要的数据啦。
 
-方法二：使用form.setFieldsValue
-对于initialValue不更新问题官方文档已经给出了解决方法
+方法二：使用 form.setFieldsValue
+对于 initialValue 不更新问题官方文档已经给出了解决方法
 
-##### react获取上一轮的props和state（接用 useEffect, useRef实现）
-如果只是 想实现 这个效果 下面的代码 也行 。就不用借助其它的了。 这个思路就是，在 改变 state之前 就 备份一下 值 。
+#### react 获取上一轮的 props 和 state（接用 useEffect, useRef 实现）
+
+如果只是 想实现 这个效果 下面的代码 也行 。就不用借助其它的了。 这个思路就是，在 改变 state 之前 就 备份一下 值 。
 
 effect 的执行时机
 
@@ -1710,23 +1729,24 @@ useRef
 useRef 返回一个可变的 ref 对象，其 .current 属性被初始化为传入的参数（initialValue）。返回的 ref 对象在组件的整个生命周期内持续存在。
 本质上，useRef 就像是可以在其 .current 属性中保存一个可变值的“盒子”。
 
-你应该熟悉 ref 这一种访问 DOM 的主要方式。如果你将 ref 对象以 <div ref={myRef} /> 形式传入组件，则无论该节点如何改变，React 都会将 ref 对象的 .current 属性设置为相应的 DOM 节点。
+你应该熟悉 ref 这一种访问 DOM 的主要方式。如果你将 ref 对象以 `<div ref={myRef} />` 形式传入组件，则无论该节点如何改变，React 都会将 ref 对象的 .current 属性设置为相应的 DOM 节点。
 
 然而，useRef() 比 ref 属性更有用。它可以很方便地保存任何可变值，其类似于在 class 中使用实例字段的方式。
 
 这是因为它创建的是一个普通 Javascript 对象。而 useRef() 和自建一个 {current: ...} 对象的唯一区别是，useRef 会在每次渲染时返回同一个 ref 对象。
 
 请记住，当 ref 对象内容发生变化时，useRef 并不会通知你。变更 .current 属性不会引发组件重新渲染。如果想要在 React 绑定或解绑 DOM 节点的 ref 时运行某些代码，则需要使用回调 ref 来实现。
-```
+
+```jsx
 function Counter() {
   const [count, setCount] = useState(0);
- 
+
   const prevCountRef = useRef();
   useEffect(() => {
     prevCountRef.current = count;
   });
   const prevCount = prevCountRef.current;
- 
+
   return <h1>Now: {count}, before: {prevCount}</h1>;
 }
 ```

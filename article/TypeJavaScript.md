@@ -171,13 +171,13 @@ let strLength: number = (someValue as string).length;
 - 解构
   解构数组
 
-```
+```ts
 let input = [1, 2];
 let [first, second] = input;
 [first, second] = [second, first];
 function f([first, second]: [number, number]) {
-    console.log(first);
-    console.log(second);
+  console.log(first);
+  console.log(second);
 }
 //你可以在数组里使用...语法创建剩余变量
 let [first, ...rest] = [1, 2, 3, 4];
@@ -291,48 +291,48 @@ clone.m(); // error!
 
 ## 接口
 
-
 ## react+ts
-新建项目使用typescript
-如果你是要新建一个使用typescript的react项目，并且你用脚手架Create React App去创建，那没就非常的容易，你只需要在创建的时候将命令改为
+
+新建项目使用 typescript
+如果你是要新建一个使用 typescript 的 react 项目，并且你用脚手架 Create React App 去创建，那没就非常的容易，你只需要在创建的时候将命令改为
 `yarn create react-app xxx --template typescript`
 
-已有react项目
-1、安装ts
+已有 react 项目
+1、安装 ts
 npm i typescript -g 全局安装
 npm i typescript -D 当前项目安装
 
 tsc --init
-修改tsconfig配置文件
+修改 tsconfig 配置文件
 
 ```
 {
   "compilerOptions": {
-     "target": "es5", /**指定ECMAScript目标版本**/                   
-     "module": "commonjs", /**指定生成哪个模块系统代码**/ 
-     "allowJs": true,  /**允许编译js文件**/                     
-     "jsx": "preserve",  /**支持JSX**/                  
-     "outDir": "build",  /**编译输出目录**/    
-     "strict": true, /**启用所有严格类型检查选项**/ 
-     "noImplicitAny": false, /**在表达式和声明上有隐含的any类型时报错**/          
-     "skipLibCheck": true,  /**忽略所有的声明文件的类型检查**/                   
-     "forceConsistentCasingInFileNames": true   /**禁止对同一个文件的不一致的引用**/   
+     "target": "es5", /**指定ECMAScript目标版本**/
+     "module": "commonjs", /**指定生成哪个模块系统代码**/
+     "allowJs": true,  /**允许编译js文件**/
+     "jsx": "preserve",  /**支持JSX**/
+     "outDir": "build",  /**编译输出目录**/
+     "strict": true, /**启用所有严格类型检查选项**/
+     "noImplicitAny": false, /**在表达式和声明上有隐含的any类型时报错**/
+     "skipLibCheck": true,  /**忽略所有的声明文件的类型检查**/
+     "forceConsistentCasingInFileNames": true   /**禁止对同一个文件的不一致的引用**/
   },
-  "include": ["src"] /**指定编译目录**/ 
+  "include": ["src"] /**指定编译目录**/
 }
 ```
 
-
-安装react的声明文件
+安装 react 的声明文件
 `npm install --save typescript @types/node @types/react @types/react-dom @types/jest`
 
-
 ## 常见错误
-- Cannot use JSX unless the '--jsx' flag is provided 报错或React‘ refers to a UMD global 或者 Cannot use JSX unless the ‘--jsx‘ flag is provided.
-在tsconfig.json中加入：
-"jsx": "react-jsx",
+
+- Cannot use JSX unless the '--jsx' flag is provided 报错或 React‘ refers to a UMD global 或者 Cannot use JSX unless the ‘--jsx‘ flag is provided.
+  在 tsconfig.json 中加入：
+  "jsx": "react-jsx",
 
 - Cannot find module ‘./index.module.less’ or its corresponding type declarations
+
 ```
 给ts的CSS文件加上类型的声明
 *.d.ts文件：ts专用的类型声明文件，只包含类型的声明，不包含逻辑，不会被编译，也不会被webpack打包
@@ -341,13 +341,15 @@ declare module "*.css" {
   const css: {[key: string]: string}
   export default css
   }
-  declare module '*.scss' { 
+  declare module '*.scss' {
   const content: { [className: string]: string};
   export = content;
 }
 
 ```
+
 - `“AsyncThunkAction<any，void，{}>”`类型的参数不能分配给“AnyAction”类型的参数
+
 ```
 
 // app/store.ts
@@ -377,4 +379,3 @@ import type { RootState, AppDispatch } from './store'
 export const useAppDispatch = () => useDispatch<AppDispatch>()
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 ```
-

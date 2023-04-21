@@ -15,10 +15,11 @@ categories:
 2. vite 创建：`vue init vite-app test`
    - `vue install`
    - `npm run dev`
-或者`npm init vite@latest`输入工程名称,选择框架为vue
+     或者`npm init vite@latest`输入工程名称,选择框架为 vue
    - `vue install`
    - `npm run dev`
->https://vitejs.cn/
+     > <https://vitejs.cn/>
+
 ## main.js
 
 ```
@@ -443,7 +444,9 @@ import App from './App.vue'
 import router from './router'
 createApp(App).use(router).mount('#app')
 ```
+
 - 使用
+
 ```
 import { useRouter } from 'vue-router';
   setup() {
@@ -456,10 +459,13 @@ import { useRouter } from 'vue-router';
     }
   }
 ```
+
 ## vuex
 
-  npm 安装 vuex。`npm install vuex@next --save`
+npm 安装 vuex。`npm install vuex@next --save`
+
 - store/index.js
+
 ```
 import { createStore } from 'vuex'
 export default createStore({
@@ -470,7 +476,9 @@ export default createStore({
   modules: {}
 })
 ```
-首先从vuex中引入useStore函数，他的返回值就是一个vuex实例
+
+首先从 vuex 中引入 useStore 函数，他的返回值就是一个 vuex 实例
+
 ```
 <template>
   <h1>vuex中的数据{{ store.state.count }}</h1>
@@ -488,7 +496,8 @@ export default defineComponent({
 </script>
 ```
 
-- vue3的router文件引入vuex 
+- vue3 的 router 文件引入 vuex
+
 ```
 //错误引入
 
@@ -505,12 +514,14 @@ const $store = myStore;
 console.log($store)
 ```
 
-
 ## less
+
 安装：`npm i less-loader less --save-dev`
+
 ## sass
+
 安装：`npm install node-sass sass-loader --save-dev`
-文件使用scss后缀写style时声明lang=scss
+文件使用 scss 后缀写 style 时声明 lang=scss
 
 ```
 <style scoped lang="scss">
@@ -530,7 +541,7 @@ console.log($store)
  }
 ```
 
-可以封装函数，通过 @mixin 声明函数，该函数创建颜色style,不传参默认黑色
+可以封装函数，通过 @mixin 声明函数，该函数创建颜色 style,不传参默认黑色
 
 ```
 @mixin create_color($color:black){
@@ -538,7 +549,7 @@ console.log($store)
 }
 ```
 
-通过@import引入封装函数的文件，通过@include调用函数
+通过@import 引入封装函数的文件，通过@include 调用函数
 
 ```
 <style lang="scss" scoped>
@@ -548,12 +559,12 @@ console.log($store)
         @include create_color(red);
      }
     }
-</style>   
+</style>
 ```
 
 ## antdesign
 
-安装antdesign
+安装 antdesign
 
 `npm i --save ant-design-vue@next`
 
@@ -561,23 +572,24 @@ console.log($store)
 import { createApp } from 'vue'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
-const app = createApp(App) 
+const app = createApp(App)
 app.use(Antd);
 ```
 
-vue3引用ant-design-vue编译运行时，可能会报错can't read property undefine错误
+vue3 引用 ant-design-vue 编译运行时，可能会报错 can't read property undefine 错误
 
 执行下面命令就行
 
 `npm i --save ant-design-vue@next -S`
 
 ```
-vue3解析component: router-view失败  
+vue3解析component: router-view失败
 解决：
 //app.use(router) 需放在app.mount('#app')前面  不然加载时router-view、router-link等未被渲染
 ```
 
 ### 清空数组的几个方式
+
 ```
 //使用ref()
 const array = ref([1,2,3]);
@@ -592,29 +604,32 @@ array.value.length = 0;
 //使用splice,可以使用reactive,不过要注意，watch会触发多次
 array.splice(0,array.length)
 ```
-### Vue3中废弃了$set的概念
+
+### Vue3 中废弃了$set 的概念
 
 原因就是 Vue2 中的数据响应式是利用 object.definedProperty()实现的，它是无法深层监听数据的变化的。
 
-而Vue3，用的是ES6的proxy，对数据响应式进行一个数据的代理。这个就厉害了啊，结合Vue3的 composition API。
+而 Vue3，用的是 ES6 的 proxy，对数据响应式进行一个数据的代理。这个就厉害了啊，结合 Vue3 的 composition API。
 
 Vue3 中的 reactivity API：
+
 ```
 reactive
 readonly
 ref
 computed
 ```
-如果想要让一个对象变为响应式数据，可以使用reactive或ref
 
-### vue3.0中使用nextTick 
+如果想要让一个对象变为响应式数据，可以使用 reactive 或 ref
 
- nextTick 是将回调推迟到下一个 DOM 更新周期之后执行。在更改了一些数据以等待 DOM 更新后立即使用它
+### vue3.0 中使用 nextTick
+
+nextTick 是将回调推迟到下一个 DOM 更新周期之后执行。在更改了一些数据以等待 DOM 更新后立即使用它
 
 ```
 import { nextTick } from 'vue'
 ...
- setup () {    
+ setup () {
     let otherParam = reactive({
       showA:false
     })
@@ -623,14 +638,14 @@ import { nextTick } from 'vue'
     })
   return {
       otherParam
- 
+
     }
- 
- 
+
+
 }
 ```
 
-## vue3使用ref获取元素
+## vue3 使用 ref 获取元素
 
 ```
 <template>
@@ -643,6 +658,7 @@ onMounted(() => {
   console.log(hello.value); });
 </script>
 ```
+
 变量名称必须要与 ref 命名的属性名称一致。
 通过 hello.value 的形式获取 DOM 元素。
 必须要在 DOM 渲染完成后才可以获取 hello.value，否则就是 null
@@ -661,7 +677,7 @@ onMounted(() => {
 </script>
 ```
 
-- ref 绑定函数 
+- ref 绑定函数
 
 ```
 <template>
@@ -674,4 +690,3 @@ const hello = (el,index)=>{
 };
 </script>
 ```
-
