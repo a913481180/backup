@@ -6,6 +6,7 @@ categories:
 ---
 
 ### JavaScript
+
 运行在客户端的脚本语言；不需要编译，运行过程中由js引擎逐行解释并执行,也可以用于后端node.js技术
 浏览器引擎：
 渲染引擎：内核
@@ -17,6 +18,7 @@ js引擎：js解释器
 对象：具体的某一个个体，具有唯一性的实例；
 
 编程思想：
+
    1. 分析有哪些实体
    2. 设计实体的属性和功能
    3. 实体间的相互作用
@@ -31,20 +33,24 @@ js引擎：js解释器
   2. 外部链接：`<script src="xxx.js"></script>`
   3. 内联式：`<script>alert('hello')</script>`
 
->js脚本可被放置与 HTML 页面的 `<body>` 或` <head>` 部分中，或兼而有之。  
->提示：把脚本置于` <body>` 元素的底部，可改善显示速度，因为脚本编译会拖慢显示。  
+>js脚本可被放置与 HTML 页面的 `<body>` 或`<head>` 部分中，或兼而有之。  
+>提示：把脚本置于`<body>` 元素的底部，可改善显示速度，因为脚本编译会拖慢显示。  
 >注释：旧的 JavaScript 例子也许会使用 type 属性：`<script type="text/javascript">`。  
 >注释：type 属性不是必需的。JavaScript 是 HTML 中的默认脚本语言。
 
-
 #### 输入输出语句
+
 - alert(msg):浏览器弹窗提示
 - console.log(msg):控制台打印信息
 - innerHTML:写入HTML元素
->innerHTML 和 outerHTML 的区别：1）innerHTML:从对象的起始位置到终止位置的全部内容, 不包括HTML标签。2）outerHTML:除了包含innerHTML的全部内容外, 还包含对象标签本身。       
+
+>innerHTML 和 outerHTML 的区别：1）innerHTML:从对象的起始位置到终止位置的全部内容, 不包括HTML标签。2）outerHTML:除了包含innerHTML的全部内容外, 还包含对象标签本身。
 >如需访问 HTML 元素，JavaScript 可使用 document.getElementById(id) 方法。如：`document.getElementById("demo").innerHTML = 5 + 6;`
+
 - document.write()：写入HTML输出
+
 >注意：在 HTML 文档完全加载后使用 document.write() 将会删除所有的标签 ;
+
 - prompt(info):浏览器弹出，用户输入
 
 #### 变量
@@ -57,11 +63,9 @@ js引擎：js解释器
 |console.log(age)|不声明，不负值|报错|
 |age=10;console.log(age)|不声明，只赋值|10(如果您为尚未声明的变量赋值，此变量会自动成为全局变量。)|
 
-
 可以在字符串添加转义字符来使用引号：
 
 如果变量在函数内没有声明（没有使用 var 关键字），该变量为全局变量。
-
 
 #### 命名规范
 
@@ -92,14 +96,13 @@ false:`0` `-0` `""` `undefined` `null`  `false`  `NaN`
 `console.log(typeof age);`
 查看数据类型
 
-
 - constructor 属性
 
 constructor 属性返回所有 JavaScript 变量的构造器函数。
 
 实例
 
-```
+```js
 "Bill".constructor                 // 返回 "function String()  { [native code] }"
 (3.14).constructor                 // 返回 "function Number()  { [native code] }"
 false.constructor                  // 返回 "function Boolean() { [native code] }"
@@ -114,7 +117,8 @@ function () {}.constructor         // 返回 "function Function(){ [native code]
 Infinity:无穷大；
 -Infinity:无穷小；
 除以 0（零）也会生成 Infinity
-```
+
+```js
 var x =  2 / 0;          // x 将是 Infinity
 var y = -2 / 0;          // y 将是 -Infinity
 ```
@@ -123,7 +127,6 @@ NaN:非数字
 尝试用一个非数字字符串进行除法会得到 NaN
 可使用全局 JavaScript 函数 isNaN() 来确定某个值是否是数：
 NaN 是数，typeof NaN 返回 number
-
 
 JavaScript 数值始终是 64 位的浮点数,其中 0 到 51 存储数字（片段），52 到 62 存储指数，63 位存储符号
 
@@ -136,7 +139,7 @@ JavaScript 字符串可以拥有数字内容：
 
 在所有数字运算中，JavaScript 会尝试将字符串转换为数字：
 
-```
+```js
 var x = "100";
 var y = "10";
 var z = x / y;       // z 将是 10
@@ -150,13 +153,13 @@ var z = x + y;       // z 不会是 110（而是 10010）
 
 数值属性
 
-|属性	|描述|
+|属性 |描述|
 |-|-|
-|MAX\_VALUE	|返回 JavaScript 中可能的最大数。|
-|MIN\_VALUE	|返回 JavaScript 中可能的最小数。|
-|NEGATIVE\_INFINITY	|表示负的无穷大（溢出返回）。|
-|NaN	|表示非数字值（"Not-a-Number"）。|
-|POSITIVE\_INFINITY	|表示无穷大（溢出返回）。|
+|MAX\_VALUE |返回 JavaScript 中可能的最大数。|
+|MIN\_VALUE |返回 JavaScript 中可能的最小数。|
+|NEGATIVE\_INFINITY |表示负的无穷大（溢出返回）。|
+|NaN |表示非数字值（"Not-a-Number"）。|
+|POSITIVE\_INFINITY |表示无穷大（溢出返回）。|
 
 >数字属性不可用于变量
 >数字属性属于名为 number 的 JavaScript 数字对象包装器。
@@ -166,65 +169,72 @@ var z = x + y;       // z 不会是 110（而是 10010）
 >使用 myNumber.MAX\_VALUE，其中 myNumber 是变量、表达式或值，将返回 undefined：
 
 实例
-```
+
+```js
 var x = 6;
 var y = x.MAX_VALUE;    // y 成为 undefined
 //只能如下使用
-var x = Number.MIN_VALUE;	//返回 JavaScript 中可能的最小数字。
+var x = Number.MIN_VALUE; //返回 JavaScript 中可能的最小数字。
 ```
 
-###  字符串
+### 字符串
+
 使用单引号或双引号，推荐单引号。在js中字符串既是基本数据类型，又是复合数据类型.
 
 - 声明
 
    1. new运算符声明(对象）
-```
+
+```js
 var str=new String("100")
 ```
+
    2. 省略new
 
-```
+```js
 var str=String("jjj");
 ```
+
    3. 字符串常量声明
-```
+
+```js
 var str="jjj";
 ```
 
 - 嵌套：`var str='啥"嘎"嘎和'; var str="航空'港行'供货商";`也可以加转义符`\`
 - 字符串长度：`var str='画口红管工行';  alert(str.length);`
+
 >注：中文UTF-8（三个字符代表一个汉字），gbk（两个字符表示一个汉字）但计数时都当成一个字来计数。
+
 - 字符串拼接：`字符串+任何类型=拼接后的字符串`
 
 #### js 判断字符串中是否包含某个字符串
 
 1. 方法一: indexOf()   (推荐)
 
-```
+```js
 var str = "123";
 console.log(str.indexOf("3") != -1 );  // 未找到文本将返回-1
 //indexOf() 方法可返回某个指定的字符串值在字符串中首次出现的位置。
 //lastIndexOf() 方法返回指定文本在字符串中最后一次出现的索引,其为从后向前进行检索
 //两种方法都接受作为检索起始位置的第二个参数。如str.indexOf("China", 18);
 ```
- 
 
-2. 方法二: search() 
+2. 方法二: search()
 
 找到符合条件的子串第一次出现的位置
 
-```
+```js
 var str = "123";
 console.log(str.search("3") != -1 );  //并返回匹配位置的下标
 //search() 方法用于检索字符串中指定的子字符串，或检索与正则表达式相匹配的子字符串。如果没有找到任何匹配的子串，则返回 -1。
 ```
- 
 
 3. 方法三:match()
 
 匹配成功返回匹配的子串数组,否则返回null
-```
+
+```js
 var str = "123";
 var reg = RegExp(/3/);
 if(str.match(reg)){
@@ -233,18 +243,18 @@ if(str.match(reg)){
 //match() 方法可在字符串内检索指定的值，或找到一个或多个正则表达式的匹配。其为RegExp 对象方法
 ```
 
-4. 方法四:test() 
+4. 方法四:test()
 
-```
+```js
 var str = "123";
 var reg = RegExp(/3/);
 console.log(reg.test(str)); // true
 //test() 方法用于检索字符串中匹配的正则是否存在。若有则返回 true 否则 false。
 ```
- 
+
 5. 方法五:exec()
 
-```
+```js
 var str = "123";
 var reg = RegExp(/3/);
 if(reg.exec(str)){
@@ -252,64 +262,64 @@ if(reg.exec(str)){
 }
 //exec() 方法用于检索字符串中的正则表达式的匹配。返回一个数组，其中存放匹配的结果。如果未找到匹配，则返回值为 null。
 ```
+
 ## 正则表达式
+
 正则表达式是构成搜索模式（search pattern）的字符序列。
 语法：`/pattern/modifiers;`如：`var patt = /hello/i;`
 
 声明：
+
 1. new声明
 
 参数：第一个为字符串，第二个为修饰符(修饰符无顺序）
 
-
-```
+```js
 var box1=new RegExp("hello","ig");
 var box1= RegExp("hello","ig");
 ```
 
 2. 省略new声明
 
-```
+```js
 var box1=/hello/gi;
 ```
-
-
 
 正则表达式修饰符
 修饰符可用于大小写不敏感的更全局的搜素：
 
-|修饰符	|描述|
+|修饰符 |描述|
 |-|-|
-|i	|执行对大小写不敏感的匹配。|
-|g	|执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。|
-|m	|执行多行匹配。|
+|i |执行对大小写不敏感的匹配。|
+|g |执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。|
+|m |执行多行匹配。|
 
 >字符串中，遇到换行，重新开始计算行首；
 
 正则表达式模式
 括号用于查找一定范围的字符串：
 
-|表达式	|描述|
+|表达式 |描述|
 |-|-|
-|[]	|查找方括号之间的任何符合的字符。|	
+|[] |查找方括号之间的任何符合的字符。|
 |[^]|匹配除括号内的字符|
-|[0-9]	|查找任何从 0 至 9 的数字。|	
-|(x\|y)	|查找由 \| 分隔的任何选项。|
+|[0-9] |查找任何从 0 至 9 的数字。|
+|(x\|y) |查找由 \| 分隔的任何选项。|
 
 元字符（Metacharacter）是拥有特殊含义的字符：
 
-|元字符	|描述|
+|元字符 |描述|
 |-|-|
 |.|匹配单个任意字符|
-|\\d	|查找数字。|
+|\\d |查找数字。|
 |\\D|匹配非数字|
-|\\s	|查找空白符、空格、制表符、换行符。|
+|\\s |查找空白符、空格、制表符、换行符。|
 |\\S|匹配非空白字符|
-|\\b	|匹配空格字符。|
-|\\n	|查找换行符。|
-|\\r	|查找回车符。|
-|\\t	|查找制表符。|
-|\\0	|查找null符。|
+|\\b |匹配空格字符。|
+|\\n |查找换行符。|
+|\\r |查找回车符。|
+|\\t |查找制表符。|
+|\\0 |查找null符。|
 
 锚字符
 |||
@@ -317,15 +327,14 @@ var box1=/hello/gi;
 |^|行首匹配|
 |$|行尾匹配|
 
-
 重复字符：(n为任意的单个字符）
 
-|量词	|描述|
+|量词 |描述|
 |-|-|
-|n?	|匹配任何包含零个或一个 n 的字符。|
-|n+	|匹配任何包含至少一个 n 的字符。|	
-|n*	|匹配任何个 n 的字符。|
-|n\*	|匹配任何包含零个或多个 n 的字符。|
+|n? |匹配任何包含零个或一个 n 的字符。|
+|n+ |匹配任何包含至少一个 n 的字符。|
+|n* |匹配任何个 n 的字符。|
+|n\* |匹配任何包含零个或多个 n 的字符。|
 |n{m,n}|匹配至少m个，至多n个|
 |n{m}|必须匹配m个|
 |(abd)+|小括号中的部分代表一个字符串处理|
@@ -336,7 +345,7 @@ var box1=/hello/gi;
 - slice(start, end)
 该方法设置两个参数：起始索引（开始位置），终止索引（结束位置）。
 
-```
+```js
 var str = "Apple, Banana, Mango";
 var res = str.slice(7,13);
 //如果某个参数为负，则从字符串的结尾开始计数。
@@ -359,12 +368,11 @@ substr() 类似于 slice()。
 如果省略第二个参数，则该 substring() 将删除前面的部分，保留后面的部分。
 如果首个参数为负，则从字符串的结尾计算位置。第二个参数不能为负，因为它定义的是长度。
 
-
-- replace() 
+- replace()
 
 str.replace(oldstr,newstr);该方法用另一个值替换在字符串中指定的值,会返回替换成功的新字符串：
 
-```
+```js
 str = "Please visit Microsoft!";
 var n = str.replace("Microsoft", "W3School");
 ```
@@ -372,7 +380,7 @@ var n = str.replace("Microsoft", "W3School");
 默认地，replace() 只替换首个匹配：如需替换所有匹配，请使用正则表达式的 g 标志（用于全局搜索)
 replace() 对大小写敏感。如需执行大小写不敏感的替换，请使用正则表达式 /i（大小写不敏感）
 
-```
+```js
 str = "Please visit Microsoft!";
 var n = str.replace(/MICROSOFT/gi, "W3School");
 ```
@@ -380,14 +388,14 @@ var n = str.replace(/MICROSOFT/gi, "W3School");
 - 转换为大写和小写
 通过 toUpperCase() 把字符串转换为大写：通过 toLowerCase() 把字符串转换为小写：
 
-```
+```js
 var text1 = "Hello World!";       // 字符串
 var text2 = text1.toUpperCase();  // text2 是被转换为大写的 text1
 ```
 
 - concat() 连接两个或多个字符串：
 
-```
+```js
 var text1 = "Hello";
 var text2 = "World";
 text3 = text1.concat(text2);
@@ -406,11 +414,13 @@ alert(str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, ''));
 ```
 
 #### 提取字符串中的一个字符
+
 这是两个提取字符串字符的安全方法：
 
 - charAt(position)
 charAt() 方法返回字符串中指定下标（位置）的字符串：
-```
+
+```js
 var str = "HELLO WORLD";
 str.charAt(0);            // 返回 H
 ```
@@ -419,7 +429,7 @@ str.charAt(0);            // 返回 H
 
 charCodeAt() 方法返回字符串中指定索引的字符 unicode 编码：
 
-```
+```js
 var str = "HELLO WORLD";
 str.charCodeAt(0);         // 返回 72
 ```
@@ -427,21 +437,22 @@ str.charCodeAt(0);         // 返回 72
 - String.fromCharCode(码值1，码值2...）
 用于将ASCII码转换为对应字符,返回值为组合的字符串
 
-```
+```js
 var str=String.fromCharCode(99,93,83);
 ```
 
 - 属性访问（Property Access）
 
 使用属性访问有点不太靠谱：
-   - 不适用 Internet Explorer 7 或更早的版本
-   - 它让字符串看起来像是数组（其实并不是）
-   - 如果找不到字符，[ ] 返回 undefined，而 charAt() 返回空字符串。
-   - 字符串是只读的，无法像数组一样通过索引下标去修改单个字符，除非整个修改。str[0] = "A" 不会产生错误（但也不会工作！）
+
+- 不适用 Internet Explorer 7 或更早的版本
+- 它让字符串看起来像是数组（其实并不是）
+- 如果找不到字符，[ ] 返回 undefined，而 charAt() 返回空字符串。
+- 字符串是只读的，无法像数组一样通过索引下标去修改单个字符，除非整个修改。str[0] = "A" 不会产生错误（但也不会工作！）
 
 >提示：如果您希望按照数组的方式处理字符串，可以先把它转换为数组。
 
-```
+```js
 var str = "HELLO WORLD";
 str[0];                   // 返回 H
 ```
@@ -449,18 +460,18 @@ str[0];                   // 返回 H
 表单元素，获取其中的内容，可通过`.value`属性获取
 双标签节点，用innerHTML属性获取标签间内容
 
-```
+```js
 function test(){
 var text=document.ElementById("id");
 var msg=document.ElementById("id");
 ```
-
 
 - 把字符串转换为数组
 
 可以通过 split(分割符/正则)分割字符串，返回分割的子串组成的数组。
 
  将字符串转换为数组：
+
 ```
 var txt = "a,b,c,d,e";   // 字符串
 txt.split(",");          // 用逗号分隔
@@ -470,8 +481,6 @@ txt.split("|");          // 用竖线分隔
 //若没有匹配，被返回的数组也是整个字符串即["string"]
 //如果分隔符是 ""，被返回的数组将是间隔单个字符的数组
 ```
-
-
 
 #### 数据类型转换
 
@@ -484,16 +493,17 @@ txt.split("|");          // 用竖线分隔
 |拼接|`var num=1; alert(num+"");`|
 
 能够使用 toString() 方法把数输出为十六进制、八进制或二进制。
-```
+
+```js
 var myNumber = 128;
 myNumber.toString(16);     // 返回 80
 myNumber.toString(8);      // 返回 200
 myNumber.toString(2);      // 返回 10000000
 ```
 
-
 toExponential() 返回字符串值，它包含已被四舍五入并使用指数计数法的数字。
-```
+
+```js
 var x = 9.656;
 x.toExponential(2);     // 返回 9.66e+0
 x.toExponential(4);     // 返回 9.6560e+0
@@ -502,7 +512,7 @@ x.toExponential(6);     // 返回 9.656000e+0
 
 toFixed() 返回字符串值，它包含了指定位数小数的数字：
 
-```
+```js
 var x = 9.656;
 x.toFixed(0);           // 返回 10
 x.toFixed(2);           // 返回 9.66
@@ -511,19 +521,18 @@ x.toFixed(6);           // 返回 9.656000
 ```
 
 toPrecision() 返回字符串值，它包含了指定长度的数字：
-```
+
+```js
 var x = 9.656;
 x.toPrecision();        // 返回 9.656
 x.toPrecision(2);       // 返回 9.7
 x.toPrecision(4);       // 返回 9.656
 x.toPrecision(6);       // 返回 9.65600
 ```
+
 >在 JavaScript 中，数字可以是原始值（typeof = number）或对象（typeof = object）。
 >在 JavaScript 内部使用 valueOf() 方法可将 Number 对象转换为原始值。
 >所有 JavaScript 数据类型都有 valueOf() 和 toString() 方法。
-
-
-
 
 - 转数字
 
@@ -550,19 +559,20 @@ Number() 还可以把日期转换为数字：`Number(new Date("2019-04-15"));   
 `表达式1||表达式2`如果表达式1为真则返回表达式1，否则返回表达式2
 
 ### 位运算符
+
 位运算符处理 32 位数。
 
 该运算中的任何数值运算数都会被转换为 32 位的数。结果会被转换回 JavaScript 数。
 
-|运算符|	描述|	例子|	等同于|	结果|	十进制|
+|运算符| 描述| 例子| 等同于| 结果| 十进制|
 |-|-|-|-|-|-|
-|&	|与	|5 & 1	|0101 & 0001	|0001	|1|
-|\|	|或	|5 \| 1	|0101 \| 0001	|0101	|5|
-|~	|非	|~ 5	|~0101	|1010	|10|
-|^	|异或	|5 ^ 1	|0101 ^ 0001	|0100	|4
-|<<	|零填充左位移	|5 << 1	|0101 << 1	|1010	|10|
-|>>	|有符号右位移	|5 >> 1	|0101 >> 1	|0010	|2|
-|>>>	|零填充右位移	|5 >>> 1	|0101 >>> 1	|0010	|2|
+|& |与 |5 & 1 |0101 & 0001 |0001 |1|
+|\| |或 |5 \| 1 |0101 \| 0001 |0101 |5|
+|~ |非 |~ 5 |~0101 |1010 |10|
+|^ |异或 |5 ^ 1 |0101 ^ 0001 |0100 |4
+|<< |零填充左位移 |5 << 1 |0101 << 1 |1010 |10|
+|>> |有符号右位移 |5 >> 1 |0101 >> 1 |0010 |2|
+|>>> |零填充右位移 |5 >>> 1 |0101 >>> 1 |0010 |2|
 
 >上例使用 4 位无符号的例子。但是 JavaScript 使用 32 位有符号数。
 
@@ -570,11 +580,11 @@ Number() 还可以把日期转换为数字：`Number(new Date("2019-04-15"));   
 
 >\~00000000000000000000000000000101 将返回 11111111111111111111111111111010。
 
-幂运算符为`**`而不是`^`,也可以用`Math.pow(x,y) `实现
+幂运算符为`**`而不是`^`,也可以用`Math.pow(x,y)`实现
 
 ### 结构
 
-```
+```js
 //switch
 var num=3;
 switch(num){
@@ -597,42 +607,42 @@ break用于结束循环；
 请不要最后一个元素之后写逗号（比如 "BMW",）可能存在跨浏览器兼容性问题。
 JavaScript 方法 toString() 把数组转换为数组值（逗号分隔）的字符串。
 
-```
+```js
 //利用new创建数组
-var a=new Array();	//注意大写
-var a=new Array(2);	//只有一个数字时，为直接创建长度为2的空数组
-var cars = new Array("Saab", "Volvo", "BMW");	//也可以直接赋值
+var a=new Array(); //注意大写
+var a=new Array(2); //只有一个数字时，为直接创建长度为2的空数组
+var cars = new Array("Saab", "Volvo", "BMW"); //也可以直接赋值
 ```
 
-```
+```js
 //数组字面量方式创建
 var a=[];
 var a=['xxx',77,true];
 ```
 
-```
+```js
 //获取数组元素：数组名[索引号]
 console.log(a[0]);
 //二位数组,只对字符串有用
-console.log(a[0][0]);	//结果为第二个x
-console.log(a[2][0]);	//结果为undefined
+console.log(a[0][0]); //结果为第二个x
+console.log(a[2][0]); //结果为undefined
 ```
 
-```
+```js
 //数组长度：数组名.length
 console.log(a.length); //新增数组元素
 //修改数组索引追加数组元素
 //不能直接给数组名赋值，否则会覆盖以前的数据
 ```
 
-```
+```js
 //变量里存放的是数组的地址
 var arr=["jjj","222",true,222];
 var arr1=arr
 console.log(arr1);
 arr1.push("end");
 console.log("push:",arr1);
-console.log(arr);	//arr也会一起变化
+console.log(arr); //arr也会一起变化
 ```
 
 ### 数组遍历
@@ -642,7 +652,7 @@ console.log(arr);	//arr也会一起变化
 - forEach
 - for....of
 
-```
+```js
 var array=[10,11,12,13,14];
 
 for(var i in array){
@@ -657,6 +667,7 @@ for (var item of array){
 //item为当前遍历到的元素
 }
 ```
+
 ### 数组的操作方法
 
 10种：push,pop,shift,unshift,splice,slice,concat,join,sort,reverse
@@ -665,10 +676,9 @@ for (var item of array){
 
    1. 在末尾追加push()；
 
-
 示例代码：
 
-```
+```js
 //向arr数组的末尾追加元素，
 arr.push('lemon', 'cucumber');
 alert(arr);
@@ -677,7 +687,7 @@ alert(arr);
 
 也可以使用 length 属性向数组添加新元素：
 
-```
+```js
 var fruits = ["Banana", "Orange", "Apple", "Mango"];
 fruits[fruits.length] = "Lemon";     // 向 fruits 添加一个新元素 (Lemon)
 //添加具有高索引的元素会在数组中创建未定义的undefined
@@ -686,47 +696,44 @@ fruits[10] = "Lemon";
 
    2. 在第一位添加unshift()；
 
-
 示例代码：
 
-```
+```js
 //向arr数组的第一位添加元素，
-arr.unshift('peach', 'pear');	//返回新数组的长度。
+arr.unshift('peach', 'pear'); //返回新数组的长度。
 alert(arr);
 ```
 
    3. 在指定位置添加splice();
 
-
 示例代码：
 
-```
+```js
 ///从数组中添加/删除项目，然后返回被删除的项目,如果有的话。
 arr.splice(3,0,'元素1','元素2'); 
 alert(arr);
 //arrayObject.splice(index,howmany,item1,.....,itemX)
-//index	必需。整数，规定添加/删除项目的位置，使用负数可从数组结尾处规定位置。
-//howmany	必需。要删除的项目数量。如果设置为 0，则不会删除项目。
+//index 必需。整数，规定添加/删除项目的位置，使用负数可从数组结尾处规定位置。
+//howmany 必需。要删除的项目数量。如果设置为 0，则不会删除项目。
 ```
-
 
 - pop() 方法从数组中删除最后一个元素：
 
-```
+```js
 var fruits = ["Banana", "Orange", "Apple", "Mango"];
 fruits.pop();              // 从 fruits 删除最后一个元素（"Mango"）
 ```
 
 - pop() 方法返回被删除的值：
 
-```
+```js
 var fruits = ["Banana", "Orange", "Apple", "Mango"];
 var x = fruits.pop();      // x 的值是 "Mango"
 ```
 
 - shift() 方法会删除首个数组元素，
 
-```
+```js
 var fruits = ["Banana", "Orange", "Apple", "Mango"];
 fruits.shift();            // 从 fruits 删除第一个元素 "Banana"
 //shift() 方法返回被删除的字符串即 返回 "Banana"
@@ -735,25 +742,24 @@ fruits.shift();            // 从 fruits 删除第一个元素 "Banana"
 - 删除元素
 既然 JavaScript 数组属于对象，其中的元素就可以使用 JavaScript delete 运算符来删除：
 
-```
+```js
 var fruits = ["Banana", "Orange", "Apple", "Mango"];
 delete fruits[0];           // 把 fruits 中的首个元素改为 undefined
 //用 delete 会在数组留下未定义的空洞。请使用 pop() 或 shift() 取而代之。
 ```
+
 使用 splice() 来删除元素
 
-
-```
+```js
 //通过聪明的参数设定，您能够使用 splice() 在数组中不留“空洞”的情况下移除元素：
 var fruits = ["Banana", "Orange", "Apple", "Mango"];
 fruits.splice(0, 1);        // 删除 fruits 中的第一个元素
 ```
 
-
 - 拼接数组
 splice() 方法可用于向数组添加新项：
 
-```
+```js
 var fruits = ["Banana", "Orange", "Apple", "Mango"];
 fruits.splice(2, 0, "Lemon", "Kiwi");
 //第一个参数（2）定义了应添加新元素的位置（拼接）。
@@ -764,7 +770,7 @@ fruits.splice(2, 0, "Lemon", "Kiwi");
 
 - concat() 方法通过合并（连接）现有数组来创建一个新数组：
 
-```
+```js
 var myGirls = ["Cecilie", "Lone"];
 var myBoys = ["Emil", "Tobias", "Linus"];
 var myChildren = myGirls.concat(myBoys,"jjjj",11);   // 连接 myGirls 和 myBoys,"jjj"等
@@ -781,9 +787,9 @@ slice(start,end) 方法用数组的某个片段切出新数组。原数组不会
 
 本例从数组元素 1 （"Orange"）开始切出一段数组：
 
-```
+```js
 var fruits = ["Banana", "Orange", "Lemon", "Apple", "Mango"];
-var citrus = fruits.slice(1); 	//默认到结尾
+var citrus = fruits.slice(1);  //默认到结尾
 ```
 
 - sort() 方法以字母顺序对数组进行排序：
@@ -792,7 +798,7 @@ var citrus = fruits.slice(1); 	//默认到结尾
 
 不过，如果数字按照字符串来排序，则 "25" 大于 "100"，因为 "2" 大于 "1"。
 
-```
+```js
 var fruits = ["Banana", "Orange", "Apple", "Mango"];
 fruits.sort();            // 对 fruits 中的元素进行排序
 ```
@@ -801,7 +807,7 @@ sort() 方法在对数值排序时会产生不正确的结果。
 
 我们通过一个比值函数来修正此问题：
 
-```
+```js
 var points = [40, 100, 1, 5, 25, 10];
 points.sort(function(a, b){return a - b}); 
 //比值函数
@@ -832,15 +838,14 @@ fruits.reverse();         // 反转元素顺序
 - 声明
 在函数中，声明的参数是局部变量。只能在函数内访问。局部变量在函数开始时创建，在函数完成时被删除。
 
-
-```
+```js
 //函数关键字声明
 function a(){
 console.log('xxxxxxxxx');
 }
 ```
 
-```
+```js
 //函数表达式声明
 var b=function(){};
 //function 函数名（形参1，形参2...）{//形参即形式上的参数}
@@ -852,9 +857,10 @@ b('xxx');
 //实参小于形参时，多余的形参可看作不用声明的变量，结果为undefined
 //实参多于形参时，只取到形参的个数
 //#######################################
-```
 
 ```
+
+```js
 //函数的返回值
 function c(){
 return 返回的内容；
@@ -866,7 +872,7 @@ var n=c();
 //如果没有return则返回undefind
 ```
 
-```
+```js
 //###########
 function fn(){
 console.log(arguments);
@@ -875,19 +881,21 @@ fn(1,2,2,34,9);
 //arguments里储存了所有传过来的实参，它是一个伪数组，具有length属性，可用索引的方式遍历，但不具有数组的push，pop等方法
 ```
 
-```
+```js
 window.onload=function(){
 写在这的代码会在整个页面加载完后再运行
 }
 ```
 
-```
+```js
 //简化写法
 function $(id){
 return document.getElenmentById(id);
 }
 var text=$("button");
+
 ```
+
 - 递归
 
 函数自己调用自己，一般情况下有参数，有return
@@ -908,30 +916,33 @@ JavaScript 变量的有效期始于其被创建时。
 在 HTML 中，全局作用域是 window。所有全局变量均属于 window 对象。
 实例
 
-```
+```js
+
 var carName = "porsche";
 // 此处的代码能够使用 window.carName
+
 ```
 
 - JavaScript 声明会被提升
 在 JavaScript 中，可以在使用变量之后对其进行声明。
 换句话说，可以在声明变量之前使用它。
 
-
-```
+```js
 //js中没有块级作用域，如{} if{} for{}，只有全局作用域和局部作用域
 //作用域链：内部函数访问外部函数变量，采用的是链式查找方式来取值的，其采取就近原则
 var num=10;
 function fn (){
 var num=20;
 function fun(){
-console.log(num)	//结果为20
+console.log(num) //结果为20
 }
 return fun();
 }
-```
 
 ```
+
+```js
+
 //js引擎运行分两步
 //预解析:js引擎会把js里的所有var， function提升到当前作用域的最前面，但不提升赋值操作
 //代码执行：顺序从上往下执行
@@ -940,77 +951,88 @@ var fun=function(){xxx};//会报错
 //-------------
 fun();
 function fun(){xxx}//正常运行
-```
 
 ```
+
+```js
 //预编译:创建AO对象;找已声明的变量,值都是undefined;实参形参值相等;找函数声明，会覆盖形参的值
 function fn(a,c){
-	console.log(c);	//2
-	console.log(a);	//function a()
-	function a(){ }
+ console.log(c); //2
+ console.log(a); //function a()
+ function a(){ }
 
-	var a=12;
-	console.log(a);		//12
+ var a=12;
+ console.log(a);  //12
 
-	console.log(b);		//undefined
-	var b=function(){}
-	console.log(b);		//function b()
+ console.log(b);  //undefined
+ var b=function(){}
+ console.log(b);  //function b()
 
 }
 fn(1,2);
-```
 
+```
 
 JavaScript 初始化不会被提升
 JavaScript 只提升声明，而非初始化。
 
-```
+```js
 var x = 5; // 初始化 x
- 
 elem = document.getElementById("demo"); // 查找元素
 elem.innerHTML = x + " " + y;           // 显示 x 和 y
- 
-var y = 7; // 初始化 y 
-```
-## ES6 中的一些新特性。
 
-   - JavaScript let
-   - JavaScript const
-   - 幂 (**)
-   - 默认参数值
-   - Array.find()
-在数组中查找符合条件的元素，只要找到一个符合条件的元素，就终止遍历，返回值为找到的元素。
+var y = 7; // 初始化 y
+
 ```
+
+## ES6 中的一些新特性
+
+- JavaScript let
+- JavaScript const
+- 幂 (**)
+- 默认参数值
+- Array.find()
+在数组中查找符合条件的元素，只要找到一个符合条件的元素，就终止遍历，返回值为找到的元素。
+
+```js
 var array=[1,2,3,45,5];
 var res=arr.find(function(item,idex,array){
 //查找条件
 return item>5;
 })
 console.log(res);
-```
-   - Array.findIndex()
 
 ```
+
+- Array.findIndex()
+
+```js
+
 array.findIndex(item=>item>20);
+
 ```
 
 - Array.copyWithin()
+
+>es6
 第一个参数：从哪个下标开始
-第二第三个参数：开始与结束的范围[start,end)
+第二第三个参数：开始与结束的范围`[start,end)`
 把范围里的元素从第一个参数开始覆盖。
 
-```
+```js
+
 var arr=[2,3,4,1,4,5,1,6,7,8,9,1,3];
 arr.copyWithin(2,5,7);
+
 ```
 
-- Object.assign();合并对象
+- Object.assign();合并对象(es6)
 
 将所有传入的对象都合并到第一个对象里。浅拷贝，
 
-
-- let 和 const 关键字
+- let 和 const 关键字(es6)
 用 let 或 const 声明的变量和常量不会被提升！遇到大括号就形成作用域。
+
 >全局（在函数之外）声明的变量拥有全局作用域。
 >局部（函数内）声明的变量拥有函数作用域。
 
@@ -1019,11 +1041,13 @@ arr.copyWithin(2,5,7);
 
 实例
 
-```
-{ 
-  var x = 10; 
+```js
+
+{
+  var x = 10;
 }
 // 此处可以使用 x
+
 ```
 
 在 ES2015 之前，JavaScript 是没有块作用域的。
@@ -1034,11 +1058,13 @@ arr.copyWithin(2,5,7);
 
 实例
 
-```
-{ 
+```js
+
+{
   let x = 10;
 }
 // 此处不可以使用 x
+
 ```
 
 - 重新声明变量
@@ -1047,17 +1073,18 @@ arr.copyWithin(2,5,7);
 
 在块中重新声明变量也将重新声明块外的变量：
 
-
 实例
 
-```
+```js
+
 var x = 10;
 // 此处 x 为 10
-{ 
+{
   var x = 6;
   // 此处 x 为 6
 }
 // 此处 x 为 6
+
 ```
 
 使用 let 关键字重新声明变量可以解决这个问题。
@@ -1066,15 +1093,18 @@ var x = 10;
 
 实例
 
-```
+```js
+
 var x = 10;
 // 此处 x 为 10
-{ 
+{
   let x = 6;
   // 此处 x 为 6
 }
 // 此处 x 为 10
+
 ```
+
 >Internet Explorer 11 或更早的版本不完全支持 let 关键词。
 
 - var 与let 区别
@@ -1089,7 +1119,6 @@ var x = 10;
 通过 var 声明的变量会提升到顶端
 通过 let 定义的变量不会被提升到顶端
 
-
 - const
 
 通过 const 定义的变量与 let 变量类似，但不能重新赋值;const 变量必须在声明时赋值,const 变量不能在声明之前使用
@@ -1098,7 +1127,8 @@ var x = 10;
 
 实例
 
-```
+```js
+
 // 您可以创建 const 对象：
 const car = {type:"porsche", model:"911", color:"Black"};
 
@@ -1107,15 +1137,18 @@ car.color = "White";
 
 // 您可以添加属性：
 car.owner = "Bill";
+
 ```
 
 但是您无法重新为常量对象赋值：
 
 实例
 
-```
+```js
+
 const car = {type:"porsche", model:"911", color:"Black"};
 car = {type:"Volvo", model:"XC60", color:"White"};    // ERROR
+
 ```
 
 同理常量数组可以更改；但是您无法重新为常量数组赋值
@@ -1125,7 +1158,8 @@ car = {type:"Volvo", model:"XC60", color:"White"};    // ERROR
 
 实例
 
-```
+```js
+
 const x = 2;       // 允许
 {
   const x = 3;   // 允许
@@ -1133,10 +1167,10 @@ const x = 2;       // 允许
 {
   const x = 4;   // 允许
 }
+
 ```
 
 >Internet Explorer 10 或更早版本不支持 const 关键词。
-
 
 - 声明严格模式
 
@@ -1146,9 +1180,11 @@ const x = 2;       // 允许
 
 实例
 
-```
+```js
+
 "use strict";
 x = 3.14;       // 这会引发错误，因为 x 尚未声明
+
 ```
 
 - 严格模式中不允许的事项：
@@ -1157,13 +1193,12 @@ x = 3.14;       // 这会引发错误，因为 x 尚未声明
 删除变量（或对象）是不允许的`delete:x;`
 删除函数是不允许的,重复参数名是不允许的,八进制数值文本是不允许的,转义字符是不允许的写入只读属性是不允许的,写入只能获取的属性是不允许的,删除不可删除的属性是不允许的,字符串 "eval" 不可用作变量,字符串 "arguments" 不可用作变量,with 语句是不允许的,处于安全考虑，不允许 eval() 在其被调用的作用域中创建变量,在类似 f() 的函数调用中，this 的值是全局对象。在严格模式中，现在它成为了 undefined。
 
-
 ### 对象
 
+```js
 
-```
 //利用对象字面量创建对象{}
-var obj={};	//创建了一个空的对象
+var obj={}; //创建了一个空的对象
 var obj={
 username:'张山',
 age: 18,
@@ -1172,9 +1207,11 @@ hi:function(){
 console.log('hello!!!!!!!!!!!!!!');
 }
 }
-```
 
 ```
+
+```js
+
 //#################
 //利用new Object 创建对象
 var obj1= new Object();//创建一个空对象,可省略new
@@ -1184,9 +1221,11 @@ obj1.sex='男';
 obj1.hi=function(){
 console.log('hello!!!!!!!!!!!!!!');
 }
-```
 
 ```
+
+```js
+
 //里面的属性或方法，采用键值对的形式->  属性名： 属性值
 //多个属性或方法中间用逗号隔开
 //方法冒号后面跟的是一个匿名函数
@@ -1198,19 +1237,23 @@ console.log(obj1['age']);
 //调用对象的方法-> 对象名.方法名
 obj1.hi();
 //如果您不使用 () 访问 fullName 方法，则将返回函数的具体内容
-```
 
 ```
+
+```js
+
 //##############################
 //遍历对象
 //for(变量 in 对象){}
 for (var i in obj){
-console.log(k);		
+console.log(k);  
 console.log(obj[i]);
 }
-```
 
 ```
+
+```js
+
 //################################
 //利用构造函数创建对象
 //function 构造函数名(){
@@ -1224,6 +1267,7 @@ this.age=age;
 this.sex=sex;
 }
 new Star('刘德华',58,'男');
+
 ```
 
 - 箭头函数（Arrow Function）
@@ -1235,17 +1279,19 @@ new Star('刘德华',58,'男');
 
 实例
 
-```
+```js
+
 var x = function(x, y) {
-   return x * y;
+   return x *y;
 }
 //多个参数，有返回值
-var  x = (x, y) => x * y;
+var  x = (x, y) => x* y;
 //或
 var x=(x,Y)=>{
 reruen x*y;
 }
 --------------------
+
 function add(x){
 return x+10;
 }
@@ -1257,6 +1303,7 @@ var add=x=>{
 return x+10;
 }
 --------------------
+
 function show(){
 alert("hello");
 }
@@ -1265,6 +1312,7 @@ var show=()=>{
 alert("hello");
 }
 --------------------
+
 function xxx(num){
 alert(num);
 }
@@ -1273,86 +1321,99 @@ var xxx=num=>{
 alert(num);
 }
 ----------------
+
 function show(){
 return {name:'xxx'};
 }
 //返回对象
 var show=()=>({..});
+
 ```
 
 箭头功能没有自己的 this。它们不适合定义对象方法。
 箭头功能未被提升。它们必须在使用前进行定义。
-
-
 
 使用 const 比使用 var 更安全，因为函数表达式始终是常量值。
 如果函数是单个语句，则只能省略 return 关键字和花括号。因此，保留它们可能是一个好习惯：
 
 实例
 
-```
+```js
+
 const x = (x, y) => { return x * y };
+
 ```
 
 #### 内置对象(如同内置函数）如:Math、 Date、 Array、 String、
 
 Math对象
 
-```
+```js
+
 Math.PI  //圆周率
-Math.abs()	//求绝对值
-Math.max()	//求最大
-Math.min()	//求最小值
-Math.pow(x,y) 	//x的y次幂
-Math.round()	//四舍五入
-Math.random()	//获取随机数
-Math.ceil()	// 向上取整,有小数就整数部分加1
-Math.floor()	// 向下取整,丢弃小数部分
+Math.abs() //求绝对值
+Math.max() //求最大
+Math.min() //求最小值
+Math.pow(x,y)  //x的y次幂
+Math.round() //四舍五入
+Math.random() //获取随机数
+Math.ceil() // 向上取整,有小数就整数部分加1
+Math.floor() // 向下取整,丢弃小数部分
+
 ```
 
 - 获取当前时间
 
-```
+```js
+
 //时间对象是静态的
 //必须实例化
 var nowdate=new Date();
 console.log(nowdate);
-```
 
 ```
+
+```js
+
 //############
 //Date()构造函数的参数
 //自定义日期格式
 var nowdate=new Date("2020-2-22");
-```
 
 ```
+
+```js
+
 //日期格式化
-//getFUllYear()	//年
-//getMonth() 	//月
-//getDate()	//天
-//getDay()	//星期（周日0到周六6）
+//getFUllYear() //年
+//getMonth()  //月
+//getDate() //天
+//getDay() //星期（周日0到周六6）
 //getHours()
 //getMinutes()
 //getSeconds()
 var date= new Date();
 console.log(date.getHours());
-```
 
 ```
+
+```js
+
 //封装一个获取时间的方法
 function gettime(){
 var time = new Date();
 var h=time.getHours();
-h= h<10 ? "0"+h : h;		//小于10前面添加0
+h= h<10 ? "0"+h : h;  //小于10前面添加0
 var m=time.getMinutes();
 var s=getSeconds();
 return h +':'+ m +':'+ s;
 }
 console.log(gettime());
-```
 
 ```
+
+```js
+
 //######################
 //获取Date总毫秒数，距离1970.1.1的总毫秒数
 var date= new Date();
@@ -1360,48 +1421,52 @@ console.log(date.valueOf());
 //或
 console.log(date.getTime());
 //或
-var date1= +new Date();		//常用
+var date1= +new Date();  //常用
 console.log(date1);
 //或
-console.log(Date.now());	//H5新增
+console.log(Date.now()); //H5新增
+
 ```
 
 - js 时分秒转化为秒
 
-```
+```js
+
 var time = '00:02:10';
-          var hour = time.split(':')[0];
-          var min = time.split(':')[1];
-          var sec = time.split(':')[2];
+          var hour = time.split[':'](0);
+          var min = time.split[':'](1);
+          var sec = time.split[':'](2);
 
           s = Number(hour*3600) + Number(min*60) + Number(sec);
           console.log(s);//130
+
 ```
 
--  设置日期对象的日期值
+- 设置日期对象的日期值
 
-|方法|	描述|
+|方法| 描述|
 |-|-|
-|setDate()|	以数值（1-31）设置日|
-|setFullYear()|	设置年（可选月和日）|
-|setHours()|	设置小时（0-23）|
-|setMilliseconds()|	设置毫秒（0-999）|
-|setMinutes()|	设置分（0-59）|
-|setMonth()|	设置月（0-11）|
-|setSeconds()|	设置秒（0-59）|
-|setTime()|	设置时间（从 1970 年 1 月 1 日至今的毫秒数）|
-
+|setDate()| 以数值（1-31）设置日|
+|setFullYear()| 设置年（可选月和日）|
+|setHours()| 设置小时（0-23）|
+|setMilliseconds()| 设置毫秒（0-999）|
+|setMinutes()| 设置分（0-59）|
+|setMonth()| 设置月（0-11）|
+|setSeconds()| 设置秒（0-59）|
+|setTime()| 设置时间（从 1970 年 1 月 1 日至今的毫秒数）|
 
 setFullYear() 方法设置日期对象的年份。这个例子设置为 2020 年：
 
 实例
 
-```
+```html
+
 <script>
 var d = new Date();
 d.setFullYear(2020);
 document.getElementById("demo").innerHTML = d;
 </script>
+
 ```
 
 - 比较日期
@@ -1412,7 +1477,8 @@ document.getElementById("demo").innerHTML = d;
 
 实例
 
-```
+```js
+
 var today, someday, text;
 today = new Date();
 someday = new Date();
@@ -1423,7 +1489,9 @@ if (someday > today) {
   text = "今天在 2049 年 1 月 16 日之后";
 }
 document.getElementById("demo").innerHTML = text;
+
 ```
+
 ### 定时器
 
 - setInterval("函数"，毫秒数);
@@ -1434,37 +1502,46 @@ document.getElementById("demo").innerHTML = text;
 取消定时器
 
 ### 延时器
+
     只执行一次
+
 - 创建延时器
     `window.setTimeout(函数类型，延迟时间)`
     返回值timeoutID是一个正整数，表示定时器的编号需要注意的是setTimeout()和setInterval()共用一个编号池，技术上，clearTimeout()和 clearInterval() 可以互换。但是，为了避免混淆，不要混用取消定时函数。
-    
-```
+
+```js
+
     var timer1=window.setTimeout(function (){
                     console.log("你好啊！！！");
                 },3000);
-```
-- 清除延时器
-    
-`window.clearTimeout(延时器名称)`
 
 ```
+
+- 清除延时器
+
+`window.clearTimeout(延时器名称)`
+
+```js
+
     function func(){
                     //清除延时器
                     window.clearTimeout(timer1);
                 }
+
 ```
 
-### JS this 关键词指的是它所属的对象。
+### JS this 关键词指的是它所属的对象
 
 它拥有不同的值，具体取决于它的使用位置：
+
 - 在方法中，this 指的是所有者对象。
 
 在对象方法中，this 指的是此方法的“拥有者”。
 在本页最上面的例子中，this 指的是 person 对象。
 person 对象是 fullName 方法的拥有者。
 
-```
+```js
+
 var person = {
   firstName: "Bill",
   lastName : "Gates",
@@ -1472,6 +1549,7 @@ var person = {
 fullName : function() {
   return this.firstName + " " + this.lastName;
 }
+
 ```
 
 - 单独的情况下，this 指的是全局对象。
@@ -1481,8 +1559,10 @@ fullName : function() {
 
 实例
 
-```
+```js
+
 var x = this;
+
 ```
 
 在严格模式中，如果单独使用，那么 this 指的是全局对象 [object Window]
@@ -1494,11 +1574,14 @@ var x = this;
 
 实例
 
-```
+```js
+
 function myFunction() {
   return this;
 }
+
 ```
+
 箭头函数没有自己的this，其中的this指的是window全局对象
 
 在函数中使用时，在严格模式下，this 是未定义的（undefined）
@@ -1509,7 +1592,8 @@ function myFunction() {
 
 实例
 
-```
+```js
+
 <button onclick="this.style.display='none'">
   点击来删除我！
 </button>
@@ -1517,19 +1601,19 @@ function myFunction() {
 
 - 像 call() 和 apply() 这样的方法可以将 this 引用到任何对象。
 
-   - call
+  - call
 格式：函数名.call();
 参数：第一个参数：传入该函数this指向的对象，传入什么强制指向什么。
       第二参数开始：将原函数的参数往后顺延一位。
 
-   - apply
+  - apply
 格式：函数名.apply()
 参数：第一个参数：传入该函数this指向的对象，传入什么强制指向什么。
       第二个参数：数组 其放入我们所有原来的参数。
 
-   - bind预设this指向
+  - bind预设this指向
 
-```
+```js
 function show(x,y){
 console.log(this);
 console.log(x);
@@ -1539,12 +1623,11 @@ var res=show.bind("bind");
 console.log(res);
 ```
 
-
 call() 和 apply() 方法是预定义的 JavaScript 方法。
 它们都可以用于将另一个对象作为参数调用对象方法。
 在下面的例子中，当使用 person2 作为参数调用 person1.fullName 时，this 将引用 person2，即使它是 person1 的方法：
 
-```
+```js
 var person1 = {
   fullName: function() {
     return this.firstName + " " + this.lastName;
@@ -1567,10 +1650,10 @@ person1.fullName.call(person2);  // 会返回 "Bill Gates"
 
 - finally 使您能够执行代码，在 try 和 catch 之后，无论结果如何。
 
-```
+```js
 try {
      供测试的代码块
-	throw new Error("直接允许");
+ throw new Error("直接允许");
 }
  catch(err) {
 console.log(err);
@@ -1622,7 +1705,7 @@ JavaScript 变量属于本地或全局作用域。
 
 >拥有相同名称的全局变量和局部变量是不同的变量。修改一个，不会改变其他。不通过关键词 var 创建的变量总是全局的，即使它们在函数中创建。
 
-```
+```js
 var add = (function () {
     var counter = 0;
     return function () {return counter += 1;}
@@ -1646,10 +1729,10 @@ add();
 */
 ```
 
-```
+```js
 var moduleA=(function(mod){
-var conut=10;	//私有变量
-function showA(){	//私有函数
+var conut=10; //私有变量
+function showA(){ //私有函数
 count+=20;
 console.log(count);
 }
@@ -1678,7 +1761,7 @@ mouleA.outC();
 
 - 立即执行函数写法
 
-```
+```js
 var test=(function(){
 var c=0;
 var m1=function(){xxxx};
@@ -1689,11 +1772,15 @@ m2:m2
 }
 })();
 ```
+
 #### 模块化规范
 
+- CommonJs规范(nodejs)
+
 - AMD规范：
-   - 声明：
-```
+  - 声明：
+
+```js
 define(function(){
 //代码
 return{
@@ -1705,7 +1792,7 @@ outB:showB
 
 引用：（异步执行）
 
-```
+```js
 require("moduleA.js",function(moduleA){
 moduleA.putA();
 moduleA.putB();
@@ -1714,15 +1801,53 @@ moduleA.putB();
 
 - ECMA6
 
-```
+moduleB.js
+```js
+//导出
 export={
-outA:showA
-outB:showB
+   outA:showA
+   outB:showB
 }
-import moduleA from "moduleA.js"
+
+export const age='xx'
+export const name='xx'
+export function sayName(){}
+
+
+
+```
+
+```html
+<script type="module">
+//导入
+import {age,sayName,name} from "./moduleA.js"
+
+sayName()
+</script>
+```
+
+moduleA.js
+```js
+//默认导出
+let obj={name:'xx',}
+//只能使用一次
+export default obj
+
+
+```
+
+```html
+<script type="module">
+//导入
+import moduleA from "./moduleB.js"
+//或
+import * as a from "./moduleB.js"
 moduleA.outA();
 moduleA.outB();
+
+</script>
 ```
+
 - JavaScript 性能
 
    1. 减少循环中的活动
@@ -1736,23 +1861,23 @@ moduleA.outB();
    6. 避免使用 with
 请避免使用 with 关键词。它对速度有负面影响。它也将混淆 JavaScript 作用域。
 
-
 - JavaScript JSON
 
 JSON 是存储和传输数据的格式。
 JSON 格式仅仅是文本，它能够轻松地在服务器浏览器之间传输，并用作任何编程语言的数据格式。
 JSON 语法衍生于 JavaScript 对象标记法语法:
-   - 数据在名称/值对中
-   - 数据由逗号分隔
-   - 花括号容纳对象
-   - 方括号容纳数组
+
+- 数据在名称/值对中
+- 数据由逗号分隔
+- 花括号容纳对象
+- 方括号容纳数组
 
 JSON 的值不可以是以下数据类型之一：函数;日期;undefined.
 
 把 JSON 文本转换为 JavaScript 对象
 首先，创建包含 JSON 语法的 JavaScript 字符串：
 
-```
+```js
 var text = '{ "employees" : [' +
 '{ "firstName":"Bill" , "lastName":"Gates" },' +
 '{ "firstName":"Steve" , "lastName":"Jobs" },' +
@@ -1761,7 +1886,7 @@ var text = '{ "employees" : [' +
 
 然后，使用 JavaScript 的内建函数 JSON.parse() 来把这个字符串转换为 JavaScript 对象：
 
-```
+```js
 var obj = JSON.parse(text);
 ```
 
@@ -1769,20 +1894,20 @@ var obj = JSON.parse(text);
 
 实例
 
-```
+```html
 <p id="demo">\</p>
 <script>
 document.getElementById("demo").innerHTML =
 obj.employees[1].firstName + " " + obj.employees[1].lastName;
-</script> 
+</> 
 ```
 
 JSON 与 XML 的差异在于：
 
-   - JSON 不使用标签
-   - JSON 更短
-   - JSON 的读写速度更快
-   - JSON 可使用数组
+- JSON 不使用标签
+- JSON 更短
+- JSON 的读写速度更快
+- JSON 可使用数组
 
 最大的不同在于：
 
@@ -1793,7 +1918,7 @@ HTML 表单验证能够通过 JavaScript 来完成
 
 JavaScript 实例
 
-```
+```js
 function validateForm() {
     var x = document.forms["myForm"]["fname"].value;
     if (x == "") {
@@ -1807,7 +1932,7 @@ function validateForm() {
 
 HTML 表单实例
 
-```
+```js
 <form name="myForm" action="action\_page\_post.php" onsubmit="return validateForm()" method="post">
 姓名：<input type="text" name="fname">
 <input type="submit" value="Submit">
@@ -1817,7 +1942,8 @@ HTML 表单实例
 ## BOM
 
 浏览器对象
-```
+
+```js
 window:{
 document:{anchors,forms,images,links,location},
 frames,
@@ -1827,7 +1953,6 @@ navigator,
 screen
 }
 ```
-
 
 ### window方法
 
@@ -1890,11 +2015,11 @@ https:
 
 `hostname:port`可直接定位到当前使用的网络的程序
 
-- location.pathname 
+- location.pathname
 
 查看路径
 
-- location.search 
+- location.search
 
 查看字符串如`?name1=Tom&name2=Tony`
 
@@ -1906,8 +2031,7 @@ https:
 
 查看整个url
 
-
-##DOM
+## DOM
 
 文档对象模型（document object model）
 HTML DOM 方法是您能够（在 HTML 元素上）执行的动作。
@@ -1915,18 +2039,18 @@ HTML DOM 属性是您能够设置或改变的 HTML 元素的值。
 
 - 通过这个对象模型，JavaScript 获得创建动态 HTML 的所有力量：
 
-   - JavaScript 能改变页面中的所有 HTML 元素
-   - JavaScript 能改变页面中的所有 HTML 属性
-   - JavaScript 能改变页面中的所有 CSS 样式
-   - JavaScript 能删除已有的 HTML 元素和属性
-   - JavaScript 能添加新的 HTML 元素和属性
-   - JavaScript 能对页面中所有已有的 HTML 事件作出反应
-   - JavaScript 能在页面中创建新的 HTML 事件
+  - JavaScript 能改变页面中的所有 HTML 元素
+  - JavaScript 能改变页面中的所有 HTML 属性
+  - JavaScript 能改变页面中的所有 CSS 样式
+  - JavaScript 能删除已有的 HTML 元素和属性
+  - JavaScript 能添加新的 HTML 元素和属性
+  - JavaScript 能对页面中所有已有的 HTML 事件作出反应
+  - JavaScript 能在页面中创建新的 HTML 事件
 
 - 节点类型:
-   - 元素节点：<div></div>
-   - 属性节点：id=“div1”
-   - 文本节点： 文本
+  - 元素节点：<div></div>
+  - 属性节点：id=“div1”
+  - 文本节点： 文本
 
 ### 结点的获取
 
@@ -1935,14 +2059,14 @@ HTML DOM 属性是您能够设置或改变的 HTML 元素的值。
 - node.getElementsByTagName(标签名);
 通过标签名获取符合条件的元素节点，返回：伪数组
 
-```
+```js
 //获取ol下的li节点
 bar oOl=document.getElementById("ol1");
 var lis=oOl.getElementsByTagName("li");
 //返回的是数组
 ```
 
-- node.getElementsByClassName(class名);		
+- node.getElementsByClassName(class名);  
 通过class名字获取符合条件的元素节点；(IE8以下不兼容）
 
 - document.getElementByName(name属性的值);
@@ -1951,7 +2075,7 @@ var lis=oOl.getElementsByTagName("li");
 - document.querySelector(CSS选择器格式字符串);
 返回一个元素节点，找到符合条件的第一个元素节点
 
-```
+```js
 window.onload=function(){
 //id=ol1
 var node=document.querySelector("#ol1");
@@ -1964,34 +2088,22 @@ var node =document.querySelector(".box");
 node.style.backgroundColor='red';
 }
 ```
-```
+
+```js
 一、js获取子节点的方式
 1. 通过获取dom方式直接获取子节点
 
 其中test的父标签id的值，div为标签的名字。getElementsByTagName是一个方法。返回的是一个数组。在访问的时候要按数组的形式访问。
 
-1
 var a = document.getElementById("test").getElementsByTagName("div");
 2. 通过childNodes获取子节点
 
 使用childNodes获取子节点的时候，childNodes返回的是子节点的集合，是一个数组的格式。他会把换行和空格也当成是节点信息。
 
-1
 var b =document.getElementById("test").childNodes;
 为了不显示不必须的换行的空格，我们如果要使用childNodes就必须进行必要的过滤。通过正则表达式式取掉不必要的信息。下面是过滤掉
 
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
+
 //去掉换行的空格
 for(var i=0; i<b.length;i++){
   if(b[i].nodeName == "#text" && !/\s/.test(b.nodeValue)){
@@ -2008,26 +2120,21 @@ for(var i=0;i<b.length;i++){
 
 利用children来获取子元素是最方便的，他也会返回出一个数组。对其获取子元素的访问只需按数组的访问形式即可。
 
-1
 var getFirstChild = document.getElementById("test").children[0];
 5. 获取第一个子节点
 
 firstChild来获取第一个子元素，但是在有些情况下我们打印的时候会显示undefined，这是什么情况呢？？其实firstChild和childNodes是一样的，在浏览器解析的时候会把他当换行和空格一起解析，其实你获取的是第一个子节点，只是这个子节点是一个换行或者是一个空格而已。那么不要忘记和childNodes一样处理呀。
 
-1
 var getFirstChild = document.getElementById("test").firstChild;
 6. firstElementChild获取第一个子节点
 
 使用firstElementChild来获取第一个子元素的时候，这就没有firstChild的那种情况了。会获取到父元素第一个子元素的节点 这样就能直接显示出来文本信息了。他并不会匹配换行和空格信息。
 
-1
 var getFirstChild = document.getElementById("test").firstElementChild;
 7. 获取最后一个子节点
 
 lastChild获取最后一个子节点的方式其实和firstChild是类似的。同样的lastElementChild和firstElementChild也是一样的。不再赘余。
 
-1
-2
 var getLastChildA = document.getElementById("test").lastChild;
 var getLastChildB = document.getElementById("test").lastElementChild;
 一个包解决你所有的JS问题,点击获取
@@ -2037,56 +2144,48 @@ var getLastChildB = document.getElementById("test").lastElementChild;
 
 获取的是当前元素的直接父元素。parentNode是w3c的标准。
 
-1
 var p = document.getElementById("test").parentNode;
 2. parentElement获取父节点
 
 parentElement和parentNode一样，只是parentElement是ie的标准。
 
-1
 var p1 = document.getElementById("test").parentElement;
 3. offsetParent获取所有父节点
 
 一看offset我们就知道是偏移量 其实这个是于位置有关的上下级 ，直接能够获取到所有父亲节点， 这个对应的值是body下的所有节点信息。
 
-1
 var p2 = document.getElementById("test").offsetParent;
 三、js获取兄弟节点的方式
 1. 通过获取父亲节点再获取子节点来获取兄弟节点
 
-1
 var brother1 = document.getElementById("test").parentNode.children[1];
 2. 获取上一个兄弟节点
 
 在获取前一个兄弟节点的时候可以使用previousSibling和previousElementSibling。他们的区别是previousSibling会匹配字符，包括换行和空格，而不是节点。previousElementSibling则直接匹配节点。
 
-1
-2
 var brother2 = document.getElementById("test").previousElementSibling;
 var brother3 = document.getElementById("test").previousSibling;
 3. 获取下一个兄弟节点
 
 同previousSibling和previousElementSibling，nextSibling和nextElementSibling也是类似的。
 
-1
-2
 var brother4 = document.getElementById("test").nextElementSibling;
 var brother5 = document.getElementById("test").nextSibling;
 ```
+
 - document.querySelectorAll(CSS选择器格式字符串);
 返回一个数组
 
-
 ### 获取样式
 
-- node.currentStyle['height'];	//IE兼容
-- getComputedStyle(node)['height'];	//火狐、谷歌
+- node.currentStyle['height']; //IE兼容
+- getComputedStyle[node]('height'); //火狐、谷歌
 
 获取的是当前有效的样式
 
 - node.getAttribute("class");
 
-```
+```js
 //增加属性,支持自定义
 node.setAttribute("class","box");
 node.setAttribute("jjj","aaa");
@@ -2097,14 +2196,14 @@ node.removeAttribute("class");
 
 ### 获取内容
 
-- innerHTML 
+- innerHTML
 获取标签内容，写入时会解析标签
 - innerText
 获取标签间纯文本，不会解析标签
-- outerHTML 
+- outerHTML
 会替换整个标签
 
-```
+```js
 window.onload=function(){
 var odiv=document.getElementById("div1");
 
@@ -2117,7 +2216,7 @@ console.log(odiv.outerHTML);
 
 ### 获取子节点
 
-- childNodes 
+- childNodes
 访问当前节点下所有的子节点
 
 - firstChild
@@ -2138,7 +2237,6 @@ console.log(odiv.outerHTML);
 - nextElementSibling
 - previousElementSibling
 
-
 >上面这些属性只获取子节点中的元素节点，不包含文本。
 
 ||nodeType|nodeName|nodeValue|
@@ -2147,10 +2245,10 @@ console.log(odiv.outerHTML);
 |属性节点|2|属性名|属性值|
 |文本节点|3|#text|文本内容|
 
-```
+```js
 window.onload=function(){
 var oDiv=document.getElementById("div1");
-console.log(oDiv.childNodes.length);	//返回数组，里面为全部子元素，包括换行，缩进
+console.log(oDiv.childNodes.length); //返回数组，里面为全部子元素，包括换行，缩进
 console.log(oDiv.childNodes[0].nodeName);
 }
 <body>
@@ -2170,12 +2268,13 @@ console.log(oDiv.attributes);
 ```
 
 返回的是集合：
+
    1. 无序
    2. 不重复
 
 ### 获取其中的某一个属性节点
 
-```
+```js
 //div中title="hello"
 console.log(oDiv.attributes.getNamedItem("title").nodeName);
 console.log(oDiv.attributes.getNamedItem("title").nodeType);
@@ -2192,7 +2291,7 @@ console.log(oDiv.attributes["title"].nodeType);
 
 - createElement()
 
-```
+```js
 document.createElement();
 参数：标签名
 返回值：创建好的节点
@@ -2200,61 +2299,59 @@ document.createElement();
 
 - appendChild()
 
-```
+```js
 node1.appendChild(node2);
 将node2节点插入到node1节点的子节点的末尾
 ```
 
 - createTextNode()
 
-```
+```js
 document.createTextNode(文本);
 创建文本节点（纯文本）
 ```
 
 - insertBefore()
 
-```
+```js
 box1的父节点.insertBefore(box2,box1);
 将box2添加到box1前面
 ```
 
 - replaceChild()
 
-```
+```js
 box1的父节点.replaceChild(box2,box1);
 用box2替换掉box1
 ```
 
 - cloneNode()
 
-```
-node.cloneNode();	//克隆自己
-node.cloneNode(true);	//克隆自己和本身下的所有子节点
+```js
+node.cloneNode(); //克隆自己
+node.cloneNode(true); //克隆自己和本身下的所有子节点
 //返回克隆的新节点
 ```
 
 - removeChild()
 
-```
+```js
 box1的父节点.Child(box1);
 删掉box1节点
 ```
 
-
-
 实例
 
-```
+```js
 window.onload=function(){
-                var oDiv=document.getElementById("div1");	//div
-               var newP=document.createElement('p');		//创建一个新的p标签节点
-                var newText=document.createTextNode('jjjj');	//创建一个字符节点
-                newP.appendChild(newText);			//将字符节点插入到p节点中
-                oDiv.appendChild(newP);				//将p节点插入到div节点中
-		var newb=document.createElement('input');		//新建一个input节点
-                oDiv.insertBefore(newb,newP);			//将input节点添加到p节点前面
-		//doument.body.insertBefore(oP,oDiv);	//将oP节点插入到oDiv 前面
+                var oDiv=document.getElementById("div1"); //div
+               var newP=document.createElement('p');  //创建一个新的p标签节点
+                var newText=document.createTextNode('jjjj'); //创建一个字符节点
+                newP.appendChild(newText);   //将字符节点插入到p节点中
+                oDiv.appendChild(newP);    //将p节点插入到div节点中
+  var newb=document.createElement('input');  //新建一个input节点
+                oDiv.insertBefore(newb,newP);   //将input节点添加到p节点前面
+  //doument.body.insertBefore(oP,oDiv); //将oP节点插入到oDiv 前面
         }
 
 ```
@@ -2263,7 +2360,6 @@ window.onload=function(){
 
 - offsetWidth
 - offsetHeight
-
 
 - offsetLeft
 - offsetTop
@@ -2274,11 +2370,11 @@ window.onload=function(){
 
    3. 如果父元素不是body元素且设置了position属性时，offsetLeft为元素边框外侧到父元素边框内侧的距离（各浏览器情况一致）。
 
-```
+```js
 window.onload=function(){
 var oDiv=document.getElementById("div1");
 //alert(getStyle(ODiv,"width"));
-alert(oDiv.offsetWidth);	//眼睛能看到的实际宽度（width+border+padding）
+alert(oDiv.offsetWidth); //眼睛能看到的实际宽度（width+border+padding）
 
 var oDiv2=document.getElementById("div2");
 alert(oDiv2.offsetLeft);//眼睛能看到实际距离第一个有定位的父节点的距离。
@@ -2289,12 +2385,12 @@ alert(oDiv2.offsetLeft);//眼睛能看到实际距离第一个有定位的父节
 
 HTML 事件可以是浏览器或用户做的某些事情。
 
-
 写法：
+
 1. 内联模式
 2. 脚本模式/外联模式
 
-```
+```html
 <button onclick="btnClick()"> 内联模式</button>
 
 <button id="btn">外联模式</button>
@@ -2311,7 +2407,7 @@ console.log("click button");
 
 >系统会在事件绑定完成时，生成一个事件对象。触发事件时，系统会自动去调用事件绑定的函数，将事件对象当做第一个参数传入。
 
-```
+```js
 function show(){
 console.log(argument.length);
 }
@@ -2324,9 +2420,9 @@ var oBtn=document.getElement("btn1");
 button属性：左键0；中键1；右键2；
 
 鼠标位置：(原点位置不同）
-clientX    clientY		//可视窗口的左上角
-pageX    pageY			//整个页面的左上角（滚动也包括）
-screenX    screenY		//电脑屏幕的左上角
+clientX    clientY  //可视窗口的左上角
+pageX    pageY   //整个页面的左上角（滚动也包括）
+screenX    screenY  //电脑屏幕的左上角
 */
 
 oBtn.onclick=function(e){
@@ -2340,66 +2436,63 @@ console.log(ev);
 ```
 
 循环添加
-```
+
+```js
 var Oblock=document.querySelectorAll('div');
-			//console.log(Oblock);
-			for (var i=0 ;i< Oblock.length;i++){
-				Oblock[i].index=i;
-				Oblock[i].onmousedown=function(e){
-				console.log(this.index);
-				}
-			}
+   //console.log(Oblock);
+   for (var i=0 ;i< Oblock.length;i++){
+    Oblock[i].index=i;
+    Oblock[i].onmousedown=function(e){
+    console.log(this.index);
+    }
+   }
 ```
 
 - window事件
 
-   - load 当页面加载完后会触发
-   - unload 当页面解析的时候触发（如刷新界面、关闭当前界面）IE浏览器兼容
-   - scroll 页面滚动
-   - resize 窗口大小发生变化的时候触发
+  - load 当页面加载完后会触发
+  - unload 当页面解析的时候触发（如刷新界面、关闭当前界面）IE浏览器兼容
+  - scroll 页面滚动
+  - resize 窗口大小发生变化的时候触发
 
 - 表单事件
 
-   - blur 失去焦点
-   - focus 获取焦点
-   - select  在输入框内选中文本时触发
-   - change 修改输入框内容并失去焦点时触发
+  - blur 失去焦点
+  - focus 获取焦点
+  - select  在输入框内选中文本时触发
+  - change 修改输入框内容并失去焦点时触发
 
-   - sumit 只对sumit按钮有效
-   - reset 只对reset按钮有效
-
-
-
+  - sumit 只对sumit按钮有效
+  - reset 只对reset按钮有效
 
 下面是一些常见的 HTML 事件：
 
-|事件	|描述|
+|事件 |描述|
 |-|-|
-|onchange	|HTML 元素已被改变|
-|onclick	|用户点击了 HTML 元素|
-|ondblclick	|	 双击|
-|onmouseover	|用户把鼠标移动到 HTML 元素上(经过子节点会重复触发)|
-|onmouseout	|用户把鼠标移开 HTML 元素(经过子节点会重复触发)|
-|onmouseenter	|用户把鼠标移动到 HTML 元素上(经过子节点不会重复触发,IE8不兼容)|
-|onmouseleave	|用户把鼠标移开 HTML 元素(经过子节点不会重复触发,IE8不兼容)|
-|onmousedown	|鼠标任一按钮被按下|
-|onmousemove	|鼠标被移动,会不停触发|
-|onmouseup	|鼠标按键被松开|
-|onkeypress	|用户按下键盘按键(只支持字符建，shift等没用)|
-|onkeydown	|用户按下键盘按键|
-|onkeyup	|用户抬起键盘按键|
-|onload	|浏览器已经完成页面加载
-
+|onchange |HTML 元素已被改变|
+|onclick |用户点击了 HTML 元素|
+|ondblclick |  双击|
+|onmouseover |用户把鼠标移动到 HTML 元素上(经过子节点会重复触发)|
+|onmouseout |用户把鼠标移开 HTML 元素(经过子节点会重复触发)|
+|onmouseenter |用户把鼠标移动到 HTML 元素上(经过子节点不会重复触发,IE8不兼容)|
+|onmouseleave |用户把鼠标移开 HTML 元素(经过子节点不会重复触发,IE8不兼容)|
+|onmousedown |鼠标任一按钮被按下|
+|onmousemove |鼠标被移动,会不停触发|
+|onmouseup |鼠标按键被松开|
+|onkeypress |用户按下键盘按键(只支持字符建，shift等没用)|
+|onkeydown |用户按下键盘按键|
+|onkeyup |用户抬起键盘按键|
+|onload |浏览器已经完成页面加载
 
 键盘事件对象属性：
 
-- shiftKey	//按下shift键为true，默认为false
+- shiftKey //按下shift键为true，默认为false
 - altKey
 - ctrlKey
-- metaKey		//按下win键
-- keyCode	键码		//不区分大小写，只返回大写ASCII码，支持shift、ctrl等非字符键；只在keydown下支持,可用 which兼容
+- metaKey  //按下win键
+- keyCode 键码  //不区分大小写，只返回大写ASCII码，支持shift、ctrl等非字符键；只在keydown下支持,可用 which兼容
 
-```
+```js
 window.onload=function(){
 window.onkeydown=function(ev){
 var e=ev||window.event;
@@ -2409,10 +2502,9 @@ console.log(w);
 }
 ```
 
-- charCode		键码		//区分大小写，只支持字符键，只在keypress下支持,可用 which兼容
+- charCode  键码  //区分大小写，只支持字符键，只在keypress下支持,可用 which兼容
 
-
-```
+```js
 window.onload=function(){
 window.onkeypress=function(ev){
 var e=ev||window.event;
@@ -2422,13 +2514,12 @@ console.log(w);
 }
 ```
 
-
-- target	
+- target
 目标对象/触发对象
 
 IE8以下不兼容，可使用window.event.srcElement
 
-```
+```js
 window.onload=function(){
 var oUl=document.getElementById("ul1");
 
@@ -2447,7 +2538,7 @@ console.log(target.innerHTML);
 cancelBubble=true;
 stopPropagation();
 
-```
+```js
 window.onload=function(){
 var oDiv=document.getElementById("div1");
 for(var i=0;i<aDivs.length;i++){
@@ -2467,14 +2558,16 @@ e.cancelBubble=true;
 语法
 element.addEventListener(event, function, useCapture);
 第一个参数是事件的类型（比如 "click" 或 "mousedown"）。第二个参数是当事件发生时我们需要调用的函数。第三个参数是布尔值，指定使用事件冒泡还是事件捕获,默认false事件冒泡,此参数是可选的。
+
 >注意：请勿对事件使用 "on" 前缀；请使用 "click" 代替 "onclick"。
 
 实例
 
-```
+```js
 //添加当用户点击按钮时触发的事件监听器：
 document.getElementById("myBtn").addEventListener("click", displayDate);
 ```
+
 addEventListener() 方法为指定元素指定事件处理程序。addEventListener() 方法为元素附加事件处理程序而不会覆盖已有的事件处理程序。您能够向一个元素添加多个事件处理程序。您能够向一个元素添加多个相同类型的事件处理程序，例如两个 "click" 事件。传统事件绑定重复添加会覆盖。您能够向任何 DOM 对象添加事件处理程序而非仅仅 HTML 元素，例如 window 对象。addEventListener() 方法使我们更容易控制事件如何对冒泡作出反应。当使用 addEventListener() 方法时，JavaScript 与 HTML 标记是分隔的，已达到更佳的可读性；即使在不控制 HTML 标记时也允许您添加事件监听器。
 
 您能够通过使用 `removeEventListener()` 方法轻松地删除事件监听器。
@@ -2482,22 +2575,19 @@ addEventListener() 方法为指定元素指定事件处理程序。addEventListe
 格式：`node.removeEvenetListener()`
 参数：第一个为事件类型，第二个为删除函数的名字；
 
-
 #### IE事件处理函数
 
 - attachEvent();
 参数：事件名称和函数
 格式：node.attchEvent(onclink,fn);
 
-
 - detachEvent();
 参数：事件名称和函数
 格式：node.detachEvent(onclink,fn);
 
-
 - 阻止超链接的默认行为
 
-```
+```js
 window.onload=function(){
 var a1=document.getElementById("a1");
 a1.onclick=function(){
@@ -2510,7 +2600,7 @@ alert("done");
 }
 //or
 a1.onclick=function(evt){
-window.event.returnValue=false;			//IE兼容
+window.event.returnValue=false;   //IE兼容
 alert("done");
 }
 
@@ -2520,12 +2610,14 @@ alert("done");
 ### 委托
 
 事件委托
+
    1. 找到当前节点的父节点或者祖先节点
    2. 将事件添加到你找到的这个父节点或者祖先节点上
    3. 找到触发对象，判断触发对象是否是想要的触发对象，进行后续操作
 
 li委托ul将li变成红色：
-```
+
+```js
 window.onload=function(){
 var oUl=document.getElementById("ul1");
 oUl.onclick=function(ev){
@@ -2538,7 +2630,6 @@ target.style.backgroundColor="red";
 }
 ```
 
-
 ### localStorage
 
 HTML5中年，加入了一个localStorage特性，用来作为本地存储使用的，解决了cookie存储空间不足的问题。localStorage中一般浏览器支持5M大小，cookie中每条cookie的存储空间为4k。
@@ -2546,16 +2637,16 @@ HTML5中年，加入了一个localStorage特性，用来作为本地存储使用
 - 本地存储技术：
 
 *localStorage(IE8以下不兼容);*
-   
-   - 永久存储
-   - 最大可存储5M，相当于客户端一个微型数据库
-   - 只能存储string
+
+- 永久存储
+- 最大可存储5M，相当于客户端一个微型数据库
+- 只能存储string
 
 - localStorage对象
 
-   - setItem(name,value);
+  - setItem(name,value);
 
-```
+```js
 if(!window.localStorage){
 alert("当前页面不支持localStorage");
 }
@@ -2563,23 +2654,22 @@ else{
 localStorage.setItem("a","1");
 localStorage.b="2";
 localStorage["c"]="3";
-console.log(localStorage.getItem("b");
-console.log(localStorage.b;
-console.log(localStorage["a"];
+console.log(localStorage.getItem("b"));
+console.log(localStorage.b);
+console.log(localStorage["a"]);
 }
 ```
 
-   - getItem(name);
-   - removeItem(name);
-
+- getItem(name);
+- removeItem(name);
 
 *cookie*
 
 会话跟踪技术,从一次会话开始到结束（浏览器的关闭），会全程跟踪记录客户端的状态，记录相关信息
 
-   - 可设置过期时间
-   - 最大可存储4KB
-   - 每一个域名下最多可存储50条数据
+- 可设置过期时间
+- 最大可存储4KB
+- 每一个域名下最多可存储50条数据
 
 >只能存储字符串
 
@@ -2588,9 +2678,9 @@ console.log(localStorage["a"];
 name 键；value 值，都可自定义
 `name=value;expires=date;path=path;domain=url;secure，其中name=value必选，剩余的可选`
 
-   1. expires:过期时间，填写日期对象。系统会自动清理过期的cookie
+   1. expires/max-age:过期时间，填写日期对象。系统会自动清理过期的cookie
 
-```
+```js
 funciton afterOffDate(n){
 var d=new Date();
 var day=d.getDate();
@@ -2603,104 +2693,304 @@ document.cookie="user='xxx';expires="+afterOffDate(7);
    2. path 限制访问路径，如果不设置默认加载当前.html文件的路径；
    3. domain 限制访问域名，如果不设置默认加载当前文件.html文件的服务器域名
    4. secure 加入这个字段后只能设置https协议加载cookie；
+   5. httpOnly cookie的值不能修改；
+
 >火狐浏览器支持本地加载的文件缓存cookie，谷歌只支持服务器加载文件缓存cookie
 
-```
+```js
+
+//客户
 //设置cookie
-document.cookie='username=xxx';
+document.cookie='username=xiaomi';
 //读取cookie
 console.log(document.cookie);
+
+
+//服务端设置
+//在响应头中set-cookie
 ```
+
 - cookie编解码
 
+```js
+document.cookie="name1="+encodeURIComponent("小明"); //编码写入
+console.log(decodeURIComponent(document.cookie); //解码读取
 ```
-document.cookie="name1="+encodeURIComponent("小明");	//编码写入
-console.log(decodeURIComponent(document.cookie);	//解码读取
-```
-
 
 *sessionStorage(结合后台使用)*
 
-
 #### ES6 新特性
 
-- 中括号解析
+##### 函数默认值
 
+```js
+//es5
+function test(a,b){
+   a=a||10;
+   b=b||10;
+   return a+b
+}
+//es6
+function test(a=10,b=10){
+   return a+b
+}
 ```
+
+##### 函数参数
+
+```js
+//es5
+function test(args){
+   console.log(arguments);
+}
+
+//es6
+function test(a,...args){
+   console.log(args)
+}
+test(1,2,3,4,5)
+```
+
+##### 箭头函数
+
+- 没有自己的this
+- 内部没有arguments
+- 不能使用new 关键词实例化对象
+- function 是对象，箭头函数不是对象，是表达式,
+
+```js
+let test=()=>{}
+```
+
+##### 扩展运算符号
+
+```js
+let arr=[1,2,3]
+let obj={
+   name:'xxx',
+   age:10
+}
+console.log(...arr)
+console.log(...obj)
+```
+
+##### 解构赋值
+
+```js
 var [x,y,z]=[1,"dd",false];
 //相当与
 var x=1,y="dd",z=fase;
+
 //还可以
-var [x,[a,b],y]=[10,[10,"dd"],"a"];
+const [x,[a,b],y]=[10,[10,"dd"],"a"];
+
 //交换两数方便
-var [x,y]=[1,2];
+const [x,y]=[1,2];
 [x,y]=[y,x];
+
 //函数可一次性返回多个数据
 function xxx(){
-return ["jj",3,true];
+   return ["jj",3,true];
 }
-var [a,b,c]=xxx();
-```
+const [a,b,c]=xxx();
 
-- 大括号解析
 
-```
 //不用按循序赋值
-var {name,age,sex}={
-sex:"男",
-name:"xiaomi",
-age:11
+const {name,age,sex:x,...res}={
+   sex:"男",
+   name:"xiaomi",
+   age:11,
+   school:'xx'
 }
+console.log(name,age,x)
 ```
 
 - 反引号
 
-   - 可用反引号代替单双引号括起字符串。其中的换行、代码缩进都会保留。
-   - 拼接字符串时可用`${变量/表达式/函数}`代替`+''+`
+  - 可用反引号代替单双引号括起字符串。其中的换行、代码缩进都会保留。
+  - 拼接字符串时可用`${变量/表达式/函数}`代替`+''+`
 
-- Array.from()
+##### Array.includes()
 
-将伪数组转换为真数组
-
+```js
+let a=[1,2,3,4]
+a.includes(5)//false
 ```
+
+##### Array.from()
+
+将伪数组（没有真数组身上的方法）转换为真数组
+
+```js
 var aLid=document.getElementById("li1");
-aLis=Array.from(aLis);
+let aLis=Array.from(aLis);
 aLis.push("test");
+
+//第二个参数
+
+let aLis=Array.from(aLis,item=>item);
+
+//可使用扩展运算符，转为真数组
+let list=[...aLid]
 ```
 
-- Set();集合
+##### Array.of()
 
-特点：
-   1. 不重复
-   2. 无序
+将一组的值，转换为数组
 
+```js
+Array.of(3,11,'xx',{name:'xx'},[1,2])
 ```
+
+##### Symbol
+
+>原始数据类型，表示独一无二的值(内存地址不同)
+>用于定义对象的私有变量
+
+```js
+const name=Symbol('xx')
+const name2=Symbol('xx')
+console.log(name===name2)//false
+
+
+let obj={}
+obj[name]=name
+//必须使用中括号
+//无法遍历,不可枚举
+console.log(obj[name])
+
+//可通过以下获取key
+let s=Object.getOwnPropertySysmbols(obj)
+console.log(s)
+let m=Reflect.ownKeys(obj)
+console.log(m)
+```
+
+##### 迭代器Iterator
+>
+>新的遍历机制
+
+```js
+let arr=['1','2','3']
+//创建迭代器
+const ite=arr[Symbol.iterator]()
+console.log(ite.next())//{value:'1',done:false}
+console.log(ite.next())//{value:'2',done:false}
+console.log(ite.next())//{value:'3',done:false}
+console.log(ite.next())//{value:undefined,done:true}
+```
+
+##### 生成器generator
+>
+>通过yield关键字，将函数挂起,暂停执行
+>只能在函数内部使用yield表达式，将函数挂起
+
+```js
+function* test(){
+   console.log('one')
+   yield 1;
+   console.log('two')
+   yield 2;
+   console.log('end')
+   return a+b
+}
+let fn=test()
+console.log(fn.next())//one \n {value:'1',done:false}
+console.log(fn.next())//two \n {value:'2',done:false}
+console.log(fn.next())//end \n {value:undefined,done:true}
+```
+
+```js
+ //赋值
+function* test(x){
+   console.log('one',x)
+  let a= yield 1;
+   console.log('two',a)
+   yield 2;
+   console.log('end',b)
+   return a+b
+}
+let fn=test(999)
+console.log(fn.next())//one 999 \n {value:'1',done:false}
+console.log(fn.next(10))//two 10 \n {value:'2',done:false}
+console.log(fn.next(20))//end 20 \n {value:30,done:true}
+```
+
+>用于给不具备interator接口的对象提供遍历操作
+>用于解决回调地域
+
+```js
+//for...of.. foreach 不能遍历对象
+//for...of..只能遍历带有iterator迭代器接口的,for...of底层利用iterator迭代器实现，遍历时会调用自身的next方法，让yield向下执行
+//使用生成器，遍历对象
+function* aobjectEntries(obj){
+   const keys=Object.keys(obj)
+   for(let i of keys){
+      yield [i,obj[i]]
+   }
+}
+
+const obj={name:'xx',age:10};
+obj[Symbol.iterator]=objectEntries;
+
+for(let [key,value] of objectEntries(obj))
+{
+   console.log(key,value)
+
+}
+```
+
+##### 新数据类型：Set集合(无重复值的有序列表)
+
+```js
 let imgs= new Set();
 //添加元素
 imgs.add(100);
 imgs.add(100);
 imgs.add("ddd");
+imgs.delete(100)
+imgs.has(100)//false
 imgs.add(new String("ddd"));
-console.log(imgs);
+imgs.forEach((val,key)=>{
+   //键值是相等的
+   console.log(val)
+   console.log(key)
+})
+console.log(imgs,imgs.size);
+
+//set中的对象引用无法被释放
+let set3=new Set()
+let obj={name:'xx'}
+set3.add(obj)
+obj=null
+
+//使用WeakSet代替
+let set3=new WeakSet()
+set3.add(obj)
+obj=null
+//它不能传入非对象类型的参数
+//不能遍历
+//没有size属性
+
 ```
 
 遍历集合`for....of`
 
-```
-for(let item of imgs.keys()){	//遍历键
+```js
+for(let item of imgs.keys()){ //遍历键
 console.log(item);
 }
-for(let item of imgs.values()){		//只遍历值
+for(let item of imgs.values()){  //只遍历值
 console.log(item);
 }
-for(let item of imgs.entries()){   	//遍历键与值
+for(let item of imgs.entries()){    //遍历键与值
 console.log(item);
 }
 ```
 
 数组与集合互转
 
-```
+```js
 //数组变集合
 var set=new Set([3,2,4,5,6,1,3,4]);
 console.log(set);
@@ -2709,16 +2999,17 @@ var arr = [...set];
 console.log(arr);
 ```
 
+##### Map映射(键值对的有序列表，键值可以是任意类型)
 
-- Map();映射
-
-```
+```js
 let map=new Map();
 //添加数据
 map.set("Tom","fishman");
 map.set("Jack","woker");
 map.set("Sim","teacher");
 map.set("Jack","bussnessman");
+map.delete('Sim')
+map.has('Sim')
 console.log(map);
 //取值
 console.log(map.get("Tom"));
@@ -2727,20 +3018,20 @@ for(let [key,value] of map){
 console.log(key,value);
 }
 ```
+
 >遍历：数组[for循环、for...in、foreach、for...of],对象[for...in]，set[for...of],map[for...pf];
 
-
-- 构造函数
-
+##### 构造函数
 
 我们某一个函数，使用new运算符去调用
+
    1. 当前函数中的this指向新创建的对象
    2. 自动完成原料和出厂操作
 这种通过new调用函数，叫做构造函数(首字母一般大写)，其可构造对象，
 
-```
+```js
 function createPerson(name,sex){
-var obj=new Object();	//原料
+var obj=new Object(); //原料
 //加工
 0bj.name=name;
 obj.sex=sex;
@@ -2750,25 +3041,25 @@ console.log(this.name);
 obj.showSex=functin(){
 console.log(this.sex);
 }
-return obj;	//出厂
+return obj; //出厂
 }
 var p1=createPerson("Tom","man");
 p1.showName();
 p1.showSex();
 ```
 
-- prototype 原型对象
+##### prototype 原型对象
 
 每一个函数上，都一个原型对象prototype
 
-```
+```js
 function show(){
 }
 console.log(show.prototype);
 ```
 
-
 用在构造函数上，我们可以给构造函数的原型prototype，添加方法
+
    1. 如果我们将方法添加到构造函数的原型prototype对象上
    2. 构造函数构造出来的对象共享原型上所有的方法
 
@@ -2776,7 +3067,7 @@ console.log(show.prototype);
 
 instanceof关键字，判断某一个对象是否是这个构造函数构造出来的。
 
-```
+```js
 var arr1=[3,32,4,1,45];
 var arr2=[4,3,2,1];
 Array.prototype.sum=function(){
@@ -2797,21 +3088,35 @@ console.log(arr1.sum==arr2.sum);
 继承侧重是从父一级构造函数，继承到属性和方法；
 多态侧重的是子一级自己重写和新增的属性和方法;
 
-
-
 #### ECMA6 class语法
 
+```js
+//es5
+function Person(name,sex,age){
+   this.name=name;
+   this.sex=sex;
+   this.age=age;
+}
+Person.prototype.sayName=function(){
+   return this.name
+}
+
+let p1=new Person('xiaomi','man',10)
+console.log(p1)
 ```
+
+```js
+//es6
 class preson{
 //class属性添加。
+//实例化的时候立即调用
 constructor(name,sex,age){
-this.name=xxx;
-this.sex=sex;
-this.age=age;
-
-showself(){
-console.log(`${this.name},${this.age}`);
-}
+   this.name=xxx;
+   this.sex=sex;
+   this.age=age;
+   showself(){
+      console.log(`${this.name},${this.age}`);
+   }
 }
 
 var p1=new person("Tony","man",33);
@@ -2819,16 +3124,24 @@ p1.showself();
 
 //extends继承
 class worker extends person{
-constructor(name,sex,age,job){
-//继承到父一级的属性
-super(name,sex,age);
-this.job=job;
+   constructor(name,sex,age,job){
+   //继承到父一级的属性
+   super(name,sex,age);//要写在最前面
+   this.job=job;
+   //子类自己的方法
+   sayName(){
+      console.log(this.name)
+   }
+   //重写父类方法
+   showself(){
+      console.log('xx')
+      super.showself()
+   }
 }
 
 ```
 
-
-```
+```js
 function person(name,sex,age){
 this.name=name;
 this.sex=sex;
@@ -2862,10 +3175,66 @@ console.log(this.job);
 var w1=new worker("Tom","man",22,"driver");
 ```
 
----
-## 触发input-file的click事件：`document.querySelector('#file').click()`
-## 清空input-file值:
+##### promise
+
+```js
+let p=new Promise((resolve,reject)=>{
+   //异步操作
+})
+p.then(res=>{},err=>{}).catch(err=>{})
+//then()，第一个参数时resolve回调函数，第二个是reject回调函数，可选．
+//catch(err=>{})等价于then(null,err=>{})
+
+//resolve()方法,将现有的任何对象转化为promise对象
+//reject()方法,将现有的任何对象转化为promise对象
+let p1=Promise.resolve('123')
+let p2=Promise.reject('123')
+p1.then(val=>{
+   //val==123
+//等价于new Promise(resolve=>resolve('123'))
+})
+
+
+
+//all(),所有异步操作都成功才成功，只要有一个失败就都失败
+let p3=new Promise((resolve,reject)=>{})
+let p4=new Promise((resolve,reject)=>{})
+let p5=Promise.all([p3,p4])
+p5.then()
+
+//race(),返回多个promise中最先执行完成的那个promise，无论成功还是失败
+let p6=Promise.race([p3,p4])
+p6.then()
+
+//finally()，不管成功失败都会执行
+//done()
+p1.then(res=>{},err=>{}).finally(()=>{})
+
 ```
+
+
+##### async 异步操作
+
+```js
+//async返回一个promise对象
+//async 是generator的语法糖
+async function test(){
+   return await '123'
+   //throw new Error('err')
+}
+test().then(val=>{
+   //val=='123'
+})
+```
+
+
+---
+
+## 触发input-file的click事件：`document.querySelector('#file').click()`
+
+## 清空input-file值
+
+```js
 //1.###
 var test = document.getElementById('test');
 test.value = '';  //test的value不能设为有字符的值，但是可以设置为空值
@@ -2874,13 +3243,17 @@ test.value = '';  //test的value不能设为有字符的值，但是可以设置
 var test = document.getElementById('test');
 test.outerHTML = test.outerHTML; //重新初始化了test的html
 ```
-## switch case语句:
-```
+
+## switch case语句
+
+```js
 switch (value){
     case value1:  xxxxx  // 当表达式的结果等于 value1 时，则执行该代码
         break;
     default :  xxxxxxxx // 如果没有与表达式相同的值，则执行该代码
 }
 ```
-## js时间戳转换成日期的方法：`(new Date(parseInt(n))).toLocaleDateString() `
-##  获取地址栏地址：window.location.href。
+
+## js时间戳转换成日期的方法：`(new Date(parseInt(n))).toLocaleDateString()`
+
+## 获取地址栏地址：window.location.href

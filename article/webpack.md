@@ -23,7 +23,7 @@ categories:
 
 让webpack能够去处理那些非js文件
 
-### Plugins 
+### Plugins
 
 用于执行范围更广的任务，如打包优化，压缩等
 
@@ -31,19 +31,17 @@ categories:
 
 指示webpack使用相应模式的配置
 
-- development	本地开发模式
+- development本地开发模式
 
 会将`process.env.NODE_ENV`的值设为development;启用NamedChunksPlugin和NamedModulesPlugin
 
 开发环境：`webpack ./src/index.js -o ./build/built.js --mode=development`;webpack会以./src/index.js为入口文件开始打包，输出到./build/built.js
 
-- production	上线生产模式
+- production上线生产模式
 
 会将`process.env.NODE_ENV`的值设为production;启用FlagDependencyUsagePlugin,FlagIncludedChunksPlugin,ModuleConcatenationPlugin,NoEmitOnErrorsPlugin,OccurrenceOrderPlugin,SideEffectsFlagPlugin,UglifyJsPlugin；
 
-
 生产环境：`webpack ./src/index.js -o ./build/built.js --mode=production`;webpack会以./src/index.js为入口文件开始打包，输出到./build/built.js
-
 
 1. webpack能处理js/json文件，不能处理css、img等其他文件
 2. 生产环境和开发环境会将es6模块化编译成浏览器能识别的模块化
@@ -77,7 +75,7 @@ path: resolve(__dirname,'build')
 
 //loader配置
 module:{
-rules:[	//loader配置
+rules:[ //loader配置
 
 {
 //匹配哪些文件
@@ -111,9 +109,9 @@ test:/\.(jpg|png|gif)$/,
 //使用一个loader
 loader:'url-loader',
 options:{
-limit:8*1024,		//图片小于8kb,会被处理成base64，减少请求数量，减轻服务器压力，但图片体积会更大
-esModule:false,		//关闭url-loader的es6模块化，使用commonjs解析，避免解析时出现[object Module]
-name:'[hash:10].[ext]',		//给图片重新命名，提取图片hash的前10位，扩展名为ext
+limit:8*1024,  //图片小于8kb,会被处理成base64，减少请求数量，减轻服务器压力，但图片体积会更大
+esModule:false,  //关闭url-loader的es6模块化，使用commonjs解析，避免解析时出现[object Module]
+name:'[hash:10].[ext]',  //给图片重新命名，提取图片hash的前10位，扩展名为ext
 }
 },
 
@@ -125,7 +123,7 @@ loader:'html-loader'
 
 {
 //打包其他资源
-exclude:/\.(css|js|html|less)$/,	//排除css、js、html
+exclude:/\.(css|js|html|less)$/, //排除css、js、html
 loader:'file-loader',
 opetions:{
 name:'[hash:10].[ext]'
@@ -139,7 +137,7 @@ test:/\.js$/,
 exclue:/node_modules/,
 loader:'eslint-loader',
 options{
-fix:true	//自动修复eslint的错误
+fix:true //自动修复eslint的错误
 }
 },
 
@@ -154,7 +152,7 @@ exclude:/node_modules/,
 /*
 当一个文件需要多个loader处理时，需要指定loader执行的先后顺序
 */
-enforce:'pre',	//优先执行
+enforce:'pre', //优先执行
 loader:'babel-loader',
 options:{
 //预设：指示babel做怎样的兼容处理
@@ -215,9 +213,9 @@ plugins:[
 new HtmlWebpackPlugin({
 //复制‘./src/index.html’文件，并自动引入打包输出的所有文件资源
 template:'./src/index.html',
-minify:{	//压缩html代码
-collapseWhitespace:true,	//移除空格
-removeComments:true		//移除注释
+minify:{ //压缩html代码
+collapseWhitespace:true, //移除空格
+removeComments:true  //移除注释
 }
 }),
 
@@ -250,21 +248,22 @@ open:true,
 }
 
 ```
+
 - package.json
 
 ```
 ...
-"browserslist":{		//兼容的浏览器版本
+"browserslist":{  //兼容的浏览器版本
 //默认匹配生产环境，可通过修改process.env.NODE_ENV=developent来改变
-	"developent":[
-		"last 1 chrome version",
-		"last 1 firefox version",
-	],
-	"production":[
-		">0.2%",
-		"not dead",
-		"not op_mini all"	
-		]
+ "developent":[
+  "last 1 chrome version",
+  "last 1 firefox version",
+ ],
+ "production":[
+  ">0.2%",
+  "not dead",
+  "not op_mini all" 
+  ]
 },
 
 "eslintConfig":{
@@ -281,7 +280,6 @@ import './index.css'
 import '@babel/polyfill'
 ```
 
-
 ## 性能优化
 
 ### 开发环境优化
@@ -291,6 +289,7 @@ import '@babel/polyfill'
 HMR:模块热替换;当模块发生变化时，只会重新打包这个模块，而不是打包全部模块。
 
  package.json
+
 ```
 ...
 devServer:{
@@ -299,18 +298,21 @@ devServer:{
 hot:true
 }
 ```
-   - 样式文件:可以使用hmr功能：style-loader内部实现了
-   - js文件：默认不能使用hmr功能,解决办法：修改js代码，添加支持hmr功能的代码，但只能处理非入口js文件的其他文件。
+
+- 样式文件:可以使用hmr功能：style-loader内部实现了
+- js文件：默认不能使用hmr功能,解决办法：修改js代码，添加支持hmr功能的代码，但只能处理非入口js文件的其他文件。
 index.html
+
 ```
 if(module.hot){
-module.hot.accept('./test.js',function(){});	//监听test.js的变化，若变化则执行回调函数
+module.hot.accept('./test.js',function(){}); //监听test.js的变化，若变化则执行回调函数
 }
 ```
 
-   - html文件：默认不能使用hmr功能,解决办法：修改entry，将html文件引入
+- html文件：默认不能使用hmr功能,解决办法：修改entry，将html文件引入
 
 webpack.config.js
+
 ```
 module.exports={
 entry:['./src/js/index.js','./src/index.html'],
@@ -319,15 +321,12 @@ output:{...},
 }
 ```
 
-
 - 代码调试
 
 ### 生成环境优化
 
 - 打包构建速度
 - 代码运行的性能
-
-
 
 source-map:一种提供源代码到构建后代码映射的技术，用于检测源代码的错误
 种类：
@@ -357,7 +356,6 @@ source-map:一种提供源代码到构建后代码映射的技术，用于检测
 生产环境：内联会让代码体积变大，所以不用内联，源代码要不要隐藏（nosource-source-map全部隐藏，hidden-source-map只隐藏源代码，会提示构建后代码错误信息）
 所以选择source-map/cheap-module-souce-map
 
-
 ## oneOf
 
 ```
@@ -372,8 +370,12 @@ use:[...commonCssLoadder]
 {}
 ]
 ```
+
 ---
+
 1. webpack打包后打开index.html无内容出现空白页面：修改webpack配置，在util.js中的`fallback:'vue-style-loader',`下面增加publicPath:'../../'，修改config/index.js，增加build：{ assetsPublicPath:'./'}。另外，！路由模式改为hash模式
 2. 界面正常显示但出现cannot read property xxx of undefined（不能读取xxx属性）的问题：在渲染页面时，则会直接读取初始时的数据，若数据初始时为空，则容易出现错误。而请求是异步的，请求的数据会在页面首次渲染后才会发起
+
 - webpack设置服务器代理在config目录下的index.js中配置
+
 1. 保留eslint的语法检测把不符合自己习惯的规则去掉，可配置文件在项目根目录里以 .eslintrc.* 命名的文件。关闭方法，则是把 build/webpack.base.conf.js 配置文件中的eslint rules注释掉即可

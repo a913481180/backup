@@ -65,12 +65,12 @@ const vu= new Vue({
   - 单向数据绑定：数据只能从 data 流向页面;
   `v-bind:href="xxx"`或简写为`:href="xxx"`
   - 双向数据绑定：数据能从 data 流向页面,也能从页面流向 data，默认绑定value
-  `v-model:value="xxx"`或简写`v-model="xxx"`。`v-model`指令只能用在表单类（输入类 input、select）元素上,`v-model`的三个修饰符：`lazy`失去焦点在收集数据，`number`输入的字符串转为有效数字，`trim`去除首尾的空格
+    `v-model:value="xxx"`或简写`v-model="xxx"`。`v-model`指令只能用在表单类（输入类 input、select）元素上,`v-model`的三个修饰符：`lazy`失去焦点在收集数据，`number`输入的字符串转为有效数字，`trim`去除首尾的空格
 
     ```html
     <!--输入框-->
     <input type="text"  v-model.trim="keyWords/>
-
+    
     <!--单选框，要加上value属性-->
     <input type="radio" v-model="radio" value="radio1" name="test" />    
     <input type="radio" v-model="radio" value="radio2" name="test" />    
@@ -541,6 +541,25 @@ components:{
 //全局注册组件
 Vue.component('xuexiao',school);
 ```
+
+```js
+import App from './compoents/App.vue'
+const vm =new Vue({
+components:{App},
+render:h=>h('App')
+})
+```
+
+```js
+import App from './compoents/App.vue'
+const vm =new Vue({
+render:h=>h(App)
+})
+```
+
+
+
+
 
 使用组件
 

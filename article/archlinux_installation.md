@@ -380,6 +380,8 @@ Server = https://mirror.kamtv.ru/manjaro/stable/$repo/$arch
     - 安装:`pacman -S gnome gnome-extra`
     - 配置: `vim .xinitrc`，添加`exec gnome-session`
   - lxde(轻量)：
+    - 安装:`pacman -S lxde`
+    - 配置: `vim .xinitrc`，添加`exec startlxde`
 
 ## 蓝牙服务
 
@@ -521,6 +523,7 @@ amixer sset Headphone unmute
 |pacman -Qs 名称|查看已安装的软件|
 |pacman -R 包名|删除软件，保留依赖|
 |pacman -Rs 包名|删除软件，和其他没有被引用的依赖|
+|pacman -Rdd 包名|删除软件，及依赖它的软件|
 |pacman -Sc|清空软件包缓存|
 |pacman -Scc|清空所有缓存|
 |pacman -R $(pacman -Qdtq)|清楚系统中的无用包|
@@ -537,8 +540,11 @@ amixer sset Headphone unmute
 |pacman -Ps|查看系统包安装信息|
 
 ## 其他软件
+
 ### 官网
+
 - [listen1](http://listen1.github.io/listen1/)
+
 ### pacman
 
 - 男人：`man`
@@ -561,13 +567,15 @@ amixer sset Headphone unmute
 ### [aur](https://aur.archlinux.org/)
 
 - 谷歌:`google-chrome`（root用户无法启动）
-- markdown:`remarkable`
+- markdown:`typora-free-cn`,`remarkable`
 - vscode:`visual-studio-code-bin`（root用户无法启动）
 - wps：`wps-office`
 - qq:`linuxqq`
 - 腾讯会议：`wemeet-bin`
 - 微信：`wechat-uos`
 - 飞书：`feishu-bin`
+- 迅雷：`xunlei-bin`
+
 ## 触摸板
 
 - 安装驱动：`libinput`，`xf86-input-libinput`
@@ -657,6 +665,27 @@ acpi_backlight=none
 - 更新数据库：`sudo debtap -u`
 - 转化deb包：`debtap xxx.deb`
 - 安装：`sudo pacman -U xxxx.pkg`
+
+### 文件管理工具
+
+安装： `sudo pacman -S dolphin breeze`
+ 文件预览：
+
+- kdegraphics-thumbnailers: Image files, PDFs and Blender application files.
+- kimageformats: Gimp .xcf files
+- libheif: HEIF files
+- qt5-imageformats : .webp, .tiff, .tga, .jp2 files
+- resvgAUR: Fast and accurate SVG image thumbnails
+- kdesdk-thumbnailers: Plugins for the thumbnailing system
+- ffmpegthumbs: Video files (based on ffmpeg)
+- raw-thumbnailerAUR: .raw files
+- taglib : Audio files
+- kde-thumbnailer-apkAUR: Android package files
+Enable preview showing of required file type in`Settings > Configure Dolphin... > General > Previews.`
+
+To enable `heif/heic image thumbnails`, edit `/usr/share/kservices5/imagethumbnail.desktop` by adding `image/heif;` to the line which starts with `MimeType=`.
+
+Note that heif/heic thumbnails will be enabled by default on versions of `kio-extras` after 21.12
 
 ### 设置
 

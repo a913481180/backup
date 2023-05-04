@@ -53,7 +53,7 @@ ReactDOM.render(Vdom,document.getElementById('test'));
 
 ## JSX
 
-> javascript XML,react 定义的类似与 XML 的 js 扩展语法
+> javascript XML,react 定义的类似与 XML 的 js 扩展语法，脚手架通过@babel/plugin-transform-react-jsx包解析成React.createElemnt('h1',{className:'test'},'xx')函数
 
 xml：早期用于存储和传输数据的格式
 
@@ -96,6 +96,62 @@ const Vdom=(
 
 - 标签首字符为小写则直接转为 html 中同名元素，若为大写则去渲染对应组件
 
+### 列表渲染
+
+```jsx
+return (
+  <ul>
+  {list.map(item=><li key={item.id}>item.name</li>)}
+  </ul>
+)
+```
+
+### 条件渲染
+
+三元表达式，逻辑&&||运算，函数
+
+```jsx
+const isTrue=false
+const genSpan=(i)=>{
+  if(i){
+    return <span>x</span>
+  }else{
+    return <b>x</b>
+  }
+}
+return (
+  <div>
+  {isTrue&&<span>xx</span>}
+  {isTrue?<span>xx</span>:<b>xx</b>}
+  {genSpan(isTrue)}
+  </div>
+)
+```
+
+## 样式控制
+
+- 内联
+
+```jsx
+const style={color:'red'}
+return 
+<>
+<div style={{color:'red'}}>xx</div>
+<div style={style}>xx</div>
+</>
+```
+
+- 类名
+不能用对象和数组，只能是字符串
+
+```jsx
+return 
+<>
+<div className='test'>xx</div>
+<div className={isTrue?'test':''}>xx</div>
+</>
+```
+
 ## 组件和模块
 
 模块：提供特定功能的 js 程序
@@ -103,10 +159,11 @@ const Vdom=(
 
 ### 函数式组件
 
-```
+```jsx
 function Demo(){  //组件必须首字母大写
 //this 为undefind,经过babel编译后开启严格模式，this便指向undefind，不开启严格模式则是window
 return <h1>test</h1>
+//必须有返回值，若没有内容返回null
 }
 
 ReactDOM.render(<Demo/>,document.getElementById('test'))
@@ -117,16 +174,16 @@ ReactDOM.render(<Demo/>,document.getElementById('test'))
 
 #### 简单组件
 
-```
+```jsx
+//在Demo的原型对象上
 class Demo extends React.Component{
-render(){//在Demo的原型对象上
-//this指向Demo的实例对象
-return <h1>test</h1>
+  render(){//必须提供render,极其返回值
+      //this指向Demo的实例对象
+    return <h1>test</h1>
+  }
 }
-}
-ReactDOM.render(<Demo/>,document.getElementById('test'))
 //react解析组件标签,找到Demo组件，发现此组件是类定义的，便new 出该类实例，通过该实例调用原型对象上的render方法。将虚拟dom渲染成真实dom
-
+ReactDOM.render(<Demo/>,document.getElementById('test'))
 ```
 
 #### 复杂组件
@@ -134,96 +191,136 @@ ReactDOM.render(<Demo/>,document.getElementById('test'))
 ##### state
 
 > state 为组件的重要属性，值是对象，通过更新组件的 state 来更新对应的页面显示（重新渲染组件）
+>
+###### 传统写法
 
-```
+```jsx
 class Demo extends React.Component{
-constructor(prop){
-super(prop)
-this.state={
-a:1,
-b:2
-}
-//改变t
-this.changValue=this.changValue.bind(this)
+  constructor(prop){
+    super(prop)
+    this.state={
+      a:1,
+      b:2
+    }
+  }
+ changValue(){
+ //类中的方法默认开启局部严格模式
+ //所以this为undefind
+ //只有通过Demo实例调用此实例，this才为Demo的实例
+ //changeValue作为onClick的回调，不是实例调用
+  }
+  render(){
+    return (
+      <h1 onClick={test}>test{this.state.a}</h1>
+      <h1 onClick={this.changeValue}>test{this.state.b}</h1>
+    )
+  }
+ 
 }
 
-render(){
-return (
-<h1 onClick={test}>test{this.state.a}</h1>
-<h1 onClick={this.changeValue}>test{this.state.b}</h1>
-)
-
-changValue(){
-	//类中的方法默认开启局部严格模式
-	//所以this为undefind
-	//只有通过Demo实例调用此实例，this才为Demo的实例
-	//changeValue作为onClick的回调，不是实例调用
-}
-}
-}
 function test(){}
 ReactDOM.render(<Demo/>,document.getElementById('test'))
 
 ```
 
-- 解决 this 指向
+解决 this 指向
 
-```
+```jsx
 
 class Demo extends React.Component{
-constructor(prop){
-super(prop)//构造器是否接受props，是否传给super取决于是否希望在构造器中通过this访问props
-this.state={
-a:1,
-b:2
-}
-//改变this指向
-this.changValue=this.changValue.bind(this)
-}
+  constructor(prop){
+    super(prop)//构造器是否接受props，是否传给super取决于是否希望在构造器中通过this访问props
+    this.state={
+      a:1,
+      b:2
+    }
+    //改变this指向
+    this.changValue=this.changValue.bind(this)
+  }
+  changValue(){
+    //state不能直接更改
+    this.state.a=1
+    //必须通过api
+    this.setState({a:2})//更新为合并，不是替换
+   }
+  render(){
+    return (
+      <h1 onClick={this.changeValue}>test{this.state.b}</h1>
+    )
 
-render(){
-return (
-<h1 onClick={this.changeValue}>test{this.state.b}</h1>
-)
-
-changValue(){
-//state不能直接更改
-this.state.a=1
-//必须通过api
-this.setState({a:2})//更新为合并，不是替换
-}
-}
+  }
+  
 }
 ReactDOM.render(<Demo/>,document.getElementById('test'))
 ```
 
-- 简写
+###### 简写
 
-```
+```jsx
 class Demo extends React.Component{
-state={//等于号，代表给该类的实例追加属性
-a:1,
-b:2
+  //名称固定，就叫state
+  state={//等于号，代表给该类的实例追加属性
+    a:1,
+    b:2
+  }
+//必须用箭头函数,不需要通过constructor修改this指向
+  changValue=()=>{
+  this.setState({a:2})//更新为合并，不是替换
+  }
+  render(){
+    return (
+      <h1 onClick={this.changeValue}>test{this.state.b}</h1>
+    )
+  }
 
-}
-render(){
-return (
-<h1 onClick={this.changeValue}>test{this.state.b}</h1>
-)
-
-}
-changValue=()=>{//必须用箭头函数
-this.setState({a:2})//更新为合并，不是替换
-}
 }
 ReactDOM.render(<Demo/>,document.getElementById('test'))
+```
+
+##### 状态不可变
+
+不要直接修改state状态的值，而是基于当前状态创建新的状态值
+
+- 错误修改
+
+```js
+state={count:0,list:[1,2,3],person:{name:'xx',age:18}}
+this.state.count++
+this.state.count+=1
+this.state.count=1
+
+this.state.list.push(1)
+this.state.list.splice(1,1)
+
+
+this.state.person.name='aaa'
+```
+
+- 正确修改
+
+```js
+this.setState({
+  count:this.state.count+1,
+  //增加
+  list:[...this.state.list,4]
+  //删除
+  list:this.state.list.filter(item=>item!==1)
+
+  person:{
+    ...this.state.person,
+    name:'aaa'
+  }
+})
 ```
 
 ##### props
 
-> 组件的所有属性都保存在 props 中，props 是只读的，不能修改
+> 组件的所有属性都保存在 props 中，props 是只读的，不能修改。可以传递任何数据包括函数，jsx
+> 类式组件通过this.props获取props对象
+> 函数式组件通过参数获取props对象
+> 可使用ts来配置
 
-```
+```jsx
 class Demo extends React.Component{
 render(){
 return (
@@ -239,8 +336,17 @@ ReactDOM.render(<Demo {...obj}/>,document.getElementById('test2'))//批量传属
 
 - props 规则限制
 
-```
+>常见规则：
+>必传：isRequired
+>基本类型：boolean , number,...
+>节点：element
+>指定对象：shape({})
 
+```jsx
+//react16.x以上需引入prop-types.js
+//导入prop-type包
+//组件名.propTypes={}给组件添加规则校验
+import PropTypes from 'prop-types'
 class Demo extends React.Component{
 render(){
 return (
@@ -251,7 +357,6 @@ return (
 }
 //限制类型
 Demo.propTypes={
-//react16.x以上需引入prop-types.js
 a:PropTypes.number.isRequied
 test:PropTypes.func
 }
@@ -267,8 +372,8 @@ ReactDOM.render(<Demo {...obj}/>,document.getElementById('test2'))//批量传属
 
 - 简写
 
-```
-
+```jsx
+import PropTypes from 'prop-types'
 class Demo extends React.Component{
 render(){
 return (
@@ -277,7 +382,7 @@ return (
 
 }
 
-static propTypes={	//加上static代表给类本身添加属性
+static propTypes={ //加上static代表给类本身添加属性
 //react16.x以上需引入prop-types.js
 a:PropTypes.number.isRequied
 test:PropTypes.func
@@ -293,7 +398,9 @@ ReactDOM.render(<Demo {...obj}/>,document.getElementById('test2'))//批量传属
 
 - 函数式组件使用 props
 
-```
+```jsx
+
+import propTypes from 'prop-types'
 function Demo(props){
 return (
 <h1 >test{props.b}</h1>
@@ -312,11 +419,30 @@ function test(){}
 ReactDOM.render(<Demo a={1} b='ss' handle="test"/>,document.getElementById('test1'))//数据类型要用｛｝
 ```
 
+```jsx
+
+import propTypes from 'prop-types'
+//官方推荐
+function Demo({b:'xxx'}){
+return (
+<h1 >test{b}</h1>
+)
+
+}
+ Demo.propTypes={
+a:PropTypes.number.isRequied
+test:PropTypes.func
+}
+
+function test(){}
+ReactDOM.render(<Demo a={1} b='ss' handle="test"/>,document.getElementById('test1'))//数据类型要用｛｝
+```
+
 ##### refs
 
 > 组件内的标签可使用 ref 属性标识自己类似 id='test'
 
-```
+```jsx
 class Demo extends React.Component{
 render(){
 return (
@@ -334,16 +460,68 @@ console.log(this.title3.current)
 }
 ```
 
+##### 受控组件
+
+>input框的状态（value）被React组件状态（state）控制，就是可以被react状态控制的组件
+
+- 在状态state中声明一个组件的状态数据
+- 将状态数据设置为input标签元素的value属性的值
+- 为input添加change时间
+- 通过事件对象e获取文本框的值
+- 调用setState方法，将文本框的值作为state状态的最新值
+
+##### 非受控组件
+
+>就是手动操作dm的方式获取文本的值，文本框的状态不受react组件的state中的状态控制
+
+- 导入createRef 函数
+- 调用createRef函数，创建一个ref,存储到名为myref的实例属性中
+- 为input添加ref属性
+- 通过myref.current即可拿到input对应的dom元素
+
 ##### 绑定事件
 
 1. 通过 onXxx 属性指定事件处理函数（注意大小写）
    - react 使用的自定义事件（原生小写->大写，原生大写->小写），而不是原生 DOM 事件
    - react 中的事件是通过事件委托方式处理的（委托给组件最外层的元素,事件冒泡）
+
+   ```jsx
+   //函数式组件
+   function App(){
+    return <div onClick={(event)=>{}}>xx<div>
+   }
+   //类式组件
+   class App extends React.Component{
+
+      /*避免this指向出现问题(undefined),使回调中的this指向当前组件实例对象*/
+     handleClick=(event)=>{
+
+    }
+      //this为undefined,需要在constructor中通过bind改变this指向
+     handleClick2(event){
+
+    }
+    
+    render(){
+      //render函数中的 this已被react修正为当前组件实例对象
+      return (
+      <>
+      <div onClick={this.handleClick}></div>
+      {/*不通过constuctor改变this指向，可用以下这种方法*/}
+      <div onClick={()=>this.handleClick2()}></div>
+      </>)
+    }
+   }
+   ```
+
 2. 可通过 event.target 得到的发生事件的 DOM 元素对象
+3. 阻止默认行为event.preventDefault()
 
 #### 生命周期
+>
+>类式组件才有生命周期,因为函数式组件不能实例化
 
-##### 旧
+##### 旧(<16.4)
 
 - 初始化阶段
 
@@ -398,13 +576,13 @@ componentWillUnmount()
 - 初始化阶段
 
 ```
-constructor()//构造器
+constructor()//构造器,初始化state,创建ref,bind解决this指向
 //UNSAFE_componentWillMount()
 static getDerivedStateFromProps(props,state){//组件将要挂载，不能加到实例上，要加上static。
 //必须返回状态对象，若包含state中的数据，将覆盖它。用于state的值任何时候取决于props
 return {a:1}
 }
-render()
+render()//每次组件渲染都会触发，不要在里面调用setState()
 componentDidMount()//组件挂载完毕
 ```
 
@@ -419,7 +597,7 @@ return 'xxx'
 
 }
 render()
-componentDidUpdate(preProps,preState,snapshotValue)//之前的prop时和状态
+componentDidUpdate(preProps,preState,snapshotValue)//之前的prop时和状态,不要在里面调用setState()
 ```
 
 - 卸载组件
@@ -450,7 +628,7 @@ key 是虚拟 Dom 对象的标识，当状态中的数据变化时，react 会�
 
 安装：`npm i create-react-app -g`
 
-创建文件夹：`create-ract app test`
+创建文件夹：`create-ract-app test`
 
 进入创建的文件夹：`npm start`
 
@@ -462,7 +640,17 @@ import React from "react";
 //渲染
 import ReactDOM from "react-dom";
 import App from "./App";
+//react16.x
 ReactDOM.render(<App />, document.getElementById("root"));
+
+//react 18.x
+//const root=ReactDOM.createRoot(document.getElementById("root"))
+//root.render(
+  //严格模式会影响useEffect的执行时机，为了检测额外的副作用，会让每一个useEffect执行两次
+  // <React.StrictMode>
+  // <App/>
+  // </React.StrictMode>
+// )
 ```
 
 - App.js
@@ -661,11 +849,14 @@ export default withRouter(Test); //返回的是全新的组件
 #### React Router 6
 
 > 移除`<Switch/>` ，新增`<Routers/>`
-> 移除`<Redirect/> `，新增`<Navigate/>` > `component={About}`变为 `element={<About/>}`
+> 移除`<Redirect/>`，新增`<Navigate/>`
+> `component={About}`变为 `element={<About/>}`
 > 增加 hooks
 
 - Routers
-  > 必须用 Routers 包裹，不会匹配多个
+
+> 提供路由出口，满足条件的路由组件会渲染到组件内部，相当与vue-router里的<router-view></router-view>
+> 必须用 Routers 包裹，不会匹配多个
 
 ```jsx
 import {Routers,Route} form 'react-router-dom'
@@ -690,7 +881,7 @@ import {Routers,Route,Navigate} form 'react-router-dom'
 - NavLink
 
 ```jsx
-<NaviLink className={()=>return 'activeColor'}></NaviLink>
+<NavLink className={()=>return 'activeColor'}></NavLink>
 ```
 
 - 路由表
@@ -701,25 +892,25 @@ import {useRoutes,Navigate} from 'react-router-dom'
 //生成路由
 cosnt About=lazy(()=>import('../pages/About'))
 const element=useRoutes([
-{
-path:'/test',
-element:<Test/>
-children:[
-{
-path:'new',
-element:<New/>
-}
-]
-},
-{
-path:'/about',
-element:<About/>
-},
-{
-        path:'/',
-        //实现路由重定向
-        element:<Navigate to='/main'/>
-    }
+  {
+    path:'/test',
+    element:<Test/>
+    children:[
+      {
+        path:'new',
+        element:<New/>
+      }
+    ]
+  },
+  {
+    path:'/about',
+    element:<About/>
+  },
+  {
+      path:'/',
+      //实现路由重定向
+      element:<Navigate to='/main'/>
+  }
 ])
 
 
@@ -735,17 +926,32 @@ return (
 - Outlet
 
 ```jsx
+function App(){
+  return (
+    <Routers>
+    <Router path="/test" element={<Test/>}>
+      {/*二级路由嵌套*/}
+      <Router path="test1" element={<Test1/>}></Router>
+      <Router path="test2" element={<Test2/>}></Router>
+    </Router>
+    </Routers>
+  )
+}
+```
 
+```jsx
+import {Outlet,NavLink} from 'react-router-dom'
+function Test(){
 // 若要显示子路由，需在父级路由组件中引入Outlet！！！
-render(){
-return (
-<div>
-<NavLink end to="new"></NavLink>//end代表匹配子路由时，自己失去高亮
-{/*指定路由组件呈现的位置*/}
-<Outlet />
-</div>
-)}
-
+  render(){
+    return (
+      <div>
+      <NavLink end to="new"></NavLink>//end代表匹配子路由时，自己失去高亮
+        {/*指定路由组件呈现的位置*/}
+         <Outlet />
+      </div>
+    )}
+}
 ```
 
 - 路由参数
@@ -757,8 +963,8 @@ return (
 
 import {useParams,useMath} from 'react-router-dom'
 export default function Demo(){
-const {a,b}=userParams()
-const {a,b}=userParams(/test/:a/:b})
+const {a,b}=useParams()
+const {a,b}=useParams(/test/:a/:b})
 return ({a+b})
 }
 ```
@@ -767,7 +973,7 @@ return ({a+b})
 <Link to=`/test?a=${123}&b=${123}`></Link>
 import {useSearchParams,useLocation} from 'react-router-dom'
 export default function Demo(){
-const [search,setSearch]=userSearchParams()
+const [search,setSearch]=useSearchParams()
 const a=search.get('a')
 let setData=()=>{setSearch(1234)}//更新a
 const a1=useLocation()
@@ -787,19 +993,58 @@ return ({obj.a})
 - 编程式路由
 
 ```jsx
+//导入useNavigate　函数
 import {useNavigate} from 'react-router-dom'
 const navigate=userNavigate()
 goto(){
-navigate('/test',{
-replace:false,
-state:{}
-})
-navigate(1)//前进
-navigate(-1)//后退
+  //跳转
+  navigate('/test')
+  navigate('/test',{
+    replace:false,
+    state:{}
+  })
+  navigate(1)//前进
+  navigate(-1)//后退
+//传参searchParams
+  navigate('/test?id=1&name=xigua')
+//params参数
+//需配置路由/test/:id/:name
+  navigate('/test/1/xigua')
 }
+
 ```
 
-#### redux
+```jsx
+import {useParams,useSearchParams} from 'react-router-dom'
+function Test(){
+  const [searchParams]=useSearchParams()
+  const id=searchParams.get('id')
+  const {name}=searchParams.getAll()
+
+
+  const [params]=useParams()
+  const id=params.id
+  return (
+    <div>
+    </div>
+  )
+}
+
+```
+
+- 通配符
+
+>不匹配时，显示的内容
+
+```jsx
+
+<Routes>
+  <Route path="/" element={<Home></Home>}>
+  <Route path="*" element={<NotFount></NotFount>}>
+</Routes>
+```
+
+#### 集中式状态管理工具redux
 
 > 状态管理 js 库，集中式管理 react 应用中多个组件共享的状态
 
@@ -1318,6 +1563,150 @@ createSlice({
       </ul>
 ```
 
+##### 集中式状态管理工具Mobx
+
+>简单：编写无模板的极简代码
+>轻松实现最优渲染：依赖自动追踪最小渲染优化
+>自由：可移植，测试
+
+###### 安装
+
+```bash
+npm install mobx mobx-react
+```
+
+###### 基本使用
+
+- stroe/counter.js
+
+```js
+import {makeAutoObservable,computed} from 'mobx'
+class CounterStore{
+  //定义数据
+  count=0
+  constructor(){
+    //把数据弄成响应式
+    makeAutoObservable(this,
+   {
+  count_2:computed,//标记为计算属性
+   } 
+    )
+  }
+  //修改数据
+  addCount=()=>{
+    this.conut++
+  }
+
+  get count_2(){
+    return this.count*10
+  }
+}
+//实例化，导出
+const counterStore=new CounterStore()
+export default counterStore
+
+```
+
+- App.js
+
+```jsx
+//导入store
+import counterStore from './store/counter.js'
+//导入中间件，链接mobx，react,完成响应式
+import {observer} from 'mobx-react'
+function App(){
+  return (
+    <div>
+    {counterSotre.count}
+    {counterSotre.count_2}
+
+    <button onClick={counterStore.addCount}>add</button>
+    </div>
+  )
+}
+export default observer(App)
+
+```
+
+###### 模块化
+
+- store/index.js
+
+```js
+//组合模块
+import {CounterStore} from './counter.Store.js'
+import React from 'react'
+
+//声明rootStore
+class RootStore{
+  constructor(){
+    this.counterStore=new CounterSotre()
+
+  }
+}
+//实例化根store
+const rootStore=new RootStore()
+//使用context进行透传．也可以直接导出包一层observer
+//查找机制：优先从Provider标签中value,若找不到则找createContext()方法中的传递过来的默认参数
+const context=React.createContext(rootStore)
+const useStore=()=>React.useContext(context)
+export {useStore}
+
+
+```
+
+- store/counter.Stroe.js
+
+```js
+import {makeAutoObservable,computed} from 'mobx'
+class CounterStore{
+  //定义数据
+  count=0
+  constructor(){
+    //把数据弄成响应式
+    makeAutoObservable(this,
+   {
+  count_2:computed,//标记为计算属性
+   } 
+    )
+  }
+  //修改数据
+  addCount=()=>{
+    this.conut++
+  }
+
+  get count_2(){
+    return this.count*10
+  }
+}
+//实例化，导出
+export default CounterStore
+
+```
+
+ App.js
+
+```jsx
+//导入store
+import {useStore} from './store/index.js'
+import {observer} from 'mobx-react'
+function App(){
+  const rootStore=useStore()
+
+  return (
+    <div>
+    {rootStore.counterSotre.count}
+    {rootStore.counterSotre.count_2}
+
+    <button onClick={rootStore.counterStore.addCount}>add</button>
+    </div>
+  )
+}
+
+export default observer(App)
+
+```
+
 ##### 解构赋值
 
 ```js
@@ -1328,7 +1717,27 @@ const {a:{b:value}}=obj;//连续解构赋值+重命名
 
 ```
 
+##### 高阶组件
+>把一个组件当成另一个组件的参数传入，然后返回新的组件
+
+```jsx
+function AuthComponent({children}){
+  const isToken=localStorage.get('token')
+  if(isToken){
+    return <>{children}</>
+  }else{
+    return <Navigate to="/login" replace />
+  }
+}
+
+//使用
+<AuthComponent>
+  <Home>
+</AuthComponent>
+```
+
 ##### 高阶函数
+
 
 - 若 a 函数，接收的参数是一个函数，那么 a 就可以称为高阶函数
 - 若 a 函数，调用的返回值依然是一个函数，那么 a 就可以称为高阶函数
@@ -1371,7 +1780,7 @@ sum(1)(2)(3)
 
 #### 前端发请求
 
-#####　 xhr
+##### 　 xhr
 
 - jquery
 - axios（node 使用 axios 是封装 http 协议）
@@ -1409,7 +1818,8 @@ return {a:1}},()=>{})
 > 路由组件懒加载
 
 ```jsx
-import {lazy,COmponent,Suspense} form 'react'
+import {lazy,Component,Suspense} form 'react'
+import Loading from "./component/Loading.jsx"
 const Home=lazy(()=>{import ('./Home')})
 export default class Demo extend Component{
 
@@ -1423,19 +1833,26 @@ export default class Demo extend Component{
 
 ```
 
+
 #### Hooks
 
 > hook 是 16.8 的新特性，可以让你在函数组件中使用 state 以及其他 react 特性
+>hook 本质是一套能够使函数组件更强大，灵活的‘钩子’(某一时刻下自动执行的函数)
+>解决组件逻辑复用的问题：hook出现前，react先后尝试了mixins、HOC高阶组件、render-props等模式，但各自都有对应的问题。如mixin的数据来源不明，高阶组件的嵌套问题
+>解决了类式组件自身的问题：如属性过多，生命周期、this指向
 
 ##### state
 
+useState返回的值是数组
+
 ```jsx
-import React form 'react'
+import React from 'react'
 function Test(){
-const [a,set]=React.useState(123) //初始化会调用一次，下次调用时，会缓存数据，不会覆盖
-let add1=()=>{set(456)}
-let add2=()=>{set((a)=>{return a+1})}
-return (<div>a</div>)}
+  const [a,set]=React.useState(123) //初始化会调用一次，下次调用时，会缓存数据，不会覆盖
+  //不能在if/for/函数体中写（react会按照hooks调用顺序识别每一个hook）
+  let add1=()=>{set(456)}
+  let add2=()=>{set((a)=>{return a+1})}
+  return (<div>{a}</div>)}
 ```
 
 ##### effect
@@ -1447,17 +1864,24 @@ import React form 'react'
 function Test(){
 const [count,setCount]=React.useState(123)
 
-React.userEffect(()=>{},[a])//检测a,改变时调用------
-React.userEffect(()=>{},[])//谁也不监测,仅在挂载和卸载的时候执行----
-React.userEffect(()=>{})//检测所有,改变时调用----componentDidUpdate
-React.userEffect(()=>{return ()=>{组件卸载前执行}},[])//componentWillUnmount
-
+React.useEffect(()=>{},[a])//检测a,改变时调用------
+React.useEffect(()=>{},[])//谁也不监测,仅在挂载和卸载的时候执行----
+React.useEffect(()=>{})//检测所有,改变时调用----componentDidUpdate
+React.useEffect(()=>{return ()=>{组件卸载前执行}},[])//componentWillUnmount
+//不要在useEffectd 的回调函数外层直接包裹await,因为异步会导致清理函数无法立即返回
+React.useEffect(async()=>{
+  const res=await axios.get('...')
+},[])
+//正确写法
+React.useEffect(()=>{
+  async function getData(){
+  const res=await axios.get('...')
+}},[])
 return (<div>a</div>)
 }
 
 ```
 
-```jsx
 在React通知到Renderer渲染器后，渲染器又分了三个子阶段来处理：
 
 beforeMutation阶段（渲染视图前）
@@ -1472,9 +1896,10 @@ useLayoutEffect的是在渲染器执行当前渲染界面任务时，同步执�
 在当前一轮的Reconciler任务调度过程中，在渲染器执行完当前任务后，才会异步调用useEffect。
 useLayoutEffect先于useEffect执行，并且子组件优先执行。
 componentDidMount()完全等价于useLayoutEffect( fn , [ ] )，但是不等价于useEffect( fn , [ ] )。
-```
 
 ##### ref
+>
+>获取dom元素获取组件对象
 
 ```jsx
 import React form 'react'
@@ -1580,7 +2005,8 @@ this.setState(obj)//浅比较，数据不会更新
 ```
 
 #### render Props
-
+>
+>组件标签内可以直接写多个文本，标签、函数、jsx,会传入到组件prpos中的chidren属性中
 > vue 中的插槽
 
 ```jsx
@@ -1588,16 +2014,20 @@ class A extends Component{
 state={a:1}
 render(){
 return (
+  <>
 <B>aaa</B>
  <B render={(val)=>{<C b={val} />}/>
+ </>
 )}
 }
 class B extends Component{
 state={b:1}
 render(){
 return (
+  <>
 <span>{this.props.children}</span>
 this.props.render(this.state.b)
+</>
 )}//aaa
 }
 function C(){
@@ -1657,7 +2087,7 @@ redux、dva
 
 - 搭配
 父子：props
-兄弟: 集中式管理、消息订阅发布
+兄弟: 集中式管理、消息订阅发布，借助父组件
 祖孙: 集中式管理、消息订阅发布、context（开发用的少，封装插件用得多）
 
 ### 关闭eslint
@@ -1684,7 +2114,6 @@ redux、dva
 ```
 
 第三步：重启项目
-
 
 ### 常见错误
 
