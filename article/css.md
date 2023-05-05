@@ -585,23 +585,25 @@ align-items:stretch/center/flex-start/flex-end/baseline;
 
 #### 字体属性
 
-- font-family:默认使用第一个字体,` font-family:"Microsoft yahie" ,"hiragino Sans GB",Arial; `
+- font-family:默认使用第一个字体,` font-family:"Microsoft yahie" ,"hiragino Sans GB",Arial;`
 
 - font-size: 单位px
 
-- font-weight: `nomal或400`不加粗;`bold或700`加粗；`100-900`
+- font-weight: `lighter或100-300`;`nomal或400`不加粗;`bold或700`加粗；`100-900`
 
-- font-style:`normal`默认；`italic`斜体；
+- font-style:`normal`默认；`italic`斜体；`oblique`强制斜体
 
 - color：支持十六进制、rgb（255,5,5）、预设颜色值red
 
 - text-align:文本内容对齐left,right,center;
 
-- line-height:行高，单位px;
+- line-height:行高，单位px|百分比|倍数,不能为负数;
 
-- text-decoration:文本装饰；`none`没有装饰线；`underline` 下划线；`line-through`删除线；
+- text-decoration:文本装饰；`none`没有装饰线；`underline` 下划线；`line-through`删除线；可搭配dotted线|wavy波浪线和颜色
 
 - text-indent:缩进；单位em代表1个文字大小；px像素
+- letter-space:字间距；单位em代表1个文字大小；px像素,可以为负数
+- word-space:英文字母间距；单位em代表1个文字大小；px像素,可以为负数
 
 - 字体复合属性：`font: font-style font-weight font-size/line-height font-family;`顺序不能换，必须保留`font-size` 和`font-family`属性
 
