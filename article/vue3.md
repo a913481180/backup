@@ -45,7 +45,6 @@ cosnt vm =new  Vue({
 vm.$mount('#app')
 ```
 
-
 ## 响应式 API：核心
 
 ### App.vue
@@ -253,6 +252,7 @@ let a=test()
 return {a}
 }
 ```
+
 #### isRef|unRef
 
 ```js
@@ -320,6 +320,7 @@ c:1
 person =readonly(person)//深只读,保护数据
 person =shallowReadonly(person)//浅只读
 ```
+
 #### isProxy()||isReactive()||isReadonly()
 
 - isReactive()​
@@ -351,6 +352,7 @@ person =markRaw(person)//标记一个对象，使其永远不再成为响应式�
 customRef() 预期接收一个工厂函数作为参数，这个工厂函数接受 track 和 trigger 两个函数作为参数，并返回一个带有 get 和 set 方法的对象。
 
 一般来说，track() 应该在 get() 方法中调用，而 trigger() 应该在 set() 中调用。然而事实上，你对何时调用、是否应该调用他们有完全的控制权。
+
 ```js
 import { customRef } from 'vue'
 
@@ -373,6 +375,7 @@ export function useDebouncedRef(value, delay = 200) {
   })
 }
 ```
+
 在组件中使用：
 
 ```vue
@@ -385,8 +388,6 @@ const text = useDebouncedRef('hello')
   <input v-model="text" />
 </template>
 ```
-
-
 
 #### provide||inject
 

@@ -380,7 +380,7 @@ Server = https://mirror.kamtv.ru/manjaro/stable/$repo/$arch
     - 安装:`pacman -S gnome gnome-extra`
     - 配置: `vim .xinitrc`，添加`exec gnome-session`
   - lxde(轻量)：
-    - 安装:`pacman -S lxde`
+    - 安装:`pacman -S lxde`或最少需要安装 `lxde-common`包, `lxsession`包, `openbox`包(或者其他窗口管理器）。
     - 配置: `vim .xinitrc`，添加`exec startlxde`
 
 ## 蓝牙服务
@@ -668,6 +668,7 @@ acpi_backlight=none
 
 ### 文件管理工具
 
+#### dolphin
 安装： `sudo pacman -S dolphin breeze`
  文件预览：
 
@@ -686,6 +687,56 @@ Enable preview showing of required file type in`Settings > Configure Dolphin... 
 To enable `heif/heic image thumbnails`, edit `/usr/share/kservices5/imagethumbnail.desktop` by adding `image/heif;` to the line which starts with `MimeType=`.
 
 Note that heif/heic thumbnails will be enabled by default on versions of `kio-extras` after 21.12
+
+#### pcmanfm 
+
+### 远程控制windowns
+
+- `rdesktop`
+在此之前需要让Windows支持远程协助，可以在系统属性-远程中开启：【允许远程协助连接这台计算机】+【允许远程连接到此计算机】，如果勾选了【仅运行运行使用网络级别身份验证的远程桌面单位计算机连接】，那么 rdesktop 无法连接，报错信息：
+
+```bash
+Core(warning): Certificate received from server is NOT trusted by this system, an exception has been added by the user to trust this specific certificate.
+Failed to initialize NLA, do you have correct Kerberos TGT initialized ?
+Failed to connect, CredSSP required by server (check if server has disabled old TLS versions, if yes use -V option).
+```
+
+解决方法有两种：1）不勾选该选项；2）使用 xfreerdp
+rdesktop 192.168.xxx.xxx 默认选项就可以远程桌面连接Windows（需要输入用户口令）。
+rdesktop一些常用选项：
+-u : Windows用户
+-p : Windows口令（非PIN）
+-g : 窗口大小，如 1366x768
+-f :全屏
+-a : 色彩深度 ：8, 15, 16, 24, 32
+-r sound ：支持声音
+-r clipboard：支持剪切板
+-r disk： 远程连接时挂载本地文件目录
+
+详细信息 man rdesktop
+
+- `freerdp`
+
+```bash
+/v:<server>[:port] 默认端口 3389
+/w、/h 窗口大小
+/size:<width>x<height> 窗口大小，如 1024x768
+/f 全屏
+/workarea Use available work area
+/bpp:<depth> 色彩深度 
+/u:<user>[@<domain>] 
+/p:<password>
+/d:<domain> 域，可选
++fonts 平滑字体
+```
+
+- 共享盘或者传输文件
+  - 对于xfreerdp 指定 /drive:
+xfreerdp /drive:SharedDir,/home/user/SharedDir /u:user /p:password /v:ip
+
+  - 对于rdesktop 指定 -r disk:
+rdesktop -r disk:SharedDir=/home/user/SharedDir ip
+其中 SharedDir 是随便输入的名字，接着是共享文件夹的本地绝对路径
 
 ### 设置
 

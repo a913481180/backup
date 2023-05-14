@@ -621,7 +621,7 @@ border-bottom:
 border-collapse:collapse;
 ```
 
-#### 内容:content
+#### 内容:`content`
 
 #### 内边界:`padding`
 
@@ -931,17 +931,97 @@ flex 布局，设置水平与竖直方向的内容居中。
 - 盒子阴影`box-shadow`：`3px水平阴影 0px垂直阴影 5px模糊距离 0px阴影尺寸 #fff颜色 inset（内阴影）`不占空间
 - 透明：`opacity:0.5`子元素也会跟着变化
 
-- 圆角边框：`border-radius:10px|10%|顺时针四个参数`;
+### 边框属性
+
+- 圆角边框`border-radius`：`10px|10%|顺时针四个参数`最大值为50%;
+
+```css
+ border-top-left-radius:10px;
+ border-top-right-radius:10px;
+ border-bottom-left-radius:100px 200px;/* 椭圆x轴半径 , y轴半径*/
+/*椭圆*/
+ border-raduis:10px  20px 30px 40px /10px 20px 40px 10px
+ ```
+
+- 外轮廓：
+
+```css
+/*不占位置*/
+.test{
+outline-width:20px;
+outline-color:red;
+outline-style:solid;
+outline-offset:10px;
+}
+.test2{
+outline:20px solid blue;
+outline-offset:10px;
+}
+```
+
+### 文本属性
+
 - 文字阴影：`text-shadow:水平阴影 垂直阴影 模糊距离 颜色`
-- 渐变背景：`background:linear-gradient(to bottom|to top|to right|to left,#fff(开始颜色),#000(结束颜色));
+
+- 文本换行`white-space`：`normal`,`pre`原文显示,`pre-wrap`超出边界换行.`pre-line`超出边界换行，只识别文本中的换行，行前行尾空格会忽略.`no-wrap`不换行
+
+- 文本移除`text-overflow`：`ellipsis`需配合`overflow:hidden(非visible);white-space:no-wrap`使用|`clip`默认值
+- 文本修饰
+
+```css
+text-decoration-line:overline;
+text-decoration-style:solid;
+text-decoration-line:red;
+text-decoration:overline solid red;
+```
+
+- 文本描边(wekit)
+
+```css
+-webkit-text-stroke-color:red;
+-webkit-text-stroke-width:10px;
+-webkit-text-stroke:10px green;
+```
+
+### 背景
+
+- 背景图原点`background-origin`：`paddding-box`默认，从padding区域开始；`border-box`从border区域开始，`content-box`：从内容区域开始
+
+- 背景图向外裁切区域`background-clip`：`paddding-box`默认，从padding区域开始；`border-box`从border区域开始，`content-box`：从内容区域开始；`text`背景图显示在文字上，需要加上-webkit-前缀
+
+- 背景图位置`background-position`：移动的距离是这个目标图片的 x，y 坐标，一般情况是向上或左移动，所以数值是负值；
+
+> 精灵图
+>将多个小背景图整合到一张大图片中，减少了服务器的请求
+
+- 背景图大小`background-size`：`300px 200px`不能为负值；`100% 20%`不能为负值；`auto`默认；`contain`图片整张放在div中，可能图片会重复铺满；`cover`图片充满div,可能会裁切一部分
+
+- 复合写法`background:color url repeat position / size origin clip`size必须写在position后面且用斜杠分割，origin和clip相同可以少写后一个，
+- 多个背景`background:url('xx.jpg') no-repeat right top,url('xx.jpg') no-repeat right bottom,url('xx.jpg') no-repeat left top,`
+
+### 渐变
+
+>本质是图片
+
+- 线性渐变背景：`background:linear-gradient(100px|100px 20px半径,to bottom|to top|to right|to left|to left top|20deg,#fff(开始颜色),#3a3 10%,#3a3 100px,#000(结束颜色));`
+
+- 径向渐变背景：`background:radial-gradient(at bottom|at top|at right|at left|at left top|circle|at 20px 100px,#fff(开始颜色),#3a3 10%,#3a3 100px,#000(结束颜色));`
+
+- 重复线性渐变背景：`background:repeating-linear-gradient(100px|100px 20px半径,to bottom|to top|to right|to left|to left top|20deg,#fff(开始颜色),#3a3 10%,#3a3 100px,#000(结束颜色));`
+
+- 重复径向渐变背景：`background:repeating-radial-gradient(at bottom|at top|at right|at left|at left top|circle|at 20px 100px,#fff(开始颜色),#3a3 10%,#3a3 100px,#000(结束颜色));`
+
+### 2d/3d变换
+
+- 位移属性（不能用于行内元素）：`transform:translateX(20%)|translateY(-10%)|translateZ(20px)|translate(10px,10px,0px);`位移时默认是元素的中心位置,不脱离文档流
+- 缩放（不能用于行内元素）：`transform:scaleX(1.5)|scaleY(1.5)|scaleZ(1.5)|scale(1.5)|scale3d(1.5);`默认为 1 正常大小，通过缩放可实现字体小于浏览器的最小字体限制；`transform-origin:50% 50%;`元素缩放中心点位置
+- 旋转：`transform:rotateX()|rotateY()|rotate3d()|rotateZ(30deg)|rotate(30deg);`z轴是垂直与屏幕的
+- 透视：`transform:perspective(1000px);`透视距离，必须写在前面；
+
 - 过渡动画：`transition: width(要过渡的属性) 1s(过渡时间) ease-in(过渡方式) 2s(延迟时间)`
 
 > transition 过渡方式 ：ease：慢速开始，然后变快，然后慢速结束；ease-in：以慢速开始的过渡效果；ease-out：以慢速结束的过渡效果；ease-in-out：以慢速开始和结束的过渡
 
-- 位移属性：`transform:translateX|translateY|translateZ(20px);`位移时默认是元素的中心位置
-- 缩放：`transform:scale(1.5);`默认为 1 正常大小；`transform-origin:50% 50%;`元素缩放中心点位置
-- 旋转：`transform:rotateX|rotateY|rotateZ(30deg);`
-- 透视：`transform:perspective(1000px);`透视距离，必须写在前面；
 - 循环动画：
 
 ```css
@@ -979,28 +1059,27 @@ span.heart {
 - 设置字间距可使用 letter-spacing 属性增加或减少字符间的空白（字符间距）。该属性定义了在文本字符框之间插入多少空间(允许使用负值)
 - CSS 中用于设置过渡特效的属性是 transition，但是其不能同时使用在多个属性身上。
 
-### 精灵图
-
-将多个小背景图整合到一张大图片中，减少了服务器的请求
-
-移动背景位置：`background-position`移动的距离是这个目标图片的 x，y 坐标，一般情况是向上或左移动，所以数值是负值；
-
-### 字体图标
+### 字体图标和web字体
 
 精灵图放大会失真，字体图标不会，且可以改变颜色大小，只适合简单图形；
 
 字体图标下载网站：`http://icomoon.io` `https://iconfont.cn`
 
-使用方法： 1.添加字体声明在`<style></>`中
+使用方法： 1.添加字体声明在`<style></style>`中
 
 ```css
 @font-face {
-  font-family: `name`;
-  src: url() ....;
+  font-family: 'xxname';
+  src: url("./xxx.ttf");
+  src: url("./xxx.ttf"),url("./xxx.ttf"),url("./xxx.ttf") format('woff');
+}
+h1{
+  font-family:'xxname';
+  font-size:19px;
 }
 ```
 
-2.使用:从官网复制图标粘贴到相应位置并设置样式:`span{font-family:'name';font-size:....}`
+2.使用:从官网复制图标粘贴到相应位置并设置样式:`span{font-family:'xxname';font-size:....}`
 
 ### 三角形
 
@@ -1283,7 +1362,7 @@ easyless 插件，预编译生产 css
 
 ```less
 //不会编译到css文件中
-.common(@w,@h) {
+.common(@w:red,@h) {
   color: @w;
   margin: @h;
 }
@@ -1298,4 +1377,10 @@ easyless 插件，预编译生产 css
     .common(pink,20px);
   }
 }
+```
+
+- 匹配
+
+```less
+
 ```

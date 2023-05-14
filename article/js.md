@@ -1,11 +1,11 @@
 ---
-title: JavaScript
-date: 2021-05-22 21:22:11
+title: JavaScript语法
+date: 2021-05-22 21:23:11
 categories:
 - web 
 ---
 
-### JavaScript
+## JavaScript
 
 运行在客户端的脚本语言；不需要编译，运行过程中由js引擎逐行解释并执行,也可以用于后端node.js技术
 浏览器引擎：
@@ -30,7 +30,7 @@ js引擎：js解释器
 >优势：分离了 HTML 和代码,使 HTML 和 JavaScript 更易于阅读和维护,已缓存的 JavaScript 文件可加速页面加载  
 >可通过完整的 URL 或相对于当前网页的路径引用外部脚本：`<script src="www.xxx.com/.."><script>`
 
-  2. 外部链接：`<script src="xxx.js"></script>`
+  2. 外部链接：`<script src="xxx.js"></script>`,标签中间不能写代码，会忽略
   3. 内联式：`<script>alert('hello')</script>`
 
 >js脚本可被放置与 HTML 页面的 `<body>` 或`<head>` 部分中，或兼而有之。  
@@ -38,7 +38,7 @@ js引擎：js解释器
 >注释：旧的 JavaScript 例子也许会使用 type 属性：`<script type="text/javascript">`。  
 >注释：type 属性不是必需的。JavaScript 是 HTML 中的默认脚本语言。
 
-#### 输入输出语句
+### 输入输出语句
 
 - alert(msg):浏览器弹窗提示
 - console.log(msg):控制台打印信息
@@ -49,11 +49,27 @@ js引擎：js解释器
 
 - document.write()：写入HTML输出
 
+>会解析标签
 >注意：在 HTML 文档完全加载后使用 document.write() 将会删除所有的标签 ;
 
 - prompt(info):浏览器弹出，用户输入
 
-#### 变量
+### 堆栈
+
+#### 栈
+
+ 由编译器自动分配释放 ，存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的栈。
+ 基本数据类型变量保存在栈内存中，因为基本数据类型占用空间小、大小固定，通过值来访问，属于被频繁使用的数据。
+>闭包中的基本数据类型变量是保存在堆内存里的，当函数执行完弹出调用栈后，返回一个内部函数的一个引用，这时候函数的变量就会转移到堆上，因此内部函数依然能访问到上一层函数的变量。
+
+#### 堆
+
+一般由程序员分配释放， 若程序员不释放，程序结束时可能由OS回收 。注意它与数据结构中的堆是两回事，分配方式倒是类似于链表
+引用数据类型存储在堆内存中，引用数据类型占据空间大、大小不固定，如果存储在栈中，将影响程序的运行性能。
+引用数据类型会在栈中存储一个指针，这个指针指向堆内存空间中该实体的起始地址。
+当解释器寻找引用值时，会先检索其在栈中的地址，取得地址后，从堆中获得实体。
+
+### 变量
 
 变量是弱类型的,重复声明 JavaScript  变量，将不会丢它的值。
 
@@ -73,32 +89,35 @@ js引擎：js解释器
 - 不能数字开头
 - 可使用的符号作开头：下划线`_`，美元符`$`
 
-#### 变量数据类型
+### 数据类型
 
 动态数据类型。同一变量可做不同数据类型使用
-类型种类：`number` `boolean` `string` `undefined` `null`
 
-- 布尔类型
-`var flag=true;`
-true参加数学加法时当做1，false为0；
+基本数据类型：`number` `boolean` `string` `undefined` `null`,`BigInt`,`Symbol`
+复杂(引用)数据类型:`object`
 
-true:`-15` `"false"`
-false:`0` `-0` `""` `undefined` `null`  `false`  `NaN`
-
-- undefined
-与数字相加后结果为NaN;任何变量均可通过设置值等于 undefined 或null进行清空。其类型也将是 undefined而null的类型为对象。
+#### 查看数据类型
 
 - typeof
 
->typeof 运算符不是变量。它属于运算符。运算符（比如 + - * /）没有数据类型。
->但是，typeof 始终会返回字符串（包含运算数的类型）。
+typeof 运算符不是变量。它属于运算符。运算符（比如 + - * /）没有数据类型。
+但是，typeof 始终会返回字符串（包含运算数的类型）。
 
 `console.log(typeof age);`
-查看数据类型
+`console.log(typeof(age));`
+
+- instanceof运算符
+
+>只能判断复杂类型
+instanceof，用于检测某个对象的原型链是否包含某个构造函数的 prototype 属性。
+instanceof 适用于检测对象，它是基于原型链运作的。
+instanceof 除了适用于任何 object 的类型检查之外，也可以用来检测内置对象，比如：Array、RegExp、Object、Function
+instanceof 对基本数据类型检测不起作用，主要是因为基本数据类型没有原型链。
 
 - constructor 属性
 
 constructor 属性返回所有 JavaScript 变量的构造器函数。
+`undefined`,`null`没有constructor
 
 实例
 
@@ -112,10 +131,46 @@ new Date().constructor             // 返回 "function Date()    { [native code]
 function () {}.constructor         // 返回 "function Function(){ [native code] }"
 ```
 
-- 数字型
+#### 布尔类型
+
+`var flag=true;`
+true参加数学加法时当做1，false为0；
+
+true:`-15` `"false"`
+false:`0` `-0` `""` `undefined` `null`  `false`  `NaN`
+
+#### `undefined`与`null`
+
+undefined 表示尚未初始化的变量的值,这个变量从根本上就没有定义，而 null 表示该变量有意缺少对象指向,这个值虽然定义了，但它并未指向任何内存中的对象
+
+```js
+null == undefined  // true
+null === undefined  // false
+!!null === !!undefined  // true
+
+JSON.stringify({a: undefined})  // '{}'
+JSON.stringify({b: null})  // '{b: null}'
+JSON.stringify({a: undefined, b: null})  // '{b: null}'
+
+let obj1 = { a: undefined }
+let obj2 = {}
+console.log(obj1.a)  // undefined
+console.log(obj2.a)  // undefined
+```
+
+`undefined`与数字相加后结果为`NaN`;而`null`会隐式转换为0
+`undefined`其类型也将是`undefined`。而`null`的类型为对象。
+>ypeof null 输出为 'object' 其实是一个底层的错误，但直到现阶段都无法被修复。
+>原因是，在 JavaScript 初始版本中，值以 32位 存储。前 3位 表示数据类型的标记，其余位则是值。
+>对于所有的对象，它的前 3位 都以 000 作为类型标记位。在 JavaScript 早期版本中， null 被认为是一个特殊的值，用来对应 C 中的 空指针 。但 JavaScript 中没有 C 中的指针，所以 null 意味着什么都没有或者 void 并以 全0(32个) 表示。
+>因此每当 JavaScript 读取 null 时，它前端的 3位 将它视为 对象类型 ，这也是为什么 typeof null 返回 'object' 的原因。
+任何变量均可通过设置值等于 `undefined` （`void 0`） 或`null`进行清空。
+
+#### 数字型
+
 绝不要用前导零写数字（比如 07）。
-Infinity:无穷大；
--Infinity:无穷小；
+`Infinity`:无穷大；
+`-Infinity`:无穷小；
 除以 0（零）也会生成 Infinity
 
 ```js
@@ -123,18 +178,21 @@ var x =  2 / 0;          // x 将是 Infinity
 var y = -2 / 0;          // y 将是 -Infinity
 ```
 
-NaN:非数字
+##### `NaN`:非数字
+>
+>NaN 是数，typeof NaN 返回 number
 尝试用一个非数字字符串进行除法会得到 NaN
-可使用全局 JavaScript 函数 isNaN() 来确定某个值是否是数：
-NaN 是数，typeof NaN 返回 number
+可使用全局 JavaScript 函数 `isNaN()` 来确定某个值是否是数：
 
-JavaScript 数值始终是 64 位的浮点数,其中 0 到 51 存储数字（片段），52 到 62 存储指数，63 位存储符号
+JavaScript 数值始终是 `64 位`的浮点数,其中 0 到 51 存储数字（片段），52 到 62 存储指数，63 位存储符号
 
-精度
-整数（不使用指数或科学计数法）会被精确到 15 位。
-小数的最大数是 17 位，但是浮点的算数并不总是 100% 精准
+##### 精度
 
-数字字符串
+整数（不使用指数或科学计数法）会被精确到 `15 位`。
+小数的最大数是 `17 位`，但是浮点的算数并不总是 100% 精准
+
+##### 数字字符串
+
 JavaScript 字符串可以拥有数字内容：
 
 在所有数字运算中，JavaScript 会尝试将字符串转换为数字：
@@ -151,22 +209,20 @@ var z = x - y;       // z 将是 90
 var z = x + y;       // z 不会是 110（而是 10010）
 ```
 
-数值属性
+##### 数值属性
 
 |属性 |描述|
 |-|-|
-|MAX\_VALUE |返回 JavaScript 中可能的最大数。|
-|MIN\_VALUE |返回 JavaScript 中可能的最小数。|
-|NEGATIVE\_INFINITY |表示负的无穷大（溢出返回）。|
+|MAX_VALUE |返回 JavaScript 中可能的最大数。|
+|MIN_VALUE |返回 JavaScript 中可能的最小数。|
+|NEGATIVE_INFINITY |表示负的无穷大（溢出返回）。|
 |NaN |表示非数字值（"Not-a-Number"）。|
-|POSITIVE\_INFINITY |表示无穷大（溢出返回）。|
+|POSITIVE_INFINITY |表示无穷大（溢出返回）。|
 
 >数字属性不可用于变量
 >数字属性属于名为 number 的 JavaScript 数字对象包装器。
-
->这些属性只能作为 Number.MAX\_VALUE 访问。
-
->使用 myNumber.MAX\_VALUE，其中 myNumber 是变量、表达式或值，将返回 undefined：
+>这些属性只能作为 Number.MAX_VALUE 访问。
+>使用 myNumber.MAX_VALUE，其中 myNumber 是变量、表达式或值，将返回 undefined：
 
 实例
 
@@ -177,223 +233,152 @@ var y = x.MAX_VALUE;    // y 成为 undefined
 var x = Number.MIN_VALUE; //返回 JavaScript 中可能的最小数字。
 ```
 
-### 字符串
+#### 字符串
 
 使用单引号或双引号，推荐单引号。在js中字符串既是基本数据类型，又是复合数据类型.
 
-- 声明
+##### 声明
 
    1. new运算符声明(对象）
 
-```js
-var str=new String("100")
-```
+      ```js
+      var str=new String("100")
+      ```
 
    2. 省略new
 
-```js
-var str=String("jjj");
-```
+      ```js
+      var str=String("jjj");
+      ```
 
    3. 字符串常量声明
 
-```js
-var str="jjj";
-```
+      ```js
+      var str="jjj";
+      ```
 
-- 嵌套：`var str='啥"嘎"嘎和'; var str="航空'港行'供货商";`也可以加转义符`\`
-- 字符串长度：`var str='画口红管工行';  alert(str.length);`
-
+ 嵌套：`var str='啥"嘎"嘎和'; var str="航空'港行'供货商";`也可以加转义符`\`
+ 字符串长度：`var str='画口红管工行';  alert(str.length);`
 >注：中文UTF-8（三个字符代表一个汉字），gbk（两个字符表示一个汉字）但计数时都当成一个字来计数。
 
-- 字符串拼接：`字符串+任何类型=拼接后的字符串`
+字符串拼接：`字符串+任何类型=拼接后的字符串`
 
 #### js 判断字符串中是否包含某个字符串
 
-1. 方法一: indexOf()   (推荐)
+- `indexOf()` 与`lastIndexOf`
+   `indexOf()` 方法可返回某个指定的字符串值在字符串中首次出现的位置。（从0开始，未找到返回-1）
+   `lastIndexOf()` 方法返回指定文本在字符串中最后一次出现的索引,其为从后向前进行检索
+   两种方法都接受作为检索起始位置的第二个参数。如`str.indexOf("China", 18);`
 
-```js
-var str = "123";
-console.log(str.indexOf("3") != -1 );  // 未找到文本将返回-1
-//indexOf() 方法可返回某个指定的字符串值在字符串中首次出现的位置。
-//lastIndexOf() 方法返回指定文本在字符串中最后一次出现的索引,其为从后向前进行检索
-//两种方法都接受作为检索起始位置的第二个参数。如str.indexOf("China", 18);
-```
+      ```js
+      var str = "123";
+      console.log(str.indexOf("3",0) != -1 );  // 未找到文本将返回-1
+      ```
+- `include(str,position)`
+   是否可以在另一个字符串中找到一个字符串，并根据情况返回 true 或 false
+  方法接受作为检索起始位置的第二个参数。如`str.include("China", 18);`
 
-2. 方法二: search()
+      ```js
+      var str = "123";
+      console.log(str.indexOf("3",0) != -1 );  // 未找到文本将返回-1
+      ```
 
-找到符合条件的子串第一次出现的位置
+- `search()`
+search() 方法用于检索字符串中指定的子字符串，或与正则表达式相匹配的子字符串，首次出现的位置。如果没有找到任何匹配的子串，则返回 -1。
 
-```js
-var str = "123";
-console.log(str.search("3") != -1 );  //并返回匹配位置的下标
-//search() 方法用于检索字符串中指定的子字符串，或检索与正则表达式相匹配的子字符串。如果没有找到任何匹配的子串，则返回 -1。
-```
+>传入的不是正则会隐式转换为正则
 
-3. 方法三:match()
+      ```js
+      var str = "123";
+      console.log(str.search("3") != -1 );  //并返回匹配位置的下标
+      ```
 
-匹配成功返回匹配的子串数组,否则返回null
+- `match()`
 
-```js
-var str = "123";
-var reg = RegExp(/3/);
-if(str.match(reg)){
-    // 包含        
-}
-//match() 方法可在字符串内检索指定的值，或找到一个或多个正则表达式的匹配。其为RegExp 对象方法
-```
+用于检索字符串中指定的子字符串，或正则表达式相匹配的子串数组,否则返回null
 
-4. 方法四:test()
+      ```js
+      var str = "123";
+      var reg = RegExp(/3/);
+      if(str.match(reg)){
+          // 包含        
+      }
+      ```
 
-```js
-var str = "123";
-var reg = RegExp(/3/);
-console.log(reg.test(str)); // true
-//test() 方法用于检索字符串中匹配的正则是否存在。若有则返回 true 否则 false。
-```
+- `test()`
+`test()` 方法用于检索字符串中匹配的正则是否存在。若有则返回 true 否则 false。
 
-5. 方法五:exec()
+      ```js
+      var str = "123";
+      var reg = RegExp(/3/);
+      console.log(reg.test(str)); // true
+      ```
 
-```js
-var str = "123";
-var reg = RegExp(/3/);
-if(reg.exec(str)){
-    // 包含        
-}
-//exec() 方法用于检索字符串中的正则表达式的匹配。返回一个数组，其中存放匹配的结果。如果未找到匹配，则返回值为 null。
-```
+- `exec()`
+exec() 方法用于检索字符串中的正则表达式的匹配。返回一个数组，其中存放匹配的结果。如果未找到匹配，则返回值为 null。
 
-## 正则表达式
+      ```js
+      var str = "123";
+      var reg = RegExp(/3/);
+      if(reg.exec(str)){
+          // 包含        
+      }
+      ```
 
-正则表达式是构成搜索模式（search pattern）的字符序列。
-语法：`/pattern/modifiers;`如：`var patt = /hello/i;`
+#### 提取部分字符串
 
-声明：
-
-1. new声明
-
-参数：第一个为字符串，第二个为修饰符(修饰符无顺序）
-
-```js
-var box1=new RegExp("hello","ig");
-var box1= RegExp("hello","ig");
-```
-
-2. 省略new声明
-
-```js
-var box1=/hello/gi;
-```
-
-正则表达式修饰符
-修饰符可用于大小写不敏感的更全局的搜素：
-
-|修饰符 |描述|
-|-|-|
-|i |执行对大小写不敏感的匹配。|
-|g |执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。|
-|m |执行多行匹配。|
-
->字符串中，遇到换行，重新开始计算行首；
-
-正则表达式模式
-括号用于查找一定范围的字符串：
-
-|表达式 |描述|
-|-|-|
-|[] |查找方括号之间的任何符合的字符。|
-|[^]|匹配除括号内的字符|
-|[0-9] |查找任何从 0 至 9 的数字。|
-|(x\|y) |查找由 \| 分隔的任何选项。|
-
-元字符（Metacharacter）是拥有特殊含义的字符：
-
-|元字符 |描述|
-|-|-|
-|.|匹配单个任意字符|
-|\\d |查找数字。|
-|\\D|匹配非数字|
-|\\s |查找空白符、空格、制表符、换行符。|
-|\\S|匹配非空白字符|
-|\\b |匹配空格字符。|
-|\\n |查找换行符。|
-|\\r |查找回车符。|
-|\\t |查找制表符。|
-|\\0 |查找null符。|
-
-锚字符
-|||
-|-|-|
-|^|行首匹配|
-|$|行尾匹配|
-
-重复字符：(n为任意的单个字符）
-
-|量词 |描述|
-|-|-|
-|n? |匹配任何包含零个或一个 n 的字符。|
-|n+ |匹配任何包含至少一个 n 的字符。|
-|n* |匹配任何个 n 的字符。|
-|n\* |匹配任何包含零个或多个 n 的字符。|
-|n{m,n}|匹配至少m个，至多n个|
-|n{m}|必须匹配m个|
-|(abd)+|小括号中的部分代表一个字符串处理|
-
-提取部分字符串
-有三种提取部分字符串的方法：
-
-- slice(start, end)
-该方法设置两个参数：起始索引（开始位置），终止索引（结束位置）。
+- `slice(start, end)`
+提取`[start,end)`这部分字符串，返回新的字符串
+如果某个参数为负，则从字符串的结尾开始计数。
+如果省略第二个参数，则该 `slice()` 将删除前面的部分，保留后面的部分。
+提示：负值位置不适用 Internet Explorer 8 及其更早版本。
 
 ```js
 var str = "Apple, Banana, Mango";
 var res = str.slice(7,13);
-//如果某个参数为负，则从字符串的结尾开始计数。
-//如果省略第二个参数，则该 slice() 将删除前面的部分，保留后面的部分。
-//提示：负值位置不适用 Internet Explorer 8 及其更早版本。
 ```
 
-- substring(start, end)
+- `substring(start, end)`
 
-提取[start,end)这部分字符串，返回新的字符串
+`substring()` 类似于 `slice()`。提取`[start,end)`这部分字符串，返回新的字符串
+不同之处在于 `substring()`无法接受负的索引，后一个值大于前一个时会调换参数。
+如果省略第二个参数，则该`substring()` 将删除前面的部分，保留后面的部分。
 
-不同之处在于 substring() 无法接受负的索引。
-如果省略第二个参数，则该 substring() 将删除前面的部分，保留后面的部分。
-
-- substr(start, length)
-
-substr() 类似于 slice()。
-
+- `substr(start, length)`(废弃)
 不同之处在于第二个参数规定被提取部分的长度。
-如果省略第二个参数，则该 substring() 将删除前面的部分，保留后面的部分。
 如果首个参数为负，则从字符串的结尾计算位置。第二个参数不能为负，因为它定义的是长度。
+如果省略第二个参数，则该 substring() 将删除前面的部分，保留后面的部分。
 
-- replace()
+#### 替换文本
 
-str.replace(oldstr,newstr);该方法用另一个值替换在字符串中指定的值,会返回替换成功的新字符串：
+- `replace()`
+
+`str.replace(oldstr,newstr);`该方法用另一个值替换在字符串中指定的值,会返回替换成功的新字符串：
 
 ```js
 str = "Please visit Microsoft!";
 var n = str.replace("Microsoft", "W3School");
 ```
 
-默认地，replace() 只替换首个匹配：如需替换所有匹配，请使用正则表达式的 g 标志（用于全局搜索)
-replace() 对大小写敏感。如需执行大小写不敏感的替换，请使用正则表达式 /i（大小写不敏感）
+默认地，`replace()` 只替换首个匹配：如需替换所有匹配，请使用正则表达式的 `g` 标志（用于全局搜索)
+`replace()` 对大小写敏感。如需执行大小写不敏感的替换，请使用正则表达式 `i`（大小写不敏感）
 
 ```js
 str = "Please visit Microsoft!";
 var n = str.replace(/MICROSOFT/gi, "W3School");
 ```
 
-- 转换为大写和小写
-通过 toUpperCase() 把字符串转换为大写：通过 toLowerCase() 把字符串转换为小写：
+#### 转换为大写和小写
+
+通过 `toUpperCase()` 把字符串转换为大写：
+通过 `toLowerCase()` 把字符串转换为小写：
 
 ```js
 var text1 = "Hello World!";       // 字符串
 var text2 = text1.toUpperCase();  // text2 是被转换为大写的 text1
 ```
 
-- concat() 连接两个或多个字符串：
+#### concat() 连接两个或多个字符串
 
 ```js
 var text1 = "Hello";
@@ -402,9 +387,13 @@ text3 = text1.concat(text2);
 text4 = text1.concat("jjjjjj",text2,"jj");
 ```
 
-- trim() 方法删除字符串两端的空白符：
+#### 删除字符串两端的空白符
 
-```
+`trim()` 方法删除字符串两端的空白符
+`trimEnd()` 方法删除字符串末尾的空白符
+`trimStart()` 方法删除字符串开头的空白符
+
+```js
 var str = "       Hello World!        ";
 alert(str.trim());
 //Internet Explorer 8 或更低版本不支持 trim() 方法。
@@ -445,10 +434,10 @@ var str=String.fromCharCode(99,93,83);
 
 使用属性访问有点不太靠谱：
 
-- 不适用 Internet Explorer 7 或更早的版本
-- 它让字符串看起来像是数组（其实并不是）
-- 如果找不到字符，[ ] 返回 undefined，而 charAt() 返回空字符串。
-- 字符串是只读的，无法像数组一样通过索引下标去修改单个字符，除非整个修改。str[0] = "A" 不会产生错误（但也不会工作！）
+ 不适用 Internet Explorer 7 或更早的版本
+ 它让字符串看起来像是数组（其实并不是）
+ 如果找不到字符，[ ] 返回 undefined，而 charAt() 返回空字符串。
+ 字符串是只读的，无法像数组一样通过索引下标去修改单个字符，除非整个修改。str[0] = "A" 不会产生错误（但也不会工作！）
 
 >提示：如果您希望按照数组的方式处理字符串，可以先把它转换为数组。
 
@@ -457,22 +446,11 @@ var str = "HELLO WORLD";
 str[0];                   // 返回 H
 ```
 
-表单元素，获取其中的内容，可通过`.value`属性获取
-双标签节点，用innerHTML属性获取标签间内容
-
-```js
-function test(){
-var text=document.ElementById("id");
-var msg=document.ElementById("id");
-```
-
 - 把字符串转换为数组
 
-可以通过 split(分割符/正则)分割字符串，返回分割的子串组成的数组。
+可以通过 split(分割符/正则,限制返回的数量)分割字符串，返回分割的子串组成的数组。
 
- 将字符串转换为数组：
-
-```
+```js
 var txt = "a,b,c,d,e";   // 字符串
 txt.split(",");          // 用逗号分隔
 txt.split(" ");          // 用空格分隔
@@ -482,17 +460,92 @@ txt.split("|");          // 用竖线分隔
 //如果分隔符是 ""，被返回的数组将是间隔单个字符的数组
 ```
 
+##### 正则表达式
+
+正则表达式是构成搜索模式（search pattern）的字符序列。
+语法：`/pattern/modifiers;`如：`var patt = /hello/i;`
+
+###### 声明
+
+1. new声明
+
+参数：第一个为字符串，第二个为修饰符(修饰符无顺序）
+
+```js
+var box1=new RegExp("hello","ig");
+var box1= RegExp("hello","ig");
+```
+
+2. 省略new声明
+
+```js
+var box1=/hello/gi;
+```
+
+正则表达式修饰符
+修饰符可用于大小写不敏感的更全局的搜素：
+
+|修饰符 |描述|
+|-|-|
+|i |执行对大小写不敏感的匹配。|
+|g |执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。|
+|m |执行多行匹配。|
+
+>字符串中，遇到换行，重新开始计算行首；
+
+正则表达式模式
+括号用于查找一定范围的字符串：
+
+|表达式 |描述|
+|-|-|
+|`[]` |查找方括号之间的任何符合的字符。|
+|`[^]`|匹配除括号内的字符|
+|`[0-9]` |查找任何从 0 至 9 的数字。|
+|`(x|y)` |查找由 `|` 分隔的任何选项。|
+
+元字符（Metacharacter）是拥有特殊含义的字符：
+
+|元字符 |描述|
+|-|-|
+|.|匹配单个任意字符|
+|\\d |查找数字。|
+|\\D|匹配非数字|
+|\\s |查找空白符、空格、制表符、换行符。|
+|\\S|匹配非空白字符|
+|\\b |匹配空格字符。|
+|\\n |查找换行符。|
+|\\r |查找回车符。|
+|\\t |查找制表符。|
+|\\0 |查找null符。|
+
+锚字符
+|||
+|-|-|
+|^|行首匹配|
+|$|行尾匹配|
+
+重复字符：(n为任意的单个字符）
+
+|量词 |描述|
+|-|-|
+|n? |匹配任何包含零个或一个 n 的字符。|
+|n+ |匹配任何包含至少一个 n 的字符。|
+|n* |匹配任何包含零个或多个 n 的字符。|
+|n{m,n}|匹配至少m个，至多n个|
+|n{m}|必须匹配m个|
+|(abd)+|小括号中的部分代表一个字符串处理|
+
 #### 数据类型转换
 
-- 转为字符串
+##### 数字转为字符串
 
 |||
 |-|-|
 |toString()|`var num=1;alert(num.toString());`|
 |String()强制转换|`var num=1; alert(String(num));`|
-|拼接|`var num=1; alert(num+"");`|
+|`+`拼接，只要有一边是字符串，另一半也会转为字符串|`var num=1; alert(num+"");`|
 
-能够使用 toString() 方法把数输出为十六进制、八进制或二进制。
+- 能够使用 toString() 方法把数输出为十六进制、八进制或二进制。
 
 ```js
 var myNumber = 128;
@@ -501,7 +554,7 @@ myNumber.toString(8);      // 返回 200
 myNumber.toString(2);      // 返回 10000000
 ```
 
-toExponential() 返回字符串值，它包含已被四舍五入并使用指数计数法的数字。
+- toExponential() 返回字符串值，它包含已被四舍五入并使用指数计数法的数字。
 
 ```js
 var x = 9.656;
@@ -510,7 +563,7 @@ x.toExponential(4);     // 返回 9.6560e+0
 x.toExponential(6);     // 返回 9.656000e+0
 ```
 
-toFixed() 返回字符串值，它包含了指定位数小数的数字：
+- toFixed() 返回字符串值，它包含了指定位数小数的数字：
 
 ```js
 var x = 9.656;
@@ -520,7 +573,7 @@ x.toFixed(4);           // 返回 9.6560
 x.toFixed(6);           // 返回 9.656000
 ```
 
-toPrecision() 返回字符串值，它包含了指定长度的数字：
+- toPrecision() 返回字符串值，它包含了指定长度的数字：
 
 ```js
 var x = 9.656;
@@ -534,21 +587,77 @@ x.toPrecision(6);       // 返回 9.65600
 >在 JavaScript 内部使用 valueOf() 方法可将 Number 对象转换为原始值。
 >所有 JavaScript 数据类型都有 valueOf() 和 toString() 方法。
 
-- 转数字
+##### 字符串转数字
 
 |||
 |-|-|
-|parseInt(string)保留整数,去掉单位;只返回首个数字;如果无法转换为数值，则返回 NaN|`parseInt('11');`|
-|parseFloat(string)只返回首个数字,包括小数部分|`parseFloat('222');`|
-|Number()强制转换|`Number('22');`|
+|`parseInt(string)`保留整数,去掉单位;只返回首个数字;如果无法转换为数值，则返回 NaN|`parseInt('11');`|
+|`parseFloat(string)`只返回首个数字,包括小数部分|`parseFloat('222');`|
+|`Number()`强制转换|`Number('22');`|
 |js隐式转换（减，乘，除)|`'11'-0`|
 
-Number() 还可以把日期转换为数字：`Number(new Date("2019-04-15"));    // 返回 1506729600000`方法返回 1970 年 1 月 1 日至今的毫秒数。
+>Number() 还可以把日期转换为数字：`Number(new Date("2019-04-15"));    // 返回 1506729600000`方法返回 1970 年 1 月 1 日至今的毫秒数。
 
 `==`符号会把字符串的数据类型转换为数字型再比较。
 `===`两侧的值和数据类型一样才相等。
 
-### 逻辑运算符
+### 运算符
+
+#### 一元操作符
+
+- 自增和自减操作符`--`,`++`
+`++i,i++`单独使用没有区别
+
+```js
+//先加再用
+let i=1
+console.log(++i + 2)//4
+//先用再加
+let a=1
+console.log(a++ + 2)//3
+
+let b=1
+console.log(b++ + 3 ++b)//7
+```
+
+- 一元加减操作符
+
+```js
+let a = -1;
+let b = "hello";
+let c = BigInt;
+console.log(+a)  // -1
+console.log(+b)  // NaN
+console.log(+c)  // NaN
+
+let a = -1;
+let b = 2;
+console.log(-a)  // 1
+console.log(-b)  // -2
+```
+
+#### 逻辑运算符
+
+- 逻辑非
+
+如果操作数是对象，则返回 false；
+如果操作数是空字符串，则返回 true；
+如果操作数是非空字符串，则返回 false；
+如果操作数是数值0，则返回 true；
+如果操作数是非0数值（包括 Infinity)，则返回 false；
+如果操作数是 null，则返回 true；
+如果操作数是 NaN，则返回 true；
+如果操作数是 undefined， 则返回 true.
+
+逻辑非操作符也可以用于将任何值转化为布尔值，同时使用两个!，相当于调用了Boolean()方法：
+
+```js
+!!"blue" // true
+!!0;     // false
+!!NaN    // false
+!!""     // false
+!!12345  // true
+```
 
 - 逻辑与
 `表达式1&&表达式2`如果第一个表达式为真，则返回表达式2，否则返回表达式1
@@ -558,7 +667,116 @@ Number() 还可以把日期转换为数字：`Number(new Date("2019-04-15"));   
 - 逻辑或
 `表达式1||表达式2`如果表达式1为真则返回表达式1，否则返回表达式2
 
-### 位运算符
+#### 比较操作符
+
+- 等于（==）不等于（!=）
+
+首先会判断两者类型是否相同，相同的话就比较两者的大小；
+类型不相同的话，就会进行类型转换；
+会先判断是否在对比 null 和 undefined，是的话就会返回 true
+判断两者类型是否为 string 和 number，是的话就会根据ASCII将字符串转换为 number
+判断两者类型是否为 string 和 string，是的话就会根据ASCII将字符串转换为 number,从左到右比较，第一位相等就比较下一位，由此类推
+判断其中一方是否为 boolean，是的话就会把 boolean 转为 number 再进行判断
+判断其中一方是否为 object 且另一方为 string、number 或者 symbol，是的话就会把 object 转为原始类型再进行判断
+
+- 全等（===）不全等（!==）
+只有当两个操作数的数据类型和值都相等时，才会返回true。它并不会进行数据类型的转化。​
+
+```js
+//NaN不等于任何值，包括它本身 
+NaN==NaN //false
+NaN===NaN //false
+null==undefined //true
+null===undefined //false
+1=='1' //true
+1==='1' //false
+
+//浏览器自己隐式创建的包装对象和我们显式创建的包装对象不严格相等，我们举个例子说明下：
+var name =  "神奇的程序员";
+var info = new String("神奇的程序员");
+console.log(name == info);    // true
+console.log(name === info);   // false
+
+- 浮点数相等比较
+```js
+
+1 / 3 === (1 - 2 / 3); // false
+// 浮点数在运算过程中会产生误差，因为计算机无法精确表示无限循环小数。要比较两个浮点数是否相等，只能计算它们之差的绝对值，看是否小于某个阈值
+Math.abs(1 / 3 - (1 - 2 / 3)) < 0.0000001; // true
+
+```
+
+#### 关系操作符
+
+小于（<）
+大于（>）
+小于等于（<=）
+大于等于（>=）
+
+如果这两个操作数都是数值，则执行数值比较；
+如果两个操作数都是字符串，则比较两个字符串对应的字符编码值；
+如果一个操作数是数值，则将另一个操作数转换为一个数值，然后执行数值比较；
+如果一个操作数是对象，则调用这个对象的valueOf()方法，并用得到的结果根据前面的规则执行比较；
+如果一个操作数是布尔值，则先将其转换为数值，然后再执行比较。
+
+#### 空值合并操作符（`??`）
+
+只有 ?? 左边为 null 或 undefined时才返回右边的值：
+
+```js
+const dogName = false; 
+const name =  dogName ?? 'default';  // name = false;
+```
+
+#### 可选链操作符（`?.`）
+
+在引用为null 或 undefined 的情况下不会引起错误，该表达式短路返回值是 undefined。与函数调用一起使用时，如果给定的函数不存在，则返回 undefined。
+
+```js
+const name = system?.user?.addr?.province?.name || 'default';
+a?.[x]
+// 等同于
+a == null ? undefined : a[x]
+
+a?.b()
+// 等同于
+a == null ? undefined : a.b()
+
+a?.()
+// 等同于
+a == null ? undefined : a()
+
+```
+
+#### `void`操作符
+
+`void` 是一元运算符，它可以出现在任意类型的操作数之前执行操作数，会忽略操作数的返回值，返回一个 undefined。void 常用于 HTML 脚本中执行 JavaScript 表达式，但不需要返回表达式的计算结果。比如对于链接标签，我们并不想让它发生跳转，就可以设置`href="javascript:void(0)`
+由于 `void` 运算符的优先级比较高，高于普通运算符的优先级，所以在使用时应该使用小括号明确 `void` 运算符操作的操作数，避免引发错误。
+
+```js
+let a = b = c = 2;  // 定义并初始化变量的值
+d = void (a -= (b *= (c += 5)));  // 执行void运算符，并把返回值赋予变量d
+console.log(a);  // -12
+console.log(b);  // 14
+console.log(c);  // 7
+console.log(d);  // undefined
+```
+
+#### 位运算符
+
+1）原码
+
+原码就是一个数的二进制数。例如：10的原码为0000 1010
+
+2）反码
+
+正数的反码与原码相同，如：10    反码为 0000 1010
+负数的反码为除符号位，按位取反，即0变1，1变0。
+
+3）补码
+
+正数的补码与原码相同，如：10    补码为 0000 1010
+负数的补码是原码除符号位外的所有位取反即0变1，1变0，然后加1，也就是反码加1。
 
 位运算符处理 32 位数。
 
@@ -566,13 +784,16 @@ Number() 还可以把日期转换为数字：`Number(new Date("2019-04-15"));   
 
 |运算符| 描述| 例子| 等同于| 结果| 十进制|
 |-|-|-|-|-|-|
-|& |与 |5 & 1 |0101 & 0001 |0001 |1|
-|\| |或 |5 \| 1 |0101 \| 0001 |0101 |5|
-|~ |非 |~ 5 |~0101 |1010 |10|
-|^ |异或 |5 ^ 1 |0101 ^ 0001 |0100 |4
-|<< |零填充左位移 |5 << 1 |0101 << 1 |1010 |10|
-|>> |有符号右位移 |5 >> 1 |0101 >> 1 |0010 |2|
-|>>> |零填充右位移 |5 >>> 1 |0101 >>> 1 |0010 |2|
+|`&` |与 |5 & 1 |0101 & 0001 |0001 |1|
+|`|` |或 |5 \| 1 |0101 \| 0001 |0101 |5|
+|`~` |非 |~ 5 |~0101 |1010 |10|
+|`^` |异或 |5 ^ 1 |0101 ^ 0001 |0100 |4
+|`<<` |各二进制位全部左移若干位,高位丢弃，低位补0 |5 << 1 |0101 << 1 |1010 |10|
+|`>>` |各二进制位全部右移若干位，正数左补0，负数左补1，右边丢弃 |5 >> 1 |0101 >> 1 |0010 |2|
+|`>>>` |零填充右位移 |5 >>> 1 |0101 >>> 1 |0010 |2|
+
+>无符号右移操作符（>>>）会将数值的32位全部右移。对于正数，有符号右移操作符和无符号右移操作符的结果是一样的。对于负数的操作，两者就会有较大的差异。
+>无符号右移操作符将负数的二进制表示当成正数的二进制表示来处理。所以，对负数进行无符号右移操作之后就会变的特别大。
 
 >上例使用 4 位无符号的例子。但是 JavaScript 使用 32 位有符号数。
 
@@ -582,24 +803,84 @@ Number() 还可以把日期转换为数字：`Number(new Date("2019-04-15"));   
 
 幂运算符为`**`而不是`^`,也可以用`Math.pow(x,y)`实现
 
-### 结构
+#### 加减乘除操作符
+
+- 加
 
 ```js
-//switch
-var num=3;
-switch(num){
-case 2:
-console.log(num);
-break;
-case 3:
-console.log(num);
-break;
-default:
-}
+1 + 2             // 3
+"1" + "2"         // "12"
+"1" + 2           // "12"
+1 + {}            // "1[object Object]"
+true + false      // 1  布尔值会先转为数字，再进行运算
+1 + null          // 1 null会转化为0，再进行计算
+1 + undefined     // NaN undefined转化为数字是NaN
+
 ```
 
-continue用于跳出本次循环，继续下一次循环；
-break用于结束循环；
+如果有一个操作数是NaN，则结果是NaN；
+如果是Infinity加Infinity，则结果是Infinity；
+如果是-Infinity加-Infinity，则结果是-Infinity；
+如果是Infinity加-Infinity，则结果是NaN；
+如果是+0加+0，则结果是+0；
+如果是-0加-0，则结果是-0；
+如果是+0加-0，则结果是+0。
+
+- 减
+减法操作和加法操作符类似， 但是减法操作符只能用于数值的计算，不能用于字符串的拼接
+
+```js
+3 - 1      // 2
+3 - true   // 2
+3 - ""     // 3
+3 - null   // 3
+NaN - 1    // NaN
+```
+
+如果是Infinity减Infinity，则结果是NaN；
+如果是-Infinity减-Infinity，则结果是NaN；
+如果是Infinity减-Infinity，则结果是Infinity；
+如果是-Infinity减Infinity，则结果是-Infinity；
+如果是+0减+0，则结果是+0；
+如果是-0减+0，则结果是-0；
+如果是-0减-0，则结果是+0。
+
+- 乘
+如果有一个操作数是NaN，则结果是NaN；
+如果Infinity与0相乘，则结果是NaN；
+如果Infinity与非0数值相乘，则结果是Infinity或-Infinity，取决于有符号操作数的符号；
+如果Infinity与Infinity相乘，则结果是Infinity。
+
+- 除法`/`
+如果有一个操作数是NaN，则结果是NaN；
+如果0除以0，则结果是NaN；
+如果Infinity除以Infinity，则结果是Infinity。
+如果是非零的有限数被零除，则结果是Infinity或-Infinity，取决于有符号操作数的符号；
+如果是Infinity被任何非零数值除，则结果是Infinity或-Infinity，取决于有符号操作数的符号。
+
+- 取余`%`
+如果被除数是无穷大值而除数是有限大的数值，则结果是NaN；
+如果被除数是有限大的数值而除数是零，则结果是NaN；
+如果是Infinity被Infinity除，则结果是NaN；
+如果被除数是有限大的数值而除数是无穷大的数值，则结果是被除数；
+如果被除数是零，则结果是零。
+
+- 幂运算`**`
+
+`Math.pow(2, 10);    // 1024`
+
+#### 运算符号优先级
+
+|||
+|-|-|
+|小括号|`()`|
+|一元运算符|`++`,`--`,`!`|
+|算数运算符|先`*`,`/`,`%`,`**`,后`+`,`-`,|
+|关系运算符|`>`,`>=`,`<=`,`<`,|
+|相等运算符|`==`,`===`,`!==`,`!=`,|
+|逻辑运算符|先`&&`后`||`|
+|赋值|`=`|
+|逗号|`,`|
 
 ### 创建数组
 
@@ -746,6 +1027,8 @@ fruits.shift();            // 从 fruits 删除第一个元素 "Banana"
 var fruits = ["Banana", "Orange", "Apple", "Mango"];
 delete fruits[0];           // 把 fruits 中的首个元素改为 undefined
 //用 delete 会在数组留下未定义的空洞。请使用 pop() 或 shift() 取而代之。
+//原型中声明的属性和对象自带的属性无法被删除；
+//通过var声明的变量和通过function声明的函数拥有dontdelete特性，是不能被删除。
 ```
 
 使用 splice() 来删除元素
@@ -840,14 +1123,15 @@ fruits.reverse();         // 反转元素顺序
 
 ```js
 //函数关键字声明
-function a(){
+function a(){//具名函数
 console.log('xxxxxxxxx');
 }
 ```
 
 ```js
 //函数表达式声明
-var b=function(){};
+var b=function(){//匿名函数
+};
 //function 函数名（形参1，形参2...）{//形参即形式上的参数}
 function b(n){
 console.log(n);
@@ -856,7 +1140,6 @@ b('xxx');
 //实参与形参个数一致时，正常输出
 //实参小于形参时，多余的形参可看作不用声明的变量，结果为undefined
 //实参多于形参时，只取到形参的个数
-//#######################################
 
 ```
 
@@ -1119,9 +1402,11 @@ var x = 10;
 通过 var 声明的变量会提升到顶端
 通过 let 定义的变量不会被提升到顶端
 
-- const
+- const常量
 
-通过 const 定义的变量与 let 变量类似，但不能重新赋值;const 变量必须在声明时赋值,const 变量不能在声明之前使用
+通过 const 定义的变量与 let 变量类似，但不能重新赋值;
+const 变量必须在声明时赋值,
+const 变量不能在声明之前使用,不能重复声明
 
 - 但常量对象是可以更改
 
@@ -1802,6 +2087,7 @@ moduleA.putB();
 - ECMA6
 
 moduleB.js
+
 ```js
 //导出
 export={
@@ -1827,6 +2113,7 @@ sayName()
 ```
 
 moduleA.js
+
 ```js
 //默认导出
 let obj={name:'xx',}
@@ -2031,12 +2318,11 @@ https:
 
 查看整个url
 
-## DOM
-
-文档对象模型（document object model）
+## DOM（文档对象模型document object model）
+>用来提供一套操作网页内容的功能
 HTML DOM 方法是您能够（在 HTML 元素上）执行的动作。
 HTML DOM 属性是您能够设置或改变的 HTML 元素的值。
-
+dom树：以树状结构，体现标签与标签之间的关系
 - 通过这个对象模型，JavaScript 获得创建动态 HTML 的所有力量：
 
   - JavaScript 能改变页面中的所有 HTML 元素
@@ -2189,9 +2475,36 @@ var brother5 = document.getElementById("test").nextSibling;
 //增加属性,支持自定义
 node.setAttribute("class","box");
 node.setAttribute("jjj","aaa");
+//自定义属性data-
+node.setAttribute("data-jjj","aaa");
+node.setAttribute("data-a-b","aaa");
+node.setAttribute("data-tB","aaa");
+node.dataset.jjj
+node.dataset.aB
+node.dataset.tb
+
 //删除属性
 node.removeAttribute("class");
 
+```
+
+### 修改样式
+- 通过style属性修改
+```js
+el.style.background='red'
+```
+
+- 通过className属性修改
+```js
+el.className='test'
+```
+
+- 通过classList属性修改
+```js
+//不会覆盖原有类名
+el.classList.add('类名')
+el.classList.remove('类名')
+el.classList.toggle('类名')//有则移除，没有则添加
 ```
 
 ### 获取内容
@@ -2262,7 +2575,7 @@ console.log(oDiv.childNodes[0].nodeName);
 
 获取当前元素节点上的所有的属性节点
 
-```
+```js
 var oDiv=document.getElementById("div1");
 console.log(oDiv.attributes);
 ```
@@ -2533,10 +2846,12 @@ console.log(target.innerHTML);
 ```
 
 - 事件冒泡：由里向外逐级触发
+>事件冒泡：同样的事件会在该元素的所有祖先元素中依次被触发(从里到外)
+>事件捕获：从根元素开始去执行对应事件(从外到里)
 
 事件对象的属性和方法:
-cancelBubble=true;
-stopPropagation();
+`cancelBubble=true;`
+`stopPropagation();`(捕获阶段也有效)
 
 ```js
 window.onload=function(){
@@ -2552,13 +2867,15 @@ e.cancelBubble=true;
 }
 ```
 
+>mouseover和mouseout会有冒泡效果
+>mouseenter和mouseleave没有冒泡效果
+
 #### DOM事件监听器
 
-- addEventListerner();
+- addEventListerner
 语法
-element.addEventListener(event, function, useCapture);
+`element.addEventListener(event, function, useCapture);`
 第一个参数是事件的类型（比如 "click" 或 "mousedown"）。第二个参数是当事件发生时我们需要调用的函数。第三个参数是布尔值，指定使用事件冒泡还是事件捕获,默认false事件冒泡,此参数是可选的。
-
 >注意：请勿对事件使用 "on" 前缀；请使用 "click" 代替 "onclick"。
 
 实例
@@ -3176,13 +3493,13 @@ var w1=new worker("Tom","man",22,"driver");
 ```
 
 ##### promise
-
+>回调函数：当一个函数当作参数传递给另一个函数的时候，这个函数就是回调函数
 ```js
 let p=new Promise((resolve,reject)=>{
    //异步操作
 })
 p.then(res=>{},err=>{}).catch(err=>{})
-//then()，第一个参数时resolve回调函数，第二个是reject回调函数，可选．
+//then()，第一个参数是resolve回调函数，第二个是reject回调函数，可选．
 //catch(err=>{})等价于then(null,err=>{})
 
 //resolve()方法,将现有的任何对象转化为promise对象
@@ -3212,7 +3529,6 @@ p1.then(res=>{},err=>{}).finally(()=>{})
 
 ```
 
-
 ##### async 异步操作
 
 ```js
@@ -3226,7 +3542,6 @@ test().then(val=>{
    //val=='123'
 })
 ```
-
 
 ---
 

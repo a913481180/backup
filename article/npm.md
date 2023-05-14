@@ -161,17 +161,18 @@ yarn config delete registry
 ```
 
 npm 与 yarn 命令对比：
+
 |npm 命令|yarn 命令|说明|
 |-|-|-|
-npm install | yarn install|安装依赖,安装时，如果 node_modules 中有相应的包则不会重新下载 --force 可以强制|
-npm install [package@版本号] | yarn add [package@版本号]|指定版本安装一个包|
-npm install [package] --save | yarn add [package]|安装一个包,--save 是 yarn 默认的|
-npm install -g [package] | yarn global add [package@版本号]|指定版本安装一个包|
-npm install --save-dev [package] | yarn add --dev [package]|安装包作为开发依赖项，简写`-D`|
-npm uninstall [package] | yarn remove [package]|卸载一个包|
-npm uninstall --save-dev [package] | yarn remove [package]|卸载开发依赖包|
-npm update | yarn upgrade|更新的依赖关系|
-npm update [package] | yarn upgrade [package]|更新包，npm 可以通过 ‘--save|--save-dev’ 指定升级哪类依赖|
+|npm install | yarn install|安装依赖,安装时，如果 node_modules 中有相应的包则不会重新下载 --force 可以强制|
+|npm install [package@版本号] | yarn add [package@版本号]|指定版本安装一个包|
+|npm install [package] --save | yarn add [package]|安装一个包,--save 是 yarn 默认的|
+|npm install -g [package] | yarn global add [package@版本号]|指定版本安装一个包|
+|npm install --save-dev [package] | yarn add --dev [package]|安装包作为开发依赖项，简写`-D`|
+|npm uninstall [package] | yarn remove [package]|卸载一个包|
+|npm uninstall --save-dev [package] | yarn remove [package]|卸载开发依赖包|
+|npm update | yarn upgrade|更新的依赖关系|
+|npm update [package] | yarn upgrade [package]|更新包，npm 可以通过 ‘--save|--save-dev’ 指定升级哪类依赖|
 
 ## PNPM
 
@@ -258,7 +259,7 @@ node_modules
 ### 优势
 
 - 解决了幽灵依赖的问题
-  yarn 和 npm 中的幽灵依赖：由于在 yarn 或 npm 中采用扁平化的安装包的方式，即所有的包（包括依赖的依赖）都被提升到了项目根目录中的 node_modules 中，那么项目中可以直接引用到不在 package.json 中声明的包，那么在包更新的时候，可能会导致问题。
+  yarn 和 npm 中的幽灵依赖：由于在 yarn 或 npm 中采用扁平化的安装包的方式，即所有的包（包ffff依赖）都被提升到了项目根目录中的 node_modules 中，那么项目中可以直接引用到不在 package.json 中声明的包，那么在包更新的时候，可能会导致问题。
   而 pnmp 中的项目根目录的 node_modules 中只有项目直接依赖的包，所以不会有这个问题。
 
 - 路径过长的问题
@@ -321,6 +322,7 @@ cnpm 是个中国版的 npm，是淘宝定制的 cnpm (gzip 压缩支持) 命令
 扁平化处理时，比如安装 A，A 依赖 B 和 C，C 依赖 D 和 E，就把 A~E 全部放到 node_modules 目录下，从而解决上个版本中 node_modules 嵌套层级过深的问题。
 
 在 install 安装时，会不停的往上级 node_modules 中寻找，如果找到同样的包，就不再重复安装，从而解决了大量包被重复安装的问题。但是扁平化带来了新的问题：
+
 1. 依赖结构的不确定性
 2. 扁平化算法本身复杂性很高，耗时较长
 3. 项目中仍然可以非法访问没有声明过依赖的包

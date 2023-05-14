@@ -525,7 +525,7 @@ console.log(this.title3.current)
 
 - 初始化阶段
 
-```
+```js
 constructor()//构造器
 componentWillMount()//组件将要挂载
 render()
@@ -534,7 +534,7 @@ componentDidMount()//组件挂载完毕
 
 - 更新数据时
 
-```
+```js
 setState()
 shouldComponentUpdate()//默认返回true，返回false时不执行更新
 componentWillUpdate()//组件将要更新
@@ -544,7 +544,7 @@ componentDidUpdate()//组件更新更新完毕
 
 - 强制更新时
 
-```
+```js
 forceUpdate()//不想更改状态中的数据，更新页面
 componentWillUpdate()//组件将要更新
 render()
@@ -553,7 +553,7 @@ componentDidUpdate()//组件更新更新完毕
 
 - 父组件渲染
 
-```
+```js
 componentWillReceiveProps(props)//第一次不调用，接受新的props才调用
 shouldComponentUpdate()//默认返回true，返回false时不执行更新
 componentWillUpdate()//组件将要更新
@@ -564,8 +564,8 @@ componentDidUpdate()//组件更新更新完毕
 
 - 卸载组件
 
-```
-由React.unmountComponentAtNode()触发
+```js
+//由React.unmountComponentAtNode()触发
 componentWillUnmount()
 ```
 
@@ -575,7 +575,7 @@ componentWillUnmount()
 
 - 初始化阶段
 
-```
+```jsx
 constructor()//构造器,初始化state,创建ref,bind解决this指向
 //UNSAFE_componentWillMount()
 static getDerivedStateFromProps(props,state){//组件将要挂载，不能加到实例上，要加上static。
@@ -588,11 +588,13 @@ componentDidMount()//组件挂载完毕
 
 - 更新数据时，调用 setState()、forceUpdate()或父组件新 Props
 
-```
+```jsx
 static getDerivedStateFromProps(props,state)//组件将要挂载，不能加到实例上，要加上static。
 shouldComponentUpdate()//默认返回true，返回false时不执行更新
-static getSnapshotBeforeUpdate(preProps,preState){//更新前
 
+getSnapshotBeforeUpdate(preProps,preState){//更新前,必须和componentDidupdate一起使用
+
+//返回值会传入componentDidUpdate中
 return 'xxx'
 
 }
@@ -602,8 +604,8 @@ componentDidUpdate(preProps,preState,snapshotValue)//之前的prop时和状态,�
 
 - 卸载组件
 
-```
-由React.unmountComponentAtNode()触发
+```js
+//由React.unmountComponentAtNode()触发
 componentWillUnmount()
 ```
 
@@ -1718,6 +1720,7 @@ const {a:{b:value}}=obj;//连续解构赋值+重命名
 ```
 
 ##### 高阶组件
+>
 >把一个组件当成另一个组件的参数传入，然后返回新的组件
 
 ```jsx
@@ -1737,7 +1740,6 @@ function AuthComponent({children}){
 ```
 
 ##### 高阶函数
-
 
 - 若 a 函数，接收的参数是一个函数，那么 a 就可以称为高阶函数
 - 若 a 函数，调用的返回值依然是一个函数，那么 a 就可以称为高阶函数
@@ -1832,7 +1834,6 @@ export default class Demo extend Component{
 }
 
 ```
-
 
 #### Hooks
 
