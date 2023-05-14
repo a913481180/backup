@@ -53,7 +53,7 @@ categories:
 
 webpack配置文件
 
-```
+```js
 //用于拼接路径
 const {resolve}=require('path');
 //插件:需要下载
@@ -251,7 +251,7 @@ open:true,
 
 - package.json
 
-```
+```json
 ...
 "browserslist":{  //兼容的浏览器版本
 //默认匹配生产环境，可通过修改process.env.NODE_ENV=developent来改变
@@ -273,7 +273,7 @@ open:true,
 
 - index.js
 
-```
+```js
 //引用样式
 import './index.css'
 //兼容js
@@ -290,7 +290,7 @@ HMR:模块热替换;当模块发生变化时，只会重新打包这个模块，
 
  package.json
 
-```
+```json
 ...
 devServer:{
 ...
@@ -303,7 +303,7 @@ hot:true
 - js文件：默认不能使用hmr功能,解决办法：修改js代码，添加支持hmr功能的代码，但只能处理非入口js文件的其他文件。
 index.html
 
-```
+```js
 if(module.hot){
 module.hot.accept('./test.js',function(){}); //监听test.js的变化，若变化则执行回调函数
 }
@@ -313,7 +313,7 @@ module.hot.accept('./test.js',function(){}); //监听test.js的变化，若变�
 
 webpack.config.js
 
-```
+```js
 module.exports={
 entry:['./src/js/index.js','./src/index.html'],
 output:{...},
@@ -358,7 +358,7 @@ source-map:一种提供源代码到构建后代码映射的技术，用于检测
 
 ## oneOf
 
-```
+```js
 //以下loader只会匹配一个
 //注意：不能有两个配置处理同一个类型文件
 oneOf:[

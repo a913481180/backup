@@ -7,7 +7,6 @@ tags:
   - vue
 ---
 
-# Vue2.0
 
 > 一套用于构建用户界面的渐进式 javascrip 框架
 
@@ -251,7 +250,7 @@ Vue.directive(指令名，回调函数);
 
 如添加属性：
 
-```
+```js
 let person{
 name:'xiaomei'
 }
@@ -278,7 +277,7 @@ age=value;
 
 通过一个对象对另一个对象中的属性的操作
 
-```
+```js
 var object={//原数据
     name:'xiaomei',
     sex:'female',
@@ -312,7 +311,7 @@ vue 中的数据代理：通过 vm 对象来代理 data 对象中属性的操作
 
 示例：
 
-```
+```js
 //###只能监测一层
 let data={name:'xiaomei'}
 //创建一个监视的实例对象，用于监视data中的属性变化
@@ -382,7 +381,7 @@ new Vue({
 
 能开启异步操作如:`setTimeout(()=>{},1000)`;所有不被 vue 所管理的函数最好写成箭头函数，这样 this 的指向才是 vm
 
-```js
+```html
 <script>
 const vm = new Vue({
   el:'#test',
@@ -423,7 +422,7 @@ vm.$watch('istrue',function(){ console.log('test');});
 
 对要显示的数据进行特定格式化后在显示（常用于一些简单逻辑的处理）
 
-```js
+```html
 <body>
   <h3>
     <!--使用过滤器-->

@@ -1,6 +1,6 @@
 ---
 title: AJax
-date: 2021-02-12 20:11:33
+date: 2021-02-12 20:10:33
 categories:
 - web
 ---
@@ -10,7 +10,8 @@ categories:
 `XMLHttpRequest`IE8以下不兼容；IE8以下声明ajax方法为`ActiveXObject("Microsoft.XMLHTTP");`
 
 1. 创建ajax对象
-```
+
+```js
 var xhr=null
 if(window.XMLHttpRequest){
  xhr=new XMLHttpRequest();
@@ -21,7 +22,7 @@ xhr=new ActiveXObject("Microsoft.XMLHTTP");
 
 2. 调用open
 
-```
+```js
 /*
 第一个参数： 请求方式 
 第二个：url
@@ -34,12 +35,12 @@ xhr.open("get","./get.php?name=yyyy&age=22&password=342",true);
 
 3. 调用send
 
-```
+```js
 //get方法
 xhr.send();
 //post方法，将数据放在send()里提交
-xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');	//声明发送的数据类型
-xhr.send("name=yyy&age=33&password=124564");	//无需编码
+xhr.setRequestHeader('content-type','application/x-www-form-urlencoded'); //声明发送的数据类型
+xhr.send("name=yyy&age=33&password=124564"); //无需编码
 //post没有缓存问题
 ```
 
@@ -60,11 +61,10 @@ onreadystatechange事件
 |200||
 |400||
 
-
 `responseText`:返回以文本形式存放的内容;
 `responseXML`:返回XML形式的内容
 
-```
+```js
 xhr.onreadystatechange=function(){
 if(xhr.readyState==4){
 if(xhr.status==200){
@@ -76,7 +76,8 @@ alert("error:"+xhr.status);
 }
 }
 ```
-###  传输格式
+
+### 传输格式
 
 - xml数据
 优点：种类丰富，传输量非常大
@@ -89,12 +90,14 @@ alert("error:"+xhr.status);
 
 `JSON.parse();`:将JSON字符串转为一个对象。
 你的字符串必须符合JSON格式，即键值都必须使用双引号包裹：
-```
+
+```js
 let a = '["1","2"]';
 let b = "['1','2']";
 console.log(JSON.parse(a));// Array [1,2]
 console.log(JSON.parse(b));// 报错
 ```
+
 `JSON.stringify();`:将 JavaScript 对象转换为 JSON 字符串
 
 ### ajax 只能下载同源的数据，跨源的数据禁止下载
@@ -107,62 +110,65 @@ console.log(JSON.parse(b));// 报错
 
 同源策略禁止跨源请求
 
-
 - 跨源方法：
    1. 修改ajax同源协议（不建议）
    2. 委托php文件进行跨源
    3. JSONP
 
 ### JSONP跨域的使用流程
+
    1. 先去声明一个函数，这个函数有一个形参，这个形参会拿到我们想要下载的数据，
    2. 在需要下载数据的时候，动态创建script标签，将标签src属性设置成下载数据的链接
    3. 当script插入到页面的时候，就会调用号已经封装好的函数，将数据传过来
 
 index.html
-```
+
+```js
 <script>
 function download(data){
 console.log(data);
 }
 </script>
-<script src="test.js">	//浏览器一运行就会显示</script>
+<script src="test.js"> //浏览器一运行就会显示</script>
 <script>
 //动态生成script标签
 window.onload=function(){
 var Obtn=document.getElementById('btn1');
 Obtn.onclick=function(){
-	var oScript=document.createElement("script");	//创建script标签
-	oScript.src='test.js';
-	document.body.appendChild(oScript);		//插入到页面
+ var oScript=document.createElement("script"); //创建script标签
+ oScript.src='test.js';
+ document.body.appendChild(oScript);  //插入到页面
 }
 }
 </script>
 ```
 
  test.js
-```
+
+```js
 download("hello!!!!!!!!!");
 ```
 
 实例：
-```
+
+```html
 <script>
 function download(data){
 console.log(data);
  var oInfo=documenet.getElementById("oinfo");
  var oTi=..;
-	oInfo.innerHTML=`${data.city}`
-		
-	var str='';
-	for (var i=0;i<arr.length;i++){
-	str+=`
-		<tr>
-			<td>${arr[i].data}</td>
-		</tr>
-			`
-		}
+ oInfo.innerHTML=`${data.city}`
+  
+ var str='';
+ for (var i=0;i<arr.length;i++){
+ str+=`
+  <tr>
+   <td>${arr[i].data}</td>
+  </tr>
+   `
+  }
 
-	oTi.innerHTML=str;
+ oTi.innerHTML=str;
 }
 </script>
 <script>
@@ -170,9 +176,9 @@ console.log(data);
 window.onload=function(){
 var Obtn=document.getElementById('btn1');
 Obtn.onclick=function(){
-	var oScript=document.createElement("script");	//创建script标签
-	oScript.src='https:.....&callback=download';
-	document.body.appendChild(oScript);		//插入到页面
+ var oScript=document.createElement("script"); //创建script标签
+ oScript.src='https:.....&callback=download';
+ document.body.appendChild(oScript);  //插入到页面
 }
 }
 </script>
@@ -184,13 +190,12 @@ form表单点击提交数据后需跳转页面，ajax为异步进行的数据传
 
 - action:点击submit后跳转的url
 - method:表单提交方式get/post
-   - get(默认)
+  - get(默认)
 直接将数据拼接在url后面进行提交;用`？`进行拼接,多个数据之间用`&`进行连接
-      - 优点：简单
-      - 缺点：不安全，最大2kb，无法实现上传大文件
+    - 优点：简单
+    - 缺点：不安全，最大2kb，无法实现上传大文件
 
-
-```
+```html
 <form action="get.php" method="get">
 <input type="text" name="username" placeholder="name" />
 <input type="text" name="age" placeholder="age" />
@@ -198,13 +203,15 @@ form表单点击提交数据后需跳转页面，ajax为异步进行的数据传
 <input type"submit"/>
 </form>
 ```
-   - post 
+
+- post
 通过浏览器内部进行提交
-      - 优点：安全，上传大小无上限
-      - 缺点：比get复杂
+  - 优点：安全，上传大小无上限
+  - 缺点：比get复杂
 
 `enctype`提交数据的格式，默认`application/x-www-form-urlencoded`
-```
+
+```html
 <form action="post.php" method="post"  enctype="application/x-www-from-urlencoded">
 <input type="text" name="username" placeholder="name" />
 <input type="text" name="age" placeholder="age" />
@@ -212,9 +219,10 @@ form表单点击提交数据后需跳转页面，ajax为异步进行的数据传
 <input type"submit" value="post按钮"/>
 </form>
 ```
+
 php
 
-```
+```php
 <?php
 header('content-type:text/html;charset="UTF-8"');
 //$_GET 全局关联数组 ；存放着get提交的所有数据
@@ -229,7 +237,7 @@ echo ("{$username},${age},{$password});
 
 ### 数据库操作
 
-```
+```php
 <?php
 header("Content-type:text/html;charset=utf-8");
 //连接数据库
@@ -264,12 +272,18 @@ mysql_close($link);
 
 ?>
 ```
+
 ---
-##   post/put/patch请求传参格式有 formData 形式 、query 形式 、JSON形式三种；
-## axios设置token到请求头：
+
+## post/put/patch请求传参格式有 formData 形式 、query 形式 、JSON形式三种
+
+## axios设置token到请求头
+
 加一个http request拦截器；通过window.localStorage.getItem("accessToken") 来获取token的value；通过config.headers.accessToken = token;将token放到请求头发送给服务器，放在请求头中
-##form表单提交是单向的：
-只能给服务器发送数据，但是无法获取服务器返回的数据，也就是无法读取HTTP应答包。
+
+## form表单提交是单向的
+
+只能给服务器发送数据，但是无法获取服务器返回的数据，也就是无法读取HTTP应答包
 ---
 
 同源策略
@@ -282,7 +296,7 @@ mysql_close($link);
 
 页面中的链接，重定向以及表单提交是不会受到同源策略限制的。
 
-跨域资源的引入是可以的。但是js不能读写加载的内容。如嵌入到页面中的<script src="..."></script>，<img>，<link>，<iframe>等。
+跨域资源的引入是可以的。但是js不能读写加载的内容。如嵌入到页面中的`<script src="..."></script>，<img>，<link>，<iframe>`等。
 
 受到限制的
 
@@ -295,21 +309,25 @@ jsonp的核心原理就是：目标页面回调本地页面的方法,并带入�
 服务器端实现 JSONP 接口的步骤
 服务器端获取客户端发送过来的query参数，其中参数有回调函数的名字
 得到的数据，拼接出一个函数调用的字符串
-把上一步拼接得到的字符串，响应给客户端的 <script> 标签进行解析执行
+把上一步拼接得到的字符串，响应给客户端的 `<script>` 标签进行解析执行
 jsonp的缺点：只能发送get一种请求。
 1、原生JS实现
 通过script标签src属性，发送带有callback参数的GET请求，服务端将接口返回数据拼凑到callback函数中，返回给浏览器，浏览器解析执行，从而前端拿到callback函数返回的数据。
 
+```httml
 <script>
     function getData(data){
         console.log(data)
     }
 </script>
 <script src="http://127.0.0.1:3000/web?cb=getData"></script>
+```
+
 后端nodejs代码
 主要用来模拟服务器
 携带参数必须是字符串
 
+```js
 const express=require('express')
 const router=express.Router()
 router.get('/web',(req,res)=>{
@@ -327,9 +345,12 @@ router.get('/web',(req,res)=>{
     })
 })
 module.exports=router
+```
+
 2、jquery Ajax实现
 以jquery来发起jsonp请求
 
+```html
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.10.0/jquery.js"></script>
 <script>
     let url = 'http://127.0.0.1:3000/que?cb=getData'
@@ -342,15 +363,21 @@ module.exports=router
         }
     })
 </script>
+```
+
 3、Vue axios实现
+
+```js
 handleCallback({"success": true, "user": "admin"})
 this.$http = axios;
-this.$http.jsonp('http://127.0.0.1:3000/que?cb=getData', {
+this.$http.jsonp('<http://127.0.0.1:3000/que?cb=getData>', {
     params: {},
     jsonp: 'handleCallback'
 }).then((res) => {
-    console.log(res); 
+    console.log(res);
 })
+```
+
 二、跨域资源共享（CORS）
 CORS是一个W3C标准，全称是"跨域资源共享"（Cross-origin resource sharing）。
 它允许浏览器向跨源服务器，发出XMLHttpRequest请求，从而克服了AJAX只能同源使用的限制。
@@ -364,9 +391,13 @@ CORS需要浏览器和服务器同时支持。
 
 请求方式：get/post/head其中一种
 请求头设置：
+
+```txt
 Accept
 Accept-Language
 Content-Type：application/x-www-form-urlencoded、multipart/form-data、text/plain（ 只限于三个值中的一个）
+```
+
 详细描述
 对于简单请求，浏览器直接发出CORS请求。具体来说，就是在头信息之中，增加一个Origin字段。
 举例：
@@ -375,13 +406,15 @@ Content-Type：application/x-www-form-urlencoded、multipart/form-data、text/pl
 
 自动在头信息之中，添加一个Origin字段。
 
+```txt
 GET /cors HTTP/1.1
-Origin: http://127.0.0.1:8080
+Origin: <http://127.0.0.1:8080>
 Host: api.alice.com
 Accept-Language: en-US
 Connection: keep-alive
 User-Agent: Mozilla/5.0...
 Origin：本次请求来自哪个域（协议 + 域名 + 端口）。服务器根据这个值，决定是否同意这次请求。
+```
 
 服务器判断此次请求Origin源
 
@@ -390,10 +423,14 @@ Origin：本次请求来自哪个域（协议 + 域名 + 端口）。服务器�
 注意，这种错误无法通过状态码识别，因为 HTTP 回应的状态码有可能是200。
 在许可范围内：服务器返回的响应，会多出几个头信息字段。
 有三个与 CORS 请求相关的字段，都以Access-Control-开头。
-Access-Control-Allow-Origin: http://api.bob.com
+
+```txt
+Access-Control-Allow-Origin: <http://api.bob.com>
 Access-Control-Allow-Credentials: true
 Access-Control-Expose-Headers: FooBar
 Content-Type: text/html; charset=utf-8
+```
+
 Access-Control解释
 
 Access-Control-Allow-Origin：必须的
@@ -421,14 +458,16 @@ CORS 请求时，XMLHttpRequest对象的getResponseHeader()方法只能拿到6�
 
 自动发出一个“预检”请求，要求服务器确认可以这样请求。下面是这个“预检”请求的 HTTP 头信息：
 
+```txt
 OPTIONS /cors HTTP/1.1
-Origin: http://api.bob.com
+Origin: <http://api.bob.com>
 Access-Control-Request-Method: PUT
 Access-Control-Request-Headers: X-Custom-Header
 Host: api.alice.com
 Accept-Language: en-US
 Connection: keep-alive
 User-Agent: Mozilla/5.0...
+```
 
 两个特殊字段:
 
@@ -460,13 +499,14 @@ Access-Control-Max-Age：可选
 CORS跨域
 1)前端设置
 
+```js
 let xhr;
 try {
-    xhr=new XMLHttpRequest();   
+    xhr=new XMLHttpRequest();
 } catch (error) {
      xhr=new ActiveXObject('Microsoft.XMLHTTP');
 }
-xhr.open('post','http://localhost:3000/login',true);
+xhr.open('post','<http://localhost:3000/login',true>);
 xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
 xhr.send('name=111&age=12');
 xhr.onreadystatechange=function(){
@@ -477,13 +517,17 @@ xhr.onreadystatechange=function(){
         }
     }
 }
+```
+
 nodejs代码
 在Express中通过第3方中间件来完成cors跨域解决
 使用步骤分为如下 3 步：
 
-运行 npm install cors 安装中间件
-使用 const cors = require('cors') 导入中间件
-在路由之前调用 app.use(cors()) 配置中间件
+运行` npm install cors `安装中间件
+使用 `const cors = require('cors')`导入中间件
+在路由之前调用 `app.use(cors())` 配置中间件
+
+```js
 const express=require('express')
 const cors=require('cors')
 const app=express()
@@ -507,6 +551,8 @@ app.use((req,res,next)=>{
 app.get('/login',(req,res)=>{
     res.send('登陆')
 })
+```
+
 三、Nginx 反向代理解决跨域问题
 正向代理和反向代理
 提到代理，肯定要说一下这两个的区别。
@@ -520,9 +566,12 @@ app.get('/login',(req,res)=>{
 nginx配置解决iconfont跨域
 浏览器跨域访问js、css、img等常规静态资源被同源策略许可，但iconfont字体文件(eot|otf|ttf|woff|svg)例外，此时可在nginx的静态资源服务器中加入以下配置。
 
+```conf
 location / {
   add_header Access-Control-Allow-Origin *;
 }
+```
+
 nginx反向代理接口跨域
 跨域问题：同源策略仅是针对浏览器的安全策略。服务器端调用HTTP接口只是使用HTTP协议，不需要同源策略，也就不存在跨域问题。
 
@@ -530,10 +579,12 @@ nginx反向代理接口跨域
 
 nginx具体配置
 
-#proxy服务器
+# proxy服务器
+
+```conf
 server {
     listen       81;
-    server_name  www.domain1.com;
+    server_name  <www.domain1.com>;
 
     location / {
         proxy_pass   http://www.yp2.com:8080;  #反向代理
@@ -545,6 +596,7 @@ server {
         add_header Access-Control-Allow-Credentials true;
     }
 }
+```
 
 四、nodejs中间件代理跨域
 node中间件实现跨域代理，原理大致与nginx相同，都是通过启一个代理服务器，实现数据的转发，也可以通过设置cookieDomainRewrite参数修改响应头中cookie中域名，实现当前域的cookie写入，方便接口登录认证。
@@ -552,8 +604,11 @@ node中间件实现跨域代理，原理大致与nginx相同，都是通过启�
 1、nodejs服务器代理
 使用node + express + http-proxy-middleware搭建一个proxy服务器。
 
+```bash
 npm i express htttp-proxy-middleware
+```
 
+```js
 const express=require('express')
 const app=express()
 app.listen(5000)
@@ -561,12 +616,12 @@ const httpProxyMiddleware=require('http-proxy-middleware')
 // 服务器代理  ---接口中间层 代理层
 app.use('/api' ,httpProxyMiddleware.createProxyMiddleware({
     // 代理的地址
-    target:'http://localhost:8989',
+    target:'<http://localhost:8989>',
     // 默认false不修改。修改代理请求是他的主机名
     changeOrigin:true,
     // 修改响应头信息，实现跨域并允许带cookie
     onProxyRes: function(proxyRes, req, res) {
-        res.header('Access-Control-Allow-Origin', 'http://localhost:5000');
+        res.header('Access-Control-Allow-Origin', '<http://localhost:5000>');
         res.header('Access-Control-Allow-Credentials', 'true');
     },
 
@@ -576,10 +631,13 @@ app.use('/api' ,httpProxyMiddleware.createProxyMiddleware({
         '^/v1/api':'/'
     }
 }))
+```
+
 2、vue框架的跨域
 vue中实现开发环境的时的反向代理进行跨域解决，在项目根目录下面创建一个vue.config.js文件，写下如下代码
 vue.config.js部分配置：
 
+```js
 module.exports={
     // 指定服务器模块
     devServer:{
@@ -587,7 +645,7 @@ module.exports={
         proxy:{
             '/v1/api':{
                 // 目标地址
-                target:'http://localhost:3000',
+                target:'<http://localhost:3000>',
                 changeOrigin:true,
                 pathRewrite:{
                     '/v1/api':'/api'
@@ -596,30 +654,41 @@ module.exports={
         }
     }
 }
+```
+
 五、document.domain + iframe跨域
 前提条件
 这两个域名必须属于同一个一级域名!而且所用的协议，端口都要一致，否则无法利用document.domain进行跨域。
 Javascript出于对安全性的考虑，而禁止两个或者多个不同域的页面进行互相操作。
 而相同域的页面在相互操作的时候不会有任何问题。
 
+```js
 alert(document.domain = "baidu.com");     //"baidu.com"
 alert(document.domain = "www.baidu.com"); //"www.baidu.com"
-举例
-1）父窗口：(http://father.baidu.com/a.html)
+```
 
+举例
+1）父窗口：`(<http://father.baidu.com/a.html>)`
+
+```html
 <iframe id="iframe" src="http://child.baidu.com/b.html"></iframe>
 <script>
     document.domain = 'baidu.com';
     var user = 'admin';
 </script>
-预览
-1）子窗口：(http://child.baidu.com/b.html)
+```
 
+预览
+1）子窗口：`(http://child.baidu.com/b.html)`
+
+```html
 <script>
     document.domain = 'baidu.com';
     // 获取父窗口中变量
     console.log('get js data from parent ---> ' + window.parent.user);
 </script>
+```
+
 六、location.hash + iframe跨域
 hash 属性是一个可读可写的字符串，该字符串是 URL 的锚部分（从 # 号开始的部分）。
 
@@ -631,8 +700,9 @@ a想要与b跨域相互通信，通过中间页c来实现。
 具体实现
 A域：a.html -> B域：b.html -> A域：c.html
 a与b不同域只能通过hash值单向通信，b与c也不同域也只能单向通信，但c与a同域，所以c可通过parent.parent访问a页面所有对象。
-1）a.html：(http://www.baidu1.com/a.html)
+1）a.html：`(<http://www.baidu1.com/a.html>)`
 
+```html
 <iframe id="iframe" src="http://www.baidu2.com/b.html" style="display:none;"></iframe>
 <script>
     var iframe = document.getElementById('iframe');
@@ -647,8 +717,11 @@ a与b不同域只能通过hash值单向通信，b与c也不同域也只能单向
         alert('data from c.html ---> ' + res);
     }
 </script>
-2）b.html：(http://www.baidu2.com/b.html)
+```
 
+2）b.html：`(http://www.baidu2.com/b.html)`
+
+```html
 <iframe id="iframe" src="http://www.baidu1.com/c.html" style="display:none;"></iframe>
 <script>
     var iframe = document.getElementById('iframe');
@@ -667,6 +740,8 @@ a与b不同域只能通过hash值单向通信，b与c也不同域也只能单向
         window.parent.parent.onCallback('hello: ' + location.hash.replace('#user=', ''));
     };
 </script>
+```
+
 优缺点
 location.hash + iframe跨域的优点：
 
@@ -682,6 +757,7 @@ window.name属性的独特之处：只要在一个window下，无论url怎么变
 举例
 test1.html
 
+```html
 <body>
   <h2>test1页面</h2>
   <iframe src="http://192.168.0.1/php_demo/test2.html" frameborder="1"></iframe>
@@ -695,8 +771,11 @@ test1.html
     }
   </script>
 </body>
+```
+
 test2.html
 
+```html
 <body>
   <h2>test2页面</h2>
   <script>
@@ -708,6 +787,8 @@ test2.html
     window.name = JSON.stringify(person)
   </script>
 </body>
+```
+
 通过iframe的src属性由外域转向本地域，跨域数据即由iframe的window.name从外域传递到本地域。这个就巧妙地绕过了浏览器的跨域访问限制，但同时它又是安全操作。
 
 八、postMessage通信跨域
@@ -732,9 +813,11 @@ origin： 协议+主机+端口号，也可以设置为"*"，表示可以传递�
 举例
 postMessage：发送
 onmessage：接收
-1）a.html：(http://www.baidu1.com/a.html)
+1）a.html：`(<http://www.baidu1.com/a.html>)`
+
+```html
 <iframe id="iframe" src="http://www.baidu2.com/b.html" style="display:none;"></iframe>
-<script>       
+<script>
     var iframe = document.getElementById('iframe');
     iframe.onload = function() {
         var data = {
@@ -749,8 +832,11 @@ onmessage：接收
         alert('data from baidu2 ---> ' + e.data);
     }, false);
 </script>
-2）b.html：(http://www.baidu2.com/b.html)
+```
 
+2）b.html：`(http://www.baidu2.com/b.html)`
+
+```html
 <script>
     // 接收baidu1的数据
     window.addEventListener('message', function(e) {
@@ -765,6 +851,8 @@ onmessage：接收
         }
     }, false);
 </script>
+```
+
 九、WebSocket协议跨域
 WebSocket protocol是HTML5一种新的协议。它实现了浏览器与服务器全双工通信，同时允许跨域通讯，是server push技术的一种很好的实现。
 原生WebSocket API使用起来不太方便，我们使用Socket.io，它很好地封装了webSocket接口，提供了更简单、灵活的接口，也对不支持webSocket的浏览器提供了向下兼容。
@@ -776,6 +864,7 @@ Web浏览器和服务器都必须实现 WebSockets 协议来建立和维护连�
 案例
 1）前端代码：
 
+```html
 <div>user input：<input type="text"></div>
 <script src="https://cdn.bootcss.com/socket.io/2.2.0/socket.io.js"></script>
 <script>
@@ -785,7 +874,7 @@ var socket = io('http://www.baidu2.com:8080');
 socket.on('connect', function() {
     // 监听服务端消息
     socket.on('message', function(msg) {
-        console.log('data from server: ---> ' + msg); 
+        console.log('data from server: ---> ' + msg);
     });
 
     // 监听服务端关闭
@@ -794,12 +883,15 @@ socket.on('connect', function() {
     });
 });
 
-document.getElementsByTagName('input')[0].onblur = function() {
+document.getElementsByTagName['input'](0).onblur = function() {
     socket.send(this.value);
 };
 </script>
+```
+
 2）Nodejs socket后台：
 
+```js
 var http = require('http');
 var socket = require('socket.io');
 
@@ -827,4 +919,4 @@ socket.listen(server).on('connection', function(client) {
         console.log('Client socket has closed.'); 
     });
 });
-
+```

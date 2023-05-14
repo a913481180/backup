@@ -5,9 +5,7 @@ categories:
   - tool
 ---
 
-# window10 实用软件
-
----
+## window10 实用软件
 
 ### PowerToys
 
@@ -38,6 +36,7 @@ categories:
 - [redux](https://wwbk.lanzoue.com/i5baZ0ht4wwf)
 - [vimiumC](https://wwbk.lanzoue.com/iBCXa0ht4wgj)
 - [editThisCookie](https://wwbk.lanzoue.com/isrNg0ht4wle)
+- [surfingkeys](https://wwbk.lanzoue.com/isrNg0ht4wle)
 
 ### other
 

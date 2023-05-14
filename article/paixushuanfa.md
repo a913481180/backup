@@ -10,17 +10,18 @@ categories:
 [![2QDC90.md.png](https://z3.ax1x.com/2021/06/02/2QDC90.md.png)](https://imgtu.com/i/2QDC90)
 
 ## 选择排序
+>
 >时间复杂度O(n^2);稳定的排序方法，
 
 首先在未排序序列中找到最小元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小元素，然后放到已未排序序列的第一个。
 
-```
+```c
 void selection_sort(int arr[], int len)
 {
     int i,j;
         for (i = 0 ; i < len - 1 ; i++)
     {
-                int min = i;	//用于记录最小值的下标
+                int min = i; //用于记录最小值的下标
                 for (j = i + 1; j < len; j++)     //从后面的元素开始找
                         if (arr[j] < arr[min])    //找到比当前元素小的值
                                 min = j;    //紀錄最小值的下标
@@ -28,14 +29,14 @@ void selection_sort(int arr[], int len)
         }
 }
 ```
+
 ## 冒泡排序
 
 >时间复杂度O(n^2);稳定的排序方法，
 
-
 比较相邻的元素。如果第一个比第二个大，就交换它们两个；
 
-```
+```c
 void bubble_sort(int arr[], int len) {
         int i, j, temp;
         for (i = 0; i < len - 1; i++)
@@ -47,30 +48,31 @@ void bubble_sort(int arr[], int len) {
                         }
 }
 ```
+
 ## 插入排序
 
 >时间复杂度为O(n^2) ;稳定的排序方法，n值较小时的最佳排序方法；
 
 取出下一个元素，在已经排序的元素序列中从后向前扫描；如果已排序中的元素大于该元素，则将比它大的那个元素后移到下一位置,重复以上步骤，直到找到已排序的元素*小于或者等于新元素*的位置；将新元素插入到该位置后；
 
-```
-void insertion_sort(int arr[], int len){	//传入数组和数组长度
+```c
+void insertion_sort(int arr[], int len){ //传入数组和数组长度
         int i,j,key;
         for (i=1;i<len;i++){
-                key = arr[i];	//key等于当前元素
-                j=i-1;		//j为前一个元素下标
-                while((j>=0) && (arr[j]>key)) {		//如果前面的元素大于当前元素
-                        arr[j+1] = arr[j];		//则比它大的那个元素后移一位
-                        j--;		//j下标前移
+                key = arr[i]; //key等于当前元素
+                j=i-1;  //j为前一个元素下标
+                while((j>=0) && (arr[j]>key)) {  //如果前面的元素大于当前元素
+                        arr[j+1] = arr[j];  //则比它大的那个元素后移一位
+                        j--;  //j下标前移
                 }
-                arr[j+1] = key;		//前面大的元素已经后移一位，现在只需插入当前元素
+                arr[j+1] = key;  //前面大的元素已经后移一位，现在只需插入当前元素
         }
 }
 ```
 
 ## 插入排序-希尔排序
 
->时间复杂度为O(n^(3/2));不稳定的排序方法， 
+>时间复杂度为O(n^(3/2));不稳定的排序方法，
 
 将整个待排序的记录序列分割成为若干子序列,分别进行直接插入排序，具体算法描述：
 
@@ -78,28 +80,30 @@ void insertion_sort(int arr[], int len){	//传入数组和数组长度
 按增量序列个数k，对序列进行k 趟排序；
 每趟排序，根据对应的增量ti，将待排序列分割成若干长度为m 的子序列，分别对各子表进行直接插入排序。仅增量因子为1 时，整个序列作为一个表来处理，表长度即为整个序列的长度。
 
-```
+```c
 void shell_sort(int arr[], int len) {
         int gap, i, j;
         int temp;
-        for (gap = len >> 1; gap > 0; gap >>= 1)	//
+        for (gap = len >> 1; gap > 0; gap >>= 1) //
                 for (i = gap; i < len; i++) {
                         temp = arr[i];
-                        for (j = i - gap; j >= 0 && arr[j] > temp; j -= gap){	//
-			  arr[j + gap] = arr[j];
-			}
+                        for (j = i - gap; j >= 0 && arr[j] > temp; j -= gap){ //
+     arr[j + gap] = arr[j];
+   }
                         arr[j + gap] = temp;
                 }
 }
 ```
 
 ## 归并排序
+>
 >时间复杂度O(nlogn);n值较大时，所需时间较堆排序省，但所需的辅助存储量最多。
 
 把长度为n的输入序列分成两个长度为n/2的子序列；
 对这两个子序列分别采用归并排序；
 将两个排序好的子序列合并成一个最终的排序序列。
-```
+
+```c
 int min(int x, int y) {
     return x < y ? x : y;
 }
@@ -133,8 +137,10 @@ void merge_sort(int arr[], int len) {
     free(b);
 }
 ```
+
 递归版：
-```
+
+```c
 void merge_sort_recursive(int arr[], int reg[], int start, int end) {
     if (start >= end)
         return;
@@ -159,15 +165,17 @@ void merge_sort(int arr[], const int len) {
     merge_sort_recursive(arr, reg, 0, len - 1);
 }
 ```
-## 快速排序
->时间复杂度O(nlogn),不稳定的排序方法，最坏情况O(n^2)
 
+## 快速排序
+>
+>时间复杂度O(nlogn),不稳定的排序方法，最坏情况O(n^2)
 
 从数列中挑出一个元素，称为 “基准”（pivot）；
 重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作；
 递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。
 
 ## 堆排序
+>
 >时间复杂度O(nlogn);不稳定的排序方法，
 
 将初始待排序关键字序列(R1,R2….Rn)构建成大顶堆，此堆为初始的无序区；
@@ -177,4 +185,3 @@ void merge_sort(int arr[], const int len) {
 ## 基数排序
 
 >时间复杂度O(d(n+rd));稳定的排序方法，适用于n值较大而关键词较小的序列
-

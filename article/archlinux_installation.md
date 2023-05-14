@@ -3,8 +3,9 @@ title: 安装archlinux系统
 date: 2020-11-22 20:22:22
 categories:
 - linux
+tags:
+- system
 ---
-# archlinux 安装
 
 ## 制作u盘
 

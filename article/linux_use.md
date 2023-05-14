@@ -5,23 +5,26 @@ categories:
 - linux
 ---
 
-## Linux文的权限：
+## Linux文的权限
+
 r:4 读；w:2 写；x:1  执行(运行)；－：对应数值0；777：第一个7:表示当前文件的拥有者的权限,第二个7:表示当前文件的所属组（同组用户）权限,第三个7:表示当前文件的组外权限,
 
 ### 小技巧
+
 1. Tab键：一下补全，两下提示
 2. 简写：
 若仅输入`alias`，则可列出目前所有的别名设置。alias的效力仅及于该次登入的操作。若要每次登入是即自动设好别名，可在.profile或.cshrc中设定指令的别名。
 
 `alias 别名=指令名称`
-如`alias ll=ls -l` 
+如`alias ll=ls -l`
 
 3. 强制关闭程序：`kill -9 进程pid`
 4. 修改hosts：`sudo vim /etc/hosts`
-4. 退出用户：`tty -> w -> sudo pkill -9 tty1` 
+4. 退出用户：`tty -> w -> sudo pkill -9 tty1`
+
 ## apt
 
-`  apt [options] [command] [package ...]`
+`apt [options] [command] [package ...]`
 >options：可选，选项包括 -h（帮助），-y（当安装过程提示选择全部为"yes"），-q（不显示安装的过程）等等。
 command：要进行的操作。
 package：安装的包名。
@@ -43,9 +46,9 @@ package：安装的包名。
 
 删除软件包命令：`sudo apt remove <package_name>`
 
-清理不再使用的依赖和库文件:` sudo apt autoremove`
+清理不再使用的依赖和库文件:`sudo apt autoremove`
 
-移除软件包及配置文件:` sudo apt purge <package_name>`
+移除软件包及配置文件:`sudo apt purge <package_name>`
 
 查找软件包命令： `sudo apt search <keyword>`
 
@@ -55,7 +58,7 @@ package：安装的包名。
 
 ### linux chmod命令
 
-```
+```txt
 u 表示该文件的拥有者，g 表示与该文件的拥有者属于同一个群体(group)者，o 表示其他以外的人，a 表示这三者皆是。
 + 表示增加权限、- 表示取消权限、= 表示唯一设定权限。
 r 表示可读取，w 表示可写入，x 表示可执行，X 表示只有当该文件是个子目录或者该文件已经被设定过为可执行。
@@ -63,16 +66,17 @@ r 表示可读取，w 表示可写入，x 表示可执行，X 表示只有当该
 
 chmod命令可以使用八进制数来指定权限。文件或目录的权限位是由9个权限位来控制，每三位为一组。例如， 765 将这样解释：
 
-```
+```txt
 所有者的权限用数字表达：属主的那三个权限位的数字加起来的总和。如 rwx ，也就是 4+2+1 ，应该是 7。
 用户组的权限用数字表达：属组的那个权限位数字的相加的总和。如 rw- ，也就是 4+2+0 ，应该是 6。
 其它用户的权限数字表达：其它用户权限位的数字相加的总和。如 r-x ，也就是 4+0+1 ，应该是 5。
 ```
+
 ### find命令  
 
 Linux find 命令用来在指定目录下查找文件。任何位于参数之前的字符串都将被视为欲查找的目录名。如果使用该命令时，不设置任何参数，则 find 命令将在当前目录下查找子目录与文件。
 
-```
+```bash
 find   path   -option   [   -print ]   [ -exec   -ok   command ]   {} \;
 
 -type c : 文件类型是 c 的文件。
@@ -84,7 +88,7 @@ find   path   -option   [   -print ]   [ -exec   -ok   command ]   {} \;
 Linux ln（英文全拼：link files）命令是一个非常重要命令，它的功能是为某一个文件在另外一个位置建立一个同步的链接。
 
 当我们需要在不同的目录，用到相同的文件时，我们不需要在每一个需要的目录下都放一个必须相同的文件，我们只要在某个固定的目录，放上该文件，然后在 其它的目录下用ln命令链接（link）它就可以，不必重复的占用磁盘空间
-` ln [参数][源文件或目录][目标文件或目录]`
+`ln [参数][源文件或目录][目标文件或目录]`
 >必要参数：
 -b 删除，覆盖以前建立的链接
 -d 允许超级用户制作目录的硬链接
@@ -95,12 +99,14 @@ Linux ln（英文全拼：link files）命令是一个非常重要命令，它�
 -v 显示详细的处理过程
 
 ### mv 命令
+
 Linux mv（英文全拼：move file）命令用来为文件或目录改名、或将文件或目录移入其它位置。
 
-```
-mv source_directory(目录) dest_directory(目录)	
+```bash
+mv source_directory(目录) dest_directory(目录) 
 //目录名 dest_directory 已存在，将 source_directory 移动到目录名 dest_directory 中；目录名 dest_directory 不存在则 source_directory 改名为目录名 dest_directory
 ```
+
 >参数说明：
 -b: 当目标文件或目录存在时，在执行覆盖前，会为其创建一个备份。
 -i: 如果指定移动的源目录或文件与目标的目录或文件同名，则会先询问是否覆盖旧文件，输入 y 表示直接覆盖，输入 n 表示取消该操作。
@@ -110,14 +116,12 @@ mv source_directory(目录) dest_directory(目录)
 
 ### rm 命令
 
-
 >参数：
 -i 删除前逐一询问确认。
 -f 即使原档案属性设为唯读，亦直接删除，无需逐一确认。
 -r 将目录及以下之档案亦逐一删除。
 
 ### cp 命令
-
 
 >参数说明：
 -a：此选项通常在复制目录时使用，它保留链接、文件属性，并复制目录下的所有内容。其作用等于dpR参数组合。
@@ -154,7 +158,6 @@ t 设定档案的时间记录，格式与 date 指令相同。
 
 Linux mount命令是经常会使用到的命令，它用于挂载Linux系统外的文件。
 
-
 >参数说明：
 -V：显示程序版本
 -h：显示辅助讯息
@@ -171,20 +174,16 @@ Linux mount命令是经常会使用到的命令，它用于挂载Linux系统外�
 -o sync：在同步模式下执行。
 -o atime、-o noatime：当 atime 打开时，系统会在每次读取档案时更新档案的『上一次调用时间』。当我们使用 flash 档案系统时可能会选项把这个选项关闭以减少写入的次数。
 
-
 将 /tmp/image.iso 这个光碟的 image 档使用 loop 模式挂在 /mnt/cdrom之下。用这种方法可以将一般网络上可以找到的 Linux 光 碟 ISO 档在不烧录成光碟的情况下检视其内容。
 `#mount -o loop /tmp/image.iso /mnt/cdrom`
-
 
 ### df 命令  
 
 Linux df（英文全拼：disk free） 命令用于显示目前在 Linux 系统上的文件系统磁盘使用情况统计。
 
-
 ### mkdir 命令
 
 Linux mkdir（英文全拼：make directory）命令用于创建目录。
-
 
 >参数说明：
 -p 确保目录名称存在，不存在的就建一个。
@@ -210,10 +209,10 @@ Linux logout命令用于退出系统。
 指定口令最短存活期
 -i 口令过期后多少天停用账户
 
-
 ### Linux系统用户账号的管理  
+
 添加新的用户账号使用useradd命令，其语法如下：
 `useradd 选项 用户名`
 
 删除帐号:
-`userdel 选项 用户名	//常用的选项是 -r，它的作用是把用户的主目录一起删除。`
+`userdel 选项 用户名 //常用的选项是 -r，它的作用是把用户的主目录一起删除。`

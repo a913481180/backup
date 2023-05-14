@@ -3,9 +3,10 @@ title: ubuntu系统安装
 date: 2020-12-22 23:33:33
 categores:
   - linux
+tags:
+- system
 ---
 
-# ubuntu 系统安装
 
 ## 安装
 
@@ -33,7 +34,7 @@ categores:
   `sudo vim /etc/apt/sources.list`
   粘贴
 
-```
+```txt
 #添加阿里源
 deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
 deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse

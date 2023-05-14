@@ -12,7 +12,7 @@ categories:
 ## 安装 TypeScript npm 包
 
 - 安装
-  ` npm install -g typescript`
+  `npm install -g typescript`
   安装完成后我们就可以使用 TypeScript 编译器，名称叫 tsc，可将编译结果生成 js 文件。
 - 使用
   `tsc hello.ts`
@@ -21,14 +21,14 @@ categories:
 
 - 布尔值
 
-```
+```ts
 let isDone: boolean = false;
 ```
 
 - 数字
   > 和 JavaScript 一样，TypeScript 里的所有数字都是浮点数。 这些浮点数的类型是 number。 除了支持十进制和十六进制字面量，TypeScript 还支持 ECMAScript 2015 中引入的二进制和八进制字面量。
 
-```
+```ts
 let decLiteral: number = 6;
 let hexLiteral: number = 0xf00d;
 let binaryLiteral: number = 0b1010;
@@ -37,7 +37,7 @@ let octalLiteral: number = 0o744;
 
 - 字符串
 
-```
+```ts
 let name: string = "bob";
 let name: string = 'bob';
 let name: string = `bob`;
@@ -45,7 +45,7 @@ let name: string = `bob`;
 
 - 数组
 
-```
+```ts
 let list: number[] = [1, 2, 3];
 let list: Array<number> = [1, 2, 3];//使用数组泛型Array<元素类型>
 ```
@@ -54,7 +54,7 @@ let list: Array<number> = [1, 2, 3];//使用数组泛型Array<元素类型>
 
 > 元组类型允许表示一个已知元素数量和类型的数组，各元素的类型不必相同。 比如，你可以定义一对值分别为 string 和 number 类型的元组。
 
-```
+```ts
 let x: [string, number];
 x = ['hello', 10]; // OK
 x = [10, 'hello']; // Error
@@ -62,7 +62,7 @@ x = [10, 'hello']; // Error
 
 > 当访问一个越界的元素，会使用联合类型替代：
 
-```
+```ts
 x[3] = 'world'; // OK, 字符串可以赋值给(string | number)类型
 console.log(x[5].toString()); // OK, 'string' 和 'number' 都有 toString
 x[6] = true; // Error, 布尔不是(string | number)类型
@@ -71,7 +71,7 @@ x[6] = true; // Error, 布尔不是(string | number)类型
 - 枚举
   > enum 类型是对 JavaScript 标准数据类型的一个补充。 像 C#等其它语言一样，使用枚举类型可以为一组数值赋予友好的名字。
 
-```
+```ts
 enum Color {Red, Green, Blue}
 let c: Color = Color.Green;
 //默认情况下，从0开始为元素编号。 你也可以手动的指定成员的数值。 例如，我们将上面的例子改成从 1开始编号：
@@ -89,7 +89,7 @@ console.log(colorName);  // 显示'Green'因为上面代码里它的值是2
 - Any
   不希望类型检查器对这些值进行检查而是直接让它们通过编译阶段的检查。 那么我们可以使用 any 类型来标记这些变量：
 
-```
+```ts
 let notSure: any = 4;
 notSure = "maybe a string instead";
 notSure = false;
@@ -101,7 +101,7 @@ list[1] = 100;
 - Void
   某种程度上来说，void 类型像是与 any 类型相反，它表示没有任何类型。 当一个函数没有返回值时，你通常会见到其返回值类型是 void：
 
-```
+```ts
 function warnUser(): void {
     console.log("This is my warning message");
 }
@@ -112,7 +112,7 @@ let unusable: void = undefined;
 - Null 和 Undefined
   > TypeScript 里，undefined 和 null 两者各自有自己的类型分别叫做 undefined 和 null。 和 void 相似，它们的本身的类型用处不是很大：
 
-```
+```ts
 let u: undefined = undefined;
 let n: null = null;
 ```
@@ -124,7 +124,7 @@ let n: null = null;
 
 下面是一些返回 never 类型的函数：
 
-```
+```ts
 // 返回never的函数必须存在无法达到的终点
 function error(message: string): never {
     throw new Error(message);
@@ -145,7 +145,7 @@ function infiniteLoop(): never {
 - Object
   object 表示非原始类型，也就是除 number，string，boolean，symbol，null 或 undefined 之外的类型。
 
-```
+```ts
 declare function create(o: object | null): void;
 create({ prop: 0 }); // OK
 create(null); // OK
@@ -158,7 +158,7 @@ create(undefined); // Error
 - 类型断言
   类型断言好比其它语言里的类型转换，但是不进行特殊的数据检查和解构。 它没有运行时的影响，只是在编译阶段起作用。 TypeScript 会假设你，程序员，已经进行了必须的检查。
 
-```
+```ts
 //类型断言有两种形式。 其一是“尖括号”语法：
 let someValue: any = "this is a string";
 let strLength: number = (<string>someValue).length;
@@ -191,7 +191,7 @@ let [, second, , fourth] = [1, 2, 3, 4];
 
 对象解构
 
-```
+```ts
 let o = {
     a: "foo",
     b: 12,
@@ -209,7 +209,7 @@ let total = passthrough.b + passthrough.c.length;
 
 属性重命名
 
-```
+```ts
 let { a: newName1, b: newName2 } = o;
 //好像你写成了以下样子：
 let newName1 = o.a;
@@ -220,7 +220,7 @@ let {a, b}: {a: string, b: number} = o;
 
 默认值
 
-```
+```ts
 默认值可以让你在属性为 undefined 时使用缺省值：
 function keepWholeObject(wholeObject: { a: string, b?: number }) {
     let { a, b = 1001 } = wholeObject;
@@ -230,20 +230,20 @@ function keepWholeObject(wholeObject: { a: string, b?: number }) {
 函数声明
 解构也能用于函数声明。 看以下简单的情况：
 
-```
+```ts
 type C = { a: string, b?: number }
 function f({ a, b }: C): void {
     // ...
 }
-但是，通常情况下更多的是指定默认值，解构默认值有些棘手。 首先，你需要在默认值之前设置其格式。
+// 但是，通常情况下更多的是指定默认值，解构默认值有些棘手。 首先，你需要在默认值之前设置其格式。
 
 function f({ a="", b=0 } = {}): void {
     // ...
 }
 f();
-上面的代码是一个类型推断的例子，将在本手册后文介绍。
+// 上面的代码是一个类型推断的例子，将在本手册后文介绍。
 
-其次，你需要知道在解构属性上给予一个默认或可选的属性用来替换主初始化列表。 要知道 C 的定义有一个 b 可选属性：
+// 其次，你需要知道在解构属性上给予一个默认或可选的属性用来替换主初始化列表。 要知道 C 的定义有一个 b 可选属性：
 
 function f({ a, b = 0 } = { a: "" }): void {
     // ...
@@ -251,13 +251,13 @@ function f({ a, b = 0 } = { a: "" }): void {
 f({ a: "yes" }); // ok, default b = 0
 f(); // ok, default to {a: ""}, which then defaults b = 0
 f({}); // error, 'a' is required if you supply an argument
-要小心使用解构。 从前面的例子可以看出，就算是最简单的解构表达式也是难以理解的。
+// 要小心使用解构。 从前面的例子可以看出，就算是最简单的解构表达式也是难以理解的。
 ```
 
 - 展开
   > 展开操作符正与解构相反。 它允许你将一个数组展开为另一个数组，或将一个对象展开为另一个对象。 例如：
 
-```
+```ts
 let first = [1, 2];
 let second = [3, 4];
 let bothPlus = [0, ...first, ...second, 5];//[0, 1, 2, 3, 4, 5]
@@ -275,7 +275,7 @@ let search = { food: "rich", ...defaults };
 
 对象展开还有其它一些意想不到的限制。 首先，它仅包含对象 自身的可枚举属性。 大体上是说当你展开一个对象实例时，你会丢失其方法：
 
-```
+```ts
 class C {
   p = 12;
   m() {
@@ -305,7 +305,7 @@ npm i typescript -D 当前项目安装
 tsc --init
 修改 tsconfig 配置文件
 
-```
+```js
 {
   "compilerOptions": {
      "target": "es5", /**指定ECMAScript目标版本**/
@@ -333,10 +333,10 @@ tsc --init
 
 - Cannot find module ‘./index.module.less’ or its corresponding type declarations
 
-```
 给ts的CSS文件加上类型的声明
 *.d.ts文件：ts专用的类型声明文件，只包含类型的声明，不包含逻辑，不会被编译，也不会被webpack打包
 
+```ts
 declare module "*.css" {
   const css: {[key: string]: string}
   export default css
@@ -350,7 +350,7 @@ declare module "*.css" {
 
 - `“AsyncThunkAction<any，void，{}>”`类型的参数不能分配给“AnyAction”类型的参数
 
-```
+```ts
 
 // app/store.ts
 

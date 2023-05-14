@@ -6,7 +6,7 @@ categories:
 ---
 
 # HTML 是用来描述网页的一种语言
->
+
 >Hyper text markup Language(超文本标记语言)
 >超文本：通过超链接将文字＼图片＼音频＼动画等各种信息组织在一起
 
@@ -45,6 +45,7 @@ div*3快速生成3个<div></div>
 - HTML 标签通常是成对出现的，称为双标签,如`<html>` 和`</html>`.也有单标签：`<br/>`
 - 标签对中的第一个标签是开始标签，第二个标签是结束标签
 - 开始和结束标签也被称为开放标签和闭合标签
+- 标签中的同名属性，后写的会失效
 
 网页结构：
 
@@ -79,9 +80,14 @@ div*3快速生成3个<div></div>
 |-|-|
 |name="viewport"|content="width=(设置的是viewport宽度,可设置device-width特殊值),initial-scale=(初始缩放比，大于0的数字小于10),maximum-scale=（最大缩放比，大于0的数字)，minimum-scale=(最小缩放比，大于0的数字)，user-scalable=(用户是否可以缩放)"|
 |name="http-equiv"|额外添加头部内容|
+|http-equiv="refresh"|`content="10;url=http://xxx"` 自动刷新|
+|http-equiv="X-UA-Compatible"|`content="IE=edge"` ie兼容|
 |charset='UTF-8'|编码|
+|name="author"|content="xxx,xxx,xx"网页作者|
+|name="copyright"|content="2002-2022@版权"网页版权|
 |name="keywords"|content="xxx,xxx,xx"网页关键词|
 |name="description"|content="xxx,xxx,xx"网页描述|
+|name="robots"|content="noindex|all"爬虫索引的范围|
 
 ### 常用标签
 
@@ -100,7 +106,7 @@ div*3快速生成3个<div></div>
 
 - 字体：`<h1>这是1号标题</h1> <font size="6">这是6号字体文本</font> 可以使用font-family（字体），color（颜色），和font-size（字体大小）属性来定义字体的样式,使用 text-align（文字对齐）属性指定文本的水平与垂直对齐方式`  
 
->嵌套问题：超链接不能嵌套超链接，p标签不能嵌套p标签，标题标签h1-h6也不能嵌套；
+>嵌套问题：超链接不能嵌套超链接，p标签不能嵌套p标签，；
 
 - 内部样式表
 
@@ -175,13 +181,18 @@ p {color:blue;}
 
 ```
 
-- 特殊符号:
+- 字符实体:
 
 |||
 |-|-|
 |空格|`&nbsp;`|
 |小于号|`&lt;`|
 |大于号|`&gt;`|
+|`&`|`&amp;`|
+|`￥`|`&yen;`|
+|版权|`&copy;`|
+|乘号|`&times;`|
+|除号|`&divide;`|
 
 - 表格标签：
 
@@ -362,7 +373,14 @@ display:none
 - iframe
 
 ```html
-<iframe src='xxx' name="mainFrame" width="100px" height="100px">
+<iframe src='xxx' name="mainFrame" width="100px" height="100px" frameborder="0">
+  <!-- name属性可以和超链接或表单的target配合用来显示不同内容 -->
+  <a target="mainFrame">xxx</a>
+  <form target="mainFrame">
+    <input type="reset" value="重置按钮">
+    <button >默认表达提交按钮</button>
+    <button type="button">普通按钮</button>
+  </form>
 ```
 
 ---

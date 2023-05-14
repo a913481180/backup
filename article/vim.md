@@ -4,8 +4,8 @@ date: 2020-12-01 20:00:00
 categories:
 - linux 
 ---
-# Vim常用操作
 ## 常用功能键
+
 1. 插入模式
 
 i ：在光标前插内内容:按8，再按i，进入插入模式，输入=， 按esc进入命令模式，就会出现8个=。
@@ -126,7 +126,8 @@ ggVG 选中全部的文本， 其中gg为跳到行首，V选中整行，G末尾
 :ce(nter) 本行文字居中
 :le(ft) 本行文字靠左
 :ri(ght) 本行文字靠右
-## 命令：
+
+## 命令
 
 设置backspace的工作方式
 :set backspace=indent,eol,start
@@ -136,9 +137,9 @@ ggVG 选中全部的文本， 其中gg为跳到行首，V选中整行，G末尾
 高亮显示搜索结果用":set hlsearch"
 :set ruler  会在屏幕右下角显示当前光标所处位置
 
-## Gvim配置：
+## Gvim配置
 
-```
+```txt
 （“为注释）
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 代码补全
@@ -156,7 +157,7 @@ set nofoldenable            "关闭代码折叠
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nobackup        "设置不备份
 set noswapfile      "禁止生成临时文件
-set noundofile		" 操作记录
+set noundofile  " 操作记录
 set autoread        "文件在vim之外修改过，自动重新载入
 set autowrite       "设置自动保存
 set confirm         "在处理未保存或只读文件时，弹出确认

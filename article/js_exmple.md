@@ -5,27 +5,105 @@ categories:
 - web 
 ---
 
-# 实例
+## 防抖
 
-## 判断是否是pc设备
+单位时间内，频繁触发事件，只执行最后一次事件（回城）
 
 ```js
-    function IsPC() {
-        var userAgentInfo = navigator.userAgent;
-        console.log(userAgentInfo);
-        var Agents = ["Android", "iPhone","SymbianOS", "Windows Phone", "iPod"];
-        var flag = true;
-        for (var v = 0; v < Agents.length; v++) {
-            if (userAgentInfo.indexOf(Agents[v]) > 0) {
-                flag = false;
-                break;
-            }
-        }
-        if(window.screen.width>=768){
-             flag = true;
-        }
-        return flag;
+function debounce(fn,t){
+  let timer=null
+  return ()=>{
+    if(timer){
+      clearTimeout(timer)
+      timer=null
     }
+    timer=setTimeout(()=>{fn()},t)
+  }
+}
+
+```
+
+## 节流
+
+单位时间内，频繁触发事件，必须等待第一次事件执行完毕（技能）
+
+```js
+function throttle(fn,t){
+  let timer=null
+  return ()=>{
+    if(timer===null){
+    timer=setTimeout(()=>{
+      fn()
+      clearTimeout(timer)
+      timer=null
+    },t)}
+  }
+}
+```
+
+## 图片懒加载
+
+- 图片到浏览器顶部的距离offsetTop< 视口高度clientHeight+滚动轴距离scrollTop
+
+```html
+    <div id="container" style="height:400px;position:relative;overflow:auto"> 
+      <img class="rwo" src="image/load.gif" >
+      <img class="rwo" src="image/load.gif" >
+      <img class="rwo" data-src="image/load.gif" >
+      <img class="rwo" data-src="image/load.gif" >
+      <img class="rwo" data-src="image/load.gif" >
+      <img class="rwo" data-src="image/load.gif" >
+      <img class="rwo" data-src="image/load.gif" >
+      <img class="rwo" data-src="image/load.gif" >
+    </div>
+
+    <script>
+
+      // 父元素要使用定位,否则需要计算偏移
+      window.onload = () => {
+      let el = document.getElementById("container");
+      let height = el.clientHeight;
+      el.onscroll = (e) => {
+        let scrollTop = e.target.scrollTop;
+        let imgs = el.getElementsByTagName("img");
+        for (let item of imgs) {
+          if (!item.src) {
+          let top = item.offsetTop;
+            //图片顶部小于等于滚动条加父元素高度就出现在可视区域
+            // console.log(top, height, scrollTop);
+            if (top <= height + scrollTop + 10) {
+              item.src = item.dataset.src;
+            } else {
+              break;
+            }
+          }
+        }
+      };
+    };
+    </script>
+```
+
+- Element.getBoundingClientRect() 方法返回元素的大小及其相对于视口的位置。我们可以取得它的top值，它的top值就是元素左上角到视口顶部的距离。
+
+```js
+//需要计算父容器偏移
+ let el = document.getElementById("container");
+      let height = el.clientHeight;
+      let offset = el.offsetTop;
+      el.onscroll = () => {
+        let imgs = el.getElementsByTagName("img");
+        for (let item of imgs) {
+          if (!item.src) {
+          let top = item.getBoundingClientRect().top;
+            //图片顶部出现在可视区域
+            if (top <= heigh+offset + 10) {
+              item.src = item.dataset.src;
+            } else {
+              break;
+            }
+          }
+        }
+    };
 ```
 
 ## 轮播图
@@ -888,6 +966,27 @@ set去重应该说是简单的去重方式了
 var a = [1,2,3,4,5,2,3,5,5,5,5]
 let list = [...new Set(a)]
 console.log(list); // 输出结果 [1, 2, 3, 4, 5]
+```
+
+## 判断是否是pc设备
+
+```js
+    function IsPC() {
+        var userAgentInfo = navigator.userAgent;
+        console.log(userAgentInfo);
+        var Agents = ["Android", "iPhone","SymbianOS", "Windows Phone", "iPod"];
+        var flag = true;
+        for (var v = 0; v < Agents.length; v++) {
+            if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                flag = false;
+                break;
+            }
+        }
+        if(window.screen.width>=768){
+             flag = true;
+        }
+        return flag;
+    }
 ```
 
 ## 树

@@ -1,6 +1,6 @@
 ---
 title: Bootloader、Linux内核和文件系统编译
-date: 2020-12-08 22:23:45
+date: 2019-12-08 22:23:45
 categories:
 - experiments 
 ---

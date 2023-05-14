@@ -1,8 +1,10 @@
 ---
 title: react Native
-date: 2022-12-09 20:00:00
+date: 2021-01-09 20:00:00
 categories: 
-- linux 
+- web 
+tags:
+- app
 ---
 # React
 

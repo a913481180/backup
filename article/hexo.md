@@ -1,19 +1,21 @@
 ---
 title: hexo搭建博客
-date: 2020-10-11 22:11:22
+date: 2019-10-11 22:11:22
 categories:
 - blog
 ---
 
 ## 安装nodejs
+
 * archlinux:`pacman -S nodejs`
-* ubuntu 
+* ubuntu
 
 ## 安装npm
+
 * archlinux:
 `pacman -S npm`
-* ubuntu: 
-`apt-get install npm `
+* ubuntu:
+`apt-get install npm`
 
 ### 换源
 
@@ -34,6 +36,7 @@ categories:
 `npm install -g hexo-cli`
 
 ## ssh
+
 查看ssh
 
 `cd ~/.ssh`
@@ -46,46 +49,49 @@ categories:
 
 设置git用户名邮箱  
 
-```
+```bash
 git config --global user.name "你的账号"
 git config --global user.email "你邮箱地址"
 ```
 
 ## hexo
+
 进入一个文件夹进行初始化：`hexo init`
 
 编辑`_config.yml`
 找到
 
-```
+```yml
 deploy:
   type:
 ```
 
 修改为：
 
-```
+```yml
 deploy:
   type: git
   repository: ........... ///克隆地址
   branchL: master
 ```
 
-执行`hexo g -d `上传代码（注意第一次提交需要输入yes，不要一路回车）
+执行`hexo g -d`上传代码（注意第一次提交需要输入yes，不要一路回车）
 
 **常用命令：**
 
-```
-hexo generate	//Generate static files
-hexo server	//Run server
-hexo deploy	//Deploy to remote sites
+```bash
+hexo generate //Generate static files
+hexo server //Run server
+hexo deploy //Deploy to remote sites
 
-hexo new My_New_Post   	//Create a new post
+hexo new My_New_Post    //Create a new post
 ```
+
 ### hexo博客迁移
 
 先新建一个文件夹，初始化后，从原来的文件夹中拷贝下列文件进行覆盖
-```
+
+```txt
 themes/
 _config.yml
 ------------------
@@ -96,24 +102,27 @@ source/
 
 ## Fexo
 
-- 安装
-```
+* 安装
+
+```bash
  cd my-blog
  git clone git@github.com:forsigner/fexo.git themes/fexo
 git clone https://github.com/forsigner/fexo.git
 ```
 
-- 配置主题
+* 配置主题
 主题配置全部在theme/fexo里面完成，所里下面所有配置指的是配置theme/fexo/_config.yml。
 
 设置基本信息
-```
+
+```yml
 blog_name: Forsigner
 slogan: Find the bug of the world
 ```
+
 设置头像
 
-```
+```yml
 # relative url
 avatar: /images/avatar.jpg
 # or absolute url
@@ -122,23 +131,27 @@ avatar: https://avatars0.githubusercontent.com/u/2668081?v=3&s=460
 
 设置favicon
 
-```
+```yml
 favicon: /favicon.ico
 ```
+
 设置关键词
 关键词主要作用是优化SEO
 
-```
+```yml
 keywords: forsigner,前端,设计,Hexo主题,前端开发,用户体验,设计,frontend,design,nodejs,JavaScript
 ```
+
 设置首页内容
 你可以设置是否在首页直接显示文章
-```
+
+```yml
 init_page_content: HOME_NAV  # HOME_NAV | POST
 ```
 
 设置首页导航
-```
+
+```yml
 home_nav:
   - name: Blog
     url: /archives
@@ -154,7 +167,8 @@ home_nav:
 ```
 
 设置页面导航
-```
+
+```yml
 page_nav:
   - 博客: /archives/
   - 分类: /category/
@@ -166,13 +180,13 @@ page_nav:
 
 设置页面导航样式
 
-```
+```yml
 page_nav_style: CIRCLE  # CIRCLE|ROUND_RECT
 ```
 
 设置面包屑
 
-```
+```yml
 breadcrumb:
   isShow: true # true|fase
 ```
@@ -180,7 +194,7 @@ breadcrumb:
 设置盒子
 你可设置盒子是否显示和其显示的文字
 
-```
+```yml
 toolbox:
   isShow: true # true|fase
   text: 盒子
@@ -196,16 +210,18 @@ link_slogan:
 
 设置文章标题对齐方式
 
-```
+```yml
 post:
   header_align: center # left|center
 
 ```
+
 启用页面
 你可以启用你想要的页面，在开启关于、友链、项目的页面后，你可以对这些设置这些页面的内容
 
 新建分类、搜索、关于界面：
-```
+
+```bash
 hexo new page categories
 //进入source/categories/文件夹
 //编辑index.md文件,添加type或layout属性
@@ -217,23 +233,23 @@ type: categories
 ---
 ```
 
-
 启用分类页面
 在博客根目录执行 `hexo new page category`
 修改my-blog/source/category/index.md里面的内容:
 
-```
+```txt
 ---
 title: category
 layout: category
 comments: false
 ---
 ```
+
 启用标签页面
-在博客根目录执行` hexo new page tag`
+在博客根目录执行`hexo new page tag`
 修改my-blog/source/tag/index.md里面的内容:
 
-```
+```txt
 ---
 title: tag
 layout: tag
@@ -243,10 +259,10 @@ comments: false
 
 启用友链页面
 
-在博客根目录执行` hexo new page link`
+在博客根目录执行`hexo new page link`
 修改my-blog/source/link/index.md里面的内容:
 
-```
+```txt
 ---
 title: link
 layout: link
@@ -256,7 +272,7 @@ comments: false
 
 启用友链页面后，可以设置类似以下格式的内容
 
-```
+```yml
 link:
   - name: 织网
     info: 身体和灵魂，总有一个在路上
@@ -281,7 +297,7 @@ link:
 在博客根目录执行 `hexo new page about`
 修改my-blog/source/about/index.md里面的内容:
 
-```
+```txt
 ---
 title: about
 layout: about
@@ -291,7 +307,7 @@ comments: false
 
 启用关于页面后，可以设置类似以下格式的内容:
 
-```
+```yml
 about:
   - type: me
     icon: icon-user
@@ -323,7 +339,7 @@ about:
 在博客根目录执行 `hexo new page project`
 修改my-blog/source/project/index.md里面的内容:
 
-```
+```txt
 ---
 title: project
 layout: project
@@ -333,7 +349,7 @@ comments: false
 
 启用项目页面后，可以设置类似以下格式的内容
 
-```
+```yml
 project:
   - type: personal
     name: fexo
@@ -370,7 +386,7 @@ project:
 在博客根目录执行 `hexo new page search`
 修改my-blog/source/search/index.md里面的内容:
 
-```
+```txt
 ---
 title: search
 layout: search
@@ -381,7 +397,7 @@ comments: false
 然后安装 Hexo 插件 `hexo-search` (重要)
 先进入 blog 的根目录
 
-```
+```bash
  cd my-blog
  npm install hexo-search --save
 ```
@@ -397,7 +413,7 @@ comments: false
 修改fexo/_config.yml下面配置，然后你就可以写你想要的样式了
 personal_style: /css/personal-style.css
 
-```
+```css
 # 如果不想启用自定义样式，注释这行就可以了
 比如我的个人自定义样式如下：
 
@@ -425,11 +441,11 @@ html.page-home {
 
 自定义博客名的字体
 
-
 由于中文字体文件太大，有的快10M，所以 Fexo 没有引入中文字体，导致博客名有点难看。
 但是可以通过提取字体来减小字体文件大小，让字体只有几KB。
 一下步骤可以让你实现自定义博客名字体，包括英文和中文：
-```
+
+```txt
 下载免费可用的ttf格式字体
 利用 Web-Fontmin 提取字体，然后下载 Web 字体和样式
 在博客根目录的source文件夹新建目录 fonts
@@ -447,7 +463,7 @@ PS：自定义博客名字体前请先自定义CSS
 
 修改personal-style.css:
 
-```
+```css
 html.page-home {
   position: absolute;
   top: 0;
@@ -471,14 +487,14 @@ html.page-home {
 
 启用统计
 
-```
+```yml
 google_analytics:
 baidu_analytics: 57e94d016sfsf1fba3xxxx8a2b0263af0
 ```
 
 启用评论
 
-```
+```yml
 disqus_shortname: forsigner
 # duoshuo_shortname: forsigner
 ```
@@ -491,9 +507,10 @@ disqus_shortname: forsigner
 
 ### 常见问题
 
-```
+```bash
 $ hexo d
 ERROR Deployer not found: git
 ```
+
 解决办法：
 `npm install --save hexo-deployer-git`

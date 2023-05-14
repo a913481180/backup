@@ -1,6 +1,6 @@
 ﻿---
 title: 微信小程序
-date: 2021-01-11 20:22:22
+date: 2020-01-11 20:22:22
 categories:
 - web
 ---
@@ -9,7 +9,7 @@ categories:
 
 - app.json      //配置
 
-```
+```json
 {"page":[
     "page/index/index“，
     "page下页面路径“
@@ -21,13 +21,13 @@ categories:
 
 - app.js  //注册小程序应用
 
-```
+```js
 App({.....})
 ```
 
 - app.wxss    //全局公共样式
 
-```
+```css
  page{       //小程序会在所有页面加一个page ，因此应设置页面高度为100%
             height:100%;
         }
@@ -38,7 +38,7 @@ page
 \\index  
 \\-index.js  
 
-```
+```js
      page({
      //初始化数据
          data: {
@@ -104,9 +104,10 @@ page
 .....
                  })
 ```
+
 - index.wxml
 
-```
+```html
       <view class="indexcontainer">   <!--//样式-->
         
         <image wx:if='{{userInfo.avatarUrl}}' class="avatarUrl" src="{{userInfo.avatarUrl}}"> </image>    <!--图片路径-->
@@ -124,7 +125,7 @@ page
 
 - index.wxss      //样式
 
-```
+```css
              .indexContainer{
   display: flex;
   flex-direction: column;
@@ -152,11 +153,13 @@ page
   border-radius:10rpx
 }
 ```
+
 - index.json  
 
 - 日志：
 log/logs.json
-```
+
+```json
 {
     "usingComponens":{},
     "navigationBarTitleText": "日志“    //最顶部栏文字
@@ -164,6 +167,7 @@ log/logs.json
 ```
 
 ### 绑定事件
+
 bind：冒泡事件
 catch：非冒泡
 
@@ -174,8 +178,10 @@ wx:if='条件'
 wx:else
 wx:elif='条件'
 ```
+
 ### 微信小程序 bindtap 传参
-```
+
+```html
 //index.wxml
 <view bindtap="changeIndex" data-src1="我固定参数1" data-src2="我是固定参数2" >
   
@@ -206,7 +212,9 @@ page({
  }
 })
 ```
+
 ---
+
 ### 布局
 
 ### 常用功能
@@ -215,7 +223,7 @@ page({
 
 在app.json文件内：
 
-```
+```json
 {
     "pages":[
         "路径",
@@ -245,7 +253,7 @@ page({
 
 在index.js文件夹内
 
-```
+```js
 page({
     data:{
         first:"",
@@ -271,7 +279,8 @@ page({
 ```
 
 在index.wxml文件中
-```
+
+```html
 \<input bindinput="first" placeholder="文字">\</input>
 \<input value="second" placeholder="文字"disabled>\</input>
 //placeholder：提示
@@ -285,7 +294,7 @@ page({
 
 - textarea
 
-```
+```html
 //auto-focus: 自动聚焦
 //maxlength="-1":不限长度
  \<textarea auto-focus placeholder="Text"maxlength="-1" bindinput="text_input" value="{{record}}"/>
@@ -293,7 +302,7 @@ page({
 
 - 选择照片
 
-```
+```js
  wx.chooseImage({
       count: 1, //数量 默认9
       sizeType: ['original', 'compressed'], //图片质量：原图，压缩
@@ -311,9 +320,9 @@ page({
 
 ```
 
-- 跳转界面 
+- 跳转界面
 
-```
+```js
  //返回界面
             wx.navigateBack({
               delta: 0,     //0表示上一层
@@ -338,7 +347,7 @@ wx:for控制属性绑定一个数组进行列表渲染。
 >保留关键字 *this 代表在 for 循环中的 item 本身，这种表示需要 item 本身是一个唯一的字符串或者数字，如：
 当数据改变触发渲染层重新渲染的时候，会校正带有 key 的组件，框架会确保他们被重新排序，而不是重新创建，以确保使组件保持自身的状态，并且提高列表渲染时的效率。如不提供 wx:key，会报一个 warning， 如果明确知道该列表是静态，或者不必关注其顺序，可以选择忽略。）
 
-```
+```html
 wxml:
  <view class="touch-item {{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{item1}}"   wx:key="i">
  <view class="del" catchtap="del" style="border-radius:20rpx 0 0 20rpx;"  data-detail="{{item.content.text}} " data-index="{{index}}">删除</view></view>
@@ -353,7 +362,7 @@ del(e){
 
 - 搜索
 
-```
+```js
 for(var i=0,j=0;i<app.data.item2.length;i++){
    if(app.data.item2[i].delete==0){
      //模糊搜索
@@ -367,7 +376,7 @@ for(var i=0,j=0;i<app.data.item2.length;i++){
 
 - 复制
 
-```
+```js
 /*#######复制功能########################*/
 copy: function (e) {
   var that = this;
@@ -381,7 +390,7 @@ copy: function (e) {
 
 - 云数据库
 
-```
+```js
 
 wx.cloud.init({         //初始化
   env:"cloud1-3gerlsz2682ceb37",
@@ -416,7 +425,7 @@ Page({
 
 - 获取时间
 
-```
+```js
 util.js:
 const formatTime = date => {
   const year = date.getFullYear()
@@ -454,7 +463,7 @@ module.exports = {
 
 - 固定按钮
 
-```
+```html
 wxml:
 <view class="round-click" bindtap="new_goto">+</view>
 wxss:
@@ -471,24 +480,22 @@ wxss:
 
     display: flex;
     align-items: center;
-	font-size:70rpx;
+ font-size:70rpx;
     justify-content: center;
     z-index: 9;
 
 }
 ```
 
-
-wx.request发起 HTTPS 网络请求,data请求的参数,success接口调用成功的回调函数	
+wx.request发起 HTTPS 网络请求,data请求的参数,success接口调用成功的回调函数 
 
 AudioContext对象用于与audio组件绑定，通过它可以在逻辑层操作视图层的audio组件。可以用wx.createAudioContext(audioId)接口创建并返回audio的上下文对象AudioContext。
-
 
 ## 跳转
 
 1. 利用小程序提供的 API 跳转：
 
-```
+```js
 // 保留当前页面，跳转到应用内的某个页面，使用wx.navigateBack可以返回到原页面。
 // 注意：调用 navigateTo 跳转时，调用该方法的页面会被加入堆栈，但是 redirectTo 
 wx.navigateTo({
@@ -524,7 +531,7 @@ wx.reLanch({
 
 原理：wxml中不能直接使用较高级的js语法，如‘.toFixed’，‘toString()’，但可以通过引入wxs模块实现效果
 
-```
+```js
 1.新建`filter.wxs`
 var filters = {    
     toFix: function (value) {       
@@ -555,7 +562,8 @@ module.exports = {
 ## 虚拟列表
 
 - wxml
-```
+
+```html
 <scroll-view id='scrollView' style="margin-top:80rpx;height:calc(100% - 180rpx);" scroll-y="true"
   scroll-with-animation="true" enable-back-to-top="true" refresher-enabled="true" refresher-background="#f6f6f6"
   refresher-triggered="true" bindscrolltolower="listScrollBottom" bindscrolltoupper="listScrollTop"
@@ -641,9 +649,9 @@ module.exports = {
 </scroll-view>
 ```
 
--js 
+-js
 
-```
+```js
 ...
     list: [
       [],
@@ -748,8 +756,10 @@ module.exports = {
     })
   },
 ```
+
 微信小程序中局部更新对象或者数组中的某个数据
-```
+
+```js
 this.setData({
 ['list[0][1].a']:0
 })

@@ -11,10 +11,10 @@ categories:
 
 ## 配置 git
 
-```
+```bash
 git config --global user.name "用户名"               //个人账号
 git config --global user.email 123456@qq.com         //个人邮箱地址
-上面的--global选项,表示以后管理git库时,默认使用上面的用户信息,也可以通过git config -l 来查看配置信息
+# 上面的--global选项,表示以后管理git库时,默认使用上面的用户信息,也可以通过git config -l 来查看配置信息
 ```
 
 ## git 命令
@@ -69,7 +69,7 @@ git config --global user.email 123456@qq.com         //个人邮箱地址
 
 - git 提交=报错 443
 
-```
+```bash
 # 取消代理
 git config --global --unset http.proxy
 git config --global --unset https.proxy

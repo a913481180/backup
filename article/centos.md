@@ -1,8 +1,10 @@
 ---
 title: Centos7安装 
-date: 2022-01-11 20:22:22
+date: 2022-01-10 20:22:22
 categories:
 - linux
+tags:
+- system
 ---
 
 

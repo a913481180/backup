@@ -5,7 +5,6 @@ categories:
   - linux
 ---
 
-# pm2
 
 PM2 是常用的 node 进程管理工具，它可以提供 node.js 应用管理，如自动重载、性能监控、负载均衡等。同类工具有 Supervisor、Forever 等。
 
@@ -85,7 +84,7 @@ $HOME/.pm2/conf.js：PM2配置
 命令如下，表示开启三个进程。如果`-i 0`，则会根据机器当前核数自动开启尽可能多的进程。
 
 `pm2 start app.js -i 3` # 开启三个进程
-`pm2 start app.js -i max `# 根据机器 CPU 核数，开启对应数目的进程
+`pm2 start app.js -i max`# 根据机器 CPU 核数，开启对应数目的进程
 
 ## 开机自动启动
 

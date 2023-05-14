@@ -6,6 +6,7 @@ categories:
 ---
 
 # 数据结构
+
 ### 算法时间复杂度
 
 T(n)=O(f(n))
@@ -41,10 +42,9 @@ ADT 抽象数据类型名{
 
 }ADT 抽象数据类型名
 
-
 抽象数据类型的实现
 
-```
+```c
 #define TRUE 1
 #define FALSE 0
 #define OK 1
@@ -59,171 +59,179 @@ Status 函数名{
 }//函数名
 ```
 
-```
+```c
 ADT List{
-	数据对象：D={ai|ai∈ElemSet,i=1,2,...,n,n≥0}
-	数据关系：R1={<ai-1,ai>|ai-1,ai∈D,i=2,3,4,...,n}
-	基本操作：
-	InitList(&L)
-		操作结果：构造一个空的线性表L。
-	DestroyList(&L)
-		初始条件：线性表L已存在。
-		操作结果：销毁线性表L。
-	ClearList(&L)
-		初始条件：线性表L已存在。
-		操作结果：将L重置为空表。
-	ListEmpty (L)
-		初始条件：线性表L已存在。
-		操作结果：若L为空表，则返回TRUE，否则返回FALSE。
-	ListLength(L)
-		初始条件：线性表L已存在。
-		操作结果：返回L中数据元素的个数。
-	GetElem(L,i,&e)
-		初始条件：线性表L已存在，l≤i≤ListLength(L)。
-		操作结果：用e返回L中第i个数据元素的值。
-	LocateElem(L,e,compare())
-		初始条件：线性表L已存在，compare()是数据元素的判定函数。
-		操作结果：用e返回L中第1个与e满足关系compare()的数据元素的位序。若这样的数据元素不存在，则返回值为0。
-	PriorElem(L,cur_e,&pre_e)
-		初始条件：线性表L已存在。
-		操作结果：若cur_e是L的数据元素，且不是第一个，则用pre_e返回它的前驱，否则操作失败，pre_e无定义。
-	NextElem(L,cur_e,&next_e)
-		初始条件：线性表L已存在。
-		操作结果：若cur_e是L的数据元素，且不是最后一个，则用next_e返回它的前驱，否则操作失败，next_e无定义。
-	ListInsert(&L,i,e)
-		初始条件：线性表L已存在，l≤i≤ListLength(L)+1。
-		操作结果：在L中第i个位置之前插入新的数据元素e，L的长度加1.
-	ListDelete(&L,i,&e)
-		初始条件；线性表L已存在且非空，l≤i≤ListLength(L)。
-		操作结果：删除L中第i个数据元素，并用e返回其值，L长度减1.
-	ListTraverse(L,visit())
-		初始条件：线性表L已存在。
-		操作结果：依次对L的每个数据元素调用函数visit()。一旦visit()失败，则操作失败。
+ 数据对象：D={ai|ai∈ElemSet,i=1,2,...,n,n≥0}
+ 数据关系：R1={<ai-1,ai>|ai-1,ai∈D,i=2,3,4,...,n}
+ 基本操作：
+ InitList(&L)
+  操作结果：构造一个空的线性表L。
+ DestroyList(&L)
+  初始条件：线性表L已存在。
+  操作结果：销毁线性表L。
+ ClearList(&L)
+  初始条件：线性表L已存在。
+  操作结果：将L重置为空表。
+ ListEmpty (L)
+  初始条件：线性表L已存在。
+  操作结果：若L为空表，则返回TRUE，否则返回FALSE。
+ ListLength(L)
+  初始条件：线性表L已存在。
+  操作结果：返回L中数据元素的个数。
+ GetElem(L,i,&e)
+  初始条件：线性表L已存在，l≤i≤ListLength(L)。
+  操作结果：用e返回L中第i个数据元素的值。
+ LocateElem(L,e,compare())
+  初始条件：线性表L已存在，compare()是数据元素的判定函数。
+  操作结果：用e返回L中第1个与e满足关系compare()的数据元素的位序。若这样的数据元素不存在，则返回值为0。
+ PriorElem(L,cur_e,&pre_e)
+  初始条件：线性表L已存在。
+  操作结果：若cur_e是L的数据元素，且不是第一个，则用pre_e返回它的前驱，否则操作失败，pre_e无定义。
+ NextElem(L,cur_e,&next_e)
+  初始条件：线性表L已存在。
+  操作结果：若cur_e是L的数据元素，且不是最后一个，则用next_e返回它的前驱，否则操作失败，next_e无定义。
+ ListInsert(&L,i,e)
+  初始条件：线性表L已存在，l≤i≤ListLength(L)+1。
+  操作结果：在L中第i个位置之前插入新的数据元素e，L的长度加1.
+ ListDelete(&L,i,&e)
+  初始条件；线性表L已存在且非空，l≤i≤ListLength(L)。
+  操作结果：删除L中第i个数据元素，并用e返回其值，L长度减1.
+ ListTraverse(L,visit())
+  初始条件：线性表L已存在。
+  操作结果：依次对L的每个数据元素调用函数visit()。一旦visit()失败，则操作失败。
 }ADT List
 ```
 
 ### 顺序存取
+
 数组
+
 ### 链式存取
+
 - 单链表整表创建的算法思路：
+
 1. 声明一个结点p和计数器变量n；
 2. 初始化一空链表L；
 3. 让L的头结点的指针指向NULL；
 4. 循环实现后继结点的赋值和插入；
 
-
-```
+```c
 #include<stdio.h>
 #include<stdlib.h>
-	
+ 
 typedef int DataType;
 
 typedef struct LNode{
-	DataType data;		//数据域
-	struct LNode *next;	//指针域，指向下一个节点
+ DataType data;  //数据域
+ struct LNode *next; //指针域，指向下一个节点
 }LNode,*LinkList;
 
 //创建///
 //声明函数
-LinkList CreateList(int n);	//创建链表
-void print(LinkList h);		//打印链表
+LinkList CreateList(int n); //创建链表
+void print(LinkList h);  //打印链表
 
 //创建链表
 LinkList CreateList(int n){
-	//定义指针L指向该链表即头指针，结点q为第一个结点，结点p为下一个结点
-	LinkList L,p,q;
-	//为头指针申请空间
-	L=(LNode*)malloc(sizeof(LNode));
-	if(!L){return 0;}
-	//头指针指向NULL即空链表
-	L->next =NULL;
-	//第一个结点指向头指针
-	q=L;
-	//循环创建链表结点
-	for(int i=0;i<n;i++){
-		//为下一个结点申请空间
-		p=(LinkList)malloc(sizeof(LNode));
-		printf("输入第%d个元素的值：",i);
-		//存入数据
-		scanf("%d",&(p->data));
-		//下一个结点的指针指向NULL，即尾部
-		p->next=NULL;
-		//第一个结点的指针指向下一个结点,即上一个结点与该结点相连
-		q->next=p;
-		//移动第一个结点到下一个结点
-		q=p;
-	}
-	//返回链表头部
-	return L;
+ //定义指针L指向该链表即头指针，结点q为第一个结点，结点p为下一个结点
+ LinkList L,p,q;
+ //为头指针申请空间
+ L=(LNode*)malloc(sizeof(LNode));
+ if(!L){return 0;}
+ //头指针指向NULL即空链表
+ L->next =NULL;
+ //第一个结点指向头指针
+ q=L;
+ //循环创建链表结点
+ for(int i=0;i<n;i++){
+  //为下一个结点申请空间
+  p=(LinkList)malloc(sizeof(LNode));
+  printf("输入第%d个元素的值：",i);
+  //存入数据
+  scanf("%d",&(p->data));
+  //下一个结点的指针指向NULL，即尾部
+  p->next=NULL;
+  //第一个结点的指针指向下一个结点,即上一个结点与该结点相连
+  q->next=p;
+  //移动第一个结点到下一个结点
+  q=p;
+ }
+ //返回链表头部
+ return L;
 }
 
 //打印链表
 void print (LinkList h){
-	//创建一个指针指向链表的第一个元素结点；
-	LinkList p=h->next;
-	//当不是尾部时
-	while(p!=NULL){
-	//打印数据
-	printf("%d ",p->data);
-	//移动到下一个元素
-	p=p->next;
-	}
+ //创建一个指针指向链表的第一个元素结点；
+ LinkList p=h->next;
+ //当不是尾部时
+ while(p!=NULL){
+ //打印数据
+ printf("%d ",p->data);
+ //移动到下一个元素
+ p=p->next;
+ }
 }
 int main (){
-	//创建一个头指针并指向NULL；即空链表·
-	LinkList head=NULL;
-	//输入结点个数n
-	int n;
-	printf("请输入链表长度：");
-	scanf("%d",&n);
-	//创建链表
-	head=CreateList(n);
-	//打印链表
-	printf("刚刚建立的各个链表元素的值为:\n");
-	print(head);
-	printf("\n\n");
-	//按下任意键结束
-	getchar();
-	getchar();
-	return 0;
+ //创建一个头指针并指向NULL；即空链表·
+ LinkList head=NULL;
+ //输入结点个数n
+ int n;
+ printf("请输入链表长度：");
+ scanf("%d",&n);
+ //创建链表
+ head=CreateList(n);
+ //打印链表
+ printf("刚刚建立的各个链表元素的值为:\n");
+ print(head);
+ printf("\n\n");
+ //按下任意键结束
+ getchar();
+ getchar();
+ return 0;
 }
 
 ```
 
 - 单链表整表的删除算法思路：
+
 1. 声明结点p和q；
 2. 将第一个接地赋值给p，下一个结点赋值给q；
 3. 循环执行释放p和将q赋值给p的操作；free(p)会同时把数据域和指针域同时删除
-```
+
+```c
 //h为头指针
 void delect(LinkList h){
 LinkList p,q;
-p=h->next;	//p指向第一个节点
+p=h->next; //p指向第一个节点
 while(p!=NULL){
-q=p->next;	//q指向第二个节点
-free(p);	//删除第一个节点
-p=q;		//p等于第二个节点
+q=p->next; //q指向第二个节点
+free(p); //删除第一个节点
+p=q;  //p等于第二个节点
 }
-h->next==NULL;	//头节点指向空
+h->next==NULL; //头节点指向空
 }
 ```
 
 - 获取第i个数据的算法思路：
+
 1. 声明一个结点p指向链表第一个结点，初始化j从1开始；
 2. 当j\<i时,就遍历链表，让p的指针向后移动，不断指向下一个结点，j+1；
 3. 若到链表末尾p为空，则说明第i个元素不存在；
 4. 若查找成功则返回结点p的数据；
 
 - 单链表第i个数据插入结点的算法思路：
+
 1. 将数据元素e赋值给s-\>data即s-\>data=e;
 2. s-next=p-\>next;
 3. p-next=s;
 
 - 单链表的删除
+
 1. p-\>next=p-\>next-\>next;
 
-
 头指针不为空，头指针是链表的必要元素，头指针是链表指向第一个节点的指针。头结点在第一个元素的节点前，其数据一般无意义，但也可用来存放链表的长度。空链表头指针直接指向null
+
 ### 循环链表
 
 尾指针指向头指针
@@ -231,36 +239,44 @@ h->next==NULL;	//头节点指向空
 ### 双向链表
 
 结构：
-```
+
+```c
 typedef struct DualNode{
 int data;
-struct DualNode *prior; 	//前驱节点
-struct DualNode *next;		//后继节点
+struct DualNode *prior;  //前驱节点
+struct DualNode *next;  //后继节点
 }DualNode,*DuLinkList;
 ```
+
 插入操作
-```
+
+```c
 //s为插入节点，p为后一个节点；
 s->next=p;
 s->prior=p->prior;
 p->prior-next=s;
 p->prior=s;
 ```
+
 删除操作：
-```
+
+```c
 //删除p节点
 p->prior->next=p->next;
 p->next->prior=p->prior;
 free(p);
 ```
+
 ### 静态链表
+
 用数组描述的链表称为静态链表
-```
+
+```c
 #define maxsize 1000
 typedef struct{
 int  data;//数据
 int cut;//游标
-}component,staticlinklist[maxsize];	//结构体数组
+}component,staticlinklist[maxsize]; //结构体数组
 //静态链表的初始化，相当于初始化数组:
 Status InitList(staticlinklist space){
 int i;
@@ -275,22 +291,26 @@ return Ok;
 ```
 
 ### 栈
+
 是一个先进后出的线性表，要求只在表尾进行删除和插入操作；对与栈来说，表尾称为栈的栈顶top,表头称为栈底bottom.
 结构:
-```
+
+```c
 typedef struct{
-int *bottom;	//指向栈底的指针；
+int *bottom; //指向栈底的指针；
 int *top;
-int stacksize;	//指当前可使用的最大总量。
+int stacksize; //指当前可使用的最大总量。
 }sqStack;
 ```
+
 创建一个栈：
-```
+
+```c
 #define STACK_INIT_SIZE 100
 initStack(sqStack *s){
 s->bottom=(int*)malloc(STACK_INIT_SIZE*sizeof(int));
 if(!s->base){exit(0);}
-s->top=s->base;		//开始栈顶就是栈底
+s->top=s->base;  //开始栈顶就是栈底
 s->stacksize=STACK_INIT_SIZE;
 }
 //初始化
@@ -301,8 +321,10 @@ s->top=s->bottom;
 s->stacksize=STACK_INIT_SIZE;
 }
 ```
+
 入栈操作：
-```
+
+```c
 #define STACKINCREMENT 10
 push(sqStack *s,int e);
 {
@@ -310,8 +332,8 @@ push(sqStack *s,int e);
 if (s->top - s->bottom==s->stacksize) {
 s->bottom=(int*)realloc(s->bottom,(s->stacksize+STACKINCREMENT)*sizeof(int));
 if(!s->bottom){exit(0);}
-s->top=s->bottom+s->stacksize;			//设置栈顶
-s->stacksize=s->stacksize+STACKINCREMENT;	//重新设置栈的最大容量
+s->top=s->bottom+s->stacksize;   //设置栈顶
+s->stacksize=s->stacksize+STACKINCREMENT; //重新设置栈的最大容量
 }
 *(s->top)=e;
 s->top++;
@@ -319,20 +341,25 @@ s->top++;
 ```
 
 出栈操作：
-```
+
+```c
 pop(sqStack *s, int *e){
-if(s->top==s->base){rerutn;}	//栈空退出；
+if(s->top==s->base){rerutn;} //栈空退出；
 *e=*--(s->top);
 }
 ```
+
 清空栈：
-```
+
+```c
 clearsqstack(sqStack *s){
 s->top=s->bottom;
 }
 ```
+
 销毁一个栈：
-```
+
+```c
 destroystack(sqStack *s){
 int i,len;
 len=s->stacksize;
@@ -344,23 +371,27 @@ s->bottom=s->top=NULL;
 s->stacksize=0;
 }
 ```
+
 计算栈容量：
-```
+
+```c
 int stacklen(sqStack *s){
 return(s.top-s.bottom);
 }
 ```
+
 栈的存储结构：
 顺序存储
 链式存储：栈顶为单链表的头部
-```
+
+```c
 typedef struct stackNode{
-ElemType data;		//存放栈的数据
+ElemType data;  //存放栈的数据
 struct stackNode *next;
 }stackNode,*LinkStackPtr;
 typedef strucct LinkStack{
-LinkStackPtr top;	//top指针
-int count;		//计数器
+LinkStackPtr top; //top指针
+int count;  //计数器
 }
 //栈链的进栈
 //s为新节点，top为栈顶指针；
@@ -374,7 +405,7 @@ return OK;
 //链表的出栈操作
 Status pop(LinkStack *s,ElemType *e){
 LintStack p;
-if(StackEmpty(*s)){return ERROR;}	//判断是否为空栈
+if(StackEmpty(*s)){return ERROR;} //判断是否为空栈
 *e=s->top->data;
 p=s->top;
 s->top=s->top->next;
@@ -383,31 +414,37 @@ s->count--;
 return OK;
 }
 ```
+
 ### 队列
+
 队列只允许在一端进行插入操作，在另一端进行删除操作的线性表（先进先出）
 
 队列的链式存储结构
-```
+
+```c
 typedef struct QNode{
 ElemType data;
 struct QNode *next;
 }QNode,*QueuePrt;
 type struct{
-QueuePrt front,rear;	//队头、尾指针；
+QueuePrt front,rear; //队头、尾指针；
 }LinkQueue;
 
 ```
+
 创建队列：在内存中创建一个头结点，将队列的头、尾指针都指向这个生成的头结点，此时为空队列；
-```
+
+```c
 initQueue(LinkQueue *q)
 {q->front=q->rear=(QueuePtr)malloc(sizeof(QNode));
 if(!q->front){exit(0);}
 q->front->next=NULL;
 }
 ```
+
 入队操作
 
-```
+```c
 InsertQueue(LinkQueue *q,ElemType e){
 QueuePtr p;
 p=(QueuePtr)malloc(sizeof(QNode));
@@ -418,11 +455,13 @@ q->rear->next=p;
 q->rear=p;
 }
 ```
+
 出队列
-```
+
+```c
 DeleteQueue(LinkQueue *q,ElemType *e){
 Queueptr p;
-if(q->front==q->rear){return;}	//判断队列是否为空；
+if(q->front==q->rear){return;} //判断队列是否为空；
 p=q->front->next;
 *e=p->data;
 q->front->next=p->next;
@@ -430,8 +469,10 @@ if(q->rear==p){q->rear=q->front;}
 free(p);
 }
 ```
+
 销毁一个队列
-```
+
+```c
 DestroyQueue(LinkQueue *q){
 while(q->front){
 q->rear=q->front-next;
@@ -440,6 +481,7 @@ q->front=q->rear;
 }
 }
 ```
+
 ### 串
 
 有零个或多个字符组成的有限序列`S='a1a2a3a4a5....'`
@@ -452,30 +494,28 @@ q->front=q->rear;
 
 采用顺序存储称为顺序串，
 
-```
+```c
 #define MAXLEN 255
 typedef struct{
-char ch[MAXLEN+1];	//存储串的一维数组
-int length;	//串的当前长度
+char ch[MAXLEN+1]; //存储串的一维数组
+int length; //串的当前长度
 }SString;
 ```
 
-
 采用链式存储称为链串；
 
-```
-#define CHUNKSIZE 80 	//块大小
+```c
+#define CHUNKSIZE 80  //块大小
 typedef struct Chunk{
 char ch[CHUNKSIZE];
 struct Chunk *next;
 }Chunk;
 
 typedef struct{
-Chunk *head *tail;	//串的头尾指针
-int curlen;		//串的当前长度
-}LString;	//字符串的块链结构
+Chunk *head *tail; //串的头尾指针
+int curlen;  //串的当前长度
+}LString; //字符串的块链结构
 ```
-
 
 #### 串的模式匹配算法
 
@@ -494,6 +534,7 @@ next[j]:j的下一个位置
 当j=1时，next[j]=0;
 其他情况，next[j]=1;
 next[j]=max{1\<k\<j且从头开始的k-1个元素等于j前面的k-1个元素"P1...P(k-1)"="P(j-k+1)....P(j-1)"}
+
 ### 递归
 
 方法或函数调用自身的方式称为递归调用，调用称为递，返回称为归。
@@ -513,7 +554,6 @@ next[j]=max{1\<k\<j且从头开始的k-1个元素等于j前面的k-1个元素"P1
 1.警惕堆栈溢出：可以声明一个全局变量来控制递归的深度，从而避免堆栈溢出。
 2.警惕重复计算：通过某种数据结构来保存已经求解过的值，从而避免重复计算。
 
- 
 ## 树
 
 在一颗非空树中，有且只有一个根节点，结点拥有的子树树称为度；度为0 的结点称为叶子或终端结点；不为0 的结点称为分支结点或非终端结点；树的度是树内结点度的最大值；同一个双亲的孩子互称为兄弟；从根到该结点所经过分支上的结点称为祖先，从该结点到下面所有结点称为子孙；树中结点的最大层次称为树的深度；
@@ -521,7 +561,7 @@ next[j]=max{1\<k\<j且从头开始的k-1个元素等于j前面的k-1个元素"P1
 从左到右是有次序的称为该树的有序树，否则称为无序树；
 森林是m棵互不相交的树的集合；
 
-###  二叉树
+### 二叉树
 
 每个结点至多只有两棵子树，子树有左右之分，次序不能颠倒
 
@@ -549,31 +589,31 @@ next[j]=max{1\<k\<j且从头开始的k-1个元素等于j前面的k-1个元素"P1
 
 - 二叉树的存储结构
 
-   - 顺序存储
+  - 顺序存储
 
-	将完全二叉树上编号为i的结点元素存储在一维数组中
+ 将完全二叉树上编号为i的结点元素存储在一维数组中
 
-   - 链式存储
+- 链式存储
 
-	链表中的结点至少包含三个域：数据域、左右结点指针域；还可以增加一个指向其双亲的指针域；
+ 链表中的结点至少包含三个域：数据域、左右结点指针域；还可以增加一个指向其双亲的指针域；
 
 - 遍历二叉树
 
-   - 先序遍历
+  - 先序遍历
 
-	根-左-右
+ 根-左-右
 
-   - 中序遍历
+- 中序遍历
 
-	左-根-右
+ 左-根-右
 
-   - 后续遍历
+- 后续遍历
 
-	左-右-根
+ 左-右-根
 
 - 二叉链表
 
-```
+```c
 #include<stdio.h>
 typedef char ElemType;
 typedef struct BiTNode
@@ -587,7 +627,7 @@ CreateBidTree(BiTree *T)
 {
 char c;
 scanf("%c",&c);
-if(' '==c)	//空格表示结点无子树
+if(' '==c) //空格表示结点无子树
 {
 *T=NULL;
 }
@@ -632,7 +672,7 @@ return 0;
 
 >ltag=0时,lchild指向该结点的左孩子，为1时指向该结点的前驱。rtag=0，rchild指向该结点的右孩子，为1时指向该结点的后继。
 
-``` 
+```c
 #include<stdio.h>
 #include<stdlib.h>
 typedef char ElemType;
@@ -675,8 +715,8 @@ InThreading(BiThrTree T)
 {
 if(T)
 {
-InThreading(T->lchild);	//递归左孩子线索化
-if(!T->lchild)	//如果该节点没有左孩子，则设置ltag为thread，并把lchild指向刚刚访问过的结点
+InThreading(T->lchild); //递归左孩子线索化
+if(!T->lchild) //如果该节点没有左孩子，则设置ltag为thread，并把lchild指向刚刚访问过的结点
 {
 T->ltag=Thread;
 T->lchild=pre;
@@ -688,7 +728,7 @@ Pre->rchild=T;
 }
 
 Pre=T;
-InThreading(T->rchild);		//递归右孩子线索化
+InThreading(T->rchild);  //递归右孩子线索化
 }
 }
 
@@ -728,6 +768,7 @@ return 0;
    2. 第一颗二叉树不动，从第二棵二叉树开始，依次把后一棵二叉树的根结点作为前一棵二叉树的根结点的右孩子，用线连起来
 
 >树、森林的前序遍历和二叉树的前序遍历结果相同，后序遍历与二叉树的中序遍历结果相同。
+>
 ## 图
 
 图（Graph）是由顶点的有穷非空集合和顶点之间边的集合组成，通常表示为：G（V，E）其中，G表示一个图，V是图G中顶点的集合，E是图G中边的集合。
@@ -754,15 +795,14 @@ return 0;
 
 >有向图的邻接矩阵可能是不对称的，顶点的度=顶点的出度+顶点的入度；
 
-
-```
-#define MVNum 100	//最大顶点数
-typedef char VerTexType;	//设顶点的数据类型为字符型
-typedef int ArcType;		//假设边的权值类型为整型
+```c
+#define MVNum 100 //最大顶点数
+typedef char VerTexType; //设顶点的数据类型为字符型
+typedef int ArcType;  //假设边的权值类型为整型
 typedef struct{
-VerTexType Vexs[MVNum];		//顶点数组
-ArcType arcs[MVNum][MVNum]	//邻接矩阵
-}AMGraph;	
+VerTexType Vexs[MVNum];  //顶点数组
+ArcType arcs[MVNum][MVNum] //邻接矩阵
+}AMGraph; 
 
 //在顶点数组中查找顶点
 int LocateVex(AMGraph G,VertexType u){
@@ -777,62 +817,60 @@ reruen -1;
 }
 status CreateUDN(AMGraph &G){
 //创建无向网G
-cin>>G.vexnum>>G.arcnum;	//输入总顶点数，总边数
+cin>>G.vexnum>>G.arcnum; //输入总顶点数，总边数
 for(i=0;i<G.vexnum;++i)
-cin>>G.vexs[i];		//依次输入点的信息
-for(i=0;i<G.vexnum;++i)	//初始化邻接矩阵
+cin>>G.vexs[i];  //依次输入点的信息
+for(i=0;i<G.vexnum;++i) //初始化邻接矩阵
 for (j=0;j<G.vexnum;++j)
-G.arcs[i][j]=MaxInt;	//边的权值均为最大值
-fof(k=0;k<G.arcnum;++k){	//构造邻接矩阵
-cin>>v1>>v2>>w;			//输入一条边所依附的顶点及边的权值
+G.arcs[i][j]=MaxInt; //边的权值均为最大值
+fof(k=0;k<G.arcnum;++k){ //构造邻接矩阵
+cin>>v1>>v2>>w;   //输入一条边所依附的顶点及边的权值
 i=LocateVex(G,v1);
-j=LocateVex(G,v2);	//确定v1和v2在G中的位置
-G.arcs[i][j]=w;		//边<v1,v2>的权值置为w
-G.arcs[j][i]=G.arcs[i][j];	//<v1,v2>的对称边<v2,v1>的权值为w
+j=LocateVex(G,v2); //确定v1和v2在G中的位置
+G.arcs[i][j]=w;  //边<v1,v2>的权值置为w
+G.arcs[j][i]=G.arcs[i][j]; //<v1,v2>的对称边<v2,v1>的权值为w
 }
 return 0;
 }
 
 ```
 
-
 - 邻接表
-
 
 | |缺点|改进方法|
 |-|-|-|
 |有向图|求各结点的度困难|十字链表|
 |无向图|每条边都要存储两遍|邻接多重表|
 
-
-```
+```c
 typedef struct VNode{
-VerTexType data;	//顶点信息
-ArcNode *firstarc;	//指向第一条依附该顶点的边的指针
-}VNode，AdjList[MVNum];	//AdjList表示邻接表类型
+VerTexType data; //顶点信息
+ArcNode *firstarc; //指向第一条依附该顶点的边的指针
+}VNode，AdjList[MVNum]; //AdjList表示邻接表类型
 
-status CreateUDG(ALGragh &G){	//创建无向图G
-cin>>G.vexnum>>G.arcnum;	//输入图G的顶点，边个数
+status CreateUDG(ALGragh &G){ //创建无向图G
+cin>>G.vexnum>>G.arcnum; //输入图G的顶点，边个数
 for(int i=0;i<G.vexnum;++i){
-cin>>Gvertices[i].data;		//输入顶点值
-G.vertices[i].firsarc=NULL;	//初始化表头结点的指针域
+cin>>Gvertices[i].data;  //输入顶点值
+G.vertices[i].firsarc=NULL; //初始化表头结点的指针域
 }
-for(k=0;k<G.arcnum;++k){	//输入各边
+for(k=0;k<G.arcnum;++k){ //输入各边
 cin>>v1>>v3;
 i=LocateVex(G,v1);
 j=LocateVex(G,v2);
-p1=new ArcNode;		//生成一个新的边结点*p1
-p1->adjvex=j;		//邻接点序号为j
+p1=new ArcNode;  //生成一个新的边结点*p1
+p1->adjvex=j;  //邻接点序号为j
 p1->nextarc=G.vertices[i].firstarc;
-G.vertices[i].firstarc=p1;;		//将新结点*p1插入顶点vi的边表头部
-p2=new ArcNode;		//生成另一个对称的新的边结点*p2
-p2->adjvex=i;		//邻接点序号为i
+G.vertices[i].firstarc=p1;;  //将新结点*p1插入顶点vi的边表头部
+p2=new ArcNode;  //生成另一个对称的新的边结点*p2
+p2->adjvex=i;  //邻接点序号为i
 p2->nextarc=G.vertices[j].firstarc;
-G.vertices[j].firstarc=p2;	//将新结点*p2插入顶点vj的边表头部
+G.vertices[j].firstarc=p2; //将新结点*p2插入顶点vj的边表头部
 }
 return OK;
 }
 ```
+
 ## 遍历方法
 
 - 深度优先遍历
