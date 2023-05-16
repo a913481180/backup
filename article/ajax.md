@@ -314,7 +314,7 @@ jsonp的缺点：只能发送get一种请求。
 1、原生JS实现
 通过script标签src属性，发送带有callback参数的GET请求，服务端将接口返回数据拼凑到callback函数中，返回给浏览器，浏览器解析执行，从而前端拿到callback函数返回的数据。
 
-```httml
+```html
 <script>
     function getData(data){
         console.log(data)

@@ -1101,3 +1101,49 @@ forceReload() {
 window.location.href = window.location.href,
 //强制重新加载并清除缓存。
 ```
+
+## 触发input-file的click事件
+
+`document.querySelector('#file').click()`
+
+## 清空input-file值
+
+```js
+//1.###
+var test = document.getElementById('test');
+test.value = '';  //test的value不能设为有字符的值，但是可以设置为空值
+
+//2.###
+var test = document.getElementById('test');
+test.outerHTML = test.outerHTML; //重新初始化了test的html
+```
+
+## js时间戳转换成日期的方法
+
+`(new Date(parseInt(n))).toLocaleDateString()`
+
+## 封装一个获取时间的方法
+
+```js
+function gettime(){
+var time = new Date();
+var h=time.getHours();
+h= h<10 ? "0"+h : h;  //小于10前面添加0
+var m=time.getMinutes();
+var s=getSeconds();
+return h +':'+ m +':'+ s;
+}
+console.log(gettime());
+
+```
+
+## js 时分秒转化为秒
+
+```js
+var time = '00:02:10';
+var hour = time.split[':'](0);
+var min = time.split[':'](1);
+var sec = time.split[':'](2);
+s = Number(hour*3600) + Number(min*60) + Number(sec);
+console.log(s);//130
+```

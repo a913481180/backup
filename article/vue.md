@@ -1589,7 +1589,7 @@ this.$store.commit('personAbout/ADD_PERSON',person)
 
 src/router/index.js
 
-```
+```js
 //引入路由
 import VueRouter from 'vue-router'
 //引入组件
@@ -1622,7 +1622,7 @@ component:News,
 
 main.js
 
-```
+```js
 //引入Vue
 import Vue from 'vue'
 //引入APP
@@ -1646,7 +1646,7 @@ router:router
 
 index.js 跳转
 
-```
+```vue
 <template>
 <!--用route-link代替a标签去跳转-->
 <!--active-class属性：该元素激活时触发样式，可配置高亮样式-->
@@ -1676,7 +1676,7 @@ $route.query.id
 
 简化路由跳转
 
-```
+```js
 {
 path:'/demo',
 component:Demo,
@@ -1703,7 +1703,7 @@ component:Weather
 
 跳转
 
-```
+```vue
 <router-link :to="name:hello">test</router-link>
 <router-link :to="
 {
@@ -1724,7 +1724,7 @@ params:{id:xxx,titel:xxx}
 
 接收 params 参数
 
-```
+```js
 $route.params.id
 ```
 
@@ -1732,7 +1732,7 @@ $route.params.id
 
 index.js
 
-```
+```js
 export default new VueRouter({
 
 routes:[
@@ -1761,7 +1761,7 @@ return {id:$route.query.id,title:$route.query.title}
 
 Detail.vue
 
-```
+```vue
 <template>
 <ul>
  <li></li>
@@ -1787,7 +1787,7 @@ mounted(){xxx}
 
 message.vue
 
-```
+```vue
 <script>
 name:'massage',
 data(){},
@@ -1807,7 +1807,7 @@ this.$router.push({
 
 Banner.vue
 
-```
+```vue
 <script>
 
 export default {
@@ -1821,7 +1821,7 @@ export default {
 
 ### 编程式路由导航
 
-```
+```js
 this.$router.push({
  name:'test',
  params:{id:xxx,title:xxx}
@@ -1837,7 +1837,7 @@ this.$router.replace({
 
 让不展示的路由组件保持挂载，不被销毁
 
-```
+```html
 <keep-alive include="News">
 <router-view></router-view>
 </keep-alive>
@@ -1845,7 +1845,7 @@ this.$router.replace({
 
 home.vue
 
-```
+```vue
 <template>
 <div>
  <ul>
@@ -1874,7 +1874,7 @@ export default{
 
 New.vue
 
-```
+```vue
 <script>
  export default{
  name:'News',
@@ -1897,7 +1897,7 @@ New.vue
 
 index.js
 
-```
+```js
 ...
 const router=new VueRounter({
  routes:[
@@ -1932,7 +1932,7 @@ export default router;
 
 index.js
 
-```
+```js
 ......
 name:'news',
 path:'news',
@@ -1950,7 +1950,7 @@ next(); //放行
 
 - 组件内守卫
 
-```
+```js
 //进入守卫：进入该组件时被调用
 beforeRouteEnter(to,from,next){},
 //离开守卫：离开该组件时被调用
