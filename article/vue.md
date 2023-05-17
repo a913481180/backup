@@ -1059,11 +1059,11 @@ export default ({
 
 - mixins(混入)配置项
 
->组件之的属性优先级更高，生命周期函数会一起执行
+>组件之的属性优先级更高，生命周期函数会一起执行(mixins中的先执行)
 可以把多个组件共用的配置提取成一个混入对象
 school 组件
 
-```
+```vue
 <template>
 <div>
 <h2 @click="showName" >{{name}}</h2>
