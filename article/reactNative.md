@@ -133,12 +133,15 @@ yarn react-native run-android
 
 ```gradle
  repositories {
-        maven { url 'https://repo1.maven.org/maven2' }
-        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
         maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://https://maven.aliyun.com/repository/apache-snapshots' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         maven { url 'https://maven.aliyun.com/repository/mapr-public' }
+        maven { url 'https://maven.aliyun.com/repository/grails-core' }
+        maven { url 'https://repo1.maven.org/maven2/' }
         mavenCentral()
         google()
     }
@@ -258,22 +261,73 @@ apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 5. 注意，ios的font-family要求与字体文件字体名相同（不是文件名）比如从阿里妈妈下载的文件 字体名是 iconfont，那么在XXX.js中就要使用iconfont
 `const iconSet = createIconSet(glyphMap, 'iconfont', 'MyIcon.ttf'); //阿里妈妈的图标font-family为iconfont`
 
+### 吐司toast
+
+### 安装
+
+`yarn add react-native-root-toast`
+
+### 使用
+
+```jsx
+Toast.show('This is a message', {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.BOTTOM,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 3,
+      onShow: () => {
+        // calls on toast\`s appear animation start
+      },
+      onShown: () => {
+        // calls on toast\`s appear animation end.
+      },
+      onHide: () => {
+        // calls on toast\`s hide animation start.
+      },
+      onHidden: () => {
+        // calls on toast\`s hide animation end.
+      },
+    });
+```
+
+### 本地存储AsyncStorage
+
+### 安装
+
+`yarn add @react-native-async-storage/async-storage`
+
+### 使用
+
+```jsx
+  await AsyncStorage.setItem('my-key', textInput);
+  const value = await AsyncStorage.getItem('my-key');
+
+```
+
 ## error
+
 ### Could not download react-android-0.71.3-debug.aar
+
 根据报错提供的地址，复制的下载链接到浏览器下载，放到如下位置（前提是你没有改过依赖的存放路径）：
 C:\Users\你的用户名\/.gradle\caches\modules-2\files-2.1，接下来在哪个文件夹就因你缺失的文件的不同而不同了，我的是如下路径：
 C:\Users\Duan\/.gradle\caches\modules-2\files-2.1\com.facebook.react\react-android\0.71.3
 但是一般都能在报错信息中找到，其中有多个文件夹，把刚刚下好的文件放到其中一个含有.pom文件的文件夹里就对了然后重新运行就好了！！！
 
 ### “Deprecated Gradle features were used in this build, making it incompatible with Gradle 7.0”
+
 根据提示，用如下命令
 
+```bash
 gradlew --warning-mode all
+```
 
 进行编译,提示如下：
+
 ```txt
 > Configure project :
 The compile configuration has been deprecated for dependency declaration. This will fail with an error in Gradle 7.0. Please use the implementation configuration instead.
 ```
-很显然，在Gradle 7.0，不支持compile了，所以，在build.gradle文件中，将compile改为implementation，问题就解决了。在build.gradle文件中，将compile改为implementation
 
+很显然，在Gradle 7.0，不支持compile了，所以，在build.gradle文件中，将compile改为implementation，问题就解决了。在build.gradle文件中，将compile改为implementation

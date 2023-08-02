@@ -356,6 +356,249 @@ source-map:一种提供源代码到构建后代码映射的技术，用于检测
 生产环境：内联会让代码体积变大，所以不用内联，源代码要不要隐藏（nosource-source-map全部隐藏，hidden-source-map只隐藏源代码，会提示构建后代码错误信息）
 所以选择source-map/cheap-module-souce-map
 
+### 生成环境优化2
+>
+>soucemap 是需要的，soucemap 并不会影响运行时包体积，它只是个 souce mapping，在利用 sentry 等工具做错误监控时候如果没有 soucemap 将会陷入困境。换成非自家公司的 CDN 是一个极其危险的操作
+
+#### 1.生产环境关闭productionSourceMap、css sourceMap
+
+众所周知，SourceMap就是当页面出现某些错误，能够定位到具体的某一行代码，SourceMap就是帮你建立这个映射关系的，方便代码调试。在生产环境中我们完全没必要开启这个功能（谁在生产环境调试代码？不会是你吧）
+如下配置：
+
+```js
+const isProduction = process.env.NODE_ENV === 'production' 
+// 判断是否是生产环境 
+module.exports = {     
+  productionSourceMap: !isProduction, //关闭生产环境下的SourceMap映射文件 
+  css: {         
+    sourceMap: !isProduction, // css sourceMap 配置 
+    loaderOptions: {             
+    ...其它代码         
+   }     
+  },     
+  ...其它代码 
+} 
+```
+
+此时再`npm run build` 打包，就会发现速度快了很多，体积瞬间只有几兆了！
+
+#### 2.分析大文件，找出内鬼
+
+安装 `npm install webpack-bundle-analyzer -D` 插件，打包后会生产一个本地服务，清楚的展示打包文件的包含关系和大小。
+
+vue.config.js 配置：
+
+```js
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin  
+module.exports = {     
+   ...其它     
+   configureWebpack: [         
+   plugins: [             
+      new BundleAnalyzerPlugin() // 分析打包大小使用默认配置         
+   ]    
+  },  
+ ...其它 
+} 
+```
+
+自动弹出一个服务，清晰的展示打包后js的文件大小,把必须要用的第三方js通过cdn的方式引用。
+分析发现，elementui、echarts是必须使用的，打包又耗时且页面加载也较慢得很。可以通过cdn直接引入，方便且速度快。
+
+#### 按需引入
+
+element-ui是我们项目用的主要框架，所以这个肯定是少不了，但是项目里面ant-design为什么会存在呢，原来是发现有个页面使用了antd的进度条组件，因为elementui的进度条不太好看。但是没想到这样把整个antd都导进来了。
+方案：
+
+1. 舍弃antd组件，自己去找一个类似的vue插件或者干脆自己实现一个。（这个方法短时间无法完成，且不想去动以前代码，暂不考虑）
+2. 使用antd部分加载。只加载想要的进度条组件，可以减少文件体积（这个方法简单粗暴，就是牺牲一些文件大小）。
+
+我们使用方案2，根据antd官方的文档配置部分组件的引入。
+
+安装 `npm install babel-plugin-import -D`
+
+第一步 main.js导入需要的组件 Step
+
+```js
+import { Steps } from 'ant-design-vue'; 
+Vue.component(Steps.name, Steps); 
+Vue.component(Steps.Step.name, Steps.Step); 
+```
+
+第二步 babel.config.js 加上配置：
+
+```js
+module.exports = {  
+    presets: [  '@vue/cli-plugin-babel/preset'   ],   
+    //以下是按需加载的配置++++ 
+    plugins: [     
+     [       
+      "import",       
+      {         
+          libraryName: "ant-design-vue",        
+          libraryDirectory: "es",         
+          style: true       
+      }     
+     ]   
+    ] 
+} 
+```
+
+此时再分析，antd已经小了很多。
+
+#### CDN
+
+项目里面第三方js很多，有些打包下来会很大，而且加载速度较慢。我们把这些js分离出来，通过cdn的方式在html中的script标签中直接使用，一方面减少打包体积，一方面提高了加载速度。
+这里推荐一个免费的cdn: BootCDN。也可以使用自己购买的付费cdn服务，我们到网站搜索自己项目需要的js。
+第一步：配置vue.config.js，让webpack不打包这些js，而是通过script标签加入。
+
+```js
+const isProduction = process.env.NODE_ENV === 'production' // 判断是否是生产环境
+//正式环境不打包公共js
+let externals = {}
+//储存cdn的文件
+let cdn = {
+    css: [
+        'https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.0/theme-chalk/index.min.css' // element-ui css 样式表
+    ],
+    js: []
+}
+//正式环境才需要
+if (isProduction) {
+    externals = { //排除打包的js
+        vue: 'Vue',
+        'element-ui': 'ELEMENT',
+        echarts: 'echarts',
+    }
+    cdn.js = [
+        'https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.min.js', // vuejs
+        'https://cdn.bootcdn.net/ajax/libs/element-ui/2.6.0/index.js', // element-ui js
+        'https://cdn.bootcdn.net/ajax/libs/element-ui/2.6.0/locale/zh-CN.min.js',
+        'https://cdn.bootcdn.net/ajax/libs/echarts/5.1.2/echarts.min.js',
+    ]
+}
+module.exports = {
+//...其它配置
+configureWebpack: {
+        //常用的公共js 排除掉，不打包 而是在index添加cdn，
+        externals, 
+        //...其它配置
+    },
+chainWebpack: config => {
+        //...其它配置  
+        // 注入cdn变量 (打包时会执行)
+        config.plugin('html').tap(args => {
+            args[0].cdn = cdn // 配置cdn给插件
+            return args
+        })
+    }
+//...其它配置     
+}
+```
+
+第二步：html模板中加入定义好的cdn变量使用的代码
+
+```html
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>web</title>
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <!-- 引入样式 -->
+    <% for(var css of htmlWebpackPlugin.options.cdn.css) { %>
+       <link rel="stylesheet" href="<%=css%>" >
+    <% } %>
+
+    <!-- 引入JS -->
+    <% for(var js of htmlWebpackPlugin.options.cdn.js) { %>
+       <script src="<%=js%>"></script>
+    <% } %>
+</head>
+<body style="font-size:14px">
+    <div id="app"></div>
+</body>
+</html>
+```
+
+可以发现cdn.js中，我把vue、echarts、element-ui这三个大头加入了。在externals对象中左侧是npm包的名称，右侧是在代码中暴露的全局变量。注意element-ui对应的是 ELEMENT。
+
+#### 懒加载的方式
+
+没有使用exclejs，是因为exceljs在我的业务代码中不是直接引用的，而是一个叫table2excel间接依赖的。所以就算我通过上面的方法排除掉它，在打包的时候还是会通过table2excel的依赖找到它并打包。
+那这种不可避免的情况，该如何优化，让加载速度不受影响呢？
+
+1.script标签中注释掉 `import Table2Excel from "table2excel.js";`
+
+2.下载的方法中：
+
+```js
+download(){
+    //使用import().then()方式
+    import("table2excel.js").then((Table2Excel) => {
+        new Table2Excel.default("#table").export('filename') //多了一层default
+    })
+}  
+```
+
+这样在进入系统时，不会加载Table2Excel 和exceljs，当需要时才会去加载，第一次会慢一点，后面就不需要加载了，会变快。
+
+#### moment.js的优化
+
+我们发现monentjs在项目中有使用来对时间格式化，但是使用频率并不高，完全可以自己实现一个format方法，或者使用只有6kb的day.js.
+
+但这里我们暂不替换，把moment变得瘦小一些即可，删除掉除中文以外的语言包。
+第一步：vue.config.js
+
+```js
+//...其它配置
+ chainWebpack: config => {
+     config.plugin('ignore')
+        //忽略/moment/locale下的所有文件
+     .use(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/))
+ }
+//...其它配置
+```
+
+第二步：main.js
+
+```js
+import moment from 'moment' //手动引入所需要的语言包 
+import 'moment/locale/zh-cn'; // 指定使用的语言 
+moment.locale('zh-cn'); 
+```
+
+#### gzip
+
+通过 `compression-webpack-plugin` 插件把代码压缩为gzip。但是！需要服务器支持
+webpack端 vue.config.js配置如下：
+
+```js
+//打包压缩静态文件插件
+const CompressionPlugin = require("compression-webpack-plugin")
+
+//...其它配置
+module.exports = {
+    //...其它配置
+    chainWebpack: config => {
+        //生产环境开启js\css压缩
+        if (isProduction) {
+            config.plugin('compressionPlugin').use(new CompressionPlugin({
+                test: /\.(js)$/, // 匹配文件名
+                threshold: 10240, // 对超过10k的数据压缩
+                minRatio: 0.8,
+                deleteOriginalAssets: true // 删除源文件
+            }))
+        }
+    }
+    //...其它配置
+}
+```
+
+服务器端配置这里就不详细说明了可以谷百： nginx开启静态压缩 找到答案。
+
 ## oneOf
 
 ```js
