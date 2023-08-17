@@ -1101,3 +1101,21 @@ forceReload() {
 window.location.href = window.location.href,
 //强制重新加载并清除缓存。
 ```
+
+## new Date()的浏览器兼容性问题
+
+当我们需要将一串日期字符串转换为具体的Date格式的时候，往往需要用到new Date("xxxx")方法。
+
+当时在IE、safari浏览器下，会遇到这种问题：
+
+`new Date('2016-01-01 00:00:00')`    //却返回这个值Invalid Date，转换失败
+但在chrome、FF返回的正确的结果，所以不同的浏览器还是存在差异的，以下列出了所有浏览器都支持的方式。
+
+```js
+ var d = new Date(2011, 01, 07); // yyyy, mm-1, dd  
+ var d = new Date(2011, 01, 07, 11, 05, 00); // yyyy, mm-1, dd, hh, mm, ss  
+ var d = new Date("02/07/2011"); // "mm/dd/yyyy"  
+ var d = new Date("02/07/2011 11:05:00"); // "mm/dd/yyyy hh:mm:ss"  
+ var d = new Date(1297076700000); // milliseconds  
+ var d = new Date("Mon Feb 07 2011 11:05:00 GMT"); // ""Day Mon dd yyyy hh:mm:ss GMT/UTC
+```
