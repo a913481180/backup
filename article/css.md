@@ -5,7 +5,6 @@ categories:
   - web
 ---
 
-# Cascading style sheets 层叠样式表
 
 ## 位置
 
@@ -493,7 +492,7 @@ _一般情况下，优先级如下：_
    - 静态定位 static：不脱标，不能偏移；
    - 相对定位 relative：相对与自己原来的位置来移动；不脱标，继续保留原来的位置
    - 绝对定位 absolute：若没有祖先元素或祖先元素没有定位，则以浏览器为准；若祖先元素有定位（任何定位），则以最近一级有定位的祖先元素为参考点；
-   - 固定定位 fixed：以浏览器可视窗口为参考点，更父级元素没有任何关系；不随滚动条滚动，不在占有原先位置；
+   - 固定定位 fixed：以浏览器可视窗口为参考点，跟父级元素没有任何关系；不随滚动条滚动，不在占有原先位置；
    - 粘性定位 sticky：离它最近的一个拥有滚动机制的祖先元素为参考点，即便这个祖先不是最近的真实可滚动祖先；占有原先的位置；必须添加 top,left,right,bottom 其中一个才生效；可以和浮动一起设置
 
      ```css
@@ -517,12 +516,13 @@ _一般情况下，优先级如下：_
   - 主轴的开始位置（与边框的交叉点）叫做 main start，结束位置叫做 main end；
   - 交叉轴的开始位置叫做 cross start，结束位置叫做 cross end。
   - 项目默认沿主轴排列。单个项目占据的主轴空间叫做 main size，占据的交叉轴空间叫做 cross size。
+  - 当一层 flex 布局的时候，设置子元素的 width:100%就没有问题。当页面中多层 flex 布局嵌套的时候，设置其中子元素的 width：100%会不起作用。可把元素设置为绝对定位来解决该问题。
 
-| 容器属性                                                                                                                                         | 说明                                                           |
-| ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------- |
-| flex-direction:row/row-reverse/column/column-reverse                                                                                             | 决定主轴的方向                                                 |
-| flex-wrap:nowrap/wrap/wrap-reverse（最开始的一行在下面，新的在上面）;                                                                            | 如果一条轴线排不下，是否换行以及如何换行                       |
-| flex-flow:`<flex-direction><flex-wrap>`                                                                                                          | flex-direction 与 flex-wrap 的简写形式                         |
+| 容器属性  | 说明|
+| - | - |
+| flex-direction:row/row-reverse/column/column-reverse | 决定主轴的方向|
+| flex-wrap:nowrap/wrap/wrap-reverse（最开始的一行在下面，新的在上面）;| 如果一条轴线排不下，是否换行以及如何换行 |
+| flex-flow:`<flex-direction><flex-wrap>`| flex-direction 与 flex-wrap 的简写形式 |
 | justify-content:flex-start/flex-end/center/space-between（两端对齐，项目间的间隔相等)/space-around（每个项目间的间隔相等，项目与边框的间隔较小） | 定义项目在主轴上的对齐方式                                     |
 | align-items:stretch（项目无高度或设为 auto 时，将会占满整个容器高度）/center/flex-start/flex-end/baseline（项目的第一行文字的基线对齐）;         | 定义项目在交叉轴上的对齐方式                                   |
 | align-content:stretch（项目无高度或设为 auto 时，将会占满整个容器高度）/center/flex-start/flex-end/space-between/space-around                    | 定义项目在多根轴线上的对齐方式，如果项目只有一根轴线则不起作用 |
@@ -609,15 +609,15 @@ div {
 #### 边框:`border`
 
 ```css
-加边框后盒子会变大
+/* 加边框后盒子会变大 */
 border-width:单位px
-border-stye:solid(实线)|dashed（虚线）|dotted（点线）
+border-stye:solid(实线)|dashed（虚线）|dotted（点线）|double(双实线)
 border-color:
-复合写法：border：xxx xxx xxx没有循序
-每条边可单独设置:
+/* 复合写法：border：xxx xxx xxx没有循序 */
+/* 每条边可单独设置: */
 border-top:
 border-bottom:
-合并相邻边框
+/* 合并相邻边框 */
 border-collapse:collapse;
 ```
 
@@ -626,150 +626,37 @@ border-collapse:collapse;
 #### 内边界:`padding`
 
 ```css
-也会改变盒子大小,若盒子没有width/height属性则不会
-可分开设置上下左右边距
-padding-left:
-复合写法：padding：（2个：上下，左右；3个：上，左右，下；4个：顺时针）
-不能为负数
+/* 也会改变盒子大小,若盒子没有width/height属性则不会 */
+/* 可分开设置上下左右边距 */
+padding-left:20px
+/* 复合写法：padding：（2个：上下，左右；3个：上，左右，下；4个：顺时针） */
+/* 不能为负数 */
 ```
 
 #### 外边距:`margin`
 
 ```css
-/*可分开设置
-margin-left:
-nargin-bottom:
-复合写法与padding一致
-*/
+ /*可分开设置 */
+margin-left:1px
+nargin-bottom:1px
+/* 复合写法与padding一致 */
 ```
 
 ### 盒子居中
 
-- 让块级盒子水平居中：
+- 利用绝对定位，先将元素的左上角通过top:50%和left:50%定位到页面的中心，然后再通过`transform:translate(-50%,-50%)`来调整元素的中心点到页面的中心
 
-  1. 通过手动计算 margin 左右边距
-     父盒子的定宽的，子盒子指定 margin-left 即可
-  2. 盒子有宽度，左右设为 auto；
-     `margin：0，auto；`// 让子盒子左右自动适应，想当于 `left:auto; right:auto`
-  3. 先让盒子左右边缘和父盒子垂直的中心线垂直，然后把子盒子往回移动自身宽度的一半
+- 使用flex布局，通过`align-items:center`和`justify-content:center`设置容器的垂直和水平方向上为居中对齐，然后它的子元素也可以实现垂直和水平的居中
 
-     ```css
-     /* 通过 transform 实现*/
-     /*子盒子*/
-     .test{
-     margin-left: 50%; /* 先移动父盒子的一半*/
-     transform: translateX(-50% ); /* 再移动自身盒子一半,transform中    translate使用百分比时相对的是自己的长宽，不是父盒子的。*/
-     }
+- 父盒子`高已知`的情况,子盒子是`行内元素`或者`行内块`时,给父盒子设置`text-align:center;`会使子盒子水平居中,给单行文本设置`line-height=盒子高度`；使文本在盒子里垂直居中
 
-     /*通过 定位实现*/
-     .test{
-     /*父盒子*/
-     position: relative;
-     }
-     .test2{
-     /*子盒子*/
-     position: absolute;
-     left: 50%; /* 向右移动父盒子一半*/
-     margin-left: -100px; /* 向左移动自身盒子一半*/
-     }
-     .test2{
-     /*子盒子*/
-     position: absolute;
-     left：0;
-     right:0;
-     top:0;
-     bottom:0;
-     margin:auto;
-     }
-     ```
+- 父盒子 `display: table-cell;vertical-align: middle;text-align: center;`的情况,子盒子是`行内元素`或者`行内块`时(table-cell表格单元格的形式呈现，类似于td标签)
 
-  4. 把盒子转成行内块,行内元素只需要在父级元素添加 text-align:center 即可；
+- 利用绝对定位，先将元素的左上角通过top:50%和left:50%定位到页面的中心，然后再通过margin负值来调整元素的中心点到页面的中心。该方法适用于盒子`宽高已知`的情况
 
-     ```css
-     //父盒子
-     text-align: center; // 让父盒子设置水平居中
+- 盒子`宽高已知`的情况，通过margin调整元素的中心点到页面的中心。(注意盒子的塌陷问题,margin-top不用50%的原因是，百分比默认的是父盒子宽度的百分比)
 
-     //子盒子
-     display: inline-block; // 让子盒子显示为行内块模式
-     ```
-
-- 盒子垂直居中的方法
-
-  1. 知道父盒子的高度，可以使用 margin 计算盒子的上下边距，来使盒子居中
-
-     ```css
-     margin-top: 149px; // 根据父盒子的高度指定子盒子 margin-top 即可
-     ```
-
-  2. 先让盒子的上下边缘和父盒子的水平中心线重叠，，然后再让子盒子往回移动自身一半的距离
-
-     ```css
-     /* 通过 transform 属性来移动*/
-     //子盒子
-     margin-top: 50%; // 向下移动父盒子的一半
-     transform: translateY(-50%); // 向上移动自身盒子的一半
-
-     /* 通过 定位来移动*/
-     //父盒子
-     position: relative;
-     //子盒子
-     position: absolute;
-     top: 50%; // 先向下移动父盒子的一半
-     margin-top: -100px; // 再向上移动自身盒子的一半
-     ```
-
-  3. 使用表格的 vertical-align :middle 属性来实现盒子垂直居中
-
-     ```css
-     //父盒子
-     display: table-cell; // 显示形式为表格
-     vertical-align: middle; // 里面内容为居中对齐
-     ```
-
-  4. 把盒子转成行内块
-
-     ```css
-     //父盒子line-height:500px 与 子盒子的vertical-align:middel共同作用使子盒子垂     直   居中。
-     .parent-box {
-       line-height: 500px;
-       text-align: center;
-     }
-     .child-box {
-       display: inline-block;
-       vertical-align: middle;
-       line-height: 1rem;
-       color: white;
-     }
-     ```
-
-- 利用 flex 布局
-
-flex 布局，设置水平与竖直方向的内容居中。
-
-```css
-.parent-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-```
-
-- position:absolute 配合定位与 margin：auto
-
-```css
-//不兼容低版本的IE浏览器
-.parent-box {
-  position: relative;
-}
-.child-box {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-}
-```
+- 利用绝对定位，设置四个方向的值都为0，并将margin设置为auto，由于宽高固定，因此对应方向实现平分，可以实现水平和垂直方向上的居中。该方法适用于盒子`有宽高`的情况
 
 - 使用 JS 的思路大概给大家说下：
 
@@ -1285,8 +1172,10 @@ easyless 插件，预编译生产 css
 @color1:red;//值，可直接使用
 @m:margin;//属性名，使用需要加花括号
 @selector:#test3;//类名，使用需要加花括号
-@url:../../bg.jpg;//地址链接，使用需要加花括号
+@url:"../../bg.jpg";//地址链接，使用需要加花括号
+@themes: "../../src/themes";
 
+@import "@{themes}/tidal-wave.less";
 .test{
    .test2{
       color:@color1;
@@ -1298,13 +1187,20 @@ easyless 插件，预编译生产 css
    }
 
 }
+
+@primary:  green;
+@color: primary;
+
+.section {
+    color: @@color;
+}
 ```
 
 ### 嵌套
 
 ```less
 .test {
-  //&表示当前选择器的父级
+  //&表示当前选择器的父级,代表所有父选择器（不仅仅是最近的祖先）
   & .test2 {
   }
   .test3 {
@@ -1312,7 +1208,7 @@ easyless 插件，预编译生产 css
 }
 ```
 
-### 混合
+### 混入mix-in
 
 > 将一系列属性从一个规则集引入到另一个规则集的方法(处理重复 css 样式)
 
@@ -1328,11 +1224,11 @@ easyless 插件，预编译生产 css
 .test {
   .test2 {
     font-size: 12;
-    .common;
+    .common();
   }
   .test3 {
     font-size: 16;
-    .common;
+    .common();
   }
 }
 ```
@@ -1349,16 +1245,19 @@ easyless 插件，预编译生产 css
 .test {
   .test2 {
     font-size: 12;
-    .common;
+    .common();
   }
   .test3 {
     font-size: 16;
-    .common;
+    .common();
   }
 }
 ```
 
 - 带参数的混合
+参数只用逗号分隔，但后来添加了分号以支持将逗号分隔的列表值传递给单个参数。
+逗号分隔的默认值： `.name(@param1: red, blue;1px;)`.
+从 Less 4.0 开始，您可以使用括号转义 `[~()]` 来包装列表值，例如 `.name(@param1: ~(red, blue))`。 这类似于引用转义语法：`~"quote"`
 
 ```less
 //不会编译到css文件中
@@ -1379,8 +1278,458 @@ easyless 插件，预编译生产 css
 }
 ```
 
-- 匹配
+- `!important` 关键字
+在 mixin 调用后使用 !important 关键字将其继承的所有属性标记为 !important：
 
 ```less
+.foo (@bg: #f5f5f5; @color: #900) {
+  background: @bg;
+  color: @color;
+}
 
+.important {
+  .foo() !important;
+}
+
+//编译结果
+.important {
+  background: #f5f5f5 !important;
+  color: #900 !important;
+}
+```
+
+- 重载混入
+定义多个具有相同名称和参数数量的混合是合法的。 Less 将使用所有可以应用的属性。 如果您使用带有一个参数的 mixin，例如 .mixin(green);，然后将使用具有一个强制参数的所有 mixin 的属性：
+
+```less
+.mixin(@color) {
+  color-1: @color;
+}
+.mixin(@color, @padding: 2) {
+  color-2: @color;
+  padding-2: @padding;
+}
+.mixin(@color, @padding, @margin: 2) {
+  color-3: @color;
+  padding-3: @padding;
+  margin: @margin @margin @margin @margin;
+}
+.some .selector div {
+  .mixin(#008000);
+
+//编译成
+.some .selector div {
+  color-1: #008000;
+  color-2: #008000;
+  padding-2: 2;
+}
+```
+
+- 命名参数
+mixin 引用可以通过名称而不是位置来提供参数值。 任何参数都可以通过其名称来引用，并且它们不必按任何特殊顺序排列：
+
+```less
+.mixin(@color: black; @margin: 10px; @padding: 20px) {
+  color: @color;
+  margin: @margin;
+  padding: @padding;
+}
+.class1 {
+  .mixin(@margin: 20px; @color: #33acfe);
+}
+.class2 {
+  .mixin(#efca44; @padding: 40px);
+
+```
+
+- `@arguments`
+`@arguments` 在 mixin 中有特殊含义，它包含调用 mixin 时传递的所有参数。 如果您不想处理单个参数，这很有用：
+
+```less
+.box-shadow(@x: 0, @y: 0, @blur: 1px, @color: #000) {
+  -webkit-box-shadow: @arguments;
+     -moz-box-shadow: @arguments;
+          box-shadow: @arguments;
+}
+.big-block {
+  .box-shadow(2px, 5px);
+}
+
+//结果
+.big-block {
+  -webkit-box-shadow: 2px 5px 1px #000;
+     -moz-box-shadow: 2px 5px 1px #000;
+          box-shadow: 2px 5px 1px #000;
+}
+```
+
+- 高级参数和 `@rest` 变量
+mixin 接受可变数量的参数，你可以使用 `...`。 在变量名之后使用它会将这些参数分配给变量。
+
+```less
+.mixin(...) {        // matches 0-N arguments
+.mixin(@a: 1, ...) { // matches 0-N arguments
+.mixin(@a, @rest...) {
+   // @rest is bound to arguments after @a
+   // @arguments is bound to all arguments
+}
+```
+
+- 模板匹配
+希望根据传递给它的参数更改混入的行为
+
+```less
+.mixin(dark, @color) {//它期望 dark 作为第一个参数
+  color: darken(@color, 10%);
+}
+.mixin(light, @color) {//它需要 light
+  color: lighten(@color, 10%);
+}
+.mixin(@_, @color) {//它期望任何值。
+  display: block;
+}
+
+
+//使用
+@switch: light;
+
+.class {
+  .mixin(@switch, #888);
+}
+//编译
+.class {
+  color: #a2a2a2;
+  display: block;
+} ```
+```
+
+- 覆盖混入值
+如果您有多个匹配的 mixins，所有规则都会被评估和合并，并返回具有该标识符的最后一个匹配值。
+
+```less
+// library.less
+#library() {
+  .mixin() {
+    color:red;
+    prop: foo;
+  }
+}
+
+// customize.less
+@import "library";
+#library() {
+  .mixin() {
+    color:red;
+    prop: bar;
+  }
+}
+.box {
+  my-value: #library.mixin[prop];//可以使用属性/变量访问器从已评估的混入规则中选择一个值
+}
+//编译
+.box {
+  my-value: bar;
+}
+
+```
+
+- 递归混入
+
+```less
+.loop(@counter) when (@counter > 0) {
+  .loop((@counter - 1));    // next iteration
+  width: (10px * @counter); // code for each iteration
+}
+
+div {
+  .loop(5); // launch the loop
+}
+
+.generate-columns(4);
+
+.generate-columns(@n, @i: 1) when (@i =< @n) {
+  .column-@{i} {
+    width: (@i * 100% / @n);
+  }
+  .generate-columns(@n, (@i + 1));
+
+
+
+//编译
+div {
+  width: 10px;
+  width: 20px;
+  width: 30px;
+  width: 40px;
+  width: 50px;
+}
+
+.column-1 {
+  width: 25%;
+}
+.column-2 {
+  width: 50%;
+}
+.column-3 {
+  width: 75%;
+}
+.column-4 {
+  width: 100%;
+}
+```
+
+- 混入守卫
+
+守卫中可用的比较运算符的完整列表是： `>`、`>=`、`=`、`=<`、`<`。 此外，关键字 `true` 是唯一的真值
+
+```less
+.mixin(@a) when (lightness(@a) >= 50%) {
+  background-color: black;
+}
+.mixin(@a) when (lightness(@a) < 50%) {
+  background-color: white;
+}
+.mixin(@a) {
+  color: @a;
+}
+
+//使用
+.class1 { .mixin(#ddd) }
+.class2 { .mixin(#555) }
+
+//编译
+.class1 {
+  background-color: black;
+  color: #ddd;
+}
+.class2 {
+  background-color: white;
+  color: #555;
+}
+```
+
+逻辑运算符
+使用 `and` 关键字组合守卫：
+
+```less
+.mixin(@a) when (isnumber(@a)) and (@a > 0) { ... }
+```
+
+您可以通过用逗号 `,` 分隔守卫来模拟 `or` 运算符。 如果任何一个守卫评估为真，它被认为是一场比赛：
+
+```less
+.mixin(@a) when (@a > 10), (@a < -10) { ... }
+```
+
+使用 `not` 关键字否定条件：
+
+```less
+.mixin(@b) when not (@b > 0) { ... }
+```
+
+类型检查函数
+`iscolor`
+`isnumber`
+`isstring`
+`iskeyword`
+`isurl`
+
+检查一个值除了是一个数字之外是否在一个特定的单位中
+`ispixel`
+`ispercentage`
+`isem`
+`isunit`
+
+- 别名
+Mixins可以赋值给一个变量来作为变量调用调用，也可以用于map lookup。
+
+```less
+#theme.dark.navbar {
+  .colors(light) {
+    primary: purple;
+  }
+  .colors(dark) {
+    primary: black;
+    secondary: grey;
+  }
+}
+
+.navbar {
+  @colors: #theme.dark.navbar.colors(dark);//分配给变量和不带参数调用的 mixin 调用始终需要括号
+  @colors: #theme.dark.navbar.colors;//错误
+  background: @colors[primary];
+  border: 1px solid @colors[secondary];
+}
+```
+
+### 继承
+
+Extend 是一个 Less 伪类，它将它所放置的选择器与与其引用的匹配的选择器合并。
+
+```less
+//两种写法
+.a:extend(.b,.c) {}
+.a {
+  &:extend(.b,.c);
+}
+//继承所有属性
+.c:extend(.d all) {
+  // extends all instances of ".d" e.g. ".x.d" or ".d.x"
+}
+
+.c:extend(.d) {
+  // extends only instances where the selector will be output as just ".d"
+}
+```
+
+- 继承附加到选择器
+
+附加到选择器的扩展看起来像一个普通的伪类，将选择器作为参数。 一个选择器可以包含多个扩展子句，但所有扩展都必须位于选择器的末尾。
+
+- 在选择器之后扩展： `pre:hover:extend(div pre)`.
+- 选择器和扩展之间的空间是允许的： `pre:hover :extend(div pre)`.
+- 允许多个扩展： `pre:hover:extend(div pre):extend(.bucket tr)` - 注意这与 `pre:hover:extend(div pre, .bucket tr)` 相同
+- 这是不允许的： `pre:hover:extend(div pre).nth-child(odd)`. 扩展必须在最后
+
+### 合并
+
+允许将来自多个属性的值聚合到单个属性下的逗号或空格分隔列表中,对于背景和转换等属性很有用。
+
+- 逗号`+`
+
+```less
+mixin() {
+  box-shadow+: inset 0 0 10px #555;
+}
+.myclass {
+  .mixin();
+  box-shadow+: 0 0 20px black;
+}
+
+//编译
+.myclass {
+  box-shadow: inset 0 0 10px #555, 0 0 20px black;
+}
+```
+
+- 空格`+_`
+
+```less
+.mixin() {
+  transform+_: scale(2);
+}
+.myclass {
+  .mixin();
+  transform+_: rotate(15deg);
+}
+
+//编译
+.myclass {
+  transform: scale(2) rotate(15deg);
+}
+```
+
+### `@import` 规则
+
+在标准 CSS 中，@import at 规则必须在所有其他类型的规则之前。 但是 Less 不关心你把 @import 语句放在哪里。如果它没有扩展名，则会附加 .less 并将其作为导入的 Less 文件包含在内。
+
+#### 导入选项
+
+- reference: 导入外部文件，但除非引用，否则不将导入的样式添加到编译输出。
+- inline: 在输出中包含源文件但不处理它
+- less: 将文件视为 Less 文件，无论文件扩展名是什么
+- css: 将文件视为 CSS 文件，无论文件扩展名是什么
+- once: 只包含文件一次（这是默认行为）,这意味着该文件仅导入一次，该文件的后续导入语句将被忽略。
+- multiple: 允许导入多个同名文件。 这是与一次相反的行为。
+- optional: 允许仅在文件存在时导入该文件。 如果没有 optional 关键字，Less 会在导入找不到的文件时抛出 FileError 并停止编译。
+
+### `@plugin` 规则
+
+```js
+// my-plugin.js
+install: function(less, pluginManager, functions) {
+    functions.add('pi', function() {
+        return Math.PI;
+    });
+}
+```
+
+使用
+
+```less
+@plugin "my-plugin";
+.show-me-pi {
+  value: pi();
+}
+
+//编译
+.show-me-pi {
+  value: 3.141592653589793;
+}
+```
+
+## react使用less
+
+在终端中输入`npm install less-loader less --save`
+我们在项目根目录中找到刚才生成的config文件，找到里面的`webpack.config.js`这个文件：
+然后搜索`sassRegex`就可以找到如下代码：
+
+```js
+// style files regexes
+const cssRegex = /\.css$/;
+const cssModuleRegex = /\.module\.css$/;
+const sassRegex = /\.(scss|sass)$/;
+const sassModuleRegex = /\.module\.(scss|sass)$/;
+//增加
+const lessRegex = /\.less$/;
+const lessModuleRegex = /\.module\.less$/;
+```
+
+接着再搜索`sassRegex`，声明了变量肯定要用，添加如下代码：
+
+```js
+// Opt-in support for less (using .scss or .sass extensions).
+// By default we support less Modules with the
+// extensions .module.less
+{
+  test: lessRegex,
+  exclude: lessModuleRegex,
+  use: getStyleLoaders(
+    {
+      importLoaders: 3,
+      sourceMap: isEnvProduction && shouldUseSourceMap,
+    },
+    'less-loader'
+  ),
+  // Don't consider CSS imports dead code even if the
+  // containing package claims to have no side effects.
+  // Remove this when webpack adds a warning or an error for this.
+  // See https://github.com/webpack/webpack/issues/6571
+  sideEffects: true,
+},
+// Adds support for CSS Modules, but using less
+// using the extension .module.less
+{
+  test: lessModuleRegex,
+  use: getStyleLoaders(
+    {
+      importLoaders: 3,
+      sourceMap: isEnvProduction && shouldUseSourceMap,
+      modules: {
+        getLocalIdent: getCSSModuleLocalIdent,
+      },
+    },
+    'less-loader'
+  ),
+},
+
+```
+
+另外，导入less还会报错，在根目录的react-app-env.d.ts加入
+
+```ts
+declare module "*.module.less" {
+  const classes: { readonly [key: string]: string };
+  export default classes;
+}
 ```

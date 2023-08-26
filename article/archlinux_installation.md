@@ -559,11 +559,20 @@ amixer sset Headphone unmute
 - 火狐：`firefox`
 - 截图：`flameshot`
 - 看图：`feh`
+- pdf：`okular`
 - 播放器：`mpv`,`vlc`
 - 录屏：`obs-studio`( 确保安装了`pipewire`,`libpipewire02`，`xdg-desktop-portal-wlr`)
+- 图形化解压工具：`xarchiver`,`file-roller`
 - 虚拟摄像头：`v4l2loopback`（可用在直播软件中实现共享屏幕）
   - 移除虚拟相机命令：`sudo modprobe --remove v4l2loopback`
   - 添加虚拟相机命令：`sudo modprobe v4l2loopback devices=2`
+
+- 编辑器：`nvim`
+  - 安装LazyVim配置:
+    - `git clone https://github.com/LazyVim/starter ~/.config/nvim`
+    - `rm -rf ~/.config/nvim/.git`
+    - `nvim`
+  - 安装字体：`Nerd Fonts`
 
 ### [aur](https://aur.archlinux.org/)
 
@@ -738,6 +747,8 @@ xfreerdp /drive:SharedDir,/home/user/SharedDir /u:user /p:password /v:ip
   - 对于rdesktop 指定 -r disk:
 rdesktop -r disk:SharedDir=/home/user/SharedDir ip
 其中 SharedDir 是随便输入的名字，接着是共享文件夹的本地绝对路径
+
+
 
 ### 设置
 

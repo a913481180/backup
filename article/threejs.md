@@ -3263,6 +3263,45 @@ const axesHelper = new THREE.AxesHelper(150);
 scene.add(axesHelper);
 ```
 
+## 坐标系
+
+### 屏幕坐标,空间坐标
+
+ThreeJS 是使用了 canvas 画布绘制图形的，因此屏幕坐标系就是 canvas 中的坐标系，也就是左上角是坐标原点
+
+Mesh 的坐标是用一个 Vector3 来表示的，Vector3 中包含了 x、y、z 坐标。
+
+空间坐标系是三维的，其原点默认在屏幕中心，且 x y z 的范围是 [-1,1]，通过Vector3对象的方法project，方法的参数是相机对象，语句worldVector.project(camera);返回的结果是世界坐标worldVector在camera相机对象矩阵变化下对应的标准设备坐标， 标准设备坐标xyz的范围是[-1,1]。
+
+ThreeJS 中，画布一般是全屏的，因此画布的宽高 w,h 就是：window.innerWidth 和 window.innerHeight，所以 Three 的空间坐标系中点 (cx, cy)在屏幕坐标系中就是：(w / 2,h / 2)。
+
+假设 canvas 中有一点 (x,y)，这个点在空间坐标系中为 (x1,y1)，那么这个转换公式是：
+
+```js
+x1=(x/w)∗2−1
+y1=−(y/h)∗2+1
+
+//推导如下
+//#####################
+cx=w/2
+cy=h/2
+//屏幕坐标系中的点(x,y),空间坐标中的点（x1,y1）
+x1=x-cx
+y2=cy-y
+//标准化[-1,1]之间
+x1/cx=(x-cx)/cx=x/cx-1=x/w/2-1=2x/w-1
+y1/cy=(cy-y)/cy=1-y/cy=1-2y/h
+```
+
+```js
+let worldVetor=boxMesh.position.cone()
+//世界坐标系转标准设备坐标
+//提取相机参数的视图矩阵、投影矩阵对世界坐标进行转换
+let standard=worldVetor.project(camera)
+//
+
+```
+
 ## 全屏
 
 ```js

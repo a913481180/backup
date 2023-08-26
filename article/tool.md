@@ -168,18 +168,18 @@ var p2 = document.getElementById("test").offsetParent;
 
 1. 通过获取父亲节点再获取子节点来获取兄弟节点
 
-```js
-var brother1 = document.getElementById("test").parentNode.children[1];
-```
+    ```js
+    var brother1 = document.getElementById("test").   parentNode.children[1];
+    ```
 
 2. 获取上一个兄弟节点
 
 在获取前一个兄弟节点的时候可以使用`previousSibling`和`previousElementSibling`。他们的区别是`previousSibling`会匹配字符，包括换行和空格，而不是节点。`previousElementSibling`则直接匹配节点。
 
-```js
-var brother2 = document.getElementById("test").previousElementSibling;
-var brother3 = document.getElementById("test").previousSibling;
-```
+   ```js
+    var brother2 = document.getElementById("test"). previousElementSibling;
+    var brother3 = document.getElementById("test"). previousSibling;
+   ```
 
 3. 获取下一个兄弟节点
 

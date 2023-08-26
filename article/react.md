@@ -5,7 +5,6 @@ categories:
   - linux
 ---
 
-# React
 
 ## 浏览器中编写
 
@@ -29,7 +28,7 @@ categories:
 - JSX
 
 ```jsx
-<script type="text/babel>/*此处要写babel*/
+<script type="text/babel">/*此处要写babel*/
 //创建虚拟dom
 const Vdom=(<h1>hello</h1>)/*不用引号*/
 //渲染虚拟DOM到页面
@@ -85,7 +84,7 @@ const Vdom = <span className="test">xxx</span>;
 
 - 虚拟 dom 只有一个根标签
 
-```
+```jsx
 const Vdom=(
 <div>
 <span className="test" >xxx</span>
@@ -191,7 +190,7 @@ ReactDOM.render(<Demo/>,document.getElementById('test'))
 ##### state
 
 > state 为组件的重要属性，值是对象，通过更新组件的 state 来更新对应的页面显示（重新渲染组件）
->
+
 ###### 传统写法
 
 ```jsx
@@ -357,12 +356,12 @@ return (
 }
 //限制类型
 Demo.propTypes={
-a:PropTypes.number.isRequied
-test:PropTypes.func
+  a:PropTypes.number.isRequied
+  test:PropTypes.func
 }
 //默认值
 Demo.defaultProps={
-b:'xx'
+  b:'xx'
 }
 function test(){}
 ReactDOM.render(<Demo a={1} b='ss' handle="test"/>,document.getElementById('test1'))//数据类型要用｛｝
@@ -377,18 +376,18 @@ import PropTypes from 'prop-types'
 class Demo extends React.Component{
 render(){
 return (
-<h1 >test{this.props.b}</h1>
+  <h1 >test{this.props.b}</h1>
 )
 
 }
 
 static propTypes={ //加上static代表给类本身添加属性
-//react16.x以上需引入prop-types.js
-a:PropTypes.number.isRequied
-test:PropTypes.func
+  //react16.x以上需引入prop-types.js
+  a:PropTypes.number.isRequied
+  test:PropTypes.func
 }
 static defaultProps={
-b:'xx'
+  b:'xx'
 }}
 function test(){}
 ReactDOM.render(<Demo a={1} b='ss' handle="test"/>,document.getElementById('test1'))//数据类型要用｛｝
@@ -403,17 +402,17 @@ ReactDOM.render(<Demo {...obj}/>,document.getElementById('test2'))//批量传属
 import propTypes from 'prop-types'
 function Demo(props){
 return (
-<h1 >test{props.b}</h1>
+  <h1>test{props.b}</h1>
 )
 
 }
  Demo.propTypes={
-//react16.x以上需引入prop-types.js
-a:PropTypes.number.isRequied
-test:PropTypes.func
+  //react16.x以上需引入prop-types.js
+  a:PropTypes.number.isRequied
+  test:PropTypes.func
 }
 Demo.defaultProps={
-b:'xx'
+  b:'xx'
 }}
 function test(){}
 ReactDOM.render(<Demo a={1} b='ss' handle="test"/>,document.getElementById('test1'))//数据类型要用｛｝
@@ -425,17 +424,17 @@ import propTypes from 'prop-types'
 //官方推荐
 function Demo({b:'xxx'}){
 return (
-<h1 >test{b}</h1>
+  <h1 >test{b}</h1>
 )
 
 }
- Demo.propTypes={
-a:PropTypes.number.isRequied
-test:PropTypes.func
+Demo.propTypes={
+  a:PropTypes.number.isRequied
+  test:PropTypes.func
 }
 
 function test(){}
-ReactDOM.render(<Demo a={1} b='ss' handle="test"/>,document.getElementById('test1'))//数据类型要用｛｝
+  ReactDOM.render(<Demo a={1} b='ss' handle="test"/>,document.getElementById('test1'))//数据类型要用｛｝
 ```
 
 ##### refs
@@ -518,7 +517,7 @@ console.log(this.title3.current)
 3. 阻止默认行为event.preventDefault()
 
 #### 生命周期
->
+
 >类式组件才有生命周期,因为函数式组件不能实例化
 
 ##### 旧(<16.4)
@@ -591,12 +590,9 @@ componentDidMount()//组件挂载完毕
 ```jsx
 static getDerivedStateFromProps(props,state)//组件将要挂载，不能加到实例上，要加上static。
 shouldComponentUpdate()//默认返回true，返回false时不执行更新
-
 getSnapshotBeforeUpdate(preProps,preState){//更新前,必须和componentDidupdate一起使用
-
-//返回值会传入componentDidUpdate中
-return 'xxx'
-
+    //返回值会传入componentDidUpdate中
+    return 'xxx'
 }
 render()
 componentDidUpdate(preProps,preState,snapshotValue)//之前的prop时和状态,不要在里面调用setState()
@@ -648,11 +644,11 @@ ReactDOM.render(<App />, document.getElementById("root"));
 //react 18.x
 //const root=ReactDOM.createRoot(document.getElementById("root"))
 //root.render(
-  //严格模式会影响useEffect的执行时机，为了检测额外的副作用，会让每一个useEffect执行两次
-  // <React.StrictMode>
-  // <App/>
-  // </React.StrictMode>
-// )
+//严格模式会影响useEffect的执行时机，为了检测额外的副作用，会让每一个useEffect执行两次
+//<React.StrictMode>
+//<App/>
+//</React.StrictMode>
+//)
 ```
 
 - App.js
@@ -1050,49 +1046,14 @@ function Test(){
 
 > 状态管理 js 库，集中式管理 react 应用中多个组件共享的状态
 
-##### 简单
+- store：联系action和reducer的对象，提供`getState()获取state`,`dispatch()发送action`,`subscribe()注册监听，返回值注销监听`方法
+  - action：本质是个对象，应用给store传递数据的载体，应用通过store.dispatch()发送给store
+  - reducer:本质是个函数，用来响应发过来的actions,处理后把state发给store。（需要有return返回值，接受两个参数`初始化state`,`action`）
+  - state:数据
 
-- store.js
+##### 旧版
 
-```jsx
-import {createStore}form 'redux'
-import countReducer from './countReducer'
-const store=createStore(countReducer)
-export default store
-```
-
-- countReducer.js
-
-```jsx
-//创建一个为count组件服务的reducer，reducer本质是一个函数
-第一次调用时是store自动触发的，传递的preState是undefin
-export default function (preState,action){
-const {type,data}=action
-return preState
-}
-```
-
-- test.jsx
-
-```jsx
-import store from '../store/store.js'
-
-componentDidMount(){
-store.subscribe(()=>{
-this.setState({})
-})
-}
-
-increment(){
-store.dispatch({type:'xx",data:123})
-}
-
-render(){
-return （<div>{{store.getState()}}</div>）
-}
-```
-
-##### 完整
+###### 使用
 
 - countAction.js
 
@@ -1134,12 +1095,12 @@ import {test} from '../store/countAction.js'
 
 componentDidMount(){
 store.subscribe(()=>{
-this.setState({})
+  this.setState({})
 })
 }
 
 increment(){
-store.dispatch(test(123))
+  store.dispatch(test(123))
 }
 
 render(){
@@ -1147,18 +1108,20 @@ return （<div>{{store.getState()}}</div>）
 }
 ```
 
-##### 异步 action
+###### 中间件实现异步 action
 
 > 异步 action 指 action 返回值为函数，同步 action 指 action 返回值为对象
+redux-thunk能让我们的action不仅能返回一个对象还能返回一个函数，在函数里面在进行一次dispatch，这样就能把异步请求抽离到action里面
+
+- 安装：`yarn add redux-thunk`
 
 - store.js
 
 ```js
 import {createStore,applyMiddleware}form 'redux'
-import countReducer from './countReducer'
 //引入异步action中间件
-//yarn add redux-thunk
 import thunk  from 'redux-thunk'
+import countReducer from './countReducer'
 const store=createStore(countReducer,applyMiddleware(thunk))
 export default store
 ```
@@ -1167,88 +1130,47 @@ export default store
 
 ```js
 import store from './store'
-export const add=data=({type:'add',data})//同步action
-export const addAsync=(data,a,b,c)=>{
-return (dispatch)=>{
-setTimeout(()=>{
-dispatch(add(data)})
-},50000)
+export const add=data=({type:'add',data})//同步action,直接返回对象
+export const addAsync=(data,a,b,c)=>{//异步action,返回函数，函数参数是dispatch方法
+  return (dispatch)=>{
+      setTimeout(()=>{
+          dispatch({type:'add',data:123}})
+      },50000)
 }
 }
 
+```
+
+###### 多个 reducer
+
+- store.js
+
+```js
+import {createStore，applyMiddleware,combineReducers}form 'redux'
+import countReducer1 from './reducer/count1'
+import countReducer2 from './reducer/count2'
+
+let allReducer=combineReducers({
+  count1:countReducer1
+  count2:countReducer2
+})
+
+export default createStore(allReducer)
 ```
 
 ##### react-redux
 
-> UI 组件应该包裹一个容器组件，它们为父子关系
-> UI 组件不能使用任何 redux api，容器组件可以
-> 容器给 UI 组件通过 props 传递状态、操作方法
-> 不用在写 store.subscribe()
+官方用于配合react的库，使组件更加方便从store中读取数据，分发action
 
-- 容器组件
-  /containers/test/index.jsx
+> 组件通过 props 传递状态、操作方法
+> 不用再写 store.subscribe()
 
-```jsx
-//yran add react-redux
-import testUI from "../../components/test.jsx";
-//引入connect用于连接UI组件与redux
-import { connect } from "react-redux";
+###### provide
 
-let mapStateToProps = (state) => {
-  //通过props传给UI组件状态
-  return {
-    a: 1,
-    b: state,
-  };
-};
-
-let mapDisoatchToProps = (dispatch) => {
-  //通过props传给UI操作方法
-  return {
-    d: (data) => {
-      dispatch({ type: "xxx", data });
-    },
-    c: () => {},
-  };
-};
-
-const testContainer = connect(mapStateToProps, mapDisoatchToProps)(testUI);
-
-export default testContainer;
-```
-
-App.jsx
-
-```jsx
-import store form '../../redux/store.js'
-import Test from '../../containers/test'
-
-render(){
-return (
-<Test store={store}/>
-)
-}
-```
-
-简写
-
-```jsx
-import { createIncreamentAction } from "../store/action.js";
-const testContainer = connect(
-  (state) => {
-    a: state;
-  },
-  {
-    add: createIncreamentAction,
-  }
-)(testUI);
-```
-
-##### provide
-
-index.js
+该组件能使整个app都能读取到store中的数据
 
 ```js
+//index.js
 import store from "./store";
 import { Provider } from "react-redux";
 //自动匹配容器组件，添加上store
@@ -1260,63 +1182,69 @@ ReactDOM.render(
 );
 ```
 
-##### 整合容器和 UI 组件
+###### connect
 
-```js
-import {createIncreamentAction} from '../store/action.js'
+该方法能使组件和store进行关联,使用`connect(参数)(组件)`
+常用参数
 
-class Test extend Componet{}
-export default connect(
-state=>{a:state},
-{
-add:createIncreamentAction
+- `mapStateToProps(state,ownProps)函数`将store中的数据作为props绑定到组件上
+- `mapDispatchToProps(dispatch,ownProps)函数`将action作为props绑定到组件上
+
+```jsx
+
+class Test extend Componet{
+  render(){
+    return <div onClick={()=>{this.props.add()}}>{this.props.state.value}<div>
+  } 
 }
+
+let mapStateToProps = (state) => {
+  return {
+    a: 1,
+    b: state,
+  };
+};
+
+let mapDisoatchToProps = (dispatch) => {
+  return {
+    d: (data) => {
+      dispatch({ type: "xxx", data });
+    },
+  };
+};
+export default connect(
+ mapStateToProps,
+ mapDisoatchToProps
 )(Test)
 ```
 
-##### 多个 reducer
+##### 新版
 
-- store.js
-
-```js
-import {createStore，applyMiddleware,combineReducers}form 'redux'
-import countReducer1 from './reducer/count1'
-import countReducer2 from './reducer/count2'
-let allReducer=combineReducers({
-count1:countReducer1
-count2:countReducer2
-})
-export default createStore(allReducer)
-```
-
-##### 使用 Redux Toolkit 简化 Redux
+使用 Redux Toolkit 简化 Redux
 
 `npm install @reduxjs/toolkit react-redux`
 react-redux 也需要单独安装
 
 - configureStore
-  configureStore 替代 createStore
-  配置简单,设置默认值也方便
+  >configureStore 替代 createStore配置简单,设置默认值也方便
   src/store/index.js
 
-```js
-// 引入
-import { configureStore } from "@reduxjs/toolkit";
-import counterSlice from "../pages/basic/counterSlice";
-import mySlice from "../pages/mySlice";
+  ```js
+  // 引入
+  import { configureStore } from "@reduxjs/toolkit";
+  import counterSlice from "../pages/basic/counterSlice";
+  import mySlice from "../pages/mySlice";
+  
+  export default configureStore({
+    reducer: {
+      rootCounter: counterSlice,
+      rootMy: mySlice,
+    },
+  });
+  ```
 
-export default configureStore({
-  reducer: {
-    rootCounter: counterSlice,
-    rootMy: mySlice,
-  },
-});
-```
-
-这里 reduer 直接合并成一个唯一的 根 root 了
-原有的 combineReducers 这个合并函数就用不到了
+这里 reduer 直接合并成一个唯一的根root了,原有的 `combineReducers` 这个合并函数就用不到了
 注意自己配置的 reducer 的 key 值 和 对应的 value 值
-我这里把单独的 reducer 放到和页面同级了,这个根据自己的习惯,放到 store 下面新建目录存放所有的 reducer 也行
 
 - 根组件配置 store
 
@@ -1355,18 +1283,16 @@ root.render(
 
   > createSlice 对 actions、Reducer 的一个封装。
 
-  1. 创建 slice
+  - 创建 slice
      使用 createSlice 方法创建一个 slice。每一个 slice 里面包含了 reducer 和 actions，可以实现模块化的封装。
      所有的相关操作都独立在一个文件中完成。
 
-  1. 关键属性:
-     name
-     命名空间，可以自动的把每一个 action 进行独立，解决了 action 的 type 出现同名的文件。在使用的时候默认会把使用 name/actionName
-     initialState
-     state 数据的初始值
-  1. reducers
+  - 关键属性:
+    - `name`：命名空间，可以自动的把每一个 action 进行独立，解决了 action 的 type 出现同名的文件。在使用的时候默认会把使用 `name/actionName`
+    - `initialState`：state 数据的初始值
+  - reducers
      定义的 action。由于内置了 immutable 插件，可以直接使用赋值的方式进行数据的改变，不需要每一次都返回一个新的 state 数据。
-  1. 导出
+  - 导出
      counterSlice.actions 导出所有的修改函数方便页面使用
      counterSlice.reducer 导出 reducer 在 store 里面使用
      具体 reducer 函数的参数
@@ -1399,7 +1325,7 @@ export const counterSlice = createSlice({
   initialState,
   reducers: {
 // reducer函数 state当前组件的数据
-//第二个参数为{payload:{},type:"""} 想想就写法或者vuex
+//第二个参数为{payload:{},type:"""} 想想旧写法或者vuex
     increment(state) {
       state.counter += 100;
     },
@@ -1432,8 +1358,7 @@ export default counterSlice.reducer;
 ```
 
 - 页面使用
-  1. useSelector()
-     返回指定的 state
+  1. useSelector()返回指定的 state
 
 ```js
 // 这样写太长了 麻烦
@@ -1720,7 +1645,7 @@ const {a:{b:value}}=obj;//连续解构赋值+重命名
 ```
 
 ##### 高阶组件
->
+
 >把一个组件当成另一个组件的参数传入，然后返回新的组件
 
 ```jsx
@@ -1779,6 +1704,25 @@ return a+b+c
 }
 sum(1)(2)(3)
 ```
+
+### useState和setState到底是同步还是异步
+
+#### 18.x
+
+均为异步
+
+#### 18.x以下
+
+##### 在正常的react的事件流里（如onClick等）
+
+- setState和useState是异步执行的（不会立即更新state的结果）
+- 多次执行setState和useState，只会调用一次重新渲染render
+不同的是，setState会进行state的合并，而useState则不会
+
+##### 在setTimeout，Promise.then等异步事件中
+
+- setState和useState是同步执行的（立即更新state的结果）
+- 多次执行setState和useState，每一次的执行setState和useState，都会调用一次render
 
 #### 前端发请求
 
