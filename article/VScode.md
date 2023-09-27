@@ -13,6 +13,21 @@ categories:
 
 - 修改 vscode 配置文件改字体大小：打开 VSCode 安装目录下的如下文件 VSCode\resources\app\out\vs\workbench\workbench.desktop.main.css 查找 .part>.content 修改字体大小即可
 
+- vim插件设置：
+
+```json
+{
+  //vim 前导键
+  "vim.leader":"<space>",
+  //启用系统剪切板作为vim寄存器
+  "vim.useSystemClipboard":true,
+  //将按钮交给vscode处理
+  "vim.handleKeys":{
+    "<C-f>":false
+  }
+}
+```
+
 - 自动保存：
 
 打开 vscode 窗口，单击左下角的设置(齿轮状)图标
@@ -43,7 +58,6 @@ categories:
 - 代码片段：`ES7+ React/Redux/React-Native snippets`、`HTML CSS Support`、`JavaScript (ES6) code snippets`
 - Markdown 预览：`Markdown Preview Enhanced`、`Markdown All in One`、`markdownlint`
 - 单词拼写：`Code Spell Checker`
-- log 打印:`Turbo Console Log`
 - 浏览器打开：`open in browser`
 - 主题：`GitHub Theme`
 - 图片预览：`Image Preview`
@@ -53,3 +67,5 @@ categories:
 - 接口请求：`REST Client`
 - SSH：`Remote-SSH`、`Visual Studio Code Remote - SSH: Editing Configuration Files`、`Remote Explorer`
 - 错误显示：`Error Lens`
+- 本地服务：`live Server`
+- 在浏览器中打开：`open in browser`

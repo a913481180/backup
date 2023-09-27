@@ -5,77 +5,103 @@ categories:
 - web
 ---
 
-# Ajax
+AJAX全称为“Asynchronous JavaScript and XML”（异步JavaScript和 XML），是一种创建交互式网页应用的网页开发技术。通过在后台与服务器进行少量数据交换，Ajax可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。而传统的网页(不使用 Ajax)如果需要更新内容，必需重载整个网页面。
+Ajax的工作原理相当于在用户和服务器之间加了一个中间层(AJAX引擎)，使用户操作与服务器响应异步化
 
-`XMLHttpRequest`IE8以下不兼容；IE8以下声明ajax方法为`ActiveXObject("Microsoft.XMLHTTP");`
+>`XMLHttpRequest`IE8以下不兼容；IE8以下声明ajax方法为`ActiveXObject("Microsoft.XMLHTTP");`
 
-1. 创建ajax对象
+## AJAX请求的五个步骤
 
-```js
-var xhr=null
-if(window.XMLHttpRequest){
- xhr=new XMLHttpRequest();
-}else{
-xhr=new ActiveXObject("Microsoft.XMLHTTP");
-}
-```
+1. 创建ajax(XMLHttpRequest)对象
 
-2. 调用open
+    ```js
+    var xhr=null
+    if(window.XMLHttpRequest){
+        xhr=new XMLHttpRequest();
+    }else{
+        xhr=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    ```
 
-```js
-/*
-第一个参数： 请求方式 
-第二个：url
-第三个：是否异步，true异步，false同步
-*/
-xhr.open("get","./1.txt",true);
-//或
-xhr.open("get","./get.php?name=yyyy&age=22&password=342",true);
-```
+2. `onreadystatechange`事件,设置回调函数,等待数据响应
 
-3. 调用send
+    发送请求将会收到响应，XHR对象以下属性将会被填充上数据
 
-```js
-//get方法
-xhr.send();
-//post方法，将数据放在send()里提交
-xhr.setRequestHeader('content-type','application/x-www-form-urlencoded'); //声明发送的数据类型
-xhr.send("name=yyy&age=33&password=124564"); //无需编码
-//post没有缓存问题
-```
+    |readyState属性|HTTP请求状态|
+    |-|-|
+    |0|（请求还未初始化）还没调用open（）方法|
+    |1|（已建立服务器链接）open() 方法已经被调用。未调用send()方法。|
+    |2|（请求已接收）send() 方法已经被调用，并且头部和状态已经可获得|
+    |3|（正在处理请求）下载中；responseText 属性已经包含部分数据。|
+    |4|（完成）下载操作已完成。|
 
-4. 等待数据响应
+    |status|状态码英文名称|服务器（请求资源）的状态|
+    |-|-|-|
+    |200|OK|请求成功|
+    |204|No Content|无内容。服务器成功处理，但未返回内容。|
+    |206|Partial Content|是对资源某一部分的请求，服务器成功处理了部分GET请求，响应报文中包含由Content-Range指定范围的实体内容。|
+    |301|Moved Permanently|永久性重定向。请求的资源已被永久的移动到新URI，返回信息会包括新的URI，浏览器会自动定向到新URI。今后任何新的请求都应使用新的URI代替|
+    |302|Found|临时性重定向。与301类似。但资源只是临时被移动。客户端应继续使用原有URI|
+    |303|See Other|查看其它地址。与302类似。使用GET请求查看|
+    |304|Not Modified|未修改。所请求的资源未修改，服务器返回此状态码时，不会返回任何资源。|
+    |307|Temporary Redirect |临时重定向。与302类似。使用GET请求重定向，会按照浏览器标准，不会从POST变成GET。|
+    |400|Bad Request|客户端请求报文中存在语法错误，服务器无法理解|
+    |401|Unauthorized|请求要求用户的身份认证，通过HTTP认证（BASIC认证，DIGEST认证）的认证信息，若之前已进行过一次请求，则表示用户认证失败|
+    |402|Payment Required|保留，将来使用|
+    |403|Forbidden|服务器理解请求客户端的请求，但是拒绝执行此请求|
+    |404|Not Found|服务器无法根据客户端的请求找到资源|
+    |500|Internal Server Error|服务器内部错误，无法完成请求|
+    |501|Not Implemented|服务器不支持请求的功能，无法完成请求|
+    |502|Bad Gateway|错误网关|
+    |503|Service Unavailable|由于超载或系统维护，服务器暂时的无法处理客户端的请求|
+    |504|Gateway Time-out|网关超时|
 
-onreadystatechange事件
+    `responseText`:返回以文本形式存放的内容;
+    `responseXML`:返回XML形式的内容,如果响应的内容类型是"text/xml"或"application/xml"，那就是包含响应数据的 XML DOM 文档。
+    `statusText`：响应的 HTTP 状态描述
 
-| readyState属性|请求状态|
-|-|-|
-|0|（初始化）还没调用open（）方法|
-|1|（载入）已调用send()方法。正在发送请求|
-|2|(载入完成）send()方法完成，已收到全部响应内容|
-|3|(解析）正在解析响应内容|
-|4|(完成）响应内容解析完成，可在客户端调用|
+    ```js
+    xhr.onreadystatechange=function(){
+        if(xhr.readyState==4){
+            if(xhr.status==200){
+            console.log(xhr.responseText);
+            }else{
+                alert("error:"+xhr.status);
+            }
+        }
+    }
+    ```
 
-|status属性|服务器（请求资源）的状态|
-|-|-|
-|200||
-|400||
+3. 调用open方法与服务器建立链接
 
-`responseText`:返回以文本形式存放的内容;
-`responseXML`:返回XML形式的内容
+    ```js
+    /*
+    第一个参数： 请求方式 
+    第二个：url
+    第三个：是否异步，true异步，false同步
+    */
+    xhr.open("get","./1.txt",true);
+    //或
+    xhr.open("get","./get.php?name=yyyy&age=22&password=342",true);
+    //或
+    xhr.open("post","/test.php",true);
+    ```
 
-```js
-xhr.onreadystatechange=function(){
-if(xhr.readyState==4){
-if(xhr.status==200){
+4. 调用send方法,向服务器发送数据
 
-console.log(xhr.responseText);
-}else{
-alert("error:"+xhr.status);
-}
-}
-}
-```
+    ```js
+    //get方法,不需要传递参数
+    xhr.send();
+
+    //post方法，将数据放在send()里提交
+    xhr.setRequestHeader('content-type','application/x-www-form-urlencoded'); //发送表单数据
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8')//发送json格式数据
+    xhr.setRequestHeader('Content-type', 'text/plain;  charset=utf-8')//发送纯文本,不指定Content-type时直接默认值
+    xhr.setRequestHeader('Content-type', 'text/html; charset=utf-8')//发送html文本
+    //设置请求头
+    xhr.send("name=yyy&age=33&password=124564"); //无需编码
+    //post没有缓存问题
+    ```
 
 ### 传输格式
 
@@ -101,6 +127,8 @@ console.log(JSON.parse(b));// 报错
 `JSON.stringify();`:将 JavaScript 对象转换为 JSON 字符串
 
 ### ajax 只能下载同源的数据，跨源的数据禁止下载
+>
+>如果要请求的域和当前域是不同域，就叫跨域
 
 - 同源策略
 
@@ -314,7 +342,7 @@ jsonp的缺点：只能发送get一种请求。
 1、原生JS实现
 通过script标签src属性，发送带有callback参数的GET请求，服务端将接口返回数据拼凑到callback函数中，返回给浏览器，浏览器解析执行，从而前端拿到callback函数返回的数据。
 
-```httml
+```html
 <script>
     function getData(data){
         console.log(data)

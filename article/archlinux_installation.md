@@ -2,9 +2,9 @@
 title: 安装archlinux系统
 date: 2020-11-22 20:22:22
 categories:
-- linux
+  - linux
 tags:
-- system
+  - system
 ---
 
 ## 制作u盘
@@ -44,8 +44,8 @@ tags:
 `timedatectl set-ntp true`
 
 ## 分区
->
->双系统不用分boot启动分区，只需要根分区、家分区、交换分区swap。linux的boot分区直接挂载在windows的efi分区上
+
+> 双系统不用分boot启动分区，只需要根分区、家分区、交换分区swap。linux的boot分区直接挂载在windows的efi分区上
 
 - 查看当前的可用磁盘：`fdisk -l`
 
@@ -62,11 +62,11 @@ tags:
 
 ```bash
 --\>n -->回车 -->回车 -->回车 -->+500m  （boot分区）
- 
+
 --\>n -->回车 -->回车 -->回车 -->+6G      （根分区）
 
 --\>n -->回车 -->回车 -->回车 -->回车  （将剩余空间全部分配给该分区）
- 
+
 --\>w    （写入）
 ```
 
@@ -96,11 +96,11 @@ tags:
 
 - 双系统
 
->先挂载根分区，再启动分区，在其他分区
+> 先挂载根分区，再启动分区，在其他分区
 
 ```bash
 #根分区
-mount /dev/nvme0n8 /mnt 
+mount /dev/nvme0n8 /mnt
 #启动分区，挂载在win系统efi分区上
 mkdir /mnt/boot
 mount /dev/nvme0n1p1 /mnt/boot
@@ -115,7 +115,7 @@ mount /dev/nvme0n1p6 /mnt/home
 
 ```bash
 #根分区
-mount  /dev/sda3 /mnt     
+mount  /dev/sda3 /mnt
 ls /mnt  /////查看是否挂载成功，若出现lost+found 则代表挂载成功
 #启动分区
 mkdir /mnt/boot
@@ -205,13 +205,14 @@ Server = https://mirror.kamtv.ru/manjaro/stable/$repo/$arch
 - USB网络：`pacman -S usbmuxd`
 - 基本网络连接工具：`iw wpa_supplicant`
 - 网络管理工具(多个管理工具之间相互冲突，安装一个即可)：`pacman -S  networkmanager dhcpcd（可不装）`
+
   - 启动服务：`systemctl enable NetworkManager.service`
   - 图形化界面：`nm-connection-editor`
   - 系统托盘：`network-manager-applet`
   - 使用：
-   NetworkManager 附带 nmcli 和 nmtui。
+    NetworkManager 附带 nmcli 和 nmtui。
 
-   ```bash
+  ```bash
   # 显示附近的 Wi-Fi 网络：
   $ nmcli device wifi list
 
@@ -258,6 +259,7 @@ Server = https://mirror.kamtv.ru/manjaro/stable/$repo/$arch
   - VPN 支持:只需要 `wireguard` 内核模块
   - 通过Ethernet共享连接：安装dnsmasq包以能够真正地共享连接。你的连有internet的设备和其他的设备通过合适的ethernet线缆连接（通常这意味着一个交叉线(cross over cable)或者之间有一个交换机（switch））。从终端运行nm-connection-editor,添加一个新的ethernet连接，给它起一个合适的名字。比如"共享连接"，转到"IPv4 设置"（IPv4 settings），对于"方法:"（method） 选择 "与其他电脑共享"（Shared to other computers）,保存。现在，你在NetworkManager的有线连接下应该有了一个新"共享连接"的选项。
   - 更换内置的DHCP 客户端：请在 `/etc/NetworkManager/conf.d/` 中的配置文件中设置选项 `[main]\n dhcp=客户端名称`。注意！不要启用 dhclient包 和 dhcpcd包 软件包提供的 systemd 单元。它们会与 NetworkManager 冲突
+
 - 网络管理工具：`dialog net-tools netctl wpa_supplicant dhcpcd`
 
 ## 安装CPU编码
@@ -280,7 +282,7 @@ Server = https://mirror.kamtv.ru/manjaro/stable/$repo/$arch
   ```bash
    pacman -S grub efibootmgr（efi启动）os-prober(寻找其他系统的工具）
    mkdir /boot/grub
-   ```
+  ```
 
 - Grub2.06后不再启用os-prober，需要手动启用：`vim /etc/default/grub`
 
@@ -296,7 +298,7 @@ Server = https://mirror.kamtv.ru/manjaro/stable/$repo/$arch
 
   ```bash
   #gpt引导32位
-   grub-install --target=i386-pc /dev/sda (整个磁盘，即根目录`/`） 
+   grub-install --target=i386-pc /dev/sda (整个磁盘，即根目录`/`）
   #efi引导
   grub-install --target=x86_64-efi --efi-directory=/boot
   ```
@@ -325,15 +327,15 @@ Server = https://mirror.kamtv.ru/manjaro/stable/$repo/$arch
 - 设置密码：`passwd 用户名`
 - 编辑权限：`vim /etc/sudoers`
 
->第一列用户名：test、root
->第二列，等号左边：允许从任何主机登陆当前用户
->第二列，等号右边：第一列用户可以切换到系统中的其他用户
->第三列，NOPASSWD表示sudo不用打密码
+> 第一列用户名：test、root
+> 第二列，等号左边：允许从任何主机登陆当前用户
+> 第二列，等号右边：第一列用户可以切换到系统中的其他用户
+> 第三列，NOPASSWD表示sudo不用打密码
 
-  ```txt
-  root    ALL=(ALL:ALL) ALL
-  test    ALL=(ALL:ALL) NOPASSWD:ALL
-  ```
+```txt
+root    ALL=(ALL:ALL) ALL
+test    ALL=(ALL:ALL) NOPASSWD:ALL
+```
 
 ## 添加archlinuxcn源
 
@@ -352,9 +354,9 @@ Server = https://mirror.kamtv.ru/manjaro/stable/$repo/$arch
 - 安装GPGkey：`pacman -S archlinuxcn-keyring`
 
 ## 图形界面
->
->用户登陆成功后，会读取用户目录下的`.bashrc`文件(zsh终端则是`.zshrc`文件)，相当于手动执行`source ~/.bashrc`。此时登陆到tty1。接着执行startx命令会执行`~/.xinitrc`中的内容
->.Xresources文件，用来调节dpi(默认96),`Xft.dpi:192`(数字为：放大倍数*96)
+
+> 用户登陆成功后，会读取用户目录下的`.bashrc`文件(zsh终端则是`.zshrc`文件)，相当于手动执行`source ~/.bashrc`。此时登陆到tty1。接着执行startx命令会执行`~/.xinitrc`中的内容
+> .Xresources文件，用来调节dpi(默认96),`Xft.dpi:192`(数字为：放大倍数\*96)
 
 - 安装xorg：`xorg` `xorg-server` `xorg-xinit`
 
@@ -404,9 +406,9 @@ Server = https://mirror.kamtv.ru/manjaro/stable/$repo/$arch
 
 - 图形化界面：`sudo pacman -S blueman`
 - 如果要用蓝牙耳机，或者蓝牙音响，还需要安装pulseaudio-bluetooth
-`# pacman -S pulseaudio-bluetooth`
-这个程序默认开机启动。但经常发生开机后能连接音响，却不是用音响输出声音的情况。
-重新启动pulseaudio执行`pulseaudio -k`
+  `# pacman -S pulseaudio-bluetooth`
+  这个程序默认开机启动。但经常发生开机后能连接音响，却不是用音响输出声音的情况。
+  重新启动pulseaudio执行`pulseaudio -k`
 
 再打开音频或者视频就能从蓝牙音响输出了。
 
@@ -431,6 +433,7 @@ amixer sset Headphone unmute
 注意： 若增益高于0 dB，可能会听到失真。
 
 - 若没有声音，需配置声卡
+
   - 获取声卡的声卡ID和设备ID:`aplay -l`
   - 获取amixer控制器配置:`amixer scontrols`
   - 获取amixer声卡配置:`amixer -c 1 scontrols`
@@ -445,7 +448,7 @@ amixer sset Headphone unmute
   pcm选项决定用来播放音频的设备，而ctl选项决定那个声卡能够由控制工具（如 alsamixer）使用。上述配置在重启音频程序（如 mplayer）后立即生效。
 
 - 启用麦克风
-要启用麦克风，按 F4 切换至 Capture （捕获）选项卡，然后按 空格 启用一个声道即可
+  要启用麦克风，按 F4 切换至 Capture （捕获）选项卡，然后按 空格 启用一个声道即可
 
 ## 安装字体
 
@@ -479,66 +482,67 @@ amixer sset Headphone unmute
 - 开机自启，执行：`cp /usr/share/applications/org.fcitx.Fcitx5.desktop ~/.config/autostart/`
 
 - 主题和外观
+
   - 安装：`yay -S fcitx5-material-color`
   - 配置：
 
-   ```conf
-   # 垂直候选列表
-   Vertical Candidate List=False
-   # 按屏幕DPI使用
-   PerScreenDPI=True
-   # Font(设置成你喜欢的字体)
-   Font="思源黑体 CN Medium 13"
-   # 主题
-   Theme=Material-Color-DeepPurple
-   ```
+  ```conf
+  # 垂直候选列表
+  Vertical Candidate List=False
+  # 按屏幕DPI使用
+  PerScreenDPI=True
+  # Font(设置成你喜欢的字体)
+  Font="思源黑体 CN Medium 13"
+  # 主题
+  Theme=Material-Color-DeepPurple
+  ```
 
 - Emoji
-   1. 首先确保电脑上已经安装了带有 Emoji 的字体（例如 noto-fonts-emoji包）。
-   2. 将字体设置为 Noto Sans CJK SC
+  1. 首先确保电脑上已经安装了带有 Emoji 的字体（例如 noto-fonts-emoji包）。
+  2. 将字体设置为 Noto Sans CJK SC
 - wps无法输入中文：该问题在国内版 wps-office-cn 11.1.0.9604-1 版本更新后部分用户出现，于 wps-office-cn 11.1.0.9615-1 版本修复
 - 自定义词库
 
->注意： 手动下载的词典文件直接放到 ~/.local/share/fcitx5/pinyin/dictionaries 路径下即可。词典文件的后缀名应当为 .dict
-一般而言,由于 fcitx5包 支持 导入搜狗词库，因此很大程度上不需要自定义词库，但是 fcitx5包 依然提供了相关工具。
+> 注意： 手动下载的词典文件直接放到 ~/.local/share/fcitx5/pinyin/dictionaries 路径下即可。词典文件的后缀名应当为 .dict
+> 一般而言,由于 fcitx5包 支持 导入搜狗词库，因此很大程度上不需要自定义词库，但是 fcitx5包 依然提供了相关工具。
 
 - 安装 `libime`包:
-原始词库文件是一个文本文件，其格式为： 汉字 拼音 频率,在得到原始词库文件后，调用 `libime_pinyindict "词库文件.txt" "词库文件.dict"` 即可。
+  原始词库文件是一个文本文件，其格式为： 汉字 拼音 频率,在得到原始词库文件后，调用 `libime_pinyindict "词库文件.txt" "词库文件.dict"` 即可。
 
 自定义词库文件放置在 `~/.local/share/fcitx5/pinyin/dictionaries`
 
 ## 安装yay
->
->需要配置etc/pacman.conf中，加入archlinuxcn Server配置
+
+> 需要配置etc/pacman.conf中，加入archlinuxcn Server配置
 
 - pacman 命令
 
-|命令|说明|
-|-|-|
-|pacman -Syu|系统升级，更新软件|
-|pacman -S 包名|安装或升级单个软件|
-|pacman -Sy 包名|同步数据后,再安装或升级单个软件|
-|pacman -U 包名|安装本地包，扩展名为pkg.tar.gz或pkg.tar.xz|
-|pacman -U url名|安装远程包|
-|pacman -Ss 名称|查看仓库中的软件|
-|pacman -Qs 名称|查看已安装的软件|
-|pacman -R 包名|删除软件，保留依赖|
-|pacman -Rs 包名|删除软件，和其他没有被引用的依赖|
-|pacman -Rdd 包名|删除软件，及依赖它的软件|
-|pacman -Sc|清空软件包缓存|
-|pacman -Scc|清空所有缓存|
-|pacman -R $(pacman -Qdtq)|清楚系统中的无用包|
-|pacman -R $(pacman -Qsq 关键词)|清楚系统中的包|
+| 命令                            | 说明                                       |
+| ------------------------------- | ------------------------------------------ |
+| pacman -Syu                     | 系统升级，更新软件                         |
+| pacman -S 包名                  | 安装或升级单个软件                         |
+| pacman -Sy 包名                 | 同步数据后,再安装或升级单个软件            |
+| pacman -U 包名                  | 安装本地包，扩展名为pkg.tar.gz或pkg.tar.xz |
+| pacman -U url名                 | 安装远程包                                 |
+| pacman -Ss 名称                 | 查看仓库中的软件                           |
+| pacman -Qs 名称                 | 查看已安装的软件                           |
+| pacman -R 包名                  | 删除软件，保留依赖                         |
+| pacman -Rs 包名                 | 删除软件，和其他没有被引用的依赖           |
+| pacman -Rdd 包名                | 删除软件，及依赖它的软件                   |
+| pacman -Sc                      | 清空软件包缓存                             |
+| pacman -Scc                     | 清空所有缓存                               |
+| pacman -R $(pacman -Qdtq)       | 清楚系统中的无用包                         |
+| pacman -R $(pacman -Qsq 关键词) | 清楚系统中的包                             |
 
 - yay 命令,不要加sudo
 
-|命令|说明|
-|-|-|
-|yay -Syu|更新软件|
-|pacman -S 包名|安装软件|
-|pacman -Rns 包名|删除单个软件|
-|pacman -Qi 包名|查看包版本|
-|pacman -Ps|查看系统包安装信息|
+| 命令             | 说明               |
+| ---------------- | ------------------ |
+| yay -Syu         | 更新软件           |
+| pacman -S 包名   | 安装软件           |
+| pacman -Rns 包名 | 删除单个软件       |
+| pacman -Qi 包名  | 查看包版本         |
+| pacman -Ps       | 查看系统包安装信息 |
 
 ## 其他软件
 
@@ -559,11 +563,21 @@ amixer sset Headphone unmute
 - 火狐：`firefox`
 - 截图：`flameshot`
 - 看图：`feh`
+- pdf：`okular`
 - 播放器：`mpv`,`vlc`
 - 录屏：`obs-studio`( 确保安装了`pipewire`,`libpipewire02`，`xdg-desktop-portal-wlr`)
+- 图形化解压工具：`xarchiver`,`file-roller`
 - 虚拟摄像头：`v4l2loopback`（可用在直播软件中实现共享屏幕）
+
   - 移除虚拟相机命令：`sudo modprobe --remove v4l2loopback`
   - 添加虚拟相机命令：`sudo modprobe v4l2loopback devices=2`
+
+- 编辑器：`nvim`
+  - 安装LazyVim配置:
+    - `git clone https://github.com/LazyVim/starter ~/.config/nvim`
+    - `rm -rf ~/.config/nvim/.git`
+    - `nvim`
+  - 安装字体：`Nerd Fonts`
 
 ### [aur](https://aur.archlinux.org/)
 
@@ -571,6 +585,23 @@ amixer sset Headphone unmute
 - markdown:`typora-free-cn`,`remarkable`
 - vscode:`visual-studio-code-bin`（root用户无法启动）
 - wps：`wps-office`
+
+  - 无法输入中文错误来源
+    好像是因为wps在较新的版本之后就不在读取用户的默认的配置文件~/.pam_environment，所以你在这个文件中再怎么改也没有用。
+
+  - 解决办法
+    正确的做法是直接在启动脚本中添加export变量导出。
+    启动脚本位于/usr/bin目录下，`/usr/bin/wps`, `/usr/bin/et` ,`/usr/bin/wpp`。
+    在gOpt一行下添加
+
+    ```bash
+    export GTK_IM_MODULE=fcitx
+    export QT_IM_MODULE=fcitx5
+    export XMODIFIERS=@im=fcitx
+    ```
+
+    然后保存退出。这样就可以成功在WPS中使用fcitx5了。
+
 - qq:`linuxqq`
 - 腾讯会议：`wemeet-bin`
 - 微信：`wechat-uos`
@@ -598,14 +629,14 @@ amixer sset Headphone unmute
   ```
 
 ## 屏幕亮度
->
->亮度由 ACPI，图形或者平台的驱动来控制
+
+> 亮度由 ACPI，图形或者平台的驱动来控制
 
 - 查看ACPI内核模块：`ls /sys/class/backlight/`
 - 查看最大亮度：`ls /sys/class/backlight/acpi_video0/max_brightness`
 - 测试,向brightness写入代表亮度等级的数值：`echo 5 > /sys/class/backlight/acpi_video0/brightness`
 - 若不生效或是amd显卡，可能需要修改内核：
-编辑 `/etc/default/grub`并将您的内核选项添加至 `GRUB_CMDLINE_LINUX_DEFAULT='...'` 行
+  编辑 `/etc/default/grub`并将您的内核选项添加至 `GRUB_CMDLINE_LINUX_DEFAULT='...'` 行
 
 ```conf
 acpi_backlight=video
@@ -670,8 +701,9 @@ acpi_backlight=none
 ### 文件管理工具
 
 #### dolphin
+
 安装： `sudo pacman -S dolphin breeze`
- 文件预览：
+文件预览：
 
 - kdegraphics-thumbnailers: Image files, PDFs and Blender application files.
 - kimageformats: Gimp .xcf files
@@ -683,18 +715,21 @@ acpi_backlight=none
 - raw-thumbnailerAUR: .raw files
 - taglib : Audio files
 - kde-thumbnailer-apkAUR: Android package files
-Enable preview showing of required file type in`Settings > Configure Dolphin... > General > Previews.`
+  Enable preview showing of required file type in`Settings > Configure Dolphin... > General > Previews.`
 
 To enable `heif/heic image thumbnails`, edit `/usr/share/kservices5/imagethumbnail.desktop` by adding `image/heif;` to the line which starts with `MimeType=`.
 
 Note that heif/heic thumbnails will be enabled by default on versions of `kio-extras` after 21.12
 
-#### pcmanfm 
+#### pcmanfm
+
+- 自动挂载u盘、垃圾桶:`gvfs`,`udisks`
+- 解压：`xarchiver`
 
 ### 远程控制windowns
 
 - `rdesktop`
-在此之前需要让Windows支持远程协助，可以在系统属性-远程中开启：【允许远程协助连接这台计算机】+【允许远程连接到此计算机】，如果勾选了【仅运行运行使用网络级别身份验证的远程桌面单位计算机连接】，那么 rdesktop 无法连接，报错信息：
+  在此之前需要让Windows支持远程协助，可以在系统属性-远程中开启：【允许远程协助连接这台计算机】+【允许远程连接到此计算机】，如果勾选了【仅运行运行使用网络级别身份验证的远程桌面单位计算机连接】，那么 rdesktop 无法连接，报错信息：
 
 ```bash
 Core(warning): Certificate received from server is NOT trusted by this system, an exception has been added by the user to trust this specific certificate.
@@ -724,20 +759,21 @@ rdesktop一些常用选项：
 /size:<width>x<height> 窗口大小，如 1024x768
 /f 全屏
 /workarea Use available work area
-/bpp:<depth> 色彩深度 
-/u:<user>[@<domain>] 
+/bpp:<depth> 色彩深度
+/u:<user>[@<domain>]
 /p:<password>
 /d:<domain> 域，可选
 +fonts 平滑字体
 ```
 
 - 共享盘或者传输文件
+
   - 对于xfreerdp 指定 /drive:
-xfreerdp /drive:SharedDir,/home/user/SharedDir /u:user /p:password /v:ip
+    xfreerdp /drive:SharedDir,/home/user/SharedDir /u:user /p:password /v:ip
 
   - 对于rdesktop 指定 -r disk:
-rdesktop -r disk:SharedDir=/home/user/SharedDir ip
-其中 SharedDir 是随便输入的名字，接着是共享文件夹的本地绝对路径
+    rdesktop -r disk:SharedDir=/home/user/SharedDir ip
+    其中 SharedDir 是随便输入的名字，接着是共享文件夹的本地绝对路径
 
 ### 设置
 
@@ -755,12 +791,13 @@ picom
 回到安装，重新pacstrap安装
 
 - 普通用户无法startx
+
   - `tmp`目录是否有权限
   - 拷贝root用户下的`.Xauthority`，`xinitrc`到普通用户的home目录下
 
 - unzip 解压大文件错误
-下载p7zip
+  下载p7zip
 
 - npm nrm安装后报错
-原因：应该使用 open 的 CommonJs规范的包 ，现在 open v9.0.0 是 ES Module 版本的包
-解决方法：`npm install -g nrm open@8.4.2 -save`
+  原因：应该使用 open 的 CommonJs规范的包 ，现在 open v9.0.0 是 ES Module 版本的包
+  解决方法：`npm install -g nrm open@8.4.2 -save`
