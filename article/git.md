@@ -17,6 +17,25 @@ git config --global user.email 123456@qq.com         //个人邮箱地址
 # 上面的--global选项,表示以后管理git库时,默认使用上面的用户信息,也可以通过git config -l 来查看配置信息
 ```
 
+## 分支操作
+
+创建分支
+
+```bash
+创建分支: git branch 分支名
+切换分支: git checkout 分支名
+查看所有分支: git brach -a
+分支合并: git merge 分支名 (把分支合并到当前分支)
+```
+
+删除分支
+
+```bash
+首先使用git branch -a查看当前所有分支。
+删除本地分支：git branch -d 分支1[,分支名2,分支名3...]
+删除远程分支: git push origin --delete 分支名1[,分支命2,分支名...]
+```
+
 ## 将 master 分支合并到当前迭代分支
 
 1、切换到master分支，拉取最新代码到本地
