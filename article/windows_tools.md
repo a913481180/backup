@@ -7,21 +7,6 @@ categories:
 
 ## window10 实用软件
 
-### PowerToys
-
-是一款实用工具的集合，它并不是新事物，Windows 95 就曾有过这款工具，只是 Windows 在原来的启发之下开发了这款针对 Window 10 系统更加高效的版本。
-目前 PowerToys 包括如下 7 项功能，每一项都非常实用，它们分别是：
-
-- FancyZones
-- File Explorer Add-ons
-- Image Resizer
-- Keyboard Manager
-- PowerRename
-- PowerToys Run
-- Shortcut Guide
-
----
-
 ### chrome
 
 插件：
@@ -36,7 +21,7 @@ categories:
 - [redux](https://wwbk.lanzoue.com/i5baZ0ht4wwf)
 - [vimiumC](https://wwbk.lanzoue.com/iBCXa0ht4wgj)
 - [editThisCookie](https://wwbk.lanzoue.com/isrNg0ht4wle)
-- [surfingkeys](https://wwbk.lanzoue.com/isrNg0ht4wle)
+- [surfingkeys](https://wwbk.lanzoum.com/ilPSS0wpm6vc)
 
 ### other
 

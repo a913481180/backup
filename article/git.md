@@ -17,9 +17,28 @@ git config --global user.email 123456@qq.com         //个人邮箱地址
 # 上面的--global选项,表示以后管理git库时,默认使用上面的用户信息,也可以通过git config -l 来查看配置信息
 ```
 
+## 分支操作
+
+创建分支
+
+```bash
+创建分支: git branch 分支名
+切换分支: git checkout 分支名
+查看所有分支: git brach -a
+分支合并: git merge 分支名 (把分支合并到当前分支)
+```
+
+删除分支
+
+```bash
+首先使用git branch -a查看当前所有分支。
+删除本地分支：git branch -d 分支1[,分支名2,分支名3...]
+删除远程分支: git push origin --delete 分支名1[,分支命2,分支名...]
+```
+
 ## 将 master 分支合并到当前迭代分支
 
-1、切换到master分支，拉取最新代码到本地
+1、切换到 master 分支，拉取最新代码到本地
 
 ```bash
 #切换到master分支
@@ -28,7 +47,7 @@ git checkout master
 git pull
 ```
 
-2、切换到当前开发分支，合并master分支
+2、切换到当前开发分支，合并 master 分支
 
 ```bash
 #切换到当前分支
@@ -38,7 +57,7 @@ git merge master
 ```
 
 3、代码冲突解决
-这一步需要在编辑器上，把冲突部分解决掉（这一步特别重要，最好叫上相关负责人一起，防止弄丢master里的最新代码）
+这一步需要在编辑器上，把冲突部分解决掉（这一步特别重要，最好叫上相关负责人一起，防止弄丢 master 里的最新代码）
 
 4、当前开发分支代码提交
 
@@ -49,10 +68,10 @@ git commit -m"merge from master"
 git push origin
 ```
 
-## 合并其他分支代码至master分支
+## 合并其他分支代码至 master 分支
 
 1.当前分支所有代码提交
-先将dev分支上所有有代码提交至git上，提交的命令一般就是这几个，先复习下：
+先将 dev 分支上所有有代码提交至 git 上，提交的命令一般就是这几个，先复习下：
 
 ```bash
 # 将所有代码提交
@@ -93,7 +112,7 @@ git status
 
 1. 没有添加到暂存区
 
-没有执行git add , 可以用命令
+没有执行 git add , 可以用命令
 
 ```bash
 git checkout – filepathname（eg: git checkout – test.cpp）
@@ -102,15 +121,15 @@ git checkout – filepathname（eg: git checkout – test.cpp）
 如果是放弃所有，直接执行
 
 ```bash
-git checkout .    
+git checkout .
 ```
 
-此命令用来放弃掉所有还没有加入到缓存区（就是 git add 命令）的修改：新增的文件会被删除、删除的文件会恢复回来、修改的文件会回去。回到暂存区之前的样子。对之前保存在暂存区里的代码不会有任何影响。对commit提交到本地分支的代码就更没影响了。当然，如果你之前压根都没有暂存或commit，那就是回到你上次pull下来的样子了。
+此命令用来放弃掉所有还没有加入到缓存区（就是 git add 命令）的修改：新增的文件会被删除、删除的文件会恢复回来、修改的文件会回去。回到暂存区之前的样子。对之前保存在暂存区里的代码不会有任何影响。对 commit 提交到本地分支的代码就更没影响了。当然，如果你之前压根都没有暂存或 commit，那就是回到你上次 pull 下来的样子了。
 
-但是此命令不会删除掉刚新建的文件。因为刚新建的文件还没已有加入到 git 的管理系统中。所以对于git是未知的。自己手动删除就好了。
+但是此命令不会删除掉刚新建的文件。因为刚新建的文件还没已有加入到 git 的管理系统中。所以对于 git 是未知的。自己手动删除就好了。
 
 2. 已经添加到暂存区：
-已经使用git add添加到暂存区，可以用命令
+   已经使用 git add 添加到暂存区，可以用命令
 
 ```bash
 git reset HEAD filepathname （比如： git reset HEAD readme.md）
@@ -122,10 +141,10 @@ git reset HEAD filepathname （比如： git reset HEAD readme.md）
 git reset HEAD .
 ```
 
-执行完此命令后，文件状态就回归到第一种情况了，此时再按照情况1处理。
+执行完此命令后，文件状态就回归到第一种情况了，此时再按照情况 1 处理。
 
 3. 已经提交到本地仓库：
-使用git commit提交到本地仓库，可以用命令回退到上一次commit的状态
+   使用 git commit 提交到本地仓库，可以用命令回退到上一次 commit 的状态
 
 ```bash
 git reset --hard HEAD^
@@ -139,17 +158,17 @@ git reset --hard commitid# 回到其中你想要的某个版
 ```
 
 4. 放弃本地修改，强制和远程同步
-在使用Git的过程中，有些时候我们只想要git服务器中的最新版本的项目，对于本地的项目中修改不做任何理会，就需要用到Git pull的强制覆盖，具体代码如下：
+   在使用 Git 的过程中，有些时候我们只想要 git 服务器中的最新版本的项目，对于本地的项目中修改不做任何理会，就需要用到 Git pull 的强制覆盖，具体代码如下：
 
 ```bash
 git fetch --all
-git reset --hard origin/master 
+git reset --hard origin/master
 git pull
 ```
 
 ## 回滚
 
-1. 通过git reset是直接删除指定的commit
+1. 通过 git reset 是直接删除指定的 commit
 
 ```bash
 git log # 得到你需要回退一次提交的commit id
@@ -159,7 +178,7 @@ git reset --hard
 git push origin HEAD --force # 强制提交一次，之前错误的提交就从远程仓库删除
 ```
 
-2. 通过git revert是用一次新的commit来回滚之前的commit
+2. 通过 git revert 是用一次新的 commit 来回滚之前的 commit
 
 ```bash
 git log # 得到你需要回退一次提交的commit id
@@ -167,11 +186,11 @@ git log # 得到你需要回退一次提交的commit id
 git revert # 撤销指定的版本，撤销也会作为一次提交进行保存
 ```
 
-3. git revert 和 git reset的区别
+3. git revert 和 git reset 的区别
 
-   - git revert是用一次新的commit来回滚之前的commit，此次提交之前的commit都会被保留；
+   - git revert 是用一次新的 commit 来回滚之前的 commit，此次提交之前的 commit 都会被保留；
 
-   - git reset是回到某次提交，提交及之前的commit都会被保留，但是此commit id之后的修改都会被删除
+   - git reset 是回到某次提交，提交及之前的 commit 都会被保留，但是此 commit id 之后的修改都会被删除
 
 ## git 命令
 
@@ -233,4 +252,14 @@ git config --global --unset https.proxy
 #刷新dns
 ipconfig /flushdns
 
+```
+
+- Git push 命令报 hint: Updates were rejected because the remote contains work that you do 问题：
+  首先它的出现是因为在你上传的时候，远程仓库中有着本地仓库没有的文件，及导致本地仓库和远程有不同的开始点，也就是两个仓库没有共同的 commit 出现的无法提交。
+  至此大部分人的问题都能解决
+
+```
+git pull origin master --allow-unrelated-histories
+
+我们再次对它产生的原因分析一波发现，首先它的出现是因为在你上传的时候，远程仓库中有着本地仓库没有的文件，及导致本地仓库和远程有不同的开始点，也就是两个仓库没有共同的 commit 出现的无法提交。
 ```

@@ -125,46 +125,51 @@ categories:
 `cd test_project`
 `npm run start`
 
+使用ts
+
+`create-react-app demo --template typescript`
+`cd test_project`
+`npm run start`
+
 ##### 安装路由
 
 `npm i react-router-dom`
-创建 router/index.js 文件,写入路由表
+创建 routes/index.js 文件,写入路由表
 
-```
-import React from "react";
+```js
 import { lazy, Suspense,  } from "react";
 import { Navigate } from "react-router-dom";
 import LoadingPage from "../pages/LoadingPage";
 const Home = lazy(() => import("../pages/Home"));
 const ErrorBlock = lazy(() => import("../pages/ErrorBlock"));
-let route = [
-	{
-		path: "/Home",
-		element: (
-			<Suspense fallback={<LoadingPage />}>
-				<Home />
-			</Suspense>
-		),
-	},
-	{
-		path: "/ErrorBlock",
-		element: (
-			<Suspense fallback={<LoadingPage />}>
-				<ErrorBlock />
-			</Suspense>
-		),
-	},
-	{
-		path: "/",
-		element: <Navigate to="/Home"></Navigate>,
-	},
+const routes= [
+ {
+  path: "/Home",
+  element: (
+   <Suspense fallback={<LoadingPage />}>
+    <Home />
+   </Suspense>
+  ),
+ },
+ {
+  path: "/ErrorBlock",
+  element: (
+   <Suspense fallback={<LoadingPage />}>
+    <ErrorBlock />
+   </Suspense>
+  ),
+ },
+ {
+  path: "/",
+  element: <Navigate to="/Home"></Navigate>,
+ },
 ];
-export default route;
+export default routes
 ```
 
 入口文件 index.js 中加入
 
-```
+```js
 import {BrowserRouter} from 'react-router-dom'
 <BrowserRouter>
 <App/>
@@ -173,17 +178,13 @@ import {BrowserRouter} from 'react-router-dom'
 
     App.js 中引入路由表
 
-```
+```jsx
 import './App.scss';
-import route from './route/'
+import routes from './routes/'
 import { useRoutes } from 'react-router-dom'
 function App() {
-const element = useRoutes(route)
-return (
-<div className="App">
-{element}
-</div>
-);
+  const element = useRoutes(routes)
+    return (<div className="App">{element}</div>);
 }
 export default App;
 ```
@@ -194,7 +195,7 @@ export default App;
 新建 store/index.js、store/actions/test/index.js、store/reducers/test/index.js,
 在 store/index.js 中写入
 
-```
+```js
 import {createStore} from 'redux'
 import test from './reducers/test/index.js'
 export default createStore(test)
@@ -202,7 +203,7 @@ export default createStore(test)
 
 在 store/actions/test/index.js 中写入
 
-```
+```js
 import store from '../../index.js'
 export const test1=(data)=>{
 return store.dispatch( {type:'test1',data} )
@@ -211,7 +212,7 @@ return store.dispatch( {type:'test1',data} )
 
 在 store/reducers/test/index.js 中写入
 
-```
+```js
 const initState={}
 export default function userInfo(preState=initState,action){
 const {type,data}=action
@@ -222,7 +223,7 @@ return preState
 
 在 入口文件 src/index.js 中
 
-```
+```js
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store'
@@ -241,7 +242,7 @@ root.render(
 
 在 src 中创建 setupProxy.js,在 react18 中使用
 
-```
+```js
 const proxy = require("http-proxy-middleware").createProxyMiddleware;
 module.exports = function (app) {
 app.use(
@@ -262,14 +263,89 @@ pathRewrite: { "^/api2": "" },
 
 ##### 使用 sass
 
-安装：`npm install node-sass --save`
+安装：`npm install node-sass --save-dev`
+
+##### 使用 less
+
+安装：`npm install less less-loader -D`
+提交代码
+
+```bash
+git add .
+git commit -am 'xxxx'
+```
+
+暴露webpack配置文件`npm run  eject`
+
+修改webpack.config.js，拷贝sass的配置改写为less
+
+```js
+//....
+const lessRegex = /\.(less)$/;
+const lessModuleRegex = /\.module\.(less)$/;
+//....
+```
+
+```js
+//...
+        {
+              test: lessRegex,
+              exclude: lessModuleRegex,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 3,
+                  sourceMap: isEnvProduction
+                    ? shouldUseSourceMap
+                    : isEnvDevelopment,
+                  modules: {
+                    mode: "icss",
+                  },
+                },
+                "less-loader"
+              ),
+              // Don't consider CSS imports dead code even if the
+              // containing package claims to have no side effects.
+              // Remove this when webpack adds a warning or an error for this.
+              // See https://github.com/webpack/webpack/issues/6571
+              sideEffects: true,
+            },
+            // Adds support for CSS Modules, but using SASS
+            // using the extension .module.less 
+            {
+              test: lessModuleRegex,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 3,
+                  sourceMap: isEnvProduction
+                    ? shouldUseSourceMap
+                    : isEnvDevelopment,
+                  modules: {
+                    mode: "local",
+                    getLocalIdent: getCSSModuleLocalIdent,
+                  },
+                },
+                "less-loader"
+              ),
+            },
+//...
+```
+
+修改react-app-env-d.ts文件，加入
+
+```ts
+//...
+declare module '*.module.less' {
+  const classes: { readonly [key: string]: string };
+  export default classes;
+}
+```
 
 ##### 修改本地调试启动端口
 
-1.  依次打开“node_modules”- “react-scripts”-“scripts”文件夹，找到并打开 start.js 文件；在 start.js 文件中查找并修改“DEFAULT_PORT”项的值即可
-2.  修改 package.json 文件中
+1. 依次打开“node_modules”- “react-scripts”-“scripts”文件夹，找到并打开 start.js 文件；在 start.js 文件中查找并修改“DEFAULT_PORT”项的值即可
+2. 修改 package.json 文件中
 
-```
+```json
 "scripts": {
 "start": "set PORT=9000 && react-scripts start",
 "build": "react-scripts build",
@@ -282,7 +358,7 @@ pathRewrite: { "^/api2": "" },
 
 修改 package.json 文件中
 
-```
+```json
 
 "eslintConfig": {
 "extends": [
@@ -302,9 +378,145 @@ pathRewrite: { "^/api2": "" },
 `npm i antd --save`
 /src/index.js 入口文件中引入样式
 
-```
+```js
 import 'antd/dist/antd.min.css';
 ```
+
+##### eslint
+
+安装执行`yarn add -D eslint`
+
+项目目录添加.eslintignore，忽略一些不需要 eslint 检测的目录和文件
+
+```txt
+.eslintrc.js
+node_modules
+dist
+.DS_Store
+*.local
+```
+
+至此，我们可以在package.json添加命令
+
+```json
+{
+  "script": {
+    "lint:js": "eslint --ext .js,.jsx,.ts,.tsx ./src"
+  }
+}
+```
+
+#### 安装 prettier
+
+`yarn add -D prettier`
+
+项目目录添加.prettierrc.js文件，我们添加常用的格式风格
+
+```js
+
+module.exports = {
+  "printWidth": 80, //一行的字符数，如果超过会进行换行，默认为80
+  "tabWidth": 2, //一个tab代表几个空格数，默认为80
+  "useTabs": false, //是否使用tab进行缩进，默认为false，表示用空格进行缩减
+  "singleQuote": false, //字符串是否使用单引号，默认为false，使用双引号
+  "semi": true, //行位是否使用分号，默认为true
+  "trailingComma": "none", //是否使用尾逗号，有三个可选值"<none|es5|all>"
+  "bracketSpacing": true, //对象大括号直接是否有空格，默认为true，效果：{ foo: bar }
+  //"parser": "babylon" //代码的解析引擎，默认为babylon，与babel相同。
+}
+
+```
+
+项目目录添加.prettierignore，忽略一些不需要 prettierg 格式化的文件
+
+```txt
+**/*.png
+**/*.svg
+package.json
+dist
+.DS_Store
+node_modules
+```
+
+至此，我们可以在package.json添加命令
+
+```json
+{
+  "script": {
+    "lint:prettier": "prettier -c --write \"src/**/*\""
+  }
+}
+```
+
+避免 eslint 和 prettier 冲突，我们需要再安装两个包
+`yarn add -D eslint-config-prettier eslint-plugin-prettier`
+安装后我们只需要在.eslintrc.js文件添加一行即可
+
+```js
+//...
+{
+  extends: [
+    // ...
+    'plugin:prettier/recommended'
+  ]
+}
+```
+
+修改规则,修改 .eslintrc.js 文件
+
+```js
+  rules: {
+    //...
+    'prettier/prettier': [
+      'error',
+      {
+        singleAttributePerLine: false, // 不强制要求一个属性占一行
+      }
+    ]
+    //....
+  }
+
+```
+
+`eslint-config-prettier`的作用是关闭 eslint 中所有不必要的或可能与 prettier 冲突的规则，让 eslint 检测代码时不会对这些规则报错或告警。
+`eslint-plugin-prettier`的作用是将 prettier 作为 ESLint 的规则来使用，相当于代码不符合 Prettier 的标准时，会报一个 ESLint 错误，同时也可以通过 eslint --fix 来进行格式化。
+
+#### 安装 stylelint
+
+检测 css 样式代码质量，其实很多项目都是不检测的，如果不做这步可以忽略。
+`yarn add -D stylelint stylelint-config-standard`
+项目目录中添加.stylelintrc.js文件
+
+```js
+module.exports = {
+  extends: ['stylelint-config-standard'],
+};
+```
+
+我们使用了官方推荐的stylelint-config-standard配置就好
+
+至此，我们可以在package.json添加命令
+
+```js
+{
+  "script": {
+    "lint:style": "stylelint \"**/*.css\""
+  }
+}
+```
+
+同样的，我们统一用 prettier 来格式化 css 代码。 需要安装stylelint插件来避免与prettier冲突。
+`stylelint-config-prettier`，作用是关闭 stylelint 所有不必要的或可能与 prettier 冲突的规则。但是在 Stylelint v15 版本之后，Stylelint 默认关闭了所有与 prettier 相冲突的风格规则，所以不需要安装`stylelint-config-prettier`了。
+`stylelint-prettier`，开启了以 prettier 为准的规则，并将报告错误给 stylelint
+修改.stylelintrc.js文件
+
+```js
+module.exports = {
+  extends: ['stylelint-config-standard', 'stylelint-prettier/recommended'],
+};
+```
+
+我们如果使用vscode开发，一定要安装ESlint、Stylelint、Prettier这三个插件，只要项目安装了ESlint和Stylelint包，那么Vscode可以实时把代码质量问题报红提示，对于强迫症的人，肯定想及时把报红消灭
 
 ### 创建后端项目
 
@@ -313,7 +525,7 @@ import 'antd/dist/antd.min.css';
 
 - 启动项目
 
-`http://dd
+`<http://dd>
 
 #### node 实例
 
@@ -361,4 +573,4 @@ Failed to parse source map: 'webpack://antd/./components/icon/style/index.less' 
 ```
 
 解决方法: antd-mobile 导入组件样式时加这个 min
-`import 'antd/dist/antd.min.css'; `
+`import 'antd/dist/antd.min.css';`

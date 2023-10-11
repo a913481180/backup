@@ -486,6 +486,49 @@ export default {
 
 ```
 
+## 下载文件
+
+② 将文件流转换为blob链接
+③ blob链接转化时要注意添加mime类型
+（移动端不加此步会导致下载失效）
+④ js创建一个a标签，并触发click点击下载
+
+```js
+export const downloadFile = (data: any, fileName: string): void => {
+  // // data为blob格式
+  const blob = new Blob([data], {
+    type: 'text/javascript',
+  });
+  //pc
+  // const downloadElement = document.createElement('a');
+  // const href = window.URL.createObjectURL(blob);
+  // downloadElement.href = href;
+  // downloadElement.download = fileName;
+  // document.body.appendChild(downloadElement);
+  // downloadElement.click();
+  // document.body.removeChild(downloadElement);
+  // window.URL.revokeObjectURL(href);
+
+//移动端
+  const reader = new FileReader();
+  // 传入被读取的blob对象
+  reader.readAsDataURL(blob);
+  // 读取完成的回调事件
+  reader.onload = (e) => {
+    const a = document.createElement('a');
+    a.download = fileName;
+    a.style.display = 'none';
+    // 生成的base64编码
+    const url = reader.result;
+    a.href = url as string;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+};
+
+```
+
 ## js获取选择的文本
 
 ⾮IE浏览器获取选中⽂本：
@@ -1100,4 +1143,68 @@ forceReload() {
 //由于window.location.reload(true)已被弃用。您可以使用：
 window.location.href = window.location.href,
 //强制重新加载并清除缓存。
+```
+
+## new Date()的浏览器兼容性问题
+
+当我们需要将一串日期字符串转换为具体的Date格式的时候，往往需要用到new Date("xxxx")方法。
+
+当时在IE、safari浏览器下，会遇到这种问题：
+
+`new Date('2016-01-01 00:00:00')`    //却返回这个值Invalid Date，转换失败
+但在chrome、FF返回的正确的结果，所以不同的浏览器还是存在差异的，以下列出了所有浏览器都支持的方式。
+
+```js
+ var d = new Date(2011, 01, 07); // yyyy, mm-1, dd  
+ var d = new Date(2011, 01, 07, 11, 05, 00); // yyyy, mm-1, dd, hh, mm, ss  
+ var d = new Date("02/07/2011"); // "mm/dd/yyyy"  
+ var d = new Date("02/07/2011 11:05:00"); // "mm/dd/yyyy hh:mm:ss"  
+ var d = new Date(1297076700000); // milliseconds  
+ var d = new Date("Mon Feb 07 2011 11:05:00 GMT"); // ""Day Mon dd yyyy hh:mm:ss GMT/UTC
+ ```
+
+## js时间戳转换成日期的方法
+
+`(new Date(parseInt(n))).toLocaleDateString()`
+
+## 封装一个获取时间的方法
+
+```js
+function gettime(){
+var time = new Date();
+var h=time.getHours();
+h= h<10 ? "0"+h : h;  //小于10前面添加0
+var m=time.getMinutes();
+var s=getSeconds();
+return h +':'+ m +':'+ s;
+}
+console.log(gettime());
+
+```
+
+## js 时分秒转化为秒
+
+```js
+var time = '00:02:10';
+var hour = time.split[':'](0);
+var min = time.split[':'](1);
+var sec = time.split[':'](2);
+s = Number(hour*3600) + Number(min*60) + Number(sec);
+console.log(s);//130
+```
+
+## 触发input-file的click事件
+
+`document.querySelector('#file').click()`
+
+## 清空input-file值
+
+```js
+//1.###
+var test = document.getElementById('test');
+test.value = '';  //test的value不能设为有字符的值，但是可以设置为空值
+
+//2.###
+var test = document.getElementById('test');
+test.outerHTML = test.outerHTML; //重新初始化了test的html
 ```

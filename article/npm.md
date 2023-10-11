@@ -8,7 +8,15 @@ tags:
 ---
 
 ## NPM
-
+>
+>主要的npm版本更新日程：
+>npm@v1.0.0 首次发布--2010年
+>npm@v3.0.0 node_modules目录结构扁平化 --2015年06月
+>npm@4.0.0 package-lock.json前身npm-shrinkwrap.json用于依赖锁定--2016年10月
+>npm@v5.0.0 package-lock.json默认生成，并兼容npm-shrinkwrap.json，重构npm-cache，大大提升下载速度 --2017年05月
+>npm@v5.2.0 npx命令发布 --2017年07月
+>npm@v6.0.0 增加npm init --2018年05月
+>
 ### 一，包的安装/更新/卸载
 
 `npm i` 或者`npm install`装包,默认安装最新版本，直接`npm i`会安装`package.json`中 dependencies 的所有包
@@ -132,9 +140,54 @@ main 设置入口文件，入口文件需和 package 同级，如不同级，则
 
 `npm unpublish 包名 --force`
 
+### npx
+
+npx是npm5.2版本新增的一个命令，如果npm版本没到v5.2，请运行`npm install -g npx`
+
+#### 可以运行本地的模块
+
+例如在vue项目中，想运行本地的 `vue-cli-service serve` 如果直接在命令行运行会报错：`找不到命令`
+所以我们通常这样：
+在package.json中：
+
+```json
+//....其它配置
+"scripts": {
+    "dev": "vue-cli-service serve",
+ },
+ //....其它配置
+```
+
+然后：`npm run dev`
+
+然而现在，通过npx可以这样：`npx cli-service serve`,运行成功
+
+#### npx方便使用一次就丢弃的情况，不会全局安装
+
+例如create-react-app，以往我们需要安装全局的包。但是使用一次后面几乎就不怎么使用了，非常浪费磁盘空间。现在我们可以用`npx create-react-app myapp`，用完就删，真香！
+如果第一次使用这个命令，npx会下载create-react-app放在临时文件中，过一段时间会自动清除，注意不会立即清除，我测试发现第二次运行`npx create-react-app myapp`不会重新下载，它会从缓存中获取。
+
+#### npm init和npx相似
+
+在npm@6版本中，增加了一个新命令`npm init <pkg>`
+这两个命令是等价的：
+`npm init react-app myapp`
+`npx create-react-app myapp`
+`npm init <pkg>`对与create开头的脚手架制定了一个特殊命令，例如create-react-app、create-esm。`npm init` 下载时会默认对安装的pkg包添加create前缀，同时像npx一样不会全局安装，只是运行一次，后面会删除。
+
+但`npm init <pkg>`不能完全取代npx，例如运行`npm init http-server` 本意是想一次性启动一个本地服务 结果报错.途中可以看到http-server被变成了create-http-server，所以就找不到该模块，推荐用npx就好，至少使用起来更可控。
+
 ## YARN
 
 > Yarn 是由 Facebook、Google、Exponent 和 Tilde 联合推出了一个新的 JS 包管理工具 。
+>yarn相当于npm优势（早期）：
+>这里列出一些早期的yarn相对于npm比较大的优势：
+>支持离线安装（npm@5已支持）
+>依赖扁平化结构（npm@3已支持）
+>依赖安装确定性yarn.lock（npm@5增加了package-lock.json）
+>安装速度快并行下载
+>安装失败自动重试
+>等等...因为npm新版本基本上已经解决了自身的老毛病，两者没有想象中那么大的区别。
 
 安装：`npm install -g yarn`
 
@@ -177,6 +230,8 @@ npm 与 yarn 命令对比：
 ## PNPM
 
 > pnpm(Performance npm，简称高性能 npm)的作者 Zoltan Kochan 发现 yarn 并没有打算去解决上述的这些问题，于是另起炉灶，写了全新的包管理器。
+>pnpm继承了yarn和新版npm的所有优点，包括离线模式和确定性安装。
+>但是链接在一些场景下会存在兼容的问题，例如Electron 应用无法使用 pnpm、部署在 lambda 上的应用无法使用 pnpm
 
 pnpm 复刻了 npm 所有的命令，所以使用方法和 npm 一样，并且在安装目录结构上做了优化，特点是善用链接，且由于链接的优势，大多数情况下 pnpm 的安装速度比 yarn 和 npm 更快。
 

@@ -25,7 +25,7 @@ dom树：以树状结构，体现标签与标签之间的关系
   - JavaScript 能在页面中创建新的 HTML 事件
 
 - 节点类型:
-  - 元素节点：<div></div>
+  - 元素节点：`<div></div>`
   - 属性节点：id=“div1”
   - 文本节点： 文本
 
@@ -168,18 +168,18 @@ var p2 = document.getElementById("test").offsetParent;
 
 1. 通过获取父亲节点再获取子节点来获取兄弟节点
 
-```js
-var brother1 = document.getElementById("test").parentNode.children[1];
-```
+    ```js
+    var brother1 = document.getElementById("test").   parentNode.children[1];
+    ```
 
 2. 获取上一个兄弟节点
 
 在获取前一个兄弟节点的时候可以使用`previousSibling`和`previousElementSibling`。他们的区别是`previousSibling`会匹配字符，包括换行和空格，而不是节点。`previousElementSibling`则直接匹配节点。
 
-```js
-var brother2 = document.getElementById("test").previousElementSibling;
-var brother3 = document.getElementById("test").previousSibling;
-```
+   ```js
+    var brother2 = document.getElementById("test"). previousElementSibling;
+    var brother3 = document.getElementById("test"). previousSibling;
+   ```
 
 3. 获取下一个兄弟节点
 
@@ -506,6 +506,183 @@ target.style.backgroundColor="red";
 }
 ```
 
+### HTML 事件
+
+HTML 事件可以是浏览器或用户做的某些事情。
+
+写法：
+
+1. 内联模式
+2. 脚本模式/外联模式
+
+```html
+<button onclick="btnClick()"> 内联模式</button>
+
+<button id="btn">外联模式</button>
+
+<script>
+var oBtn=document.getElementById("btn");
+0Btn.onclick=function(){
+console.log("click button");
+}
+</script>
+```
+
+绑定事件格式：`元素节点.on+事件类型=匿名函数`；
+
+>系统会在事件绑定完成时，生成一个事件对象。触发事件时，系统会自动去调用事件绑定的函数，将事件对象当做第一个参数传入。
+
+```js
+function show(){
+console.log(argument.length);
+}
+
+window.onload=function(){
+var oBtn=document.getElement("btn1");
+//oBtn.onclick=show;
+
+/*
+button属性：左键0；中键1；右键2；
+
+鼠标位置：(原点位置不同）
+clientX    clientY  //可视窗口的左上角
+pageX    pageY   //整个页面的左上角（滚动也包括）
+screenX    screenY  //电脑屏幕的左上角
+*/
+
+oBtn.onclick=function(e){
+//事件对象获取的方式，固定写法
+var ev=e||window.event;
+console.log(ev);
+//console.log(ev.button);
+//console.log(ev.clientX);
+}
+}
+```
+
+循环添加
+
+```js
+var Oblock=document.querySelectorAll('div');
+   //console.log(Oblock);
+   for (var i=0 ;i< Oblock.length;i++){
+    Oblock[i].index=i;
+    Oblock[i].onmousedown=function(e){
+    console.log(this.index);
+    }
+   }
+```
+
+- window事件
+
+  - load 当页面加载完后会触发
+  - unload 当页面解析的时候触发（如刷新界面、关闭当前界面）IE浏览器兼容
+  - scroll 页面滚动
+  - resize 窗口大小发生变化的时候触发
+
+- 表单事件
+
+  - blur 失去焦点
+  - focus 获取焦点
+  - select  在输入框内选中文本时触发
+  - change 修改输入框内容并失去焦点时触发
+
+  - sumit 只对sumit按钮有效
+  - reset 只对reset按钮有效
+
+下面是一些常见的 HTML 事件：
+
+|事件 |描述|
+|-|-|
+|onchange |HTML 元素已被改变|
+|onclick |用户点击了 HTML 元素|
+|ondblclick |  双击|
+|onmouseover |用户把鼠标移动到 HTML 元素上(经过子节点会重复触发)|
+|onmouseout |用户把鼠标移开 HTML 元素(经过子节点会重复触发)|
+|onmouseenter |用户把鼠标移动到 HTML 元素上(经过子节点不会重复触发,IE8不兼容)|
+|onmouseleave |用户把鼠标移开 HTML 元素(经过子节点不会重复触发,IE8不兼容)|
+|onmousedown |鼠标任一按钮被按下|
+|onmousemove |鼠标被移动,会不停触发|
+|onmouseup |鼠标按键被松开|
+|onkeypress |用户按下键盘按键(只支持字符建，shift等没用)|
+|onkeydown |用户按下键盘按键|
+|onkeyup |用户抬起键盘按键|
+|onload |浏览器已经完成页面加载
+
+键盘事件对象属性：
+
+- shiftKey //按下shift键为true，默认为false
+- altKey
+- ctrlKey
+- metaKey  //按下win键
+- keyCode 键码  //不区分大小写，只返回大写ASCII码，支持shift、ctrl等非字符键；只在keydown下支持,可用 which兼容
+
+```js
+window.onload=function(){
+window.onkeydown=function(ev){
+var e=ev||window.event;
+var w=e.which||e.keyCode;
+console.log(w);
+}
+}
+```
+
+- charCode  键码  //区分大小写，只支持字符键，只在keypress下支持,可用 which兼容
+
+```js
+window.onload=function(){
+window.onkeypress=function(ev){
+var e=ev||window.event;
+var w=e.which||e.keyCode;
+console.log(w);
+}
+}
+```
+
+- target
+目标对象/触发对象
+
+IE8以下不兼容，可使用window.event.srcElement
+
+```js
+window.onload=function(){
+var oUl=document.getElementById("ul1");
+
+window.onkeypress=function(ev){
+var e=ev||window.event;
+var target=e.target||window.event.srcElement;
+console.log(this.tagName);
+console.log(target.innerHTML);
+}
+}
+```
+
+- 事件冒泡：由里向外逐级触发
+
+>事件冒泡：同样的事件会在该元素的所有祖先元素中依次被触发(从里到外)
+>事件捕获：从根元素开始去执行对应事件(从外到里)
+
+事件对象的属性和方法:
+`cancelBubble=true;`
+`stopPropagation();`(捕获阶段也有效)
+
+```js
+window.onload=function(){
+var oDiv=document.getElementById("div1");
+for(var i=0;i<aDivs.length;i++){
+window.onkeypress=function(ev){
+var e=ev||window.event;
+console.log(this.tagName);
+e.cancelBubble=true;
+//e.stopProgagation();
+}
+}
+}
+```
+
+>mouseover和mouseout会有冒泡效果
+>mouseenter和mouseleave没有冒泡效果
+
 ## BOM浏览器对象模型
 
 ```js
@@ -518,6 +695,22 @@ window:{
     screen:{/*...*/}
 }
 ```
+
+### 输入输出语句
+
+- alert(msg):浏览器弹窗提示
+- console.log(msg):控制台打印信息
+- innerHTML:写入HTML元素
+
+>innerHTML 和 outerHTML 的区别：1）innerHTML:从对象的起始位置到终止位置的全部内容, 不包括HTML标签。2）outerHTML:除了包含innerHTML的全部内容外, 还包含对象标签本身。
+>如需访问 HTML 元素，JavaScript 可使用 document.getElementById(id) 方法。如：`document.getElementById("demo").innerHTML = 5 + 6;`
+
+- document.write()：写入HTML输出
+
+>会解析标签
+>注意：在 HTML 文档完全加载后使用 document.write() 将会删除所有的标签 ;
+
+- prompt(info):浏览器弹出，用户输入
 
 ### window方法
 

@@ -135,12 +135,15 @@ yarn react-native run-android
 
 ```gradle
  repositories {
-        maven { url 'https://repo1.maven.org/maven2' }
-        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
         maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://https://maven.aliyun.com/repository/apache-snapshots' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         maven { url 'https://maven.aliyun.com/repository/mapr-public' }
+        maven { url 'https://maven.aliyun.com/repository/grails-core' }
+        maven { url 'https://repo1.maven.org/maven2/' }
         mavenCentral()
         google()
     }
@@ -352,6 +355,50 @@ RN 中的尺寸都是 无单位的，表示的是与设备像素密度无关的�
 获取设备宽度：Dimensions.get('window').width
 获取设备高度：Dimensions.get('window).height
 
+### 吐司 toast
+
+### 安装
+
+`yarn add react-native-root-toast`
+
+### 使用
+
+```jsx
+Toast.show("This is a message", {
+  duration: Toast.durations.LONG,
+  position: Toast.positions.BOTTOM,
+  shadow: true,
+  animation: true,
+  hideOnPress: true,
+  delay: 3,
+  onShow: () => {
+    // calls on toast\`s appear animation start
+  },
+  onShown: () => {
+    // calls on toast\`s appear animation end.
+  },
+  onHide: () => {
+    // calls on toast\`s hide animation start.
+  },
+  onHidden: () => {
+    // calls on toast\`s hide animation end.
+  },
+});
+```
+
+### 本地存储 AsyncStorage
+
+### 安装
+
+`yarn add @react-native-async-storage/async-storage`
+
+### 使用
+
+```jsx
+await AsyncStorage.setItem("my-key", textInput);
+const value = await AsyncStorage.getItem("my-key");
+```
+
 ## error
 
 ### index.android.bundle
@@ -370,7 +417,9 @@ C:\Users\Duan\/.gradle\caches\modules-2\files-2.1\com.facebook.react\react-andro
 
 根据提示，用如下命令
 
+```bash
 gradlew --warning-mode all
+```
 
 进行编译,提示如下：
 

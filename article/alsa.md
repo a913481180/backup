@@ -6,13 +6,15 @@ categories:
 ---
 
 ### alsa库下载  
+
 `ftp://ftp.alsa-project.org/pub`
 
 ### 编译安装  
+
 解压进入文件夹  
-`./configure  --prefix=/home/mine/alsa	//生成文件存放的位置`  
+`./configure  --prefix=/home/mine/alsa //生成文件存放的位置`  
 开始安装驱动
-`make && sudo make install `
+`make && sudo make install`
 
 ### 交叉编译  
 
@@ -29,31 +31,34 @@ categories:
 >--with-alsa-inc-prefix和--with-alsa-prefix分别指定了交叉编译util应用所需要的alsa-lib的头文件和库文件；--disable-alsamixer表示不编译生成alsamixer这个应用程序，因为该程序依赖于ncurses这个图形界面库，目前我们对于该库还不能交叉编译，故放弃
 
 ### 可能出现的错误  
+
 ---
 
-` error: this packages requires a curses library`  
+`error: this packages requires a curses library`  
 
 **解决办法：**  
 
 `apt-get install libncurses5-dev`
 
+---
 
---- 
-
-` error: panelw library not found`  
+`error: panelw library not found`  
 
 **解决办法：**
-```
+
+```bash
 sudo ln -s libpanelw.so.5 /usr/lib/libpanelw.so
 sudo ln -s libformw.so.5 /usr/lib/libformw.so
 sudo ln -s libmenuw.so.5 /usr/lib/libmenuw.so
 sudo ln -s libncursesw.so.5 /lib/libncursesw.so
 ```
---- 
+
+---
 
 **解决办法：**
 
 根据自己的错误提示来输入命令  
+
 ```
 如果提示是t-ru.gmo的话，就用命令：touch alsaconf/po/t-ru.gmo
 如果提示是t-ja.gmo的话，就用命令：touch alsaconf/po/t-ja.gmo

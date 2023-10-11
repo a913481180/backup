@@ -1,11 +1,10 @@
 ---
 title: vue3
-date: 2020-11-11 20:33:33
+date: 2020-11-12 20:33:30
 categories:
   - web
 ---
 
-# VUE3.0
 
 ## 安装
 
@@ -179,11 +178,11 @@ export default{
       //响应式数据
       let a=ref(1);//引用实例对象
       let b=ref(1);//引用实例对象
-  watch(a,(newVal,oldVal)=>{//监听ref定义的响应式数据,不用加.value
-
+      watch(a,(newVal,oldVal)=>{//监听ref定义的响应式数据,不用加.value
       },{immediate:true,depp:true})
-watch([a,b],(newVal,oldVal)=>{//监听多个ref定义的响应式数据
-newVal->[.....]
+
+      watch([a,b],(newVal,oldVal)=>{//监听多个ref定义的响应式数据
+      //newVal->[.....]
       })
       let person=ref({
          a:1,
@@ -615,8 +614,9 @@ console.log($store)
 
 ```html
 <style scoped lang="scss">
-//这里是scss不是sass，这个是因为scss是sass3引入进来的，scss语法有"{}",";"而sass没有，所以sass-loader对他们的解析是不一样的
+/*这里是scss不是sass，这个是因为scss是sass3引入进来的，scss语法有"{}",";"而sass没有，所以sass-loader对他们的解析是不一样的
 # 这里写样式
+*/
 </style>
 ```
 
@@ -703,12 +703,10 @@ array.splice(0,array.length)
 
 Vue3 中的 reactivity API：
 
-```js
-reactive
-readonly
-ref
-computed
-```
+- reactive
+- readonly
+- ref
+- computed
 
 如果想要让一个对象变为响应式数据，可以使用 reactive 或 ref
 
