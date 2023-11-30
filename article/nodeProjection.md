@@ -574,3 +574,41 @@ Failed to parse source map: 'webpack://antd/./components/icon/style/index.less' 
 
 解决方法: antd-mobile 导入组件样式时加这个 min
 `import 'antd/dist/antd.min.css';`
+
+- 用create-react-app安装了react 18版本，加载官网示例的时候报错，不再支持render绑定根元素节点，否则降版本到react 17
+之前版本
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+class Test extends React.Component {
+  render() {
+    return (
+    <div>hellow</div>
+    );
+  }
+}
+ReactDOM.render(
+  <Test />,
+  document.getElementById('root')
+);
+```
+
+react 18（改动的地方有两处，一个是createRoot，另一个是ReactDOM的引入路径）
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+class Test extends React.Component {
+  render() {
+    return (
+    <div>hellow</div>
+    );
+  }
+}
+ReactDOM.createRoot(
+  document.getElementById('root')
+).render(<Test/>);
+```
