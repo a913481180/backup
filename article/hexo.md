@@ -2,20 +2,20 @@
 title: hexo搭建博客
 date: 2019-10-11 22:11:22
 categories:
-- blog
+  - blog
 ---
 
 ## 安装nodejs
 
-* archlinux:`pacman -S nodejs`
-* ubuntu
+- archlinux:`pacman -S nodejs`
+- ubuntu
 
 ## 安装npm
 
-* archlinux:
-`pacman -S npm`
-* ubuntu:
-`apt-get install npm`
+- archlinux:
+  `pacman -S npm`
+- ubuntu:
+  `apt-get install npm`
 
 ### 换源
 
@@ -47,7 +47,7 @@ categories:
 
 一路回车默认安装,打开生成的`id_rsa.pub`复制
 
-设置git用户名邮箱  
+设置git用户名邮箱
 
 ```bash
 git config --global user.name "你的账号"
@@ -102,7 +102,7 @@ source/
 
 ## Fexo
 
-* 安装
+- 安装
 
 ```bash
  cd my-blog
@@ -110,8 +110,8 @@ source/
 git clone https://github.com/forsigner/fexo.git
 ```
 
-* 配置主题
-主题配置全部在theme/fexo里面完成，所里下面所有配置指的是配置theme/fexo/_config.yml。
+- 配置主题
+  主题配置全部在theme/fexo里面完成，所里下面所有配置指的是配置theme/fexo/\_config.yml。
 
 设置基本信息
 
@@ -146,7 +146,7 @@ keywords: forsigner,前端,设计,Hexo主题,前端开发,用户体验,设计,fr
 你可以设置是否在首页直接显示文章
 
 ```yml
-init_page_content: HOME_NAV  # HOME_NAV | POST
+init_page_content: HOME_NAV # HOME_NAV | POST
 ```
 
 设置首页导航
@@ -181,7 +181,7 @@ page_nav:
 设置页面导航样式
 
 ```yml
-page_nav_style: CIRCLE  # CIRCLE|ROUND_RECT
+page_nav_style: CIRCLE # CIRCLE|ROUND_RECT
 ```
 
 设置面包屑
@@ -213,7 +213,6 @@ link_slogan:
 ```yml
 post:
   header_align: center # left|center
-
 ```
 
 启用页面
@@ -312,9 +311,9 @@ about:
   - type: me
     icon: icon-user
     text_value:
-    - "Scut，1991，Spring."
-    - "喜欢设计，擅长编程，喜欢睡懒觉."
-    - "前端开发工程师，常用 HTML / CSS / JavaScript."
+      - "Scut，1991，Spring."
+      - "喜欢设计，擅长编程，喜欢睡懒觉."
+      - "前端开发工程师，常用 HTML / CSS / JavaScript."
   - type: Github
     icon: icon-github
     text_key: Github
@@ -410,21 +409,23 @@ comments: false
 
 在 blog 根目录新建文件夹 my-blog/source/css
 然后在此目录新建一个 CSS，名字随意，如 personal-style.css
-修改fexo/_config.yml下面配置，然后你就可以写你想要的样式了
+修改fexo/\_config.yml下面配置，然后你就可以写你想要的样式了
 personal_style: /css/personal-style.css
 
 ```css
-# 如果不想启用自定义样式，注释这行就可以了
-比如我的个人自定义样式如下：
-
-@font-face {
+#
+  如果不想启用自定义样式，注释这行就可以了
+  比如我的个人自定义样式如下：
+  @font-face {
   font-family: "Meiryo";
   src: url("/fonts/Meiryo.eot");
   /* IE9 */
-  src: url("/fonts/Meiryo.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
-  url("/fonts/Meiryo.woff") format("woff"), /* chrome, firefox */
-  url("/fonts/Meiryo.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
-  url("/fonts/Meiryo.svg#Meiryo") format("svg");
+  src:
+    url("/fonts/Meiryo.eot?#iefix") format("embedded-opentype"),
+    /* IE6-IE8 */ url("/fonts/Meiryo.woff") format("woff"),
+    /* chrome, firefox */ url("/fonts/Meiryo.ttf") format("truetype"),
+    /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+      url("/fonts/Meiryo.svg#Meiryo") format("svg");
   /* iOS 4.1- */
   font-style: normal;
   font-weight: normal;
@@ -470,7 +471,7 @@ html.page-home {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('/images/bg.jpg');
+  background-image: url("/images/bg.jpg");
   background-color: transparent;
   background-size: cover;
   background-position: center center;
@@ -504,6 +505,37 @@ disqus_shortname: forsigner
 要使用 Mathjax，可以通过 Hexo 插件 hexo-renderer-mathjax支持
 
 查看 hexo-renderer-mathjax 文档
+
+## Next
+
+### Hexo 的搜索
+
+编辑 站点配置文件`_config.yml`
+
+```yml
+search:
+  path: search.json
+  field: post
+  format: html
+  limit: 10000
+```
+
+编辑 主题配置文件`themes/next/_config.yml`
+
+```yml
+#...
+local_search:
+  enable: true
+#...
+```
+
+安装插件
+
+```bash
+ npm install hexo-generator-searchdb
+ hexo clean
+ hexo g
+```
 
 ### 常见问题
 
