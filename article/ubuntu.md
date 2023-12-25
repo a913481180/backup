@@ -123,6 +123,7 @@ deb-src https://mirrors.163.com/debian/ bullseye-backports main non-free contrib
   `sudo apt-get upgrade`
 
 ## 安装软件
+>`sudo dpkg -i xxx-dev.deb`
 
 - vim
 - neofetch
@@ -160,15 +161,20 @@ deb-src https://mirrors.163.com/debian/ bullseye-backports main non-free contrib
  sudo tar -xJvf node-$VERSION-$DISTRO.tar.xz -C /usr/local/lib/nodejs 
 ```
 
-- 环境变量`~/.profile`：`export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH`
-- 刷新：`source ~/.profile`
+- 环境变量
+编辑文件`vim ~/.profile`
+添加`export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH`
+刷新：`source ~/.profile`
 - google chrome
 `https://www.google.cn/intl/zh-CN/chrome/`
 - 搜狗输入法(ubuntu20移除qt4,会出现死机情况)
 `https://shurufa.sogou.com/`
 - 百度输入法
 - 谷歌输入法(推荐)
+`sudo dpkg-reconfigure locales`选择中文`zh_CN.UTF-8 UTF-8`
 `sudo apt install fcitx fcitx-googlepinyin`
+- fcitx5中文输入法
+`sudo apt install fcitx5 fcitx5-chinese-addons`
 - 网易云、QQ 音乐
 - vscode
 - vitrulbox
@@ -199,3 +205,58 @@ deb-src https://mirrors.163.com/debian/ bullseye-backports main non-free contrib
 `sudo mkfontdir`
 运行 fc-cache 命令更新字体缓存。
 `sudo fc-cache -fv`
+
+## 压缩解压
+- zip 命令
+示例：
+```bash
+# 压缩文件
+zip -r test.zip file
+# 解压文件
+unzip test.zip
+```
+释义：
+`-r` : 递归处理
+- rar 命令
+示例：
+```bash
+# 压缩文件
+rar a -r test.rar file
+# 解压文件
+unrar x test.rar
+```
+释义：
+
+`a `: 添加到压缩文件
+
+`-r `: 递归处理
+
+`x `: 以绝对路径解压文件
+
+- tar 命令
+语法： `tar [主选项 + 辅选项] 文件或目录`
+
+示例：
+```bash
+# 压缩文件 file1 和目录 dir2 到 test.tar.gz
+tar -zcvf test.tar.gz file1 dir2
+# 解压 test.tar.gz（将 c 换成 x 即可）
+tar -zxvf test.tar.gz
+# 列出压缩文件的内容
+tar -ztvf test.tar.gz 
+```
+释义：
+
+`-z` : 使用 gzip 来压缩和解压文件
+
+`-v` : --verbose 详细的列出处理的文件
+
+`-f` : --file=ARCHIVE 使用档案文件或设备，这个选项通常是必选的
+
+`-c` : --create 创建一个新的归档（压缩包）
+
+`-x` : 从压缩包中解出文件
+
+其它：
+
+tar 命令其实并不是真的解压缩的处理者，而是使用了 gzip 或者 bzip2 等其它命令来达成，但是 gzip 等命令通常只能处理单个文件，并不方便，所以一般我们都是选择使用 tar 命令间接的完成解压缩。
