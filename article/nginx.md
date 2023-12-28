@@ -36,10 +36,10 @@ systemctl status firewalld.service
 ```bash
 server{
     gzip on;
-    gzip_type application/javascript;#压缩类型，文本文件压缩效果最好,图片视频资源压缩作用不大，大文件资源会消耗大量cpu资源不推荐
+    gzip_types application/javascript;#压缩类型，文本文件压缩效果最好,图片视频资源压缩作用不大，大文件资源会消耗大量cpu资源不推荐
     gzip_min_length 1k;#最小压缩单位，小于1k压缩意义不大
     gzip_comp_level 5;#压缩级别，1-9，数字越大压缩效果越好，但会加大cpu压力，高并发场景不建议调太高,建议5左右
-    gzip_very on;#在响应头添加very:accept-encoding,让代理服务器根据请求头识别是否启用了gzip压缩
+    gzip_vary on;#在响应头添加very:accept-encoding,让代理服务器根据请求头识别是否启用了gzip压缩
     gzip_http_version 1.1;#启用gzip压缩的最低http版本，默认1.1
     gzip_buffers 4 4k;#设置压缩所需的缓冲区大小和申请内存的倍率，如4 4k代表以4k为单位，按照原始数据大小以4k为单位的4倍申请内存。默认是申请跟原始数据相同大小的内存空间。
     gzip_static on;#静态压缩，若提前已准备好了压缩文件.gz的压缩包或者提供静态文件服务，可以启用。它可避免动态压缩，提高性能
@@ -226,3 +226,41 @@ proxy_pass http://IP:PORT;
 `proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;`
 
 现在的`$proxy_add_x_forwarded_for`变量，`X-Forwarded-For`部分包含的是用户的真实 ip，`$remote_addr`部分的值是上一台 nginx 的 ip 地址，于是通过这个赋值以后现在的`X-Forwarded-For`的值就变成了“用户的真实 ip，第一台 nginx 的 ip”，这样就清楚了吧。
+
+## 部署前端项目
+
+```conf
+server{
+  listen 8080;#监听的端口
+  location /{
+    try_files $uri $uri/ /index.html;
+    root  /home/build;##/home/build为项目打包文件所在的目录
+  }
+
+  location /apis{
+    rewrite ^.+apis/?(.*)$ $1 break;
+    proxy_pass http://192.168.2.16:8080;##接口代理到服务器
+  }
+  gzip on;#开启gzip压缩
+  gzip_min_length 1k;#大于1k的文件才压缩
+  gzip_types text/plain text/css text/javascript application/xml application/x-javascript application/javascript;#压缩类型，文本文件压缩效果最好,图片视频资源压缩作用不大，大文件资源会消耗大量cpu资源不推荐
+  gzip_disable MSIE[1-6]\.;#设置禁用浏览器进行Gzip压缩，ie6对gzip压缩支持不好，会造成假死。
+  gzip_vary on;#在响应头添加very:accept-encoding,让代理服务器根据请求头识别是否启用了gzip压缩
+}
+```
+
+## 常见错误
+
+### 403 Forbidden
+
+- 资源路径是否填写正确
+- nginx 的启动用户要和当前用户一致
+编辑`/etc/nginx/nginx.conf`
+
+```diff
+...
+- user nginx;
++ user root;
+...
+
+```
