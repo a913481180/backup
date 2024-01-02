@@ -238,9 +238,21 @@ server{
   }
 
   location /apis{
-    rewrite ^.+apis/?(.*)$ $1 break;
+    rewrite ^.+apis/?(.*)$ $1 break;##除去/apis
     proxy_pass http://192.168.2.16:8080;##接口代理到服务器
+    ## 真实ip
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    ## 504 Gateway Time-out
+    proxy_connect_timeout 300s;
+    proxy_send_timeout 300s;
+    proxy_read_timeout 300s;
+    ## 日志
+    #access_log /var/log/nginx/access.foo.log main;
+    #error_log /var/log/nginx/error.foo.log;
   }
+  client_max_body_size 10m;#Nginx默认的request body为1M
   gzip on;#开启gzip压缩
   gzip_min_length 1k;#大于1k的文件才压缩
   gzip_types text/plain text/css text/javascript application/xml application/x-javascript application/javascript;#压缩类型，文本文件压缩效果最好,图片视频资源压缩作用不大，大文件资源会消耗大量cpu资源不推荐
@@ -263,4 +275,12 @@ server{
 + user root;
 ...
 
+```
+
+### 反向代理 504 Gateway Time-out
+
+```
+  proxy_connect_timeout 300s;
+  proxy_send_timeout 300s;
+  proxy_read_timeout 300s;
 ```
