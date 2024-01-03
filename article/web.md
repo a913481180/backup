@@ -193,14 +193,18 @@ HTTP请求报文格式：`请求行`+`请求头`+`空行`+`消息体`，请求�
 
 4、A——>B：A告诉B：“好的，我知道你发收完了”
 ```
+
 ## 重绘 和 重排（回流）
+>
 >重绘不一定导致重排，但重排一定会导致重绘
 > 重排（Reflow） && 重绘（Redraw）会付出高昂的性能代价
 
 ### 重绘
+
 重绘 （Redraw）：某些元素的外观被改变所触发的浏览器行为（重新计算节点在屏幕中的绝对位置并渲染的过程）； 例如：修改元素的填充颜色，会触发重绘；
 
 下面情况会发生重绘：
+
 - color
 - border-style
 - border-radius
@@ -211,6 +215,7 @@ HTTP请求报文格式：`请求行`+`请求头`+`空行`+`消息体`，请求�
 - ...
 
 ### 重排（回流）
+
 重排 （Reflow）：重新生成布局，重新排列元素（重新计算各节点和css具体的大小和位置：渲染树需要重新计算所有受影响的节点）；例如：改元素的宽高，会触发重排；
 通过两者概念区别明显得知，重排要比重绘的成本大得多，我们应该尽量减少重排操作，减少页面性能消耗
 
@@ -224,18 +229,19 @@ HTTP请求报文格式：`请求行`+`请求头`+`空行`+`消息体`，请求�
 - 激活`CSS伪类`（例如：:hover）;
 - 设置 `style 属性`的值，因为通过设置style属性改变结点样式的话，每一次设置都会触发一次reflow;
 - 查询某些属性或调用某些计算方法：`offsetWidth`、`offsetHeigh`t等，除此之外，当我们调用getComputedStyl方法，或者IE里的 currentStyle 时，也会触发重排，原理是一样的，都为求一个“即时性”和“准确性”;
+
 ```txt
-width	height	margin	padding
-display	border-width	border	position
-overflow	font-size	vertical-align	min-height
-clientWidth	clientHeight	clientTop	clientLeft
-offsetWidth	offsetHeight	offsetTop	offsetLeft
-scrollWidth	scrollHeight	scrollTop	scrollLeft
-scrollIntoView()	scrollTo()	getComputedStyle()	
-getBoundingClientRect()	scrollIntoViewIfNeeded()	
+width height margin padding
+display border-width border position
+overflow font-size vertical-align min-height
+clientWidth clientHeight clientTop clientLeft
+offsetWidth offsetHeight offsetTop offsetLeft
+scrollWidth scrollHeight scrollTop scrollLeft
+scrollIntoView() scrollTo() getComputedStyle() 
+getBoundingClientRect() scrollIntoViewIfNeeded() 
 ```
 
-###  减少重排次数
+### 减少重排次数
 
 - 样式集中改变
 不要一条一条地修改 DOM 的样式。可以先定义好 css 的 class，然后修改 DOM 的 className。
@@ -248,7 +254,65 @@ DOM 的多个读操作（或多个写操作），应该放在一起。不要两�
 为动画的 HTML 元件使用 fixed 或 absoult 的 position，那么修改他们的 CSS 是不会 reflow 的。
 
 ## script标签中defer和async的区别
+
 多个带async属性的标签，不能保证加载的顺序；多个带defer属性的标签，按照加载顺序执行;
 
 - async属性，表示后续文档的加载和执行与js脚本的加载和执行是并行进行的，即异步执行；
 - defer属性，加载后续文档的过程和js脚本的加载(此时仅加载不执行)是并行进行的(异步)，js脚本需要等到文档所有元素解析完成之后才执行，DOMContentLoaded事件触发执行之前。
+
+## 前端路由
+
+前端路由是指在浏览器端控制页面内容切换显示的机制。在没有服务器端参与的情况下，前端路由可以根据URL的变化，对应展现不同的内容，实现页面的“伪”跳转。在现代前端开发中，单页面应用（SPA）已成为一种常见的架构风格。与传统的多页面应用（MPA）相比，SPA能够提供更加流畅的用户体验，因为它无需重新加载整个页面即可更新部分页面内容。
+
+### 路由的基本模式
+
+- Hash模式原理：
+  - 浏览器原生支持通过window.location.hash读写URL中的hash值，并且当hash值变化时，页面不会触发重新加载。
+  - SPA可以监听hashchange事件，在URL的hash部分变化时根据定义好的路由映射关系来动态渲染内容。
+
+```js
+// Hash模式的简易实现
+window.addEventListener('hashchange', routeChange);
+function routeChange() {
+  const hash = window.location.hash.slice(1); // Remove the '#' symbol
+  // 基于hash值显示不同内容
+  routerView.innerHTML = routes[hash] ? routes[hash] : routes['404'];
+}
+```
+
+- History模式原理：
+  - History API 允许SPA在浏览历史记录中添加、修改记录而不会触发页面加载。
+  - 通过history.pushState和history.replaceState可以改变URL且不重新加载页面。
+  - SPA可以监听popstate事件来响应浏览器前进、后退操作。
+
+```js
+// History模式的简易实现
+window.addEventListener('popstate', routeChange);
+function navigate(path) {
+  history.pushState({}, "", path);
+  routeChange();
+}
+function routeChange() {
+  const path = window.location.pathname;
+  // 根据pathname来渲染不同的页面组件
+  routerView.innerHTML = routes[path] ? routes[path] : routes['404'];
+}
+
+// navigate('/user'); // 导航至用户页面
+```
+
+### 前端路由的实现
+
+在实际项目中，前端路由通常借助专业的路由库（如react-router、vue-router等）来实现。而且，需要考虑到如下两个常见问题的解决方案：
+
+- 路由懒加载：
+
+为了加快首次页面加载速度，可以将不同路由对应的组件分割成独立的代码块后懒加载，仅当路由被访问时才加载对应组件。
+
+- 路由的保护与权限控制：
+
+前端路由守卫提供了在路由跳转执行前后插入逻辑的能力，可用于权限验证、数据预加载、动画过渡等。
+
+1. 使用路由导航钩子控制跳转流程，如进行权限校验。
+2. 结合状态管理和路由，在状态改变时同步URL变化，确保用户随时刷新页面或分享链接都能获得一致的界面状态。
+3. 利用`<link rel="prefetch">`或`import(/* webpackPrefetch: true */ './path/to/Component')`进行资源预获取，提高路由跳转的性能。
