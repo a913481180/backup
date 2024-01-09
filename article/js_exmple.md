@@ -45,12 +45,13 @@ function generateUUIDv4() {
           (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (num / 4)))
         ).toString(16);
       };
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, callback);
+      return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, callback);
     }
   }
 
   //使用Math.random(),时间戳生成 UUID.使用正则表达式替换字符串中的 x 和 y，其中 x 被随机的 16 进制数所取代，y 被一个特定的 16 进制数所取代，该数可以确定版本号（这里选择了版本 4）和变体号。
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    let d = new Date().getTime();
     let r = (d + Math.random()*16)%16 | 0;
     d = Math.floor(d/16);
     return (c=='x' ? r : (r&0x3|0x8)).toString(16);
