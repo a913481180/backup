@@ -40,3 +40,4 @@ categories:
 - 干净简单轻量级看图工具[Honeyview](https://wwbk.lanzoum.com/iBWdi0o8tfif)
 - WPS 教育考试专用版，纯净无广告[wps](https://ncre.neea.edu.cn/html1/report/1507/861-1.htm)
 - WPS 校园版,去掉了附加的增值服务以及广告（停止维护）
+- windows 本地播放器[potPlayer](https://flowus.cn/share/4dc25551-ad00-4d81-9421-b3fee98757a9)
