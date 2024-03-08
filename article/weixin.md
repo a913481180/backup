@@ -2,12 +2,70 @@
 title: 微信小程序
 date: 2020-01-11 20:22:22
 categories:
-- web
+  - web
 ---
+
+## 常见问题
+
+### wx.request 没有 formData 格式
+
+1. 使用 wx.upload 替代
+2. 手动拼装出 FormData 格式的字符串
+   数据体中 boundary，是 Content-Type 中的 boundary 前面加--。
+   开头和结尾还有每个 field 之间要加上 boundary
+
+```js
+// 手动拼接FormData字符串
+// 函数边界处理没怎么做，各位可自行补充
+// 数组和obj的情况没有处理，可以用postman发个请求看看格式，很简单的
+function createFormData(params = {}, boundary = "") {
+  let result = "";
+  for (let i in params) {
+    result += `\r\n--${boundary}`;
+    result += `\r\nContent-Disposition: form-data; name="${i}"`;
+    result += "\r\n";
+    result += `\r\n${params[i]}`;
+  }
+  // 如果obj不为空，则最后一行加上boundary
+  if (result) {
+    result += `\r\n--${boundary}`;
+  }
+  return result;
+}
+
+// 通用post请求
+export const post = function (url, params) {
+  return new Promise(function (resolve, reject) {
+    // 生成一个boundary字符串
+    const boundary = `----WebKitFormBoundary${new Date().getTime()}`;
+    const formData = createFormData(params, boundary);
+    console.log(formData);
+    Taro.request({
+      // 这里我用的taro，改成wx.request也一样
+      url,
+      method: "POST",
+      credentials: "include", //设置传递cookies
+      dataType: "json",
+      header: {
+        Accept: "application/json",
+        "Content-Type": `multipart/form-data; boundary=${boundary}`,
+      },
+      data: formData,
+      timeout: 5000,
+      success: function (res) {
+        resolve(res.data);
+      },
+      fail: function (error) {
+        reject(error);
+      },
+    });
+  });
+};
+```
 
 ## 结构
 
-- app.json      //配置
+### app.json //配置
 
 ```json
 {"page":[
@@ -19,24 +77,26 @@ categories:
 }
 ```
 
-- app.js  //注册小程序应用
+### app.js //注册小程序应用
 
 ```js
 App({.....})
 ```
 
-- app.wxss    //全局公共样式
+### app.wxss //全局公共样式
 
 ```css
- page{       //小程序会在所有页面加一个page ，因此应设置页面高度为100%
-            height:100%;
-        }
+page {
+  //小程序会在所有页面加一个page ，因此应设置页面高度为100%
+  height: 100%;
+}
 ```
 
-- 页面：
-page  
-\\index  
-\\-index.js  
+### 页面结构
+
+page/index/
+
+#### index.js
 
 ```js
      page({
@@ -49,7 +109,7 @@ page
          },
 
         //事件绑定
-        handleParent(){            
+        handleParent(){
             console.log('parent')
         },
         handleChild(){
@@ -57,7 +117,7 @@ page
         },
 
         //跳转至logs页面
-        toLogs(){                
+        toLogs(){
             //需要使用api
             wx,navigateTo({         //保留当前页面跳转到另一个页面
                 url:'/page/logs/logs',   //相对路径
@@ -70,7 +130,7 @@ page
 
              //修改msg数据：this.setData
              consile.log(this)  //this表示当前页面的实例对象
-             consile.log(this.data.msg)   
+             consile.log(this.data.msg)
               this.setData({
                  msg:'after'
              })
@@ -99,65 +159,73 @@ page
                 userInfo: res.detail.userInfo
             })
         }
-        
+
        },
 .....
                  })
 ```
 
-- index.wxml
+#### index.wxml
 
 ```html
-      <view class="indexcontainer">   <!--//样式-->
-        
-        <image wx:if='{{userInfo.avatarUrl}}' class="avatarUrl" src="{{userInfo.avatarUrl}}"> </image>    <!--图片路径-->
-        <botton wx:else bindgetuserinfo='handleGetUserInfo' open-type="getUserInfo">获取用户信息</botton>
-        <text class="userName"> 文字文字 </text>
-        <text>{{msg}}</text>    <!--//使用数据-->
-        <!--  事件绑定  -->
-    <!--    <view class="hello" bindtap="handleParent">  <text bindtap='handleChild'>hello</text>   </view>  -->
+<view class="indexcontainer">
+  <!--//样式-->
 
-      <view class="hello" bindtap="toLogs">  
-        <text>hello</text>  
-       </view> 
-    </view>
+  <image
+    wx:if="{{userInfo.avatarUrl}}"
+    class="avatarUrl"
+    src="{{userInfo.avatarUrl}}"
+  >
+  </image>
+  <!--图片路径-->
+  <botton wx:else bindgetuserinfo="handleGetUserInfo" open-type="getUserInfo"
+    >获取用户信息</botton
+  >
+  <text class="userName"> 文字文字 </text>
+  <text>{{msg}}</text>
+  <!--//使用数据-->
+  <!--  事件绑定  -->
+  <!--    <view class="hello" bindtap="handleParent">  <text bindtap='handleChild'>hello</text>   </view>  -->
+
+  <view class="hello" bindtap="toLogs">
+    <text>hello</text>
+  </view>
+</view>
 ```
 
-- index.wxss      //样式
+#### index.wxss //样式
 
 ```css
-             .indexContainer{
+.indexContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #f0f;       /*只有16进制*/
+  background: #f0f; /*只有16进制*/
   height: 100%;
 }
-.avatarUrl{         /*头像尺寸样式*/
+.avatarUrl {
+  /*头像尺寸样式*/
   width: 200rpx;
-  height:200rpx;
-  border-radius: 50%;      /*圆角*/
+  height: 200rpx;
+  border-radius: 50%; /*圆角*/
   margin: 100rpx 0;
 }
-.usrName{
+.usrName {
   font-size: 32rpx;
   margin: 100rpx 0;
 }
-.hello{
-  width:300rpx;
+.hello {
+  width: 300rpx;
   height: 80rpx;
   line-height: 80rpx;
   text-align: center;
   font-size: 28rpx;
   border: 1rpx solid #333;
-  border-radius:10rpx
+  border-radius: 10rpx;
 }
 ```
 
-- index.json  
-
-- 日志：
-log/logs.json
+#### index.json
 
 ```json
 {
@@ -166,6 +234,8 @@ log/logs.json
 }
 ```
 
+## 语法
+
 ### 绑定事件
 
 bind：冒泡事件
@@ -173,7 +243,7 @@ catch：非冒泡
 
 ### 条件渲染
 
-```
+```js
 wx:if='条件'
 wx:else
 wx:elif='条件'
@@ -183,45 +253,38 @@ wx:elif='条件'
 
 ```html
 //index.wxml
-<view bindtap="changeIndex" data-src1="我固定参数1" data-src2="我是固定参数2" >
-  
+<view bindtap="changeIndex" data-src1="我固定参数1" data-src2="我是固定参数2">
 </view>
-//index.js
-page({
- data:{
-  
- },
- changeIndex(e){
- console.log(e.currentTarget.dataset.src1); //我是固定参数1
- console.log(e.currentTarget.dataset.src2); //我是固定参数2
- }
-});
-
+//index.js page({ data:{ }, changeIndex(e){
+console.log(e.currentTarget.dataset.src1); //我是固定参数1
+console.log(e.currentTarget.dataset.src2); //我是固定参数2 } });
 ////如果需要传递动态的参数 例如遍历渲染时 想传递 index 给 changeIndex方法
 //index.wxml
-<view wx:for="{{lists}}" wx:for-index="index" wx:key="index" data-index="{{index}}" >
-{{item.title}}
+<view
+  wx:for="{{lists}}"
+  wx:for-index="index"
+  wx:key="index"
+  data-index="{{index}}"
+>
+  {{item.title}}
 </view>
-//index.js
-page({
- data:{
- lists:[{title:'参数1',id:1},{title:'参数2',id:2}]
- },
- changeIndex(e){
- console.log(e.currentTarget.dataset.index);
- }
-})
+//index.js page({ data:{ lists:[{title:'参数1',id:1},{title:'参数2',id:2}] },
+changeIndex(e){ console.log(e.currentTarget.dataset.index); } })
 ```
 
----
+### 微信小程序中局部更新对象或者数组中的某个数据
 
-### 布局
+```js
+this.setData({
+  ["list[0][1].a"]: 0,
+});
+```
 
-### 常用功能
+## 常用功能
 
 1. 导航栏
 
-在app.json文件内：
+在 app.json 文件内：
 
 ```json
 {
@@ -241,7 +304,7 @@ page({
         {
             "pagePath":"路径",
             "text":"文字"
- 
+
         }
         ]
     }
@@ -251,7 +314,7 @@ page({
 
 2. input
 
-在index.js文件夹内
+在 index.js 文件夹内
 
 ```js
 page({
@@ -278,7 +341,7 @@ page({
 })
 ```
 
-在index.wxml文件中
+在 index.wxml 文件中
 
 ```html
 \<input bindinput="first" placeholder="文字">\</input>
@@ -295,82 +358,94 @@ page({
 - textarea
 
 ```html
-//auto-focus: 自动聚焦
-//maxlength="-1":不限长度
- \<textarea auto-focus placeholder="Text"maxlength="-1" bindinput="text_input" value="{{record}}"/>
+//auto-focus: 自动聚焦 //maxlength="-1":不限长度 \<textarea
+  auto-focus
+  placeholder="Text"
+  maxlength="-1"
+  bindinput="text_input"
+  value="{{record}}"
+/>
 ```
 
 - 选择照片
 
 ```js
- wx.chooseImage({
-      count: 1, //数量 默认9
-      sizeType: ['original', 'compressed'], //图片质量：原图，压缩
-      sourceType: ['album', 'camera'],      //拍照，相册
-      success: (res) => {
-        //成功后把地址放入全局变量中,
-        app.data.picpath = res.tempFilePaths[0];
-        //跳转到图片裁剪界面，文字识别界面
-        wx.navigateTo({
-          url: '/pages/ocr/ocr',
-        })
-
-      }
-    })
-
+wx.chooseImage({
+  count: 1, //数量 默认9
+  sizeType: ["original", "compressed"], //图片质量：原图，压缩
+  sourceType: ["album", "camera"], //拍照，相册
+  success: (res) => {
+    //成功后把地址放入全局变量中,
+    app.data.picpath = res.tempFilePaths[0];
+    //跳转到图片裁剪界面，文字识别界面
+    wx.navigateTo({
+      url: "/pages/ocr/ocr",
+    });
+  },
+});
 ```
 
 - 跳转界面
 
 ```js
- //返回界面
-            wx.navigateBack({
-              delta: 0,     //0表示上一层
-            });
+//返回界面
+wx.navigateBack({
+  delta: 0, //0表示上一层
+});
 
-
- //关闭当前页面跳转到
-  wx.redirectTo({
-    url: '/pages/index/index',
-  })
+//关闭当前页面跳转到
+wx.redirectTo({
+  url: "/pages/index/index",
+});
 ```
 
-- 获取列表index
+- 获取列表 index
 
-wx:for控制属性绑定一个数组进行列表渲染。
->（当前项的下标变量名默认为 index，数组当前项的变量名默认为 item，改名：使用 wx:for-item=“jjj" 可以指定数组当前元素的变量名，
->使用 wx:for-index =”aa“可以指定数组当前下标的变量名。
-这个注意了。wx:key还是要加上的，不然一直报这个提示错误：如果列表中项目的位置会动态改变或者有新的项目添加到列表中，并且希望列表中的项目保持自己的特征和状态（如 \<input/> 中的输入内容，\<switch/> 的选中状态），需要使用 wx:key 来指定列表中项目的唯一的标识符。
+wx:for 控制属性绑定一个数组进行列表渲染。
 
->wx:key 的值以两种形式提供
-字符串，代表在 for 循环的 array 中 item 的某个 property，该 property 的值需要是列表中唯一的字符串或数字，且不能动态改变。
->保留关键字 *this 代表在 for 循环中的 item 本身，这种表示需要 item 本身是一个唯一的字符串或者数字，如：
-当数据改变触发渲染层重新渲染的时候，会校正带有 key 的组件，框架会确保他们被重新排序，而不是重新创建，以确保使组件保持自身的状态，并且提高列表渲染时的效率。如不提供 wx:key，会报一个 warning， 如果明确知道该列表是静态，或者不必关注其顺序，可以选择忽略。）
+> （当前项的下标变量名默认为 index，数组当前项的变量名默认为 item，改名：使用 wx:for-item=“jjj" 可以指定数组当前元素的变量名，
+> 使用 wx:for-index =”aa“可以指定数组当前下标的变量名。
+> 这个注意了。wx:key 还是要加上的，不然一直报这个提示错误：如果列表中项目的位置会动态改变或者有新的项目添加到列表中，并且希望列表中的项目保持自己的特征和状态（如 \<input/> 中的输入内容，\<switch/> 的选中状态），需要使用 wx:key 来指定列表中项目的唯一的标识符。
+
+> wx:key 的值以两种形式提供
+> 字符串，代表在 for 循环的 array 中 item 的某个 property，该 property 的值需要是列表中唯一的字符串或数字，且不能动态改变。
+> 保留关键字 \*this 代表在 for 循环中的 item 本身，这种表示需要 item 本身是一个唯一的字符串或者数字，如：
+> 当数据改变触发渲染层重新渲染的时候，会校正带有 key 的组件，框架会确保他们被重新排序，而不是重新创建，以确保使组件保持自身的状态，并且提高列表渲染时的效率。如不提供 wx:key，会报一个 warning， 如果明确知道该列表是静态，或者不必关注其顺序，可以选择忽略。）
 
 ```html
 wxml:
- <view class="touch-item {{item.isTouchMove ? 'touch-move-active' : ''}}" data-index="{{index}}" bindtouchstart="touchstart" bindtouchmove="touchmove" wx:for="{{item1}}"   wx:key="i">
- <view class="del" catchtap="del" style="border-radius:20rpx 0 0 20rpx;"  data-detail="{{item.content.text}} " data-index="{{index}}">删除</view></view>
-js:
- //列表删除
-del(e){
-    this.data.item1.splice(e.currentTarget.dataset.index, 1)
-    this.setData({
-     item1: this.data.item1
-    })}
+<view
+  class="touch-item {{item.isTouchMove ? 'touch-move-active' : ''}}"
+  data-index="{{index}}"
+  bindtouchstart="touchstart"
+  bindtouchmove="touchmove"
+  wx:for="{{item1}}"
+  wx:key="i"
+>
+  <view
+    class="del"
+    catchtap="del"
+    style="border-radius:20rpx 0 0 20rpx;"
+    data-detail="{{item.content.text}} "
+    data-index="{{index}}"
+    >删除</view
+  ></view
+>
+js: //列表删除 del(e){ this.data.item1.splice(e.currentTarget.dataset.index, 1)
+this.setData({ item1: this.data.item1 })}
 ```
 
 - 搜索
 
 ```js
-for(var i=0,j=0;i<app.data.item2.length;i++){
-   if(app.data.item2[i].delete==0){
-     //模糊搜索
-  if(app.data.item2[i].content.text.indexOf(this.data.search_key)!=-1){
-    this.data.item1[j]=app.data.item2[i];
-    j++;
+for (var i = 0, j = 0; i < app.data.item2.length; i++) {
+  if (app.data.item2[i].delete == 0) {
+    //模糊搜索
+    if (app.data.item2[i].content.text.indexOf(this.data.search_key) != -1) {
+      this.data.item1[j] = app.data.item2[i];
+      j++;
+    }
   }
-}
 }
 ```
 
@@ -398,14 +473,14 @@ wx.cloud.init({         //初始化
 });
 const db=wx.cloud.database();
 
-Page({ 
+Page({
     var that = this;//定义到这里，让that先获取到外面方法的this
     db.collection('my_data').where({_openid:app.data.useropenid}).get({
       success: function(res) {
     //    that.setData({item2:res.data[0].array})
     //用户数据放入全局变量中
-    app.data.item2=res.data[0].array; 
-    
+    app.data.item2=res.data[0].array;
+
     //更新数据 ，添加新条目
   db.collection('my_data')
   .doc(app.data.useropenid)     //_id
@@ -455,108 +530,79 @@ module.exports = {
   this.setData({
     record_time:time
   })
-  
+
   })
 ```
 
-3. 布局
+- AudioContext
+  AudioContext 对象用于与 audio 组件绑定，通过它可以在逻辑层操作视图层的 audio 组件。可以用 wx.createAudioContext(audioId)接口创建并返回 audio 的上下文对象 AudioContext。
 
-- 固定按钮
-
-```html
-wxml:
-<view class="round-click" bindtap="new_goto">+</view>
-wxss:
-  .round-click{
-
-    height: 120rpx;
-
-    width: 120rpx;
-    background-color:rgb(246, 246, 246,0.9);
-    border-radius: 100%;
-    position: fixed;
-    bottom: 100rpx;
-    right: 20rpx;
-
-    display: flex;
-    align-items: center;
- font-size:70rpx;
-    justify-content: center;
-    z-index: 9;
-
-}
-```
-
-wx.request发起 HTTPS 网络请求,data请求的参数,success接口调用成功的回调函数 
-
-AudioContext对象用于与audio组件绑定，通过它可以在逻辑层操作视图层的audio组件。可以用wx.createAudioContext(audioId)接口创建并返回audio的上下文对象AudioContext。
-
-## 跳转
+- 跳转
 
 1. 利用小程序提供的 API 跳转：
 
 ```js
 // 保留当前页面，跳转到应用内的某个页面，使用wx.navigateBack可以返回到原页面。
-// 注意：调用 navigateTo 跳转时，调用该方法的页面会被加入堆栈，但是 redirectTo 
+// 注意：调用 navigateTo 跳转时，调用该方法的页面会被加入堆栈，但是 redirectTo
 wx.navigateTo({
-  url: 'page/home/home?user_id=111'
-})
-复制代码
+  url: "page/home/home?user_id=111",
+});
+复制代码;
 // 关闭当前页面，返回上一页面或多级页面。可通过 getCurrentPages() 获取当前的页面栈，决定需要返回几层。
 
 wx.navigateTo({
-  url: 'page/home/home?user_id=111'　　// 页面 A
-})
+  url: "page/home/home?user_id=111", // 页面 A
+});
 wx.navigateTo({
-  url: 'page/detail/detail?product_id=222'　　// 页面 B
-})
+  url: "page/detail/detail?product_id=222", // 页面 B
+});
 // 跳转到页面 A
 wx.navigateBack({
-  delta: 2
-})
-复制代码
+  delta: 2,
+});
+复制代码;
 // 关闭当前页面，跳转到应用内的某个页面。
 wx.redirectTo({
-  url: 'page/home/home?user_id=111'
-})
+  url: "page/home/home?user_id=111",
+});
 // 跳转到tabBar页面（在app.json中注册过的tabBar页面），同时关闭其他非tabBar页面。
 wx.switchTab({
-  url: 'page/index/index'
-})
+  url: "page/index/index",
+});
 // 关闭所有页面，打开到应用内的某个页面。
 wx.reLanch({
-  url: 'page/home/home?user_id=111'
-})
+  url: "page/home/home?user_id=111",
+});
 ```
 
-原理：wxml中不能直接使用较高级的js语法，如‘.toFixed’，‘toString()’，但可以通过引入wxs模块实现效果
+原理：wxml 中不能直接使用较高级的 js 语法，如‘.toFixed’，‘toString()’，但可以通过引入 wxs 模块实现效果
 
 ```js
-1.新建`filter.wxs`
-var filters = {    
-    toFix: function (value) {       
-        return value.toFixed(2) // 此处2为保留两位小数，保留几位小数，这里写几    
-    },
-    toStr: function (value) {       
-        return value.toString()
-    },
-    toNum: function (value) {       
-        return value.toNumber()
-    },
-}
- 
-module.exports = {   
-    toFix: filters.toFix,
-    toStr: filters.toStr,
-    toNum: filters.toNum,//暴露接口调用
-}
-2.WXML中引入WXS
-<wxs module="filters" src="../../utils/filters.wxs"></wxs>
-3.在WXML中使用
-<view>
-{{ filters.toFix(price) }}
-</view>
-　　其他如toString(),toNumber()也可用此类似方法
+// 1.新建`filter.wxs`
+var filters = {
+  toFix: function (value) {
+    return value.toFixed(2); // 此处2为保留两位小数，保留几位小数，这里写几
+  },
+  toStr: function (value) {
+    return value.toString();
+  },
+  toNum: function (value) {
+    return value.toNumber();
+  },
+};
+
+module.exports = {
+  toFix: filters.toFix,
+  toStr: filters.toStr,
+  toNum: filters.toNum, //暴露接口调用
+};
+// 2.WXML中引入WXS
+// <wxs module="filters" src="../../utils/filters.wxs"></wxs>
+// 3.在WXML中使用
+// <view>
+// {{ filters.toFix(price) }}
+// </view>
+// 　　其他如toString(),toNumber()也可用此类似方法
 ```
 
 ## 虚拟列表
@@ -564,95 +610,191 @@ module.exports = {
 - wxml
 
 ```html
-<scroll-view id='scrollView' style="margin-top:80rpx;height:calc(100% - 180rpx);" scroll-y="true"
-  scroll-with-animation="true" enable-back-to-top="true" refresher-enabled="true" refresher-background="#f6f6f6"
-  refresher-triggered="true" bindscrolltolower="listScrollBottom" bindscrolltoupper="listScrollTop"
-  upper-threshold="{{listEmptyView+100}}" lower-threshold="100" scroll-top="{{currentListPosition}}">
-
-  <view wx:if="{{list.length==0}}" style="text-align:center;color:gray;padding:40rpx;">还没有动态哦，快去发一条吧(。・∀・)ノ</view>
+<scroll-view
+  id="scrollView"
+  style="margin-top:80rpx;height:calc(100% - 180rpx);"
+  scroll-y="true"
+  scroll-with-animation="true"
+  enable-back-to-top="true"
+  refresher-enabled="true"
+  refresher-background="#f6f6f6"
+  refresher-triggered="true"
+  bindscrolltolower="listScrollBottom"
+  bindscrolltoupper="listScrollTop"
+  upper-threshold="{{listEmptyView+100}}"
+  lower-threshold="100"
+  scroll-top="{{currentListPosition}}"
+>
+  <view
+    wx:if="{{list.length==0}}"
+    style="text-align:center;color:gray;padding:40rpx;"
+    >还没有动态哦，快去发一条吧(。・∀・)ノ</view
+  >
   <view id="listContainer{{index}}" wx:for="{{list}}" wx:key="index">
-    <view wx:if="{{item.length==undefind}}" style="height:{{item.height}}px"></view>
+    <view
+      wx:if="{{item.length==undefind}}"
+      style="height:{{item.height}}px"
+    ></view>
     <view wx:else>
       <view class="main_container" wx:for="{{item}}" wx:key="i">
-        <image style="width:100rpx;height:100rpx;border-radius:50%;" src="{{item.avatar}}">
+        <image
+          style="width:100rpx;height:100rpx;border-radius:50%;"
+          src="{{item.avatar}}"
+        >
         </image>
         <view class="main_container_right">
           <view>
             <view class="main_container_name">{{item.userName}} </view>
-            <view style="display:inline-block;1font-size:30rpx;font-weight:400;color:#536471;"> • {{item.createTime}}
+            <view
+              style="display:inline-block;1font-size:30rpx;font-weight:400;color:#536471;"
+            >
+              • {{item.createTime}}
             </view>
           </view>
           <!-- 文字 -->
 
-          <view style="padding-left:20rpx;"><text>{{item.content}}</text>
+          <view style="padding-left:20rpx;"
+            ><text>{{item.content}}</text>
             <!-- 视频 -->
-            <view data-src="{{item.url}}" wx:if="{{item.hasVideo&&item.url.length!=0}}" bindtap="videoPreview"
-              class="main_container_video">
+            <view
+              data-src="{{item.url}}"
+              wx:if="{{item.hasVideo&&item.url.length!=0}}"
+              bindtap="videoPreview"
+              class="main_container_video"
+            >
               <text style="font-size:100rpx;" class="iconfont icon-play"></text>
             </view>
 
-            <image wx:if="{{!item.hasVideo&&item.url.length==1}}" bindtap="imgPreview" data-src="{{item.url}}"
-              data-current="0" mode="aspectFill" class="main_container_img1" src="{{item.url[0]}}">
+            <image
+              wx:if="{{!item.hasVideo&&item.url.length==1}}"
+              bindtap="imgPreview"
+              data-src="{{item.url}}"
+              data-current="0"
+              mode="aspectFill"
+              class="main_container_img1"
+              src="{{item.url[0]}}"
+            >
             </image>
             <view wx:elif="{{item.url.length==2}}" class="main_container_img2">
-              <image bindtap="imgPreview" data-src="{{item.url}}" data-current="0" mode="aspectFill"
-                src="{{item.url[0]}}">
+              <image
+                bindtap="imgPreview"
+                data-src="{{item.url}}"
+                data-current="0"
+                mode="aspectFill"
+                src="{{item.url[0]}}"
+              >
               </image>
-              <image bindtap="imgPreview" data-src="{{item.url}}" data-current="1" mode="aspectFill"
-                src="{{item.url[1]}}">
+              <image
+                bindtap="imgPreview"
+                data-src="{{item.url}}"
+                data-current="1"
+                mode="aspectFill"
+                src="{{item.url[1]}}"
+              >
               </image>
             </view>
             <view wx:elif="{{item.url.length==3}}" class="main_container_img3">
-              <image bindtap="imgPreview" data-src="{{item.url}}" data-current="0" mode="aspectFill"
-                src="{{item.url[0]}}">
+              <image
+                bindtap="imgPreview"
+                data-src="{{item.url}}"
+                data-current="0"
+                mode="aspectFill"
+                src="{{item.url[0]}}"
+              >
               </image>
               <view class="main_container_img3_item">
-                <image bindtap="imgPreview" data-src="{{item.url}}" data-current="1" mode="aspectFill"
-                  src="{{item.url[1]}}"></image>
-                <image bindtap="imgPreview" data-src="{{item.url}}" data-current="2" mode="aspectFill"
-                  src="{{item.url[2]}}"></image>
+                <image
+                  bindtap="imgPreview"
+                  data-src="{{item.url}}"
+                  data-current="1"
+                  mode="aspectFill"
+                  src="{{item.url[1]}}"
+                ></image>
+                <image
+                  bindtap="imgPreview"
+                  data-src="{{item.url}}"
+                  data-current="2"
+                  mode="aspectFill"
+                  src="{{item.url[2]}}"
+                ></image>
               </view>
             </view>
             <view wx:elif="{{item.url.length==4}}" class="main_container_img4">
               <view class="main_container_img4_item">
-                <image bindtap="imgPreview" data-src="{{item.url}}" data-current="0" mode="aspectFill"
-                  style=" border-radius:  16rpx 0 0 0;" src="{{item.url[0]}}"></image>
-                <image bindtap="imgPreview" data-src="{{item.url}}" data-current="1" mode="aspectFill"
-                  style=" border-radius:   0 16rpx 0 0;" src="{{item.url[1]}}"></image>
+                <image
+                  bindtap="imgPreview"
+                  data-src="{{item.url}}"
+                  data-current="0"
+                  mode="aspectFill"
+                  style=" border-radius:  16rpx 0 0 0;"
+                  src="{{item.url[0]}}"
+                ></image>
+                <image
+                  bindtap="imgPreview"
+                  data-src="{{item.url}}"
+                  data-current="1"
+                  mode="aspectFill"
+                  style=" border-radius:   0 16rpx 0 0;"
+                  src="{{item.url[1]}}"
+                ></image>
               </view>
               <view class="main_container_img4_item">
-                <image bindtap="imgPreview" data-src="{{item.url}}" data-current="2" mode="aspectFill"
-                  style=" border-radius:   0 0 0 16rpx ;" src="{{item.url[2]}}"></image>
-                <image bindtap="imgPreview" data-src="{{item.url}}" data-current="3" mode="aspectFill"
-                  style=" border-radius:   0  0 16rpx 0;" src="{{item.url[3]}}"></image>
+                <image
+                  bindtap="imgPreview"
+                  data-src="{{item.url}}"
+                  data-current="2"
+                  mode="aspectFill"
+                  style=" border-radius:   0 0 0 16rpx ;"
+                  src="{{item.url[2]}}"
+                ></image>
+                <image
+                  bindtap="imgPreview"
+                  data-src="{{item.url}}"
+                  data-current="3"
+                  mode="aspectFill"
+                  style=" border-radius:   0  0 16rpx 0;"
+                  src="{{item.url[3]}}"
+                ></image>
               </view>
             </view>
             <!--位置-->
-            <view style="margin-top:30rpx;" wx:if="{{item.location}}"><text
-                style="font-size:25rpx;color:#536471">位于：</text><text
-                style="font-size:25rpx;color:#1d9bf0">{{item.location}}</text></view>
-
+            <view style="margin-top:30rpx;" wx:if="{{item.location}}"
+              ><text style="font-size:25rpx;color:#536471">位于：</text
+              ><text style="font-size:25rpx;color:#1d9bf0"
+                >{{item.location}}</text
+              ></view
+            >
           </view>
           <view class="main_container_bottom">
-            <view data-id="{{item.id}}"><text class="iconfont icon-comment"></text>{{item.comments?item.comments:''}}
+            <view data-id="{{item.id}}"
+              ><text class="iconfont icon-comment"></text
+              >{{item.comments?item.comments:''}}
             </view>
-            <view data-id="{{item.id}}"><text class="iconfont icon-favorite"></text></view>
-            <view bindtap="likesUpgrade" data-id="{{item.id}}" data-likes="{{item.likes?item.likes:0}}"><text
-                class="iconfont icon-fabulous"></text>{{item.likes?item.likes:''}}</view>
-            <view data-id="{{item.id}}"><text class="iconfont icon-share"></text></view>
+            <view data-id="{{item.id}}"
+              ><text class="iconfont icon-favorite"></text
+            ></view>
+            <view
+              bindtap="likesUpgrade"
+              data-id="{{item.id}}"
+              data-likes="{{item.likes?item.likes:0}}"
+              ><text class="iconfont icon-fabulous"></text
+              >{{item.likes?item.likes:''}}</view
+            >
+            <view data-id="{{item.id}}"
+              ><text class="iconfont icon-share"></text
+            ></view>
           </view>
         </view>
-
       </view>
     </view>
   </view>
 </scroll-view>
 ```
 
--js
+- js
 
 ```js
-...
+// ...
     list: [
       [],
       [],
@@ -665,8 +807,8 @@ module.exports = {
     listEmptyView: 0,
     currentListPosition: 0,
     scrollContainerHeight: 0,
-...
-...
+// ...
+// ...
   listScrollTop(e) {
     let pageNo = this.data.pageNo - 2;
     if (pageNo > 0) {
@@ -732,7 +874,7 @@ module.exports = {
             })
           }
           wx.createSelectorQuery().select('#listContainer' + (pageNo)).boundingClientRect(function (rect) {}).exec(function (res) { //缩短占位view高度
-      
+
             that.setData({
               listEmptyView: that.data.listEmptyView - res[0].height
             });
@@ -755,12 +897,4 @@ module.exports = {
       }
     })
   },
-```
-
-微信小程序中局部更新对象或者数组中的某个数据
-
-```js
-this.setData({
-['list[0][1].a']:0
-})
 ```
