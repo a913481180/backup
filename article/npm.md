@@ -421,6 +421,21 @@ pnpm 复刻了 npm 所有的命令，所以使用方法和 npm 一样，并且�
   你需要下载最新的 Visual Studio,下载 Vistual Studio 链接：https://visualstudio.microsoft.com/zh-hans/thank-you-downloading-visual-studio/?sku=BuildTools
   选择 c++桌面开发 , 一定要勾选一个 windows sdk
 
+- 下载 node-gyp 依赖包报错：/bin/sh: python: not found 的解决方法
+  主要原因是 python 这里命令没有映射到 已经安装的 python 版本上。
+  查看所有的 python 映射
+
+```bash
+ls -l /usr/bin/python*
+```
+
+增加对于 /usr/bin/python 的映射，这里把它映射到 /usr/bin/python3
+建立软连接，添加映射
+
+```bash
+sudo ln -s /usr/bin/python3 /usr/bin/python
+```
+
 - node-canvas 安装报错内容一般如下
 
 ```bash
