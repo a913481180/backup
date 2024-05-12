@@ -92,11 +92,16 @@ categories:
 
 - `CSS Modules`
 
+### 语言支持
+
+- `HTML CSS Support`
+
 ### 代码片段提示
 
 - `ES7+ React/Redux/React-Native snippets`
-- `HTML CSS Support`
 - `JavaScript (ES6) code snippets`
+- `Simple React Snippets`
+- `Vue 3 Snippets for Visual Studio Code`
 - `node-snippets`
 
 ### Markdown 插件
@@ -126,6 +131,10 @@ categories:
 
 - `koroFileHeader`
 
+### 翻译
+
+- `code-translate`
+
 ### 路径提示
 
 - `Path Intellisense`：最新 vscode 已支持
@@ -147,3 +156,110 @@ categories:
 ### 错误显示
 
 - `Error Lens`
+
+## 自定义代码片段
+
+文件->首选项->配置用户代码片段
+
+```json
+{
+  // Place your 全局 snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+  // Placeholders with the same ids are connected.
+  // Example:
+  // "Print to console": {
+  // 	"scope": "javascript,typescript",
+  // 	"prefix": "log",
+  // 	"body": [
+  // 		"console.log('$1');",
+  // 		"$2"
+  // 	],
+  // 	"description": "Log output to console"
+  // }
+  //js
+  "Print to console": {
+    "scope": "javascript,typescript,typescriptreact,javascriptreact,vue,html",
+    "prefix": "clg",
+    "body": ["console.log('kkk===$2==>',$1);"],
+    "description": "Log output to console"
+  },
+  "set interval": {
+    "scope": "javascript,typescript,typescriptreact,javascriptreact,vue,html",
+    "prefix": "sti",
+    "body": ["const t=setInterval(() => {$2 clearInterval(t);},$1);"],
+    "description": "set interval"
+  },
+  "set timeout": {
+    "scope": "javascript,typescript,typescriptreact,javascriptreact,vue,html",
+    "prefix": "sto",
+    "body": ["const t=setTimeout(() => {$2 clearTimeout(t);},$1);"],
+    "description": "set timeout"
+  },
+  "commentBigBlock": {
+    "prefix": "cmmb",
+    "body": ["/** ${1:first} */"],
+    "scope": "typescript,typescriptreact,javascript,javascriptreact,css,less,sass,vue,html"
+  },
+  //import .....
+  "import": {
+    "scope": "javascript,typescript,typescriptreact,javascriptreact,vue,html",
+    "prefix": "imp",
+    "body": ["import ${2:second} from '${1:first}';"]
+  },
+  "importDestructing": {
+    "prefix": "imd",
+    "body": ["import { ${2:second} } from '${1:first}'"],
+    "scope": "javascript,typescript,typescriptreact,javascriptreact,vue,html"
+  },
+  "importEverything": {
+    "prefix": "ime",
+    "body": ["import * as ${2:second} from '${1:first}'"],
+    "scope": "javascript,typescript,typescriptreact,javascriptreact,vue,html"
+  },
+  "importNoModuleName": {
+    "prefix": "imn",
+    "body": ["import '${1:first}'"],
+    "scope": "javascript,typescript,typescriptreact,javascriptreact,vue,html"
+  },
+  "require package": {
+    "scope": "javascript,typescript,typescriptreact,javascriptreact,vue,html",
+    "prefix": "req",
+    "body": ["const ${2:second} = require('${1:first}');"]
+  },
+  //react
+  "reactFunctionalComponent": {
+    "prefix": "rfc",
+    "body": [
+      "import React,{useEffect,useState,useRef} from 'react'",
+      "",
+      " const ${1:${TM_FILENAME_BASE}}: React.FC = () => {",
+      "  return (",
+      "    <>${1:first}</>",
+      "  )",
+      "}",
+      "export default ${1:${TM_FILENAME_BASE}};",
+      ""
+    ],
+    "description": "Creates a React Functional Component with ES7 module system",
+    "scope": "typescript,typescriptreact,javascript,javascriptreact"
+  },
+  "useEffect Hook": {
+    "prefix": "uef",
+    "body": ["", "useEffect(() => {", "  ${1:first}", "}, []);", ""],
+    "scope": "typescript,typescriptreact,javascript,javascriptreact"
+  },
+  "useCallback Hook": {
+    "prefix": "ucb",
+    "body": ["", "useCallback(() => {", "  ${1:first}", "}, []);", ""],
+    "scope": "typescript,typescriptreact,javascript,javascriptreact"
+  },
+  "State Hook": {
+    "prefix": "ust",
+    "body": ["const [${2:second},set${2:second}] = useState(${1:first});"],
+    "scope": "typescript,typescriptreact,javascript,javascriptreact"
+  }
+}
+```
