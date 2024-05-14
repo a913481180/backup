@@ -94,7 +94,9 @@ require("find");
 
 ## 系统模块:Node 运行环境提供的 API
 
-### fs 文件操作
+### fs
+
+#### fs 文件操作
 
 `const fs=require('fs');`
 
@@ -143,7 +145,7 @@ fs.rmdir(file,err=> {}) //删除文件夹，若文件夹下有文件，会报错
 
 ```
 
-### fs 流操作
+#### fs 流操作
 
 - 写入流 createWriteStream
 - 读取流 createReadStream
@@ -185,7 +187,7 @@ let writeStream = fs.createWriteStream("./one.txt");
 readStream.pipe(writeStream);
 ```
 
-### 路径拼接
+### path 路径拼接
 
 `path.join('路径','路径',..);`
 
@@ -204,6 +206,126 @@ console.log(doc);
 });
 ```
 
+### http
+
+#### HTTP 协议
+
+超文本传输协议。规定了客户端（浏览器）与服务器（网站服务器）之间请求和应答的标准
+
+- 静态资源：服务器不需要处理，可以直接响应给客户端的资源，如：css，JavaScript，image 文件
+- 动态资源：相同的请求地址，不同的响应资源
+
+#### web 服务器
+
+```js
+//引用系统模块
+const http = require("http");
+//创建web服务器
+const app = http.createServer();
+//当客户端发送请求的时候
+app.on("request", (req, res) => {
+  //响应
+
+  res.end("hello");
+
+  //返回状态码和返回资源类型,若无，低级浏览器可能出问题
+
+  res.writeHead(400, { "content-type": "text/html;charset=utf8" });
+});
+
+//监听端口
+app.listen(3000);
+console.log("Server is running....");
+```
+
+#### 路由
+
+指客户端请求地址,如：`http://localhost:8080/index`与服务端程序代码的对应关系，即请求什么响应什么；
+
+```js
+app.on("request", (req, res) => {
+  //获取客户端的请求路径
+  let { pathname } = url.parse(req.url);
+  //或写成
+  //let pathname=url.parse(req.url).pathname;
+  if (pathname == "/" || pathname == "/index") {
+    res.end("欢迎来到首页");
+  } else {
+    res.end("页面不存在");
+  }
+});
+```
+
+#### 报文
+
+在 HTTP 请求和响应的过程中传递的数据块叫做报文
+
+- 请求报文
+
+  1. 请求方式：GET、POST
+  2. 请求地址
+  3. 请求参数
+
+  ```js
+  app.on("request", (req, res) => {
+    req.headers; //请求报文
+    req.url; //请求地址
+    req.method; //请求方法
+  });
+  ```
+
+- 响应报文
+
+  1. HTTP 状态码： 200(请求成功)、400(客户端请求语法有误)、404(请求的资源未找到)、500(服务器错误)、
+  2. 内容类型：
+     - text/html
+     - text/css
+     - application/javascript
+     - image/jpeg
+     - application/json
+
+#### 完善：
+
+```js
+//引用系统模块
+const http = require("http");
+const url = require("url"); //处理url地址模块
+const querystring = require("querystring"); //处理参数模块
+
+//创建web服务器
+const app = http.createServer();
+
+//当客户端发送请求的时候
+app.on("request", (req, res) => {
+  //post参数是通过事件的方式接受的
+  //data当请求参数传递的时候发出data事件
+  //end当参数传递完成的时候时发出end事件
+  //获取POST参数需要使用data事件和end事件；
+  let postParams = "";
+  req.on("data", (params) => {
+    postParams += params; //接收的数据不是一次性发完的
+  });
+  req.on("end", () => {
+    console.log(postParams);
+    console.log(querystring.parse(postParams)); //将参数转换为对象格式
+  });
+
+  //响应
+  res.end("hello");
+
+  //返回状态码和相关信息
+
+  res.writeHead(400, { "content-type": "text/html;charset=utf8" });
+
+  //调用url模块方法parse();第一个参数为要处理的地址，第二个参数为是否处理为对象格式，true为是；
+  console.log(url.parse(res.url, true));
+});
+
+//监听端口
+app.listen(3000);
+console.log("Server is running....");
+```
+
 ## 第三方模块
 
 npm(node package manager):node 的第三方模块管理工具
@@ -213,125 +335,7 @@ npm(node package manager):node 的第三方模块管理工具
 
 全局安装和本地安装：一般命令行工具全局安装，库文件本地安装
 
-### 第三方模块 mine
-
-其中 mine.getType(路径);可根据路径返回请求的文件类型;可用于 res.writeHead(200,{'content-type':'text/css;charset=utf8'})
-
-### 第三方模块 art-template 模板引擎
-
-1. 下载：`npm install art-template`
-
-2. 引入：`const template = require('art-template');`
-
-3. 告诉模板引擎要拼接的数据和模板地址:`const html=template('模板数据',数据);`
-
-实例
-
-```js
-//导入模块
-const template = require('art-template');
-//拼接
-const html=template('./index.art',{
-data:{
-name: 'xioaming',
-age: 29
-}
-});
-
-//index.art
-<div>
- <span>{{data.name}}</span>
- <span>{{data.age}}</span>
-</div>
-```
-
-- 模板语法
-
-  - 数据输出
-    标准语法：`{{数据}}`
-    原始语法：`<%=数据%>`
-
-  - 原文输出：数据中带有 HTML 标签，默认情况下模板引擎不会解析标签,会转义后输出,若要解析则
-    标准语法：`{{@数据}}`
-    原始语法：`<%-数据%>`
-
-  - 条件判断
-    标准语法：`{{if 条件}}....{{else if 条件}}....{{/if}}`
-    原始语法：`<%if (条件) {%>....<%} else if(条件) {%>....<%}  %>`
-
-  - 循环
-    标准语法：`{{each 数据}} {{$index}} {{$value}}  {{/each}}`
-    原始语法：`<% for() {%> ....<%} %>`
-
-- 子模板
-
-将网站的公共区域（头部、页脚）抽离到单独文件中
-标准语法：`{include '模板路径/footer.art'}`
-原始语法：`<%include('模板路径')%>`
-
-- 模板继承
-
-将网站 HTML 骨架抽离到单独文件中，其他页面模板可以继承
-
-```htm
-!<DOCTYPE HTML>
-  <html lang="en">
-    <head>
-      <meta charset="utf-8" />
-      <title>骨架模板</title>
-      {{block 'head'}} {{/block}}
-    </head>
-    <body>
-      {{block 'content'}} {{/block}}
-      <!--预留位置-->
-    </body>
-  </html></DOCTYPE
->
-```
-
-模板继承
-
-```js
- {{extend './test.art'}}
- {{block 'head'}} <link rel="stylesheet" href="test.css"> {{/block}}
-```
-
-- 模板配置
-
-  1. 向模板中导入变量`template.default.imports.变量名=变量值(第三方模板的方法);` 在模板 test.art 中使用`{{dateFormat(time,'yyyy-mm-dd')}}`
-  2. 设置模板根目录`template.defaults.root=模板目录`
-  3. 设置模板默认后缀`template.defaults.extname='.art'`
-
-### 第三方模块 router
-
-功能：实现路由
-使用步骤：获取路由对象；调用路由对象提供的方法创建路由；启用路由；
-
-```js
-const getRouter = require("router");
-const router = getRounter();
-router.get("/add", (req, res) => {
-  res.end("hello world!");
-});
-server.on("request", (req, res) => {
-  router(req, res);
-});
-```
-
-### 第三方模块 serve-static
-
-功能：静态资源访问服务
-
-```js
-const serverStatic = require("serve-static");
-const serve = serverStatic("./pulic");
-serve.on("request", () => {
-  serve(req, res);
-});
-server.listen(3000);
-```
-
-### 第三方模块 Express 框架
+### Express 框架
 
 基于 node 平台的 web 应用开发框架，可使用`npm install express`下载
 
@@ -359,46 +363,9 @@ app.listen(3000);
 console.log('server is runningn ...');
 ```
 
-- 第三方模块 body-parser
+#### 中间件
 
-```js
-const bodyParser = require("body-parser");
-//配置body-parser模块
-app.use(bodyParser.urlencoded({ extender: false }));
-//接收请求
-app.post("/add", (req, res) => {
-  console.log(req.body);
-});
-```
-
-- 构建模块化路由
-
-```js
-const express = require("express");
-//创建路由对象
-const home = express.Router();
-//将路由和请求路径进行匹配
-app.use("/home", home);
-//在home路由下继续创建路由
-home.get("/index", () => {
-  // 响应/home/index
-  res.send("welcome");
-});
-```
-
-参数路由
-
-```js
-//服务端
-app.get("/find/:id", (req, res) => {
-  console.log(req.params); //{id:124}
-});
-
-//客户端
-localhost: 3000 / find / 124;
-```
-
-- 中间件:将客户端发来的请求进行拦截处理
+> 将客户端发来的请求进行拦截处理
 
 如：
 
@@ -462,7 +429,403 @@ app.use((err,req,res,next)=>{
 app.use(express.static("./pulic"));
 ```
 
-- express 模板引擎
+#### body-parser 中间件
+
+> 处理用户 post 请求提交的数据，把数据保存在 req.body 中
+> 此中间件已经被 express 集成，无需调用安装 body-parser，可以直接采用 express.json()和 express.urlencoded()实现相同功能。
+> Express v4.16.0 引入了 express.json()、express.urlencoded() 中间件，express.json() 可解析 json 类型的 req.body，express.urlencoded() 可解析 urlencoded 类型的 req.body；
+> Express v4.17.0 又引入 express.raw() 、express.text() 中间件，express.raw() 可解析 raw 类型的 req.body（解析为 Buffer）， express.text() 可解析 text 类型的 req.body（解析为 String）；
+
+```js
+const bodyParser = require("body-parser");
+//配置body-parser模块
+app.use(bodyParser.urlencoded({ extender: false }));
+//接收请求
+app.post("/add", (req, res) => {
+  console.log(req.body);
+});
+```
+
+- `bodyParser.json([options])`
+  解析并返回 json 格式的数据，这是常用的方法。内部会查看 content-type，只有是正确的 content-type 默认是 application/json 才进入这个中间件解析处理。
+
+```js
+{
+  // default = true
+  // 是否开启压缩体解析
+  "inflate": true,
+
+  // default = '100kb'
+  // 最大请求数据，传入数字默认单位是bytes，传入字符串要带上单位
+  "limit": "100kb",
+
+  // 指导reviver就相当于在JSON.parse()方法传入了第二个参数reviver做数据的预处理。
+  "reviver": (key, value)=> {...},
+
+   // default = true
+   // 开启严格模式只能接收能被JSON.parse()方法解析的数据
+   "strict": true,
+
+   // 接收数据的类型，默认是"application/json"
+   "type": "application/json",
+
+   // 验证数据，如果无效就可以提前抛出错误信息
+   "verify": (req, res, buf, encoding) => {...}
+}
+```
+
+- `bodyParser.urlencoded([options])`
+  这是常用的方法，常见的前端请求解决方案如表单 post 提交、axios、fetch 等库的 post 请求都需要这个中间件进行解析，返回 json 的格式数据。当请求的数据类型是 application/x-www-form-urlencoded 时才会进入这个中间件进行处理。
+
+参数
+
+```js
+{
+  // default = true
+  // 解析URL-encode数据的方法，true的话使用qs库来解析，false的话使用querystring库去解决，qs库文档：https://www.npmjs.com/package/qs#readme
+  "extended": true,
+
+  // default = true
+  // 是否开启压缩体解析
+  "inflate": true,
+
+  // default = '100kb'
+  // 最大请求数据，传入数字默认单位是bytes，传入字符串要带上单位
+  "limit": "100kb",
+
+  // default = 1000
+  // 控制url编码数据中最大参数数量，超过这个数量返回413
+  "parameterLimit": 1000,
+
+  // 接收数据的类型，默认是"application/x-www-form-urlencoded"
+  "type": "application/x-www-form-urlencoded",
+
+  // 验证数据，如果无效就可以提前抛出错误信息
+  "verify": (req, res, buf, encoding) => {...}
+
+}
+```
+
+- `bodyParser.text([options])`
+  当默认数据类型为 `text/\*`时候会进入这个中间件处理，用的少，由于 json 数据更友好，能直接在数据库使用或是保存为 json 格式的文件，如果你更改下 `options.type = 'application/json'` 也可以处理 json 的数据。
+  所以 `bodyParser.json()`相当于在此基础上进行封装优化，既然有更好用的，这个就不太用的上了，完全可以被取代。。options 多了一个解码方式的选择，`options.defaultCharset = 'utf-8'`，其他的都可以参考 `bodyParser.json()`，这里不做介绍。
+
+- `bodyParser.raw([options])`
+  处理默认数据为 `application/octet-stream` 时候的中间件，应用场景是 post 传入语音、短视频等媒体类型的数据，默认处理小于 100kb 的数据，以 buffer 的形式解析。参数参考前面的，都差不多。
+
+#### multer 中间件
+
+> express.json()、express.raw()、express.text()、express.urlencoded() 中间件，实际上都是基于 body-parser 中间件封装的；上述 4 种中间件对于处理大部分类型的 req.body 足够了，但却无法处理 multipart 类型的 req.body，body-parser 官网 也很明确的告诉我们 not handle multipart bodies，
+
+multer 中间件来处理 multipart/form-data 类型数据。其主要用于上传文件，它是写在 busboy 之上非常高效。
+
+```js
+const express = require("express");
+const multer = require("multer");
+const router = express.Router();
+const upload = multer();
+
+router.post('/This_is_router_path', upload.['中间件方法'], function (req, res) {
+  // req.body 获取文本域信息
+  // req.file、req.files 获取上传的文件信息
+})
+module.exports = router;
+```
+
+##### 中间件方法
+
+- `.none()` 仅文本域信息
+
+```js
+// .none() 不需要参数，使用该中间件的路由，只处理表单的文本域信息，保存在req.body
+// 如果任何文件上传到这个模式，将发生"LIMIT_UNEXPECTED_FILE"错误
+router.post("/upload/none", upload.none(), function (req, res) {
+  let ret = {
+    text_field: req.body,
+    file_field: req.file,
+  };
+  res.send(ret);
+});
+```
+
+- `.single()` 单文件上传
+
+```js
+// .single(fieldname) 接受一个以 fieldname 命名的文件，文件信息保存在 req.file
+// 如果上传的文件多于1个，或者上传的文件名与fieldname不匹配，将发生"LIMIT_UNEXPECTED_FILE"错误
+// 不指定filedname，则 .single() 等效于 .none()
+router.post("/upload/single", upload.single("afile"), function (req, res) {
+  let ret = {
+    text_field: req.body,
+    file_field: req.file, // req.file 是一个对象
+  };
+  res.send(ret);
+});
+```
+
+- `.array()` 多文件上传
+
+```js
+// .array(fieldname[, maxCount]) 接受一个以 fieldname 命名的文件数组，maxCount 来限制上传的最大数量，文件信息保存在 req.files
+// 如果上传的文件多于maxCount限定个数，或者上传了与fieldname不匹配的文件，将发生"LIMIT_UNEXPECTED_FILE"错误
+// 不指定fieldname或maxCount=0，则与 .none()等效
+router.post("/upload/array", upload.array("afile", 2), function (req, res) {
+  let ret = {
+    text_field: req.body,
+    file_field: req.files, //req.files 是一个数组，每个元素是一个文件信息对象
+  };
+  res.send(ret);
+});
+```
+
+- `.fields()` 多文件上传
+
+```js
+// .fields(fields) 接受指定 fields 的混合文件。
+// fields 是对象数组，具有 name 和可选的 maxCount 属性，文件信息保存在 req.files
+// 如果某name的文件上传的个数多于对应maxCount限定个数，或者上传了未指定name的文件，将发生"LIMIT_UNEXPECTED_FILE"错误
+// .fields([]) 与 .none() 等效，注意如果[]也不传，则报路由找不到
+const upFields = upload.fields([
+  { name: "afile", maxCount: 2 },
+  { name: "bfile", maxCount: 1 },
+]);
+router.post("/upload/fields", upFields, function (req, res) {
+  let ret = {
+    text_field: req.body,
+    file_field: req.files, //req.files 是一个对象，键是文件名，值是文件数组
+  };
+  res.send(ret);
+});
+```
+
+- `.any()` 多文件上传
+
+```js
+// .any() 不需要参数，使用该中间件的路由，可接受一切上传的文件，文件数组将保存在 req.files
+// 未上传文件，则 req.files为[]，不会报错
+router.post("/upload/any", upload.any(), function (req, res) {
+  let ret = {
+    text_field: req.body,
+    file_field: req.files, //req.files 是一个数组，每个元素是一个文件信息对象
+  };
+  res.send(ret);
+});
+```
+
+##### 上传控制
+
+上边在做文件上传示例讲解时，实例化 multer()并没有传参。
+实际上 multer(options) 可接受一个 options 对象，来控制上传的文件
+options 对象及作用：
+
+| Key             | Description                        |
+| --------------- | ---------------------------------- |
+| dest or storage | 在哪里存储文件                     |
+| fileFilter      | 文件过滤器，控制哪些文件可以被接受 |
+| limits          | 限制上传的数据                     |
+| preservePath    | 保存包含文件名的完整文件路径       |
+
+- 文件磁盘存储
+  通过 dest 指定存储路径
+
+```js
+// 为了避免命名冲突，Multer 将为每个文件设置为一个随机文件名，并且是没有扩展名的
+const upload = multer({ dest: __dirname + "/../../upload" });
+```
+
+通过 storage 指定存储路径
+
+```js
+// destination、filename 都是用来确定文件存储位置的函数
+// destination 用来指定文件存储位置，指定的文件夹必须由用户自己创建，如果不找不到这个文件夹，则上传文件时会报路由找不到
+// destination 如果不设置，则会使用系统默认的临时文件夹
+// filename 用来给上传的文件重命名，如果不设置filename，则 Multer 将为每个文件设置为一个随机文件名，并且是没有扩展名的
+// filename 指定的文件名要保证唯一性，不然上传同名的文件则会直接覆盖，不会有任何提示（示例中通过给文件名+时间戳来一定程度上避免重名情况）
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, __dirname + "/../../upload");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname + "-" + Date.now());
+  },
+});
+
+const upload = multer({ storage: storage });
+```
+
+- 文件内存存储
+
+```js
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+// 等效于 const upload = multer()，上边基本使用示例里就是用的不传任何参数的方式，可以看到不传任何参数时，默认使用了内存存储方式
+// 注意：使用内存存储时，如果上传非常大的文件，或者非常多的小文件，可能会导致应用程序内存溢出
+```
+
+- 文件过滤
+  Multer 通过 fileFilter 来设置一个函数来控制什么文件可以上传以及什么文件应该跳
+
+```js
+const filter = (req, file, cb) => {
+  // 回调函数cb，通过boolean值来指示是否应接受该文件
+  // 拒绝这个文件，使用`false`，cb(null, false)
+  // 接受这个文件，使用`true`，cb(null, true)
+  // 当然你也可以选择抛一个错误，cb(new Error('err_msg'))
+  let ext = path.extname(file.originalname);
+  req.refused_files = [];
+  const refused_ext = [".png"];
+  if (refused_ext.includes(ext)) {
+    // return cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE",file.fieldname));
+    return cb(null, false, req.refused_files.push(file));
+  }
+  return cb(null, true);
+};
+const upload = multer({ fileFilter: filter });
+
+// 这里 /upload/any 返回结果加一个refused_files，来测试上边的过滤配置是否生效
+router.post("/upload/any", upload.any(), function (req, res) {
+  let ret = {
+    text_field: req.body,
+    file_field: req.files,
+    refused_files: req.refused_files,
+  };
+  res.send(ret);
+});
+```
+
+- 大小限制
+  使用 limits 对象，指定一些数据大小的限制
+
+| Key           | Description                                              | Default    |
+| ------------- | -------------------------------------------------------- | ---------- |
+| fieldNameSize | field 名字最大长度                                       | 100 bytest |
+| fieldSize     | field 值的最大长度                                       | 1MBt       |
+| fields        | 非文件 field 的最大数量                                  | 无限 t     |
+| fileSize      | 在 multipart 表单中，文件最大长度 (字节单位)             | 无限 t     |
+| files         | 在 multipart 表单中，文件最大数量                        | 无限 t     |
+| parts         | 在 multipart 表单中，part 传输的最大数量(fields + files) | 无限 t     |
+| headerPairs   | 在 multipart 表单中，键值对最大组数量                    | 2000t      |
+
+```js
+// 数据大小限制
+const limits = {
+  fileSize: 1024 * 10, //限制上传文件大小为10kb
+  files: 2, //限制文件上传个数最多2个
+};
+const upload = multer({ limits: limits });
+```
+
+- 完整路径
+  Multer 通过 preservePath 来控制是否保存包含文件名的完整文件路径
+
+```js
+const upload = multer({ dest: __dirname + "/../../upload", preservePath: true });
+```
+
+##### 异常处理
+
+当遇到一个错误，multer 将会把错误发送给 express
+如果你想捕捉 multer 发出的错误，你可以自己调用中间件程序，可以使用 multer 对象下的 MulterError 类。
+
+- 在路由的常规代码中，在使用 multer 中间件时进行错误处理，
+
+```js
+const upFields = upload.fields([
+  { name: "afile", maxCount: 2 },
+  { name: "bfile", maxCount: 1 },
+]);
+router.post("/upload/fields", function (req, res) {
+  upFields(req, res, function (err) {
+    if (err) {
+      res.send(err);
+    } else {
+      let ret = { text_field: req.body, file_field: req.files };
+      res.send(ret);
+    }
+  });
+});
+
+router.post("/upload/any", function (req, res) {
+  upload.any()(req, res, function (err) {
+    if (err) {
+      res.send(err);
+    } else {
+      let ret = { text_field: req.body, file_field: req.files, refused_files: req.refused_files };
+      res.send(ret);
+    }
+  });
+});
+```
+
+- 在路由之前可以通过使用 app.use() 或 router.use() 对错误进行统一处理
+  > 注意：router.use()错误处理函数 要放在所有 router.METHOD 之后；同样的，app.use()错误处理函数，也需要放到 app.use(require(“./routes/multer_demo”)) 路由导入函数后
+
+```js
+router.post("/upload/none", upload.none(), function (req, res) {
+  let ret = { text_field: req.body, file_field: req.file };
+  res.send(ret);
+});
+
+// 对 multer 错误及其他未知错误进行统一处理
+router.use(function (err, req, res, next) {
+  if (err instanceof multer.MulterError) {
+    // A Multer error occurred when uploading.
+    res.status(500).send(err);
+  } else if (err) {
+    // An unknown error occurred.
+    res.status(500).send(err);
+  }
+  next();
+});
+```
+
+- 主动抛 multer 错误
+  在定义 fileFilter 文件过滤函数时，默认在用户上传了不允许的文件后直接过滤掉了，不会报错。假如想要在用户上传了不允许的文件类型时，抛出 multer 错误，那么就可以在定义 fileFilter 文件过滤函数时，通过 multer.MulterError 主动抛一个 LIMIT_UNEXPECTED_FILE 错误，代码如下：
+
+```js
+const filter = (req, file, cb) => {
+  let ext = path.extname(file.originalname);
+  req.refused_files = [];
+  const refused_ext = [".png"];
+  if (refused_ext.includes(ext)) {
+    const mError = new multer.MulterError("LIMIT_UNEXPECTED_FILE", file.fieldname);
+    // 默认的message内容为Unexpected field，这里我自定义一个message
+    mError.message = "Not allowed file type " + ext;
+    return cb(mError);
+    // return cb(null,false,req.refused_files.push(file));
+  }
+  return cb(null, true);
+};
+```
+
+#### 构建模块化路由
+
+```js
+const express = require("express");
+//创建路由对象
+const home = express.Router();
+//将路由和请求路径进行匹配
+app.use("/home", home);
+//在home路由下继续创建路由
+home.get("/index", () => {
+  // 响应/home/index
+  res.send("welcome");
+});
+```
+
+参数路由
+
+```js
+//服务端
+app.get("/find/:id", (req, res) => {
+  console.log(req.params); //{id:124}
+});
+
+//客户端
+localhost: 3000 / find / 124;
+```
+
+#### express 模板引擎
 
 在原 art-template 模板引擎的基础上进行封装:`npm install art-template express-art-template`
 
@@ -495,6 +858,214 @@ app.locals.users = [
 ];
 ```
 
+#### express-ws
+
+```js
+const express = require("express"); // 引入express插件包并生成一个实例app
+const app = express();
+
+// 引入express-ws的WebSocket功能，并混入app，相当于为 app实例添加 .ws 方法
+const expressWs = require("express-ws")(app);
+app.ws("/", (ws, req) => {
+  // console.log('连接成功', ws)
+  const clients = ws.getWss(); //获取所有链接的客户端
+
+  ws.send("来自服务端推送的消息");
+  ws.on("message", function (msg) {
+    ws.send(`收到客户端的消息为：${msg}，再返回去`);
+  });
+
+  ws.on("close", function (e) {
+    // console.log('连接关闭')
+  });
+});
+```
+
+### 第三方模块 mine
+
+其中 mine.getType(路径);可根据路径返回请求的文件类型;可用于 res.writeHead(200,{'content-type':'text/css;charset=utf8'})
+
+### 第三方模块 WS
+
+webSocket 没有同源限制，客户端可以发送任意请求到服务端，只要目标服务器允许。
+
+#### 服务端
+
+```js
+const WebSocket = require("ws");
+const WebSocketServer = WebSocket.Server;
+
+// 创建 websocket 服务器 监听在 3000 端口
+const wss = new WebSocketServer({ port: 3000 });
+
+// 服务器被客户端连接
+wss.on("connection", (ws) => {
+  // 通过 ws 对象，就可以获取到客户端发送过来的信息和主动推送信息给客户端
+
+  var i = 0;
+  var int = setInterval(function f() {
+    ws.send(i++); // 每隔 1 秒给连接方报一次数
+  }, 1000);
+});
+```
+
+#### client.js
+
+```js
+const WebSocket = require("ws");
+const ws = new WebSocket("ws://localhost:3000");
+
+// 接受
+ws.on("message", (message) => {
+  console.log(message);
+
+  // 当数字达到 10 时，断开连接
+  if (message == 10) {
+    ws.send("close");
+    ws.close();
+  }
+});
+```
+
+#### web 浏览器
+
+```js
+// 浏览器提供 WebSocket 对象
+const ws = new WebSocket("ws://127.0.0.1:2001");
+ws.onopen = function () {
+  ws.send("Hello Server!");
+};
+ws.onmessage = function (event) {
+  //处理服务端发来的实际数据data
+  if (typeof event.data === String) {
+    console.log("Received data string");
+  }
+
+  if (event.data instanceof ArrayBuffer) {
+    var buffer = event.data;
+    console.log("Received arraybuffer");
+  }
+};
+socket.onerror = function (event) {
+  // handle error event
+};
+ws.onclose = function (event) {};
+```
+
+### 第三方模块 art-template 模板引擎
+
+1. 下载：`npm install art-template`
+
+2. 引入：`const template = require('art-template');`
+
+3. 告诉模板引擎要拼接的数据和模板地址:`const html=template('模板数据',数据);`
+
+实例
+
+```js
+//导入模块
+const template = require('art-template');
+//拼接
+const html=template('./index.art',{
+data:{
+name: 'xioaming',
+age: 29
+}
+});
+
+//index.art
+<div>
+ <span>{{data.name}}</span>
+ <span>{{data.age}}</span>
+</div>
+```
+
+- 模板语法
+
+  - 数据输出
+    标准语法：`{{数据}}`
+    原始语法：`<%=数据%>`
+
+  - 原文输出：数据中带有 HTML 标签，默认情况下模板引擎不会解析标签,会转义后输出,若要解析则
+    标准语法：`{{@数据}}`
+    原始语法：`<%-数据%>`
+
+  - 条件判断
+    标准语法：`{{if 条件}}....{{else if 条件}}....{{/if}}`
+    原始语法：`<%if (条件) {%>....<%} else if(条件) {%>....<%}  %>`
+
+  - 循环
+    标准语法：`{{each 数据}} {{$index}} {{$value}}  {{/each}}`
+    原始语法：`<% for() {%> ....<%} %>`
+
+- 子模板
+
+将网站的公共区域（头部、页脚）抽离到单独文件中
+标准语法：`{include '模板路径/footer.art'}`
+原始语法：`<%include('模板路径')%>`
+
+- 模板继承
+
+将网站 HTML 骨架抽离到单独文件中，其他页面模板可以继承
+
+```html
+!<DOCTYPE HTML>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8" />
+      <title>骨架模板</title>
+      {{block 'head'}} {{/block}}
+    </head>
+    <body>
+      {{block 'content'}} {{/block}}
+      <!--预留位置-->
+    </body>
+  </html></DOCTYPE
+>
+```
+
+模板继承
+
+```js
+ {{extend './test.art'}}
+ {{block 'head'}} <link rel="stylesheet" href="test.css"> {{/block}}
+```
+
+- 模板配置
+
+  1. 向模板中导入变量`template.default.imports.变量名=变量值(第三方模板的方法);` 在模板 test.art 中使用`{{dateFormat(time,'yyyy-mm-dd')}}`
+  2. 设置模板根目录`template.defaults.root=模板目录`
+  3. 设置模板默认后缀`template.defaults.extname='.art'`
+
+### 第三方模块 router
+
+功能：实现路由
+使用步骤：获取路由对象；调用路由对象提供的方法创建路由；启用路由；
+
+```js
+const getRouter = require("router");
+const router = getRounter();
+router.get("/add", (req, res) => {
+  res.end("hello world!");
+});
+server.on("request", (req, res) => {
+  router(req, res);
+});
+```
+
+### 第三方模块 serve-static
+
+功能：静态资源访问服务
+
+```js
+const serverStatic = require("serve-static");
+const serve = serverStatic("./pulic");
+serve.on("request", () => {
+  serve(req, res);
+});
+server.listen(3000);
+```
+
 ### 第三方模块 Gulp
 
 功能：项目上线，HTML、CSS、JS 文件压缩合并，语法转换（es6、less）
@@ -523,124 +1094,6 @@ gulp 插件：
 - gulp-uglify: 压缩混淆 JavaScript
 - gulp-file-include:公共文件包含
 - browsersync:浏览器实时同步
-
-## HTTP 协议
-
-超文本传输协议。规定了客户端（浏览器）与服务器（网站服务器）之间请求和应答的标准
-
-- 静态资源：服务器不需要处理，可以直接响应给客户端的资源，如：css，JavaScript，image 文件
-- 动态资源：相同的请求地址，不同的响应资源
-
-### 报文
-
-在 HTTP 请求和响应的过程中传递的数据块叫做报文
-
-- 请求报文
-
-  1. 请求方式：GET、POST
-  2. 请求地址
-  3. 请求参数
-
-  ```js
-  app.on("request", (req, res) => {
-    req.headers; //请求报文
-    req.url; //请求地址
-    req.method; //请求方法
-  });
-  ```
-
-- 响应报文
-
-  1. HTTP 状态码： 200(请求成功)、400(客户端请求语法有误)、404(请求的资源未找到)、500(服务器错误)、
-  2. 内容类型：
-     - text/html
-     - text/css
-     - application/javascript
-     - image/jpeg
-     - application/json
-
-### 路由
-
-指客户端请求地址,如：`http://localhost:8080/index`与服务端程序代码的对应关系，即请求什么响应什么；
-
-```js
-app.on("request", (req, res) => {
-  //获取客户端的请求路径
-  let { pathname } = url.parse(req.url);
-  //或写成
-  //let pathname=url.parse(req.url).pathname;
-  if (pathname == "/" || pathname == "/index") {
-    res.end("欢迎来到首页");
-  } else {
-    res.end("页面不存在");
-  }
-});
-```
-
-## 创建 web 服务器
-
-```js
-//引用系统模块
-const http = require("http");
-//创建web服务器
-const app = http.createServer();
-//当客户端发送请求的时候
-app.on("request", (req, res) => {
-  //响应
-
-  res.end("hello");
-
-  //返回状态码和返回资源类型,若无，低级浏览器可能出问题
-
-  res.writeHead(400, { "content-type": "text/html;charset=utf8" });
-});
-
-//监听端口
-app.listen(3000);
-console.log("Server is running....");
-```
-
-完善：
-
-```js
-//引用系统模块
-const http = require("http");
-const url = require("url"); //处理url地址模块
-const querystring = require("querystring"); //处理参数模块
-
-//创建web服务器
-const app = http.createServer();
-
-//当客户端发送请求的时候
-app.on("request", (req, res) => {
-  //post参数是通过事件的方式接受的
-  //data当请求参数传递的时候发出data事件
-  //end当参数传递完成的时候时发出end事件
-  //获取POST参数需要使用data事件和end事件；
-  let postParams = "";
-  req.on("data", (params) => {
-    postParams += params; //接收的数据不是一次性发完的
-  });
-  req.on("end", () => {
-    console.log(postParams);
-    console.log(querystring.parse(postParams)); //将参数转换为对象格式
-  });
-
-  //响应
-  res.end("hello");
-
-  //返回状态码和相关信息
-
-  res.writeHead(400, { "content-type": "text/html;charset=utf8" });
-
-  //调用url模块方法parse();第一个参数为要处理的地址，第二个参数为是否处理为对象格式，true为是；
-  console.log(url.parse(res.url, true));
-});
-
-//监听端口
-app.listen(3000);
-console.log("Server is running....");
-```
 
 ## Node.js 异步编程
 
