@@ -5,12 +5,12 @@ categories:
   - blog
 ---
 
-## 安装nodejs
+## 安装 nodejs
 
 - archlinux:`pacman -S nodejs`
 - ubuntu
 
-## 安装npm
+## 安装 npm
 
 - archlinux:
   `pacman -S npm`
@@ -21,7 +21,7 @@ categories:
 
 `npm config set registry https://registry.npmmirror.com  //添加国内源`
 
-使用nrm切换镜像源
+使用 nrm 切换镜像源
 
 `npm install nrm -g //全局安装`
 
@@ -31,23 +31,23 @@ categories:
 
 查看镜像源：`npm get registry`
 
-安装hexo
+安装 hexo
 
 `npm install -g hexo-cli`
 
 ## ssh
 
-查看ssh
+查看 ssh
 
 `cd ~/.ssh`
 
-若无，则生成ssh
+若无，则生成 ssh
 
 `ssh-keygen -t rsa -C 用户名`
 
 一路回车默认安装,打开生成的`id_rsa.pub`复制
 
-设置git用户名邮箱
+设置 git 用户名邮箱
 
 ```bash
 git config --global user.name "你的账号"
@@ -75,7 +75,7 @@ deploy:
   branchL: master
 ```
 
-执行`hexo g -d`上传代码（注意第一次提交需要输入yes，不要一路回车）
+执行`hexo g -d`上传代码（注意第一次提交需要输入 yes，不要一路回车）
 
 **常用命令：**
 
@@ -87,7 +87,7 @@ hexo deploy //Deploy to remote sites
 hexo new My_New_Post    //Create a new post
 ```
 
-### hexo博客迁移
+### hexo 博客迁移
 
 先新建一个文件夹，初始化后，从原来的文件夹中拷贝下列文件进行覆盖
 
@@ -111,7 +111,7 @@ git clone https://github.com/forsigner/fexo.git
 ```
 
 - 配置主题
-  主题配置全部在theme/fexo里面完成，所里下面所有配置指的是配置theme/fexo/\_config.yml。
+  主题配置全部在 theme/fexo 里面完成，所里下面所有配置指的是配置 theme/fexo/\_config.yml。
 
 设置基本信息
 
@@ -129,14 +129,14 @@ avatar: /images/avatar.jpg
 avatar: https://avatars0.githubusercontent.com/u/2668081?v=3&s=460
 ```
 
-设置favicon
+设置 favicon
 
 ```yml
 favicon: /favicon.ico
 ```
 
 设置关键词
-关键词主要作用是优化SEO
+关键词主要作用是优化 SEO
 
 ```yml
 keywords: forsigner,前端,设计,Hexo主题,前端开发,用户体验,设计,frontend,design,nodejs,JavaScript
@@ -234,7 +234,7 @@ type: categories
 
 启用分类页面
 在博客根目录执行 `hexo new page category`
-修改my-blog/source/category/index.md里面的内容:
+修改 my-blog/source/category/index.md 里面的内容:
 
 ```txt
 ---
@@ -246,7 +246,7 @@ comments: false
 
 启用标签页面
 在博客根目录执行`hexo new page tag`
-修改my-blog/source/tag/index.md里面的内容:
+修改 my-blog/source/tag/index.md 里面的内容:
 
 ```txt
 ---
@@ -259,7 +259,7 @@ comments: false
 启用友链页面
 
 在博客根目录执行`hexo new page link`
-修改my-blog/source/link/index.md里面的内容:
+修改 my-blog/source/link/index.md 里面的内容:
 
 ```txt
 ---
@@ -294,7 +294,7 @@ link:
 启用关于页面
 
 在博客根目录执行 `hexo new page about`
-修改my-blog/source/about/index.md里面的内容:
+修改 my-blog/source/about/index.md 里面的内容:
 
 ```txt
 ---
@@ -336,7 +336,7 @@ about:
 启用项目页面
 
 在博客根目录执行 `hexo new page project`
-修改my-blog/source/project/index.md里面的内容:
+修改 my-blog/source/project/index.md 里面的内容:
 
 ```txt
 ---
@@ -383,7 +383,7 @@ project:
 启用搜索页面
 
 在博客根目录执行 `hexo new page search`
-修改my-blog/source/search/index.md里面的内容:
+修改 my-blog/source/search/index.md 里面的内容:
 
 ```txt
 ---
@@ -403,13 +403,13 @@ comments: false
 
 个性化设置
 
-自定义CSS
+自定义 CSS
 
 也许 Fexo 默认的样式满足不了你个性化的需求，使用此配置你可以在不修改 Fexo 源码的情况下，任意的自定义 Fexo 的样式，方法如下：
 
 在 blog 根目录新建文件夹 my-blog/source/css
 然后在此目录新建一个 CSS，名字随意，如 personal-style.css
-修改fexo/\_config.yml下面配置，然后你就可以写你想要的样式了
+修改 fexo/\_config.yml 下面配置，然后你就可以写你想要的样式了
 personal_style: /css/personal-style.css
 
 ```css
@@ -420,11 +420,9 @@ personal_style: /css/personal-style.css
   font-family: "Meiryo";
   src: url("/fonts/Meiryo.eot");
   /* IE9 */
-  src:
-    url("/fonts/Meiryo.eot?#iefix") format("embedded-opentype"),
-    /* IE6-IE8 */ url("/fonts/Meiryo.woff") format("woff"),
-    /* chrome, firefox */ url("/fonts/Meiryo.ttf") format("truetype"),
-    /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  src: url("/fonts/Meiryo.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+      url("/fonts/Meiryo.woff") format("woff"),
+    /* chrome, firefox */ url("/fonts/Meiryo.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
       url("/fonts/Meiryo.svg#Meiryo") format("svg");
   /* iOS 4.1- */
   font-style: normal;
@@ -442,8 +440,8 @@ html.page-home {
 
 自定义博客名的字体
 
-由于中文字体文件太大，有的快10M，所以 Fexo 没有引入中文字体，导致博客名有点难看。
-但是可以通过提取字体来减小字体文件大小，让字体只有几KB。
+由于中文字体文件太大，有的快 10M，所以 Fexo 没有引入中文字体，导致博客名有点难看。
+但是可以通过提取字体来减小字体文件大小，让字体只有几 KB。
 一下步骤可以让你实现自定义博客名字体，包括英文和中文：
 
 ```txt
@@ -462,7 +460,7 @@ PS：自定义博客名字体前请先自定义CSS
 
 如果你不喜欢首页简洁的白色，想个性化一点，你可以自定义首页的背景颜色或者图片
 
-修改personal-style.css:
+修改 personal-style.css:
 
 ```css
 html.page-home {
@@ -502,7 +500,7 @@ disqus_shortname: forsigner
 
 使用 Mathjax
 
-要使用 Mathjax，可以通过 Hexo 插件 hexo-renderer-mathjax支持
+要使用 Mathjax，可以通过 Hexo 插件 hexo-renderer-mathjax 支持
 
 查看 hexo-renderer-mathjax 文档
 

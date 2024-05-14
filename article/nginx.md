@@ -267,7 +267,7 @@ server{
 
 - 资源路径是否填写正确
 - nginx 的启动用户要和当前用户一致
-编辑`/etc/nginx/nginx.conf`
+  编辑`/etc/nginx/nginx.conf`
 
 ```diff
 ...

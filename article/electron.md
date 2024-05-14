@@ -59,10 +59,11 @@ electron 项目在开发阶段，因为使用 webpack / vite 脚手架,启用了
 
 2. 根据判断生产环境 mainWindow.loadFile(path.resolve(\_\_dirname, '../dist/index.html')) 在 electron main.js 中 无法使用 （.env.production / .env.development）中配置的环境变量 所以安装一个 cross-env 插件配置。
 
-### 三、打包之后，请求不到后端数据，有的人是app:// 有的人是file://  
-因为在本地环境 需要反向代理解决跨域问题，“/api”则是在vite.config.js中配置的server。而生产环境配置的代理就不在管用了，需要将请求的路径(http://www.baidu.com)配置成baseURL，如果跨域的话 就要看后端是否已经做了跨域处理，下方import.meta.env.MODE 三元判断区也可以用《上方所提到的isDev》
+### 三、打包之后，请求不到后端数据，有的人是 app:// 有的人是 file://
 
-在axios配置的文件添加：
+因为在本地环境 需要反向代理解决跨域问题，“/api”则是在 vite.config.js 中配置的 server。而生产环境配置的代理就不在管用了，需要将请求的路径(http://www.baidu.com)配置成baseURL，如果跨域的话 就要看后端是否已经做了跨域处理，下方 import.meta.env.MODE 三元判断区也可以用《上方所提到的 isDev》
+
+在 axios 配置的文件添加：
 
 const BASEURL = import.meta.env.MODE == 'development' ? '/api' : 'http://www.baidu.com';
 axios.defaults.baseURL = BASEURL;

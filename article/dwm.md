@@ -2,7 +2,7 @@
 title: dwm
 date: 2020-10-11 22:11:33
 categories:
-- linux
+  - linux
 ---
 
 ## 补丁
@@ -13,12 +13,12 @@ patch < xxxx.diff
 patch -R < xxx.diff
 ```
 
-- dwm-alpha-xxx.diff：窗口透明，需配合picom
-- dwm-awesomebar-xxx.diff：tabar隐藏窗口
+- dwm-alpha-xxx.diff：窗口透明，需配合 picom
+- dwm-awesomebar-xxx.diff：tabar 隐藏窗口
 - dwm-gaps-6.0.diff：窗口之间的缝隙
 - dwm-focusonclick.xxx.diff：鼠标点击才窗口聚焦
 - dwm-moveresize-xxx.diff：浮动模式，调整窗口位置大小
-- dwm-autostart-xxxx.diff：自动运行脚本，这个补丁将在dwm进入主循环运行之前运行~/.dwm/autostart_blocking.sh和~/.dwm/autostart.sh &，然后才启动dwm。可以省略其中一个或两个文件。 上面列出的文件分别在目录$XDG_DATA_HOME/DWM、$HOME/.local/Share/DWM和$HOME/.dwm中查找。将会在最先找到的目录中运行脚本，即使该目录下没有脚本。直接使用，将脚本文件放入~/.dwm下，同时确保没有上面提到的另两个目录。同时注意若~/.dwm/autostart_blocking.sh无法执行完毕，则将卡死。
+- dwm-autostart-xxxx.diff：自动运行脚本，这个补丁将在 dwm 进入主循环运行之前运行~/.dwm/autostart_blocking.sh 和~/.dwm/autostart.sh &，然后才启动 dwm。可以省略其中一个或两个文件。 上面列出的文件分别在目录$XDG_DATA_HOME/DWM、$HOME/.local/Share/DWM 和$HOME/.dwm 中查找。将会在最先找到的目录中运行脚本，即使该目录下没有脚本。直接使用，将脚本文件放入~/.dwm 下，同时确保没有上面提到的另两个目录。同时注意若~/.dwm/autostart_blocking.sh 无法执行完毕，则将卡死。
 
 ## 安装
 
@@ -55,11 +55,11 @@ static const char col_cyan[]        = "#00d997";
 
 - 自定义快捷键
 
-我们以flamshot为例，为flameshot设置截图快捷键
+我们以 flamshot 为例，为 flameshot 设置截图快捷键
 
-首先在/*commands*/下添加你要设置快捷键的命令
+首先在/_commands_/下添加你要设置快捷键的命令
 
-- flameshot的截图命令是：flameshot gui，后面没有参数所以设为NULL，这条命令的名字我们设为flameshot
+- flameshot 的截图命令是：flameshot gui，后面没有参数所以设为 NULL，这条命令的名字我们设为 flameshot
 
 `static const char *flameshot[]  = { "flameshot","gui", NULL };`
 
@@ -311,7 +311,7 @@ dwm_resources () {
         printf "%s/%s" "$MEMUSED" "$MEMTOT"
     else
         #printf "STA | MEM %s/%s CPU %s STO %s/%s: %s" "$MEMUSED" "$MEMTOT" "$CPU" "$STOUSED" "$STOTOT" "$STOPER"
-        printf "%s/%s " "$MEMUSED" "$MEMTOT" 
+        printf "%s/%s " "$MEMUSED" "$MEMTOT"
     fi
     printf "%s\n" "$SEP2"
 }
@@ -391,40 +391,40 @@ sudo make clean uninstall
 ## 基础快捷键
 
 - 打开新终端
-`Alt + shift + Enter`
+  `Alt + shift + Enter`
 
 - 关闭一个窗口
-`Alt + shift + C`
+  `Alt + shift + C`
 
 - 窗口横向排列
-`Alt + D`
+  `Alt + D`
 
 - 窗口竖向排列
-`Alt + I`
+  `Alt + I`
 
 - 窗口位置互换
-`Alt + Enter`
+  `Alt + Enter`
 
 - 在窗口间切换
-`Alt + J`
-`Alt + k`
+  `Alt + J`
+  `Alt + k`
 
 - 改变窗口的长度/比例
-`Alt + H`
-`Alt + L`
+  `Alt + H`
+  `Alt + L`
 
 - 平铺模式（tiling)
-`Alt + T`
+  `Alt + T`
 
 - 单窗口模式
-`Alt + M`
+  `Alt + M`
 
 - 浮动模式（float)
-`Alt + F`
+  `Alt + F`
 
 - 窗口模式切换
-`Alt + 空格`
-`Alt + shift + 空格`
+  `Alt + 空格`
+  `Alt + shift + 空格`
 
 ### 多屏幕问题
 
@@ -432,7 +432,7 @@ sudo make clean uninstall
 
 ```
 # 移动焦点至左边屏幕
-Mod + < 
+Mod + <
 # 移动焦点至右边屏幕
 Mod + >
 ```
@@ -468,12 +468,12 @@ patch -R < xxx.diff
 - st-dracula-0.8.5.diff：主题
 - st-desktopentry-0.8.2.diff：启动程序
 - st-anysize-xxx.diff：满屏
-- st-scrollback-xxx.diff：滚动，config.h绑定案件
+- st-scrollback-xxx.diff：滚动，config.h 绑定案件
 
-    ```c
-    { MODKEY,            XK_u,     kscrollup,      {.i = 2} },
-    { MODKEY,            XK_d,     kscrollup,      {.i = 2} },
-    ```
+  ```c
+  { MODKEY,            XK_u,     kscrollup,      {.i = 2} },
+  { MODKEY,            XK_d,     kscrollup,      {.i = 2} },
+  ```
 
-- st-scrollback-mouse-xxx.diff：支持鼠标滚动，需按shift键
-- st-scrollback-mouse-altscreen-xxx.diff：不用按shift键滚动
+- st-scrollback-mouse-xxx.diff：支持鼠标滚动，需按 shift 键
+- st-scrollback-mouse-altscreen-xxx.diff：不用按 shift 键滚动

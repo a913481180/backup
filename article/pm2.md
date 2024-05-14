@@ -5,7 +5,6 @@ categories:
   - linux
 ---
 
-
 PM2 是常用的 node 进程管理工具，它可以提供 node.js 应用管理，如自动重载、性能监控、负载均衡等。同类工具有 Supervisor、Forever 等。
 
 pm2 是一个进程管理工具,可以用它来管理你的 node 进程，并查看 node 进程的状态，当然也支持性能监控，进程守护，负载均衡等功能。pm2 基本是 Nodejs 应用程序不二的守护进程选择，事实上它并不仅仅可以启动 Nodejs 的程序，只要是一般的脚本的程序它同样可以胜任。
@@ -42,7 +41,7 @@ pm2 支持直接运行 server.js 启动项目，如下：`pm2 start server.js`
 
 PM2 启动后，它将自动创建这些文件夹：
 
-```
+```bsh
 $HOME/.pm2：将包含所有PM2相关文件
 
 $HOME/.pm2/logs：将包含所有应用程序日志
