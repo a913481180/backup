@@ -27,34 +27,27 @@ categories:
 ```js
 function generateUUIDv4() {
   if (typeof crypto === "object") {
-
     // Node.js API Crypto 提供 **randomUUID()** 方法，基于 RFC 4122 V4 生成随机数；
     if (typeof crypto.randomUUID === "function") {
       return crypto.randomUUID();
     }
 
     //使用crypto提供的getRandomValues方法
-    if (
-      typeof crypto.getRandomValues === "function" &&
-      typeof Uint8Array === "function"
-    ) {
+    if (typeof crypto.getRandomValues === "function" && typeof Uint8Array === "function") {
       const callback = (c) => {
         const num = Number(c);
-        return (
-          num ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (num / 4)))
-        ).toString(16);
+        return (num ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (num / 4)))).toString(16);
       };
-      return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, callback);
+      return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, callback);
     }
   }
 
   //使用Math.random(),时间戳生成 UUID.使用正则表达式替换字符串中的 x 和 y，其中 x 被随机的 16 进制数所取代，y 被一个特定的 16 进制数所取代，该数可以确定版本号（这里选择了版本 4）和变体号。
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
     let d = new Date().getTime();
-    let r = (d + Math.random()*16)%16 | 0;
-    d = Math.floor(d/16);
-    return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    let r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
   });
 }
 ```
@@ -296,39 +289,18 @@ function MakeForm() {
   <div class="cube-recycle-list" id="container">
     <!-- 可见区域列表 -->
     <div :style="{ height: heights + 'px' }">
-      <div
-        v-for="(item, index) in visibleItems"
-        :key="index"
-        class="cube-recycle-list-item"
-        :style="{ transform: 'translate(0,' + item.top + 'px)' }"
-      >
+      <div v-for="(item, index) in visibleItems" :key="index" class="cube-recycle-list-item" :style="{ transform: 'translate(0,' + item.top + 'px)' }">
         <!-- 内容 -->
-        <div
-          :style="
-            'height: ' +
-            (index + startIndex + 1) * 10 +
-            'px; width: 100%; background-color: aqua'
-          "
-        >
+        <div :style="'height: ' + (index + startIndex + 1) * 10 + 'px; width: 100%; background-color: aqua'">
           {{ index + startIndex }}
         </div>
       </div>
     </div>
 
     <!-- 预加载,用于动态获取宽高 -->
-    <div
-      class="cube-recycle-list-item"
-      v-for="(item, index) in preItems"
-      :ref="(el) => itemDom(el, item.index, index)"
-    >
+    <div class="cube-recycle-list-item" v-for="(item, index) in preItems" :ref="(el) => itemDom(el, item.index, index)">
       <!-- 内容 -->
-      <div
-        :style="
-          'height: ' +
-          (item.index + 1) * 10 +
-          'px; width: 100%; background-color: aqua'
-        "
-      >
+      <div :style="'height: ' + (item.index + 1) * 10 + 'px; width: 100%; background-color: aqua'">
         {{ item.index }}
       </div>
     </div>
@@ -358,10 +330,7 @@ export default {
     };
     let size = ref(15); //每页
     let visibleItems = computed(() => {
-      return items.value.slice(
-        Math.max(0, startIndex.value - size.value),
-        Math.min(items.value.length, startIndex.value + size.value)
-      );
+      return items.value.slice(Math.max(0, startIndex.value - size.value), Math.min(items.value.length, startIndex.value + size.value));
     });
     let preItems = computed(() => {
       //先加载元素获取其宽高，然后过滤去掉元素
@@ -475,11 +444,7 @@ export default {
       }
     };
     let _onScroll = () => {
-      if (
-        document.getElementById("container").scrollTop +
-          document.getElementById("container").offsetHeight >
-        heights.value - 100
-      ) {
+      if (document.getElementById("container").scrollTop + document.getElementById("container").offsetHeight > heights.value - 100) {
         //判断是否到底
         load();
       }
@@ -501,9 +466,7 @@ export default {
       load();
     });
     onBeforeUnmount(() => {
-      document
-        .getElementById("container")
-        .removeEventListener("scroll", _onScroll);
+      document.getElementById("container").removeEventListener("scroll", _onScroll);
       window.removeEventListener("resize", _onResize);
     });
     return {
@@ -1247,4 +1210,191 @@ test.value = ""; //test的value不能设为有字符的值，但是可以设置�
 //2.###
 var test = document.getElementById("test");
 test.outerHTML = test.outerHTML; //重新初始化了test的html
+```
+
+## 快捷键
+
+> keycode 已经被弃用
+
+```js
+window.addEventListener(
+  "keydown",
+  function (e) {
+    //可以判断是不是mac，如果是mac,ctrl变为花键
+    //event.preventDefault() 方法阻止元素发生默认的行为。
+    if ((e.key == "s" || e.key == "S") && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+      e.preventDefault();
+      alert("监听到ctrl+s");
+    }
+  },
+  false
+);
+```
+
+## 使用原生 js 来控制、修改 CSS 伪元素
+
+### 直接创建一个 style 的标签
+
+> 任何字符串都可以动态插入到样式中。原始风格不改变，只是重写; 反复使用 document.createElement()可以使 DOM 量增加
+
+```html
+<script>
+  document.onclick = function () {
+    var sty = document.createElement("style");
+    sty.innerText = "p:after{content:'修改一下'}";
+    document.body.appendChild(sty);
+  };
+</script>
+```
+
+### class 名重写
+
+```html
+<style>
+  p.special:after {
+    content: "修改一下";
+  }
+</style>
+<script>
+  document.onclick = function () {
+    var p = document.getElementById("dome");
+    p.setAttribute("class", "special");
+  };
+</script>
+```
+
+### 使用 css 中 attr()
+
+> 我们可以在 css 中使用 sttr()来读取一个特定的 DOM 属性，如果你浏览器支持伪元素就会支持 css 中使用 attr()。
+> 不会创建无尽的额外风格
+> attr()在 CSS 中只能应用于内容字符串，而不能使用 URL 或 RGB 颜色
+
+```js
+<style>
+p:after {
+    content: attr(data-after);
+}
+</style>
+
+<p id="dome">正文内容</p>
+
+<script>
+var p=document.getElementById('dome');
+p.setAttribute("data-after","我是后缀");//初始值
+document.onclick=function(){
+    p.setAttribute("data-after","修改一下");
+};
+</script>
+```
+
+### input 禁止手机唤起软键盘，并且光标存在
+
+首先先将 input 设置为 readonly="readonly"状态
+
+input 添加点击事件 click(防止多次点击唤出软键盘) 后在 input readonly 状态下聚焦
+
+```js
+let ele = document.getElementById(`no${index}`);
+ele.setAttribute("readonly", "readonly");
+if (ele) {
+  ele.focus();
+  ele = null;
+}
+```
+
+聚焦后利用 setTimeout 延迟再将 readonly 属性移除
+
+```js
+setTimeout(() => {
+  let ele = document.getElementById(`no${index}`);
+  if (ele) {
+    ele.removeAttribute("readonly");
+    ele = null;
+  }
+}, 200);
+```
+
+总的来说就是先 readonly 再聚焦 紧接着再移除 readonly
+
+input 初始创建的时候最好直接是 readonly 状态
+
+如果初始不是 readonly，页面渲染后 js 动态将 input 变成 readonly ，再执行 focus 操作。 有兼容性，部分型号的手机软键盘还是会唤起
+
+### 自动触发 focus 事件的同时调出键盘
+
+然后直接使用 input.focus()是无法在 ios 中调起键盘的，因为 ios 中 input 元素的 focus 必须由事件触发。此外，如果模拟了触摸事件，但是在 setTimeout 中延迟执行，也是不行的.综上，要在 ios 中选中 input 并调起键盘，可以将 focus 调用包装在一个用户行为触发的事件中，如点击事件、表单 onChange 事件等。
+
+### h5 手机键盘弹出收起的处理
+
+问题
+在 h5 项目中，我们会经常遇到一些表单页面，在输入框获取焦点时，会自动触发键盘弹起，而键盘弹出在 IOS 与 Android 的 webview 中表现并非一致，同时当我们主动触发键盘收起时也同样存在差异化。
+
+键盘弹出
+IOS：IOS 系统 的键盘处在窗口的最上层，当键盘弹起时，webview 的高度 height 并没有改变，只是 scrollTop 发生变化，页面可以滚动。且页面可以滚动的最大限度为弹出的键盘的高度，而只有键盘弹出时页面恰好也滚动到最底部时，scrollTop 的变化值为键盘的高度，其他情况下则无法获取。这就导致在 IOS 情况下难以获取键盘的真实高度。
+Android: 在 Android 系统中，键盘也是处在窗口的最上层，键盘弹起时，如果输入框在靠近底部的话，就会被键盘挡住，只有你输入的时候输入框才会滚动到可视化区域。
+键盘收起
+IOS：触发键盘上的按钮收起键盘或者输入框以外的页面区域时，输入框会失去焦点，因此会触发输入框的 blur 事件；当键盘收起时，页面底部会出现一个空白区域，页面会被顶起。
+Android: 触发键盘上的按钮收起键盘时，输入框并不会失去焦点，因此不会触发页面的 blur 事件；触发输入框以外的区域时，输入框会失去焦点，触发输入框的 blur 事件。
+
+在 h5 中目前没有接口可以直接监听键盘事件，但我们可以通过分析键盘弹出、收起的触发过程及表现形式，来判断键盘是弹出还是收起的状态。
+
+键盘弹出：输入框获取焦点时会自动触发键盘的弹起动作，因此，我们可以监听 focusin 事件，在里面实现键盘弹出后所需的页面逻辑。
+键盘收起：当触发其他页面区域收起键盘时，我们可以监听 focusout 事件，在里面实现键盘收起后所需的页面逻辑。而在通过键盘按钮收起键盘时在 ios 与 android 端存在差异化表现，下面具体分析：
+
+IOS：触发了 focusout 事件，仍然通过该办法监听。
+Android：没有触发 focusout 事件。在 android 中，键盘的状态切换（弹出、收起）不仅和输入框关联，同时还会影响到 webview 高度的变化，那我们就可以通过监听 webview height 的变化来判断键盘是否收起。
+
+系统判断
+在实践中我们可以通过 userAgent 来判断目前的系统：
+
+```js
+const ua = window.navigator.userAgent.toLocaleLowerCase();
+const isIOS = /iphone|ipad|ipod/.test(ua);
+const isAndroid = /android/.test(ua);
+```
+
+IOS 处理
+
+```js
+let isReset = true; //是否归位
+
+this.focusinHandler = () => {
+  isReset = false; //聚焦时键盘弹出，焦点在输入框之间切换时，会先触发上一个输入框的失焦事件，再触发下一个输入框的聚焦事件
+};
+
+this.focusoutHandler = () => {
+  isReset = true;
+  setTimeout(() => {
+    //当焦点在弹出层的输入框之间切换时先不归位
+    if (isReset) {
+      window.scroll(0, 0); //确定延时后没有聚焦下一元素，是由收起键盘引起的失焦，则强制让页面归位
+    }
+  }, 30);
+};
+
+document.body.addEventListener("focusin", this.focusinHandler);
+document.body.addEventListener("focusout", this.focusoutHandler);
+```
+
+Android 处理
+
+```js
+const originHeight = document.documentElement.clientHeight || document.body.clientHeight;
+
+this.resizeHandler = () => {
+  const resizeHeight = document.documentElement.clientHeight || document.body.clientHeight;
+  const activeElement = document.activeElement;
+  if (resizeHeight < originHeight) {
+    // 键盘弹起后逻辑
+    if (activeElement && (activeElement.tagName === "INPUT" || activeElement.tagName === "TEXTAREA")) {
+      setTimeout(() => {
+        activeElement.scrollIntoView({ block: "center" }); //焦点元素滚到可视区域的问题
+      }, 0);
+    }
+  } else {
+    // 键盘收起后逻辑
+  }
+};
+
+window.addEventListener("resize", this.resizeHandler);
 ```
