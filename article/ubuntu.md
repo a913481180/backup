@@ -4,9 +4,8 @@ date: 2020-12-22 23:33:33
 categores:
   - linux
 tags:
-- system
+  - system
 ---
-
 
 ## 安装
 
@@ -16,15 +15,15 @@ tags:
 
 ### 重启进入安装界面
 
-| 分区：     |                                                                                      |
-| ---------- | ------------------------------------------------------------------------------------ |
-| /boot/efi/ | 必须，引导分区，256mb-512mb                                                          |
-| /boot      | 非必须，引导分区，ext4格式，256mb                                                                         |
-| swap       | 非必须，交换分区，虚拟内存，swap格式。内存小于 2g->2g，内存小于 8g->4g-8g，内存大于 8g->8g-16g，内存大于 16->16g |
-| /          | 必须，主分区，用于安装系统和软件，ext4格式 ，30gb                                                                       |
-| /home      | 用户存放文件，ext4格式                                                                         |
+| 分区：     |                                                                                                                   |
+| ---------- | ----------------------------------------------------------------------------------------------------------------- |
+| /boot/efi/ | 必须，引导分区，256mb-512mb                                                                                       |
+| /boot      | 非必须，引导分区，ext4 格式，256mb                                                                                |
+| swap       | 非必须，交换分区，虚拟内存，swap 格式。内存小于 2g->2g，内存小于 8g->4g-8g，内存大于 8g->8g-16g，内存大于 16->16g |
+| /          | 必须，主分区，用于安装系统和软件，ext4 格式 ，30gb                                                                |
+| /home      | 用户存放文件，ext4 格式                                                                                           |
 
->`/bin` `/sbin`  `/lib` `/etc` `/dev`这五个目录不要与根目录`/`所在分区分开。否则系统会不能正常引导
+> `/bin` `/sbin` `/lib` `/etc` `/dev`这五个目录不要与根目录`/`所在分区分开。否则系统会不能正常引导
 
 ## 配置
 
@@ -123,34 +122,35 @@ deb-src https://mirrors.163.com/debian/ bullseye-backports main non-free contrib
   `sudo apt-get upgrade`
 
 ## 安装软件
->`sudo dpkg -i xxx-dev.deb`
+
+> `sudo dpkg -i xxx-dev.deb`
 
 - vim
 - neofetch
 - ranger
-- rar解压软件
-  - (<https://www.rarlab.com/download.htm>) 下载最新版本的linux版本rar软件
+- rar 解压软件
+  - (<https://www.rarlab.com/download.htm>) 下载最新版本的 linux 版本 rar 软件
   - 解压后进入文件夹，执行`sudo make`命令
   - 解压：`rar x test.rar`
   - 解压到当前目录：`rar e test.rar`
   - 压缩：`rar a test.rar /test`
-  - 也可以使用`unrar`命令提取rar压缩文件
+  - 也可以使用`unrar`命令提取 rar 压缩文件
 - 截图工具：`flameshot`
   - 安装：`sudo apt install flameshot`
   - 使用：`flameshot gui`
   - 添加快捷键：`/usr/bin/flameshot gui`
-- 远程连接windows软件:`rdesktop`
+- 远程连接 windows 软件:`rdesktop`
   - 安装：`sudo apt install rdesktop`
   - 使用：`rdesktop xxx.xxx.xxx.xxx -u kk -p 123456`
   - 参数：
-    - `-f`：全屏模式ctrl+alt+enter可切换全屏
-    - `-a 16`： 16位色彩
-    - `-z`：启用RDP数据流压缩
+    - `-f`：全屏模式 ctrl+alt+enter 可切换全屏
+    - `-a 16`： 16 位色彩
+    - `-z`：启用 RDP 数据流压缩
     - `-x lan`：使用局域网级别的图像质量
     - `-r clipboard`：运行共享剪切板
     - `-g 1920x1080+0+0`：分辨率,窗口位置
     - `-r sound:local`：同步声音
-    - `-r disk:share=/home`：win10网上邻居虚拟一个映射盘，ubuntu挂载到远程主机上
+    - `-r disk:share=/home`：win10 网上邻居虚拟一个映射盘，ubuntu 挂载到远程主机上
 - nodejs
   - 拷贝解压
 
@@ -158,23 +158,23 @@ deb-src https://mirrors.163.com/debian/ bullseye-backports main non-free contrib
  VERSION=v10.15.0
  DISTRO=linux-x64
  sudo mkdir -p /usr/local/lib/nodejs
- sudo tar -xJvf node-$VERSION-$DISTRO.tar.xz -C /usr/local/lib/nodejs 
+ sudo tar -xJvf node-$VERSION-$DISTRO.tar.xz -C /usr/local/lib/nodejs
 ```
 
 - 环境变量
-编辑文件`vim ~/.profile`
-添加`export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH`
-刷新：`source ~/.profile`
+  编辑文件`vim ~/.profile`
+  添加`export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH`
+  刷新：`source ~/.profile`
 - google chrome
-`https://www.google.cn/intl/zh-CN/chrome/`
-- 搜狗输入法(ubuntu20移除qt4,会出现死机情况)
-`https://shurufa.sogou.com/`
+  `https://www.google.cn/intl/zh-CN/chrome/`
+- 搜狗输入法(ubuntu20 移除 qt4,会出现死机情况)
+  `https://shurufa.sogou.com/`
 - 百度输入法
 - 谷歌输入法(推荐)
-`sudo dpkg-reconfigure locales`选择中文`zh_CN.UTF-8 UTF-8`
-`sudo apt install fcitx fcitx-googlepinyin`
-- fcitx5中文输入法
-`sudo apt install fcitx5 fcitx5-chinese-addons`
+  `sudo dpkg-reconfigure locales`选择中文`zh_CN.UTF-8 UTF-8`
+  `sudo apt install fcitx fcitx-googlepinyin`
+- fcitx5 中文输入法
+  `sudo apt install fcitx5 fcitx5-chinese-addons`
 - 网易云、QQ 音乐
 - vscode
 - vitrulbox
@@ -185,7 +185,7 @@ deb-src https://mirrors.163.com/debian/ bullseye-backports main non-free contrib
 - 有道翻译
 - 迅雷
 - wps
-- wps字体安装
+- wps 字体安装
   windows 的字体一般存放在 c:/windows/fonts 目录下，我拷贝到 linux 下的字体有：
   `simfang.ttf` 仿宋体
   `simhei.ttf`黑体
@@ -207,24 +207,30 @@ deb-src https://mirrors.163.com/debian/ bullseye-backports main non-free contrib
 `sudo fc-cache -fv`
 
 ## 压缩解压
+
 - zip 命令
-示例：
+  示例：
+
 ```bash
 # 压缩文件
 zip -r test.zip file
 # 解压文件
 unzip test.zip
 ```
+
 释义：
 `-r` : 递归处理
+
 - rar 命令
-示例：
+  示例：
+
 ```bash
 # 压缩文件
 rar a -r test.rar file
 # 解压文件
 unrar x test.rar
 ```
+
 释义：
 
 `a `: 添加到压缩文件
@@ -234,17 +240,19 @@ unrar x test.rar
 `x `: 以绝对路径解压文件
 
 - tar 命令
-语法： `tar [主选项 + 辅选项] 文件或目录`
+  语法： `tar [主选项 + 辅选项] 文件或目录`
 
 示例：
+
 ```bash
 # 压缩文件 file1 和目录 dir2 到 test.tar.gz
 tar -zcvf test.tar.gz file1 dir2
 # 解压 test.tar.gz（将 c 换成 x 即可）
 tar -zxvf test.tar.gz
 # 列出压缩文件的内容
-tar -ztvf test.tar.gz 
+tar -ztvf test.tar.gz
 ```
+
 释义：
 
 `-z` : 使用 gzip 来压缩和解压文件

@@ -19,7 +19,7 @@ python 国内常用镜像源
 
 1、临时使用
 
-```py
+```bash
 pip install [包名] -i [pip源URL]
 
 # 示例
@@ -35,7 +35,7 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 升级 pip 到最新的版本
 
-```py
+```bash
 pip install pip -U
 
 # 或

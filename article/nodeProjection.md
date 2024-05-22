@@ -19,14 +19,14 @@ categories:
 
 ##### 使用 Vue Styleguidist 编写组件文档
 
-[Vue Styleguidist官网](https://vue-styleguidist.github.io/)
+[Vue Styleguidist 官网](https://vue-styleguidist.github.io/)
 
 首先，Vue Styleguidist 只能适用于 Webpack 打包的项目，在此基础上，我们需要安装 vue-styleguidist 这个包
 
 `npm install vue-styleguidist --save-dev`
 然后在 package.json 配置下面两行命令，分别用于开发预览和部署打包
 
-```
+```json
 {
   "scripts": {
     "styleguide": "vue-styleguidist server",
@@ -42,51 +42,52 @@ categories:
 - Events
   除了 Props，Event 事件也是 Vue 的一个重要的 API 之一，可以通过 v-on 为组件绑定事件。Vue 的事件使用 vm.$('event', ...params) 的方法进行定义，我们只需要在这个方法之前，加上必要的注释就可以了。如果事件名不是字符串，可以使用 @event 进行标注，事件的参数使用 @type 进行标注
 
-  ```
+  ```js
   export default {
-  methods: {
-    handleClick(e) {
-      /**
-       * 单击事件
-       * @type {Event}
-       */
-      this.$emit('click', e);
+    methods: {
+      handleClick(e) {
+        /**
+         * 单击事件
+         * @type {Event}
+         */
+        this.$emit("click", e);
+      },
     },
-    },
-    };
+  };
   ```
 
 - Slots
   Slot 插槽是 Vue 的自定义元素之一，Slot 向一个组件传递内容，也是封装公共组件常见的 API 之一,与 Props 和 Events 不同的是，Slots 通常是定义在`<template>`部分，不能使用 JS 注释进行标注，需要使用 HTML 注释，并且在注释里使用 @slot 进行标注
 
-  ```
-    <button
-  class="btn"
-  :type="htmlType"
-  :class="btnClass"
-  :disabled="disabled"
-  @click="handleClick"
-    >
-  <!-- @slot 按钮的内容 -->
-  <slot />
+  ```html
+  <button
+    class="btn"
+    :type="htmlType"
+    :class="btnClass"
+    :disabled="disabled"
+    @click="handleClick"
+  >
+    <!-- @slot 按钮的内容 -->
+    <slot />
   </button>
   ```
 
 - Methods
   看到这里可能各位会有个疑问，Methods 和 Events 有什么区别？区别主要有以下两个：定义方式不同：Methods 只要在 methods 里定义函数即可，Events 则需要使用 `vm.$('event', ...params)` 进行定义,调用方式不同：Methods 使用`vm.$refs.ref.method()`这样的方式进行调用，Events 使用 v-on 指令或者 `vm.$on('event')` 进行监听。实际上，使用 Methods 方法封装组件 API 的情况是比较少的，但是依然不能排除这种情况。对于 Methods 方法，我们只需要像使用 JSDoc 一样为函数进行注释就可以了，最后再附上 @public 进行标识
 
-  ```
+  ```js
   export default {
-  methods: {
-    /**
-     * 单击事件
-     * @param {Event} e
-     * @public
-     */
-    click(e) {
-      // some code
+    methods: {
+      /**
+       * 单击事件
+       * @param {Event} e
+       * @public
+       */
+      click(e) {
+        // some code
+      },
     },
-  },};
+  };
   ```
 
 - 组件样例
@@ -96,17 +97,17 @@ categories:
 - 配置
   Vue Styleguidist 支持自定义配置，只需要在项目根目录下，创建 styleguide.config.js，就可以参照官方文档进行配置
 
-  ```
+  ```js
   // styleguide.config.js
   module.exports = {
-  title: 'Default Style Guide',          // 文档的标题
-  components: 'src/components/**/*.vue', // 组件的目录
-  defaultExample: false,                 // 是否使用默认样例
-  usageMode: 'expand',                   // 是否展开用法
-  exampleMode: 'expand',                 // 是否展开示例代码
-  styleguideDir: 'styleguide',           // 打包的目录
-  codeSplit: true,                       // 打包时是否进行分片
-  skipComponentsWithoutExample: true,    // 是否跳过没有样例的组件
+    title: "Default Style Guide", // 文档的标题
+    components: "src/components/**/*.vue", // 组件的目录
+    defaultExample: false, // 是否使用默认样例
+    usageMode: "expand", // 是否展开用法
+    exampleMode: "expand", // 是否展开示例代码
+    styleguideDir: "styleguide", // 打包的目录
+    codeSplit: true, // 打包时是否进行分片
+    skipComponentsWithoutExample: true, // 是否跳过没有样例的组件
   };
   ```
 
@@ -125,7 +126,7 @@ categories:
 `cd test_project`
 `npm run start`
 
-使用ts
+使用 ts
 
 `create-react-app demo --template typescript`
 `cd test_project`
@@ -137,54 +138,54 @@ categories:
 创建 routes/index.js 文件,写入路由表
 
 ```js
-import { lazy, Suspense,  } from "react";
+import { lazy, Suspense } from "react";
 import { Navigate } from "react-router-dom";
 import LoadingPage from "../pages/LoadingPage";
 const Home = lazy(() => import("../pages/Home"));
 const ErrorBlock = lazy(() => import("../pages/ErrorBlock"));
-const routes= [
- {
-  path: "/Home",
-  element: (
-   <Suspense fallback={<LoadingPage />}>
-    <Home />
-   </Suspense>
-  ),
- },
- {
-  path: "/ErrorBlock",
-  element: (
-   <Suspense fallback={<LoadingPage />}>
-    <ErrorBlock />
-   </Suspense>
-  ),
- },
- {
-  path: "/",
-  element: <Navigate to="/Home"></Navigate>,
- },
+const routes = [
+  {
+    path: "/Home",
+    element: (
+      <Suspense fallback={<LoadingPage />}>
+        <Home />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/ErrorBlock",
+    element: (
+      <Suspense fallback={<LoadingPage />}>
+        <ErrorBlock />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/",
+    element: <Navigate to="/Home"></Navigate>,
+  },
 ];
-export default routes
+export default routes;
 ```
 
 入口文件 index.js 中加入
 
 ```js
-import {BrowserRouter} from 'react-router-dom'
+import { BrowserRouter } from "react-router-dom";
 <BrowserRouter>
-<App/>
-</BrowserRouter>
+  <App />
+</BrowserRouter>;
 ```
 
     App.js 中引入路由表
 
 ```jsx
-import './App.scss';
-import routes from './routes/'
-import { useRoutes } from 'react-router-dom'
+import "./App.scss";
+import routes from "./routes/";
+import { useRoutes } from "react-router-dom";
 function App() {
-  const element = useRoutes(routes)
-    return (<div className="App">{element}</div>);
+  const element = useRoutes(routes);
+  return <div className="App">{element}</div>;
 }
 export default App;
 ```
@@ -196,45 +197,46 @@ export default App;
 在 store/index.js 中写入
 
 ```js
-import {createStore} from 'redux'
-import test from './reducers/test/index.js'
-export default createStore(test)
+import { createStore } from "redux";
+import test from "./reducers/test/index.js";
+export default createStore(test);
 ```
 
 在 store/actions/test/index.js 中写入
 
 ```js
-import store from '../../index.js'
-export const test1=(data)=>{
-return store.dispatch( {type:'test1',data} )
-}
+import store from "../../index.js";
+export const test1 = (data) => {
+  return store.dispatch({ type: "test1", data });
+};
 ```
 
 在 store/reducers/test/index.js 中写入
 
 ```js
-const initState={}
-export default function userInfo(preState=initState,action){
-const {type,data}=action
-console.log('xxxinfo',preState,action)
-return preState
+const initState = {};
+export default function userInfo(preState = initState, action) {
+  const { type, data } = action;
+  console.log("xxxinfo", preState, action);
+  return preState;
 }
 ```
 
 在 入口文件 src/index.js 中
 
 ```js
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import store from './store'
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./store";
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-<React.StrictMode>
-<Provider store={store}>
-<BrowserRouter>
-<App /></BrowserRouter>
-</Provider>
-</React.StrictMode>
+  <React.StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>
 );
 ```
 
@@ -245,19 +247,19 @@ root.render(
 ```js
 const proxy = require("http-proxy-middleware").createProxyMiddleware;
 module.exports = function (app) {
-app.use(
-proxy("/apis", {
-target: "http://xxx:xxx",
-changeOrigin: true, //控制服务器收到的响应头中的 Host 字段值
-//apis 前缀置空
-pathRewrite: { "^/apis": "" },
-}),
-proxy("/api2", {
-target: "http://xxx:xxx",
-changeOrigin: true, //控制服务器收到的响应头中的 Host 字段值,true 时为代理服务 ip,false 为当前 ip，默认为 false
-pathRewrite: { "^/api2": "" },
-})
-);
+  app.use(
+    proxy("/apis", {
+      target: "http://xxx:xxx",
+      changeOrigin: true, //控制服务器收到的响应头中的 Host 字段值
+      //apis 前缀置空
+      pathRewrite: { "^/apis": "" },
+    }),
+    proxy("/api2", {
+      target: "http://xxx:xxx",
+      changeOrigin: true, //控制服务器收到的响应头中的 Host 字段值,true 时为代理服务 ip,false 为当前 ip，默认为 false
+      pathRewrite: { "^/api2": "" },
+    })
+  );
 };
 ```
 
@@ -275,9 +277,9 @@ git add .
 git commit -am 'xxxx'
 ```
 
-暴露webpack配置文件`npm run  eject`
+暴露 webpack 配置文件`npm run  eject`
 
-修改webpack.config.js，拷贝sass的配置改写为less
+修改 webpack.config.js，拷贝 sass 的配置改写为 less
 
 ```js
 //....
@@ -310,7 +312,7 @@ const lessModuleRegex = /\.module\.(less)$/;
               sideEffects: true,
             },
             // Adds support for CSS Modules, but using SASS
-            // using the extension .module.less 
+            // using the extension .module.less
             {
               test: lessModuleRegex,
               use: getStyleLoaders(
@@ -330,11 +332,11 @@ const lessModuleRegex = /\.module\.(less)$/;
 //...
 ```
 
-修改react-app-env-d.ts文件，加入
+修改 react-app-env-d.ts 文件，加入
 
 ```ts
 //...
-declare module '*.module.less' {
+declare module "*.module.less" {
   const classes: { readonly [key: string]: string };
   export default classes;
 }
@@ -379,7 +381,7 @@ declare module '*.module.less' {
 /src/index.js 入口文件中引入样式
 
 ```js
-import 'antd/dist/antd.min.css';
+import "antd/dist/antd.min.css";
 ```
 
 ##### eslint
@@ -396,7 +398,7 @@ dist
 *.local
 ```
 
-至此，我们可以在package.json添加命令
+至此，我们可以在 package.json 添加命令
 
 ```json
 {
@@ -410,21 +412,19 @@ dist
 
 `yarn add -D prettier`
 
-项目目录添加.prettierrc.js文件，我们添加常用的格式风格
+项目目录添加.prettierrc.js 文件，我们添加常用的格式风格
 
 ```js
-
 module.exports = {
-  "printWidth": 80, //一行的字符数，如果超过会进行换行，默认为80
-  "tabWidth": 2, //一个tab代表几个空格数，默认为80
-  "useTabs": false, //是否使用tab进行缩进，默认为false，表示用空格进行缩减
-  "singleQuote": false, //字符串是否使用单引号，默认为false，使用双引号
-  "semi": true, //行位是否使用分号，默认为true
-  "trailingComma": "none", //是否使用尾逗号，有三个可选值"<none|es5|all>"
-  "bracketSpacing": true, //对象大括号直接是否有空格，默认为true，效果：{ foo: bar }
+  printWidth: 80, //一行的字符数，如果超过会进行换行，默认为80
+  tabWidth: 2, //一个tab代表几个空格数，默认为80
+  useTabs: false, //是否使用tab进行缩进，默认为false，表示用空格进行缩减
+  singleQuote: false, //字符串是否使用单引号，默认为false，使用双引号
+  semi: true, //行位是否使用分号，默认为true
+  trailingComma: "none", //是否使用尾逗号，有三个可选值"<none|es5|all>"
+  bracketSpacing: true, //对象大括号直接是否有空格，默认为true，效果：{ foo: bar }
   //"parser": "babylon" //代码的解析引擎，默认为babylon，与babel相同。
-}
-
+};
 ```
 
 项目目录添加.prettierignore，忽略一些不需要 prettierg 格式化的文件
@@ -438,7 +438,7 @@ dist
 node_modules
 ```
 
-至此，我们可以在package.json添加命令
+至此，我们可以在 package.json 添加命令
 
 ```json
 {
@@ -450,7 +450,7 @@ node_modules
 
 避免 eslint 和 prettier 冲突，我们需要再安装两个包
 `yarn add -D eslint-config-prettier eslint-plugin-prettier`
-安装后我们只需要在.eslintrc.js文件添加一行即可
+安装后我们只需要在.eslintrc.js 文件添加一行即可
 
 ```js
 //...
@@ -485,17 +485,17 @@ node_modules
 
 检测 css 样式代码质量，其实很多项目都是不检测的，如果不做这步可以忽略。
 `yarn add -D stylelint stylelint-config-standard`
-项目目录中添加.stylelintrc.js文件
+项目目录中添加.stylelintrc.js 文件
 
 ```js
 module.exports = {
-  extends: ['stylelint-config-standard'],
+  extends: ["stylelint-config-standard"],
 };
 ```
 
-我们使用了官方推荐的stylelint-config-standard配置就好
+我们使用了官方推荐的 stylelint-config-standard 配置就好
 
-至此，我们可以在package.json添加命令
+至此，我们可以在 package.json 添加命令
 
 ```js
 {
@@ -505,18 +505,18 @@ module.exports = {
 }
 ```
 
-同样的，我们统一用 prettier 来格式化 css 代码。 需要安装stylelint插件来避免与prettier冲突。
+同样的，我们统一用 prettier 来格式化 css 代码。 需要安装 stylelint 插件来避免与 prettier 冲突。
 `stylelint-config-prettier`，作用是关闭 stylelint 所有不必要的或可能与 prettier 冲突的规则。但是在 Stylelint v15 版本之后，Stylelint 默认关闭了所有与 prettier 相冲突的风格规则，所以不需要安装`stylelint-config-prettier`了。
 `stylelint-prettier`，开启了以 prettier 为准的规则，并将报告错误给 stylelint
-修改.stylelintrc.js文件
+修改.stylelintrc.js 文件
 
 ```js
 module.exports = {
-  extends: ['stylelint-config-standard', 'stylelint-prettier/recommended'],
+  extends: ["stylelint-config-standard", "stylelint-prettier/recommended"],
 };
 ```
 
-我们如果使用vscode开发，一定要安装ESlint、Stylelint、Prettier这三个插件，只要项目安装了ESlint和Stylelint包，那么Vscode可以实时把代码质量问题报红提示，对于强迫症的人，肯定想及时把报红消灭
+我们如果使用 vscode 开发，一定要安装 ESlint、Stylelint、Prettier 这三个插件，只要项目安装了 ESlint 和 Stylelint 包，那么 Vscode 可以实时把代码质量问题报红提示，对于强迫症的人，肯定想及时把报红消灭
 
 ### 创建后端项目
 
@@ -575,40 +575,31 @@ Failed to parse source map: 'webpack://antd/./components/icon/style/index.less' 
 解决方法: antd-mobile 导入组件样式时加这个 min
 `import 'antd/dist/antd.min.css';`
 
-- 用create-react-app安装了react 18版本，加载官网示例的时候报错，不再支持render绑定根元素节点，否则降版本到react 17
-之前版本
+- 用 create-react-app 安装了 react 18 版本，加载官网示例的时候报错，不再支持 render 绑定根元素节点，否则降版本到 react 17
+  之前版本
 
 ```jsx
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
 class Test extends React.Component {
   render() {
-    return (
-    <div>hellow</div>
-    );
+    return <div>hellow</div>;
   }
 }
-ReactDOM.render(
-  <Test />,
-  document.getElementById('root')
-);
+ReactDOM.render(<Test />, document.getElementById("root"));
 ```
 
-react 18（改动的地方有两处，一个是createRoot，另一个是ReactDOM的引入路径）
+react 18（改动的地方有两处，一个是 createRoot，另一个是 ReactDOM 的引入路径）
 
 ```jsx
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
 class Test extends React.Component {
   render() {
-    return (
-    <div>hellow</div>
-    );
+    return <div>hellow</div>;
   }
 }
-ReactDOM.createRoot(
-  document.getElementById('root')
-).render(<Test/>);
+ReactDOM.createRoot(document.getElementById("root")).render(<Test />);
 ```

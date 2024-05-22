@@ -5,13 +5,13 @@ categories:
   - web
 ---
 
-
 ## 安装
 
 1. 查看 vue-cli 版本，必须大于 4.5：`vue -V`
    - 升级 vue-cli：`npm install -g @vue/cli`
    - 创建：`vue create test` 选择 vue3
 2. vite 创建：`vue init vite-app test`
+
    - `vue install`
    - `npm run dev`
      或者`npm init vite@latest`输入工程名称,选择框架为 vue
@@ -26,12 +26,11 @@ categories:
 
 ```js
 ///引用的不再是vue的构造函数
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import App from "./App.vue";
 //创建应用实例对象
-const app=createApp(App);
-app.mount('#app')
-
+const app = createApp(App);
+app.mount("#app");
 ```
 
 - vue2
@@ -57,25 +56,27 @@ vm.$mount('#app')
 > setup 在 beforeCreate 前会执行一次，其中的 this 为 undefined
 
 ```js
-import {h} from 'vue'
-export default{
-   name:'App',
-   setup(){
-      //非响应式数据
-      let a=1;
-      let b=2;
-     function test(){
-      console.log(a,b)
-      }
+import { h } from "vue";
+export default {
+  name: "App",
+  setup() {
+    //非响应式数据
+    let a = 1;
+    let b = 2;
+    function test() {
+      console.log(a, b);
+    }
 
-     return {//返回对象，可在模板中直接使用
-         c:1,d:'xx',test
-      }
-      //也可以返回渲染函数，但此时模板中的内容将全部无效
-      //return ()=>{h('div','xxxx')}
-
-   }
-}
+    return {
+      //返回对象，可在模板中直接使用
+      c: 1,
+      d: "xx",
+      test,
+    };
+    //也可以返回渲染函数，但此时模板中的内容将全部无效
+    //return ()=>{h('div','xxxx')}
+  },
+};
 ```
 
 - 传值
@@ -97,24 +98,27 @@ setup(props,context){
 > 定义一个响应式数据,模板中读取数据不用`.value`;基本类型使用的是`Object.defineProperty()`的 getter、setter 实现的，对象数据使用 reactive 函数
 
 ```js
-import {ref} from 'vue'
-export default{
-   name:'App',
-   setup(){
-      //响应式数据
-      let a=ref(1);//引用实例对象
-      let b=ref({c:1});
-     function test(){
-        a.value=2;
-        b.value.c=3;
-      console.log(a,b)
-      }
+import { ref } from "vue";
+export default {
+  name: "App",
+  setup() {
+    //响应式数据
+    let a = ref(1); //引用实例对象
+    let b = ref({ c: 1 });
+    function test() {
+      a.value = 2;
+      b.value.c = 3;
+      console.log(a, b);
+    }
 
-     return {//返回对象，可在模板中直接使用
-         a,b,test
-      }
-   }
-}
+    return {
+      //返回对象，可在模板中直接使用
+      a,
+      b,
+      test,
+    };
+  },
+};
 ```
 
 #### reative
@@ -122,50 +126,57 @@ export default{
 > 定义一个对象类型的响应式数据（基本数据类型不用它)
 
 ```js
-import {ref,reactive} from 'vue'
-export default{
-   name:'App',
-   setup(){
-      //响应式数据
-      let a=ref(1);//引用实例对象
-      let b=reactive({c:1});
-     function test(){
-        a.value=2;
-        b.c=3;//不用.value
-      console.log(a,b)
-      }
+import { ref, reactive } from "vue";
+export default {
+  name: "App",
+  setup() {
+    //响应式数据
+    let a = ref(1); //引用实例对象
+    let b = reactive({ c: 1 });
+    function test() {
+      a.value = 2;
+      b.c = 3; //不用.value
+      console.log(a, b);
+    }
 
-     return {//返回对象，可在模板中直接使用
-         a,b,test
-      }
-   }
-}
+    return {
+      //返回对象，可在模板中直接使用
+      a,
+      b,
+      test,
+    };
+  },
+};
 ```
 
 #### computed
 
 ```js
-import {computed} from 'vue'
-export default{
-   name:'App',
-   setup(){
-      //响应式数据
-      let a=1;//引用实例对象
+import { computed } from "vue";
+export default {
+  name: "App",
+  setup() {
+    //响应式数据
+    let a = 1; //引用实例对象
 
-     let d= computed(()=>{
-        return 100
-      })
-let b=computed({
-   get(){
-      return 1
-   },
-   set(value){}
-})
-     return {//返回对象，可在模板中直接使用
-         a,b,test,d
-      }
-   }
-}
+    let d = computed(() => {
+      return 100;
+    });
+    let b = computed({
+      get() {
+        return 1;
+      },
+      set(value) {},
+    });
+    return {
+      //返回对象，可在模板中直接使用
+      a,
+      b,
+      test,
+      d,
+    };
+  },
+};
 ```
 
 #### watch
@@ -236,7 +247,7 @@ function test(){
       a:2
       ,b
    }
-   
+
 }
 export defalut test
 ```
@@ -256,16 +267,14 @@ return {a}
 
 ```js
 //#检查某个值是否为 ref。
-let foo: unknown
+let foo: unknown;
 if (isRef(foo)) {
-  foo.value
+  foo.value;
 }
 
 //如果参数是 ref，则返回内部值，否则返回参数本身
 //val = isRef(val) ? val.value : val //语法糖
-const unwrapped = unref(foo)
-
-
+const unwrapped = unref(foo);
 ```
 
 #### toRef|toRefs
@@ -299,79 +308,79 @@ setup(){
 
 ```js
 let person = shallowReative({
-   a:1,
-   b:{
-      c:1
-   }
-})
-let person2=shallowRef({a:1})
+  a: 1,
+  b: {
+    c: 1,
+  },
+});
+let person2 = shallowRef({ a: 1 });
 ```
 
 #### readonly||shallowReadonly
 
 ```js
-let person=Reative({
-a:1,
-b:{
-c:1
-}
-})
-person =readonly(person)//深只读,保护数据
-person =shallowReadonly(person)//浅只读
+let person = Reative({
+  a: 1,
+  b: {
+    c: 1,
+  },
+});
+person = readonly(person); //深只读,保护数据
+person = shallowReadonly(person); //浅只读
 ```
 
 #### isProxy()||isReactive()||isReadonly()
 
 - isReactive()​
-检查一个对象是否是由 reactive() 或 shallowReactive() 创建的代理。
+  检查一个对象是否是由 reactive() 或 shallowReactive() 创建的代理。
 - isProxy()​
-检查一个对象是否是由 reactive()、readonly()、shallowReactive() 或 shallowReadonly() 创建的代理。
+  检查一个对象是否是由 reactive()、readonly()、shallowReactive() 或 shallowReadonly() 创建的代理。
 - isReadonly()
-检查传入的值是否为只读对象。只读对象的属性可以更改，但他们不能通过传入的对象直接赋值。
-通过 readonly() 和 shallowReadonly() 创建的代理都是只读的，因为他们是没有 set 函数的 computed() ref。
+  检查传入的值是否为只读对象。只读对象的属性可以更改，但他们不能通过传入的对象直接赋值。
+  通过 readonly() 和 shallowReadonly() 创建的代理都是只读的，因为他们是没有 set 函数的 computed() ref。
 
 #### toRaw||markRaw
 
 > 将 reactive 生成的响应式数据转换为普通对象,ref 的不行
 
 ```js
-let person=Reative({
-   a:1,
-   b:{
-      c:1
-   }
-})
-person =roRaw(person)//转化为原始数据
-person =markRaw(person)//标记一个对象，使其永远不再成为响应式对象
+let person = Reative({
+  a: 1,
+  b: {
+    c: 1,
+  },
+});
+person = roRaw(person); //转化为原始数据
+person = markRaw(person); //标记一个对象，使其永远不再成为响应式对象
 ```
 
 #### customRef()​
 
->创建一个自定义的 ref，显式声明对其依赖追踪和更新触发的控制方式。
-customRef() 预期接收一个工厂函数作为参数，这个工厂函数接受 track 和 trigger 两个函数作为参数，并返回一个带有 get 和 set 方法的对象。
+> 创建一个自定义的 ref，显式声明对其依赖追踪和更新触发的控制方式。
+> customRef() 预期接收一个工厂函数作为参数，这个工厂函数接受 track 和 trigger 两个函数作为参数，并返回一个带有 get 和 set 方法的对象。
 
 一般来说，track() 应该在 get() 方法中调用，而 trigger() 应该在 set() 中调用。然而事实上，你对何时调用、是否应该调用他们有完全的控制权。
 
 ```js
-import { customRef } from 'vue'
+import { customRef } from "vue";
 
 export function useDebouncedRef(value, delay = 200) {
-  let timeout
+  let timeout;
   return customRef((track, trigger) => {
     return {
       get() {
-        track()
-        return value
+        track();
+        return value;
       },
       set(newValue) {
-        clearTimeout(timeout)
+        clearTimeout(timeout);
         timeout = setTimeout(() => {
-          value = newValue
-          trigger()
-        }, delay)
-      }
-    }
-  })
+          value = newValue;
+          trigger();
+        }, delay);
+      },
+    };
+  });
 }
 ```
 
@@ -379,8 +388,8 @@ export function useDebouncedRef(value, delay = 200) {
 
 ```vue
 <script setup>
-import { useDebouncedRef } from './debouncedRef'
-const text = useDebouncedRef('hello')
+import { useDebouncedRef } from "./debouncedRef";
+const text = useDebouncedRef("hello");
 </script>
 
 <template>
@@ -395,13 +404,13 @@ const text = useDebouncedRef('hello')
 - 祖组件
 
 ```js
-let person=Reative({
-   a:1,
-   b:{
-      c:1
-   }
-})
-provide('test',person)
+let person = Reative({
+  a: 1,
+  b: {
+    c: 1,
+  },
+});
+provide("test", person);
 ```
 
 - 孙组件
@@ -413,48 +422,51 @@ let x=inject('test)
 ### 内置组件
 
 #### teleport
->
->是一个内置组件，它可以将一个组件内部的一部分模板“传送”到该组件的 DOM 结构外层的位置去。如：一个组件模板的一部分在逻辑上从属于该组件，但从整个应用视图的角度来看，它在 DOM 中应该被渲染在整个 Vue 应用外部的其他地方。
+
+> 是一个内置组件，它可以将一个组件内部的一部分模板“传送”到该组件的 DOM 结构外层的位置去。如：一个组件模板的一部分在逻辑上从属于该组件，但从整个应用视图的角度来看，它在 DOM 中应该被渲染在整个 Vue 应用外部的其他地方。
 
 ```html
 <!--Teleport 接收一个 to prop 来指定传送的目标。to 的值可以是一个 CSS 选择器字符串，也可以是一个 DOM 元素对象，<Teleport> 挂载时，传送的 to 目标必须已经存在于 DOM 中-->
 <teleport to="body">
-<div>xxx</div>
+  <div>xxx</div>
 </teleport>
 
 <teleport to="#xxx">
-<div>xxx</div>
+  <div>xxx</div>
 </teleport>
 
 <teleport :disabled="false" to="#xxx">
-<div>xxx</div>
+  <div>xxx</div>
 </teleport>
 ```
 
 ### vue3.0 响应式
 
 ```js
-let person={
-a:1,
-b:'xxx'
-}
-const p=new Proxy(person,{
-get(target,propName){//读取属性
-//target:原对象
-//propName：读取的属性名
-//return target[propName]//普通操作
-return Reflect.get(target,propName)//reflect 可减少写错误捕获
-},
-set(target,propName,value){//修改属性或增加属性时调用
-//value：修改的值
-//target[propName]=value
-return Reflect.set(target,prop,value)
-},
-deleteProperty(target,propName){//删除属性
-//return delete target[propName]
-return Reflect.deleteProperty(target,prop)
-},
-})//代理
+let person = {
+  a: 1,
+  b: "xxx",
+};
+const p = new Proxy(person, {
+  get(target, propName) {
+    //读取属性
+    //target:原对象
+    //propName：读取的属性名
+    //return target[propName]//普通操作
+    return Reflect.get(target, propName); //reflect 可减少写错误捕获
+  },
+  set(target, propName, value) {
+    //修改属性或增加属性时调用
+    //value：修改的值
+    //target[propName]=value
+    return Reflect.set(target, prop, value);
+  },
+  deleteProperty(target, propName) {
+    //删除属性
+    //return delete target[propName]
+    return Reflect.deleteProperty(target, prop);
+  },
+}); //代理
 ```
 
 ### vue3.0 生命周期
@@ -492,48 +504,42 @@ console.log('xxx')
 
 ```js
 // history模式
-import {
-    createRouter,
-    createWebHashHistory,
-} from 'vue-router'
+import { createRouter, createWebHashHistory } from "vue-router";
 
-import Home from '../pages/Home.vue'
-import About from '../pages/About.vue'
+import Home from "../pages/Home.vue";
+import About from "../pages/About.vue";
 
 const routes = [
-// 路由的默认路径
-    {
-        path:'/',
-        redirect:"/home"
-    },
-    {
-        path: '/home',
-         component: () => import('…/pages/Home.vue')
-    },
-    {
-        path: '/about',
-        component: About
-    },
-]
+  // 路由的默认路径
+  {
+    path: "/",
+    redirect: "/home",
+  },
+  {
+    path: "/home",
+    component: () => import("…/pages/Home.vue"),
+  },
+  {
+    path: "/about",
+    component: About,
+  },
+];
 
 // 创建路由对象
 const router = createRouter({
-    history: createWebHashHistory(),
-    routes
-})
+  history: createWebHashHistory(),
+  routes,
+});
 export default router;
-
 ```
 
 - main.js
 
 ```js
-import {
-    createApp
-} from 'vue'
-import App from './App.vue'
-import router from './router'
-createApp(App).use(router).mount('#app')
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
+createApp(App).use(router).mount("#app");
 ```
 
 - 使用
@@ -558,14 +564,14 @@ npm 安装 vuex。`npm install vuex@next --save`
 - store/index.js
 
 ```js
-import { createStore } from 'vuex'
+import { createStore } from "vuex";
 export default createStore({
   state: {},
   getters: {},
   mutations: {},
   actions: {},
-  modules: {}
-})
+  modules: {},
+});
 ```
 
 首先从 vuex 中引入 useStore 函数，他的返回值就是一个 vuex 实例
@@ -575,15 +581,15 @@ export default createStore({
   <h1>vuex中的数据{{ store.state.count }}</h1>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue"
-import { useStore } from "vuex"
+import { defineComponent } from "vue";
+import { useStore } from "vuex";
 export default defineComponent({
   name: "index",
   setup() {
-    const store = useStore()
-    return { store }
+    const store = useStore();
+    return { store };
   },
-})
+});
 </script>
 ```
 
@@ -592,15 +598,15 @@ export default defineComponent({
 ```js
 //错误引入
 
-import { useStore } from 'vuex'
+import { useStore } from "vuex";
 const $store = useStore();
-console.log($store) //undefined
+console.log($store); //undefined
 
 //正确引入
 
-import myStore from '@/store/index.js'
+import myStore from "@/store/index.js";
 const $store = myStore;
-console.log($store)
+console.log($store);
 ```
 
 ## less
@@ -614,7 +620,7 @@ console.log($store)
 
 ```html
 <style scoped lang="scss">
-/*这里是scss不是sass，这个是因为scss是sass3引入进来的，scss语法有"{}",";"而sass没有，所以sass-loader对他们的解析是不一样的
+  /*这里是scss不是sass，这个是因为scss是sass3引入进来的，scss语法有"{}",";"而sass没有，所以sass-loader对他们的解析是不一样的
 # 这里写样式
 */
 </style>
@@ -623,19 +629,19 @@ console.log($store)
 可以声明使用变量
 
 ```scss
- $color:black;
- .container{
-   a {
-     color:$color;
-   }
- }
+$color: black;
+.container {
+  a {
+    color: $color;
+  }
+}
 ```
 
 可以封装函数，通过 @mixin 声明函数，该函数创建颜色 style,不传参默认黑色
 
 ```scss
-@mixin create_color($color:black){
-  color:$color;
+@mixin create_color($color: black) {
+  color: $color;
 }
 ```
 
@@ -659,10 +665,10 @@ console.log($store)
 `npm i --save ant-design-vue@next`
 
 ```js
-import { createApp } from 'vue'
-import Antd from 'ant-design-vue';
-import 'ant-design-vue/dist/antd.css';
-const app = createApp(App)
+import { createApp } from "vue";
+import Antd from "ant-design-vue";
+import "ant-design-vue/dist/antd.css";
+const app = createApp(App);
 app.use(Antd);
 ```
 
@@ -682,17 +688,17 @@ vue3解析component: router-view失败
 
 ```js
 //使用ref()
-const array = ref([1,2,3]);
+const array = ref([1, 2, 3]);
 array.value = [];
 
 //使用slice,不过需要注意要使用ref
-array.value = array.value.slice(0,0);
+array.value = array.value.slice(0, 0);
 
 //length赋值为0,支持reactive,而且，这种只会触发一次watch
 array.value.length = 0;
 
 //使用splice,可以使用reactive,不过要注意，watch会触发多次
-array.splice(0,array.length)
+array.splice(0, array.length);
 ```
 
 ### Vue3 中废弃了$set 的概念
@@ -755,13 +761,14 @@ onMounted(() => {
 
 ```vue
 <template>
-  <div v-for='i in 10' ref="hello">xxxx</div>
+  <div v-for="i in 10" ref="hello">xxxx</div>
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 const hello = ref([]);
 onMounted(() => {
-  console.log(hello.value); });
+  console.log(hello.value);
+});
 </script>
 ```
 
@@ -769,12 +776,19 @@ onMounted(() => {
 
 ```vue
 <template>
-  <div v-for='i in 10' :ref="(el)=>{hello(el,i)}">xxxx</div>
+  <div
+    v-for="i in 10"
+    :ref="
+      (el) => {
+        hello(el, i);
+      }
+    "
+  >
+    xxxx
+  </div>
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-const hello = (el,index)=>{
-
-};
+const hello = (el, index) => {};
 </script>
 ```

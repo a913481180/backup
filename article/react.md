@@ -5,7 +5,6 @@ categories:
   - linux
 ---
 
-
 ## 浏览器中编写
 
 - 准备容器
@@ -28,11 +27,9 @@ categories:
 - JSX
 
 ```jsx
-<script type="text/babel">/*此处要写babel*/
-//创建虚拟dom
-const Vdom=(<h1>hello</h1>)/*不用引号*/
-//渲染虚拟DOM到页面
-ReactDOM.render(Vdom,document.getElementById('test'));
+<script type="text/babel">
+  /*此处要写babel*/ //创建虚拟dom const Vdom=(<h1>hello</h1>)/*不用引号*/
+  //渲染虚拟DOM到页面 ReactDOM.render(Vdom,document.getElementById('test'));
 </script>
 ```
 
@@ -52,7 +49,7 @@ ReactDOM.render(Vdom,document.getElementById('test'));
 
 ## JSX
 
-> javascript XML,react 定义的类似与 XML 的 js 扩展语法，脚手架通过@babel/plugin-transform-react-jsx包解析成React.createElemnt('h1',{className:'test'},'xx')函数
+> javascript XML,react 定义的类似与 XML 的 js 扩展语法，脚手架通过@babel/plugin-transform-react-jsx 包解析成 React.createElemnt('h1',{className:'test'},'xx')函数
 
 xml：早期用于存储和传输数据的格式
 
@@ -85,12 +82,12 @@ const Vdom = <span className="test">xxx</span>;
 - 虚拟 dom 只有一个根标签
 
 ```jsx
-const Vdom=(
-<div>
-<span className="test" >xxx</span>
-<span className="test" >xxx</span>
-</div>
-)
+const Vdom = (
+  <div>
+    <span className="test">xxx</span>
+    <span className="test">xxx</span>
+  </div>
+);
 ```
 
 - 标签首字符为小写则直接转为 html 中同名元素，若为大写则去渲染对应组件
@@ -100,9 +97,11 @@ const Vdom=(
 ```jsx
 return (
   <ul>
-  {list.map(item=><li key={item.id}>item.name</li>)}
+    {list.map((item) => (
+      <li key={item.id}>item.name</li>
+    ))}
   </ul>
-)
+);
 ```
 
 ### 条件渲染
@@ -110,21 +109,21 @@ return (
 三元表达式，逻辑&&||运算，函数
 
 ```jsx
-const isTrue=false
-const genSpan=(i)=>{
-  if(i){
-    return <span>x</span>
-  }else{
-    return <b>x</b>
+const isTrue = false;
+const genSpan = (i) => {
+  if (i) {
+    return <span>x</span>;
+  } else {
+    return <b>x</b>;
   }
-}
+};
 return (
   <div>
-  {isTrue&&<span>xx</span>}
-  {isTrue?<span>xx</span>:<b>xx</b>}
-  {genSpan(isTrue)}
+    {isTrue && <span>xx</span>}
+    {isTrue ? <span>xx</span> : <b>xx</b>}
+    {genSpan(isTrue)}
   </div>
-)
+);
 ```
 
 ## 样式控制
@@ -132,23 +131,23 @@ return (
 - 内联
 
 ```jsx
-const style={color:'red'}
-return 
+const style = { color: "red" };
+return;
 <>
-<div style={{color:'red'}}>xx</div>
-<div style={style}>xx</div>
-</>
+  <div style={{ color: "red" }}>xx</div>
+  <div style={style}>xx</div>
+</>;
 ```
 
 - 类名
-不能用对象和数组，只能是字符串
+  不能用对象和数组，只能是字符串
 
 ```jsx
-return 
+return;
 <>
-<div className='test'>xx</div>
-<div className={isTrue?'test':''}>xx</div>
-</>
+  <div className="test">xx</div>
+  <div className={isTrue ? "test" : ""}>xx</div>
+</>;
 ```
 
 ## 组件和模块
@@ -159,13 +158,14 @@ return
 ### 函数式组件
 
 ```jsx
-function Demo(){  //组件必须首字母大写
-//this 为undefind,经过babel编译后开启严格模式，this便指向undefind，不开启严格模式则是window
-return <h1>test</h1>
-//必须有返回值，若没有内容返回null
+function Demo() {
+  //组件必须首字母大写
+  //this 为undefind,经过babel编译后开启严格模式，this便指向undefind，不开启严格模式则是window
+  return <h1>test</h1>;
+  //必须有返回值，若没有内容返回null
 }
 
-ReactDOM.render(<Demo/>,document.getElementById('test'))
+ReactDOM.render(<Demo />, document.getElementById("test"));
 //react解析组件标签,找到Demo组件，发现此组件是函数定义的，便调用该函数，将虚拟dom渲染成真实dom
 ```
 
@@ -175,14 +175,15 @@ ReactDOM.render(<Demo/>,document.getElementById('test'))
 
 ```jsx
 //在Demo的原型对象上
-class Demo extends React.Component{
-  render(){//必须提供render,极其返回值
-      //this指向Demo的实例对象
-    return <h1>test</h1>
+class Demo extends React.Component {
+  render() {
+    //必须提供render,极其返回值
+    //this指向Demo的实例对象
+    return <h1>test</h1>;
   }
 }
 //react解析组件标签,找到Demo组件，发现此组件是类定义的，便new 出该类实例，通过该实例调用原型对象上的render方法。将虚拟dom渲染成真实dom
-ReactDOM.render(<Demo/>,document.getElementById('test'))
+ReactDOM.render(<Demo />, document.getElementById("test"));
 ```
 
 #### 复杂组件
@@ -214,7 +215,7 @@ class Demo extends React.Component{
       <h1 onClick={this.changeValue}>test{this.state.b}</h1>
     )
   }
- 
+
 }
 
 function test(){}
@@ -225,74 +226,66 @@ ReactDOM.render(<Demo/>,document.getElementById('test'))
 解决 this 指向
 
 ```jsx
-
-class Demo extends React.Component{
-  constructor(prop){
-    super(prop)//构造器是否接受props，是否传给super取决于是否希望在构造器中通过this访问props
-    this.state={
-      a:1,
-      b:2
-    }
+class Demo extends React.Component {
+  constructor(prop) {
+    super(prop); //构造器是否接受props，是否传给super取决于是否希望在构造器中通过this访问props
+    this.state = {
+      a: 1,
+      b: 2,
+    };
     //改变this指向
-    this.changValue=this.changValue.bind(this)
+    this.changValue = this.changValue.bind(this);
   }
-  changValue(){
+  changValue() {
     //state不能直接更改
-    this.state.a=1
+    this.state.a = 1;
     //必须通过api
-    this.setState({a:2})//更新为合并，不是替换
-   }
-  render(){
-    return (
-      <h1 onClick={this.changeValue}>test{this.state.b}</h1>
-    )
-
+    this.setState({ a: 2 }); //更新为合并，不是替换
   }
-  
+  render() {
+    return <h1 onClick={this.changeValue}>test{this.state.b}</h1>;
+  }
 }
-ReactDOM.render(<Demo/>,document.getElementById('test'))
+ReactDOM.render(<Demo />, document.getElementById("test"));
 ```
 
 ###### 简写
 
 ```jsx
-class Demo extends React.Component{
+class Demo extends React.Component {
   //名称固定，就叫state
-  state={//等于号，代表给该类的实例追加属性
-    a:1,
-    b:2
+  state = {
+    //等于号，代表给该类的实例追加属性
+    a: 1,
+    b: 2,
+  };
+  //必须用箭头函数,不需要通过constructor修改this指向
+  changValue = () => {
+    this.setState({ a: 2 }); //更新为合并，不是替换
+  };
+  render() {
+    return <h1 onClick={this.changeValue}>test{this.state.b}</h1>;
   }
-//必须用箭头函数,不需要通过constructor修改this指向
-  changValue=()=>{
-  this.setState({a:2})//更新为合并，不是替换
-  }
-  render(){
-    return (
-      <h1 onClick={this.changeValue}>test{this.state.b}</h1>
-    )
-  }
-
 }
-ReactDOM.render(<Demo/>,document.getElementById('test'))
+ReactDOM.render(<Demo />, document.getElementById("test"));
 ```
 
 ##### 状态不可变
 
-不要直接修改state状态的值，而是基于当前状态创建新的状态值
+不要直接修改 state 状态的值，而是基于当前状态创建新的状态值
 
 - 错误修改
 
 ```js
-state={count:0,list:[1,2,3],person:{name:'xx',age:18}}
-this.state.count++
-this.state.count+=1
-this.state.count=1
+state = { count: 0, list: [1, 2, 3], person: { name: "xx", age: 18 } };
+this.state.count++;
+this.state.count += 1;
+this.state.count = 1;
 
-this.state.list.push(1)
-this.state.list.splice(1,1)
+this.state.list.push(1);
+this.state.list.splice(1, 1);
 
-
-this.state.person.name='aaa'
+this.state.person.name = "aaa";
 ```
 
 - 正确修改
@@ -315,31 +308,28 @@ this.setState({
 ##### props
 
 > 组件的所有属性都保存在 props 中，props 是只读的，不能修改。可以传递任何数据包括函数，jsx
-> 类式组件通过this.props获取props对象
-> 函数式组件通过参数获取props对象
-> 可使用ts来配置
+> 类式组件通过 this.props 获取 props 对象
+> 函数式组件通过参数获取 props 对象
+> 可使用 ts 来配置
 
 ```jsx
-class Demo extends React.Component{
-render(){
-return (
-<h1 >test{this.props.b}</h1>
-)
-
+class Demo extends React.Component {
+  render() {
+    return <h1>test{this.props.b}</h1>;
+  }
 }
-}
-ReactDOM.render(<Demo a={1} b='ss'/>,document.getElementById('test1'))//数据类型要用｛｝
-const obj={a:1,b:2}
-ReactDOM.render(<Demo {...obj}/>,document.getElementById('test2'))//批量传属性
+ReactDOM.render(<Demo a={1} b="ss" />, document.getElementById("test1")); //数据类型要用｛｝
+const obj = { a: 1, b: 2 };
+ReactDOM.render(<Demo {...obj} />, document.getElementById("test2")); //批量传属性
 ```
 
 - props 规则限制
 
->常见规则：
->必传：isRequired
->基本类型：boolean , number,...
->节点：element
->指定对象：shape({})
+> 常见规则：
+> 必传：isRequired
+> 基本类型：boolean , number,...
+> 节点：element
+> 指定对象：shape({})
 
 ```jsx
 //react16.x以上需引入prop-types.js
@@ -461,26 +451,27 @@ console.log(this.title3.current)
 
 ##### 受控组件
 
->input框的状态（value）被React组件状态（state）控制，就是可以被react状态控制的组件
+> input 框的状态（value）被 React 组件状态（state）控制，就是可以被 react 状态控制的组件
 
-- 在状态state中声明一个组件的状态数据
-- 将状态数据设置为input标签元素的value属性的值
-- 为input添加change时间
-- 通过事件对象e获取文本框的值
-- 调用setState方法，将文本框的值作为state状态的最新值
+- 在状态 state 中声明一个组件的状态数据
+- 将状态数据设置为 input 标签元素的 value 属性的值
+- 为 input 添加 change 时间
+- 通过事件对象 e 获取文本框的值
+- 调用 setState 方法，将文本框的值作为 state 状态的最新值
 
 ##### 非受控组件
 
->就是手动操作dm的方式获取文本的值，文本框的状态不受react组件的state中的状态控制
+> 就是手动操作 dm 的方式获取文本的值，文本框的状态不受 react 组件的 state 中的状态控制
 
-- 导入createRef 函数
-- 调用createRef函数，创建一个ref,存储到名为myref的实例属性中
-- 为input添加ref属性
-- 通过myref.current即可拿到input对应的dom元素
+- 导入 createRef 函数
+- 调用 createRef 函数，创建一个 ref,存储到名为 myref 的实例属性中
+- 为 input 添加 ref 属性
+- 通过 myref.current 即可拿到 input 对应的 dom 元素
 
 ##### 绑定事件
 
 1. 通过 onXxx 属性指定事件处理函数（注意大小写）
+
    - react 使用的自定义事件（原生小写->大写，原生大写->小写），而不是原生 DOM 事件
    - react 中的事件是通过事件委托方式处理的（委托给组件最外层的元素,事件冒泡）
 
@@ -500,7 +491,7 @@ console.log(this.title3.current)
      handleClick2(event){
 
     }
-    
+
     render(){
       //render函数中的 this已被react修正为当前组件实例对象
       return (
@@ -514,58 +505,57 @@ console.log(this.title3.current)
    ```
 
 2. 可通过 event.target 得到的发生事件的 DOM 元素对象
-3. 阻止默认行为event.preventDefault()
+3. 阻止默认行为 event.preventDefault()
 
 #### 生命周期
 
->类式组件才有生命周期,因为函数式组件不能实例化
+> 类式组件才有生命周期,因为函数式组件不能实例化
 
 ##### 旧(<16.4)
 
 - 初始化阶段
 
 ```js
-constructor()//构造器
-componentWillMount()//组件将要挂载
-render()
-componentDidMount()//组件挂载完毕
+constructor(); //构造器
+componentWillMount(); //组件将要挂载
+render();
+componentDidMount(); //组件挂载完毕
 ```
 
 - 更新数据时
 
 ```js
-setState()
-shouldComponentUpdate()//默认返回true，返回false时不执行更新
-componentWillUpdate()//组件将要更新
-render()
-componentDidUpdate()//组件更新更新完毕
+setState();
+shouldComponentUpdate(); //默认返回true，返回false时不执行更新
+componentWillUpdate(); //组件将要更新
+render();
+componentDidUpdate(); //组件更新更新完毕
 ```
 
 - 强制更新时
 
 ```js
-forceUpdate()//不想更改状态中的数据，更新页面
-componentWillUpdate()//组件将要更新
-render()
-componentDidUpdate()//组件更新更新完毕
+forceUpdate(); //不想更改状态中的数据，更新页面
+componentWillUpdate(); //组件将要更新
+render();
+componentDidUpdate(); //组件更新更新完毕
 ```
 
 - 父组件渲染
 
 ```js
-componentWillReceiveProps(props)//第一次不调用，接受新的props才调用
-shouldComponentUpdate()//默认返回true，返回false时不执行更新
-componentWillUpdate()//组件将要更新
-render()
-componentDidUpdate()//组件更新更新完毕
-
+componentWillReceiveProps(props); //第一次不调用，接受新的props才调用
+shouldComponentUpdate(); //默认返回true，返回false时不执行更新
+componentWillUpdate(); //组件将要更新
+render();
+componentDidUpdate(); //组件更新更新完毕
 ```
 
 - 卸载组件
 
 ```js
 //由React.unmountComponentAtNode()触发
-componentWillUnmount()
+componentWillUnmount();
 ```
 
 ##### 新
@@ -602,7 +592,7 @@ componentDidUpdate(preProps,preState,snapshotValue)//之前的prop时和状态,�
 
 ```js
 //由React.unmountComponentAtNode()触发
-componentWillUnmount()
+componentWillUnmount();
 ```
 
 #### react 中的 key 作用
@@ -847,13 +837,12 @@ export default withRouter(Test); //返回的是全新的组件
 #### React Router 6
 
 > 移除`<Switch/>` ，新增`<Routers/>`
-> 移除`<Redirect/>`，新增`<Navigate/>`
-> `component={About}`变为 `element={<About/>}`
+> 移除`<Redirect/>`，新增`<Navigate/>` > `component={About}`变为 `element={<About/>}`
 > 增加 hooks
 
 - Routers
 
-> 提供路由出口，满足条件的路由组件会渲染到组件内部，相当与vue-router里的<router-view></router-view>
+> 提供路由出口，满足条件的路由组件会渲染到组件内部，相当与 vue-router 里的<router-view></router-view>
 > 必须用 Routers 包裹，不会匹配多个
 
 ```jsx
@@ -924,16 +913,16 @@ return (
 - Outlet
 
 ```jsx
-function App(){
+function App() {
   return (
     <Routers>
-    <Router path="/test" element={<Test/>}>
-      {/*二级路由嵌套*/}
-      <Router path="test1" element={<Test1/>}></Router>
-      <Router path="test2" element={<Test2/>}></Router>
-    </Router>
+      <Router path="/test" element={<Test />}>
+        {/*二级路由嵌套*/}
+        <Router path="test1" element={<Test1 />}></Router>
+        <Router path="test2" element={<Test2 />}></Router>
+      </Router>
     </Routers>
-  )
+  );
 }
 ```
 
@@ -1013,26 +1002,21 @@ goto(){
 ```
 
 ```jsx
-import {useParams,useSearchParams} from 'react-router-dom'
-function Test(){
-  const [searchParams]=useSearchParams()
-  const id=searchParams.get('id')
-  const {name}=searchParams.getAll()
+import { useParams, useSearchParams } from "react-router-dom";
+function Test() {
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const { name } = searchParams.getAll();
 
-
-  const [params]=useParams()
-  const id=params.id
-  return (
-    <div>
-    </div>
-  )
+  const [params] = useParams();
+  const id = params.id;
+  return <div></div>;
 }
-
 ```
 
 - 通配符
 
->不匹配时，显示的内容
+> 不匹配时，显示的内容
 
 ```jsx
 
@@ -1042,13 +1026,13 @@ function Test(){
 </Routes>
 ```
 
-#### 集中式状态管理工具redux
+#### 集中式状态管理工具 redux
 
 > 状态管理 js 库，集中式管理 react 应用中多个组件共享的状态
 
-- store：联系action和reducer的对象，提供`getState()获取state`,`dispatch()发送action`,`subscribe()注册监听，返回值注销监听`方法
-  - action：本质是个对象，应用给store传递数据的载体，应用通过store.dispatch()发送给store
-  - reducer:本质是个函数，用来响应发过来的actions,处理后把state发给store。（需要有return返回值，接受两个参数`初始化state`,`action`）
+- store：联系 action 和 reducer 的对象，提供`getState()获取state`,`dispatch()发送action`,`subscribe()注册监听，返回值注销监听`方法
+  - action：本质是个对象，应用给 store 传递数据的载体，应用通过 store.dispatch()发送给 store
+  - reducer:本质是个函数，用来响应发过来的 actions,处理后把 state 发给 store。（需要有 return 返回值，接受两个参数`初始化state`,`action`）
   - state:数据
 
 ##### 旧版
@@ -1111,7 +1095,7 @@ return （<div>{{store.getState()}}</div>）
 ###### 中间件实现异步 action
 
 > 异步 action 指 action 返回值为函数，同步 action 指 action 返回值为对象
-redux-thunk能让我们的action不仅能返回一个对象还能返回一个函数，在函数里面在进行一次dispatch，这样就能把异步请求抽离到action里面
+> redux-thunk 能让我们的 action 不仅能返回一个对象还能返回一个函数，在函数里面在进行一次 dispatch，这样就能把异步请求抽离到 action 里面
 
 - 安装：`yarn add redux-thunk`
 
@@ -1160,14 +1144,14 @@ export default createStore(allReducer)
 
 ##### react-redux
 
-官方用于配合react的库，使组件更加方便从store中读取数据，分发action
+官方用于配合 react 的库，使组件更加方便从 store 中读取数据，分发 action
 
 > 组件通过 props 传递状态、操作方法
 > 不用再写 store.subscribe()
 
 ###### provide
 
-该组件能使整个app都能读取到store中的数据
+该组件能使整个 app 都能读取到 store 中的数据
 
 ```js
 //index.js
@@ -1184,18 +1168,18 @@ ReactDOM.render(
 
 ###### connect
 
-该方法能使组件和store进行关联,使用`connect(参数)(组件)`
+该方法能使组件和 store 进行关联,使用`connect(参数)(组件)`
 常用参数
 
-- `mapStateToProps(state,ownProps)函数`将store中的数据作为props绑定到组件上
-- `mapDispatchToProps(dispatch,ownProps)函数`将action作为props绑定到组件上
+- `mapStateToProps(state,ownProps)函数`将 store 中的数据作为 props 绑定到组件上
+- `mapDispatchToProps(dispatch,ownProps)函数`将 action 作为 props 绑定到组件上
 
 ```jsx
 
 class Test extend Componet{
   render(){
     return <div onClick={()=>{this.props.add()}}>{this.props.state.value}<div>
-  } 
+  }
 }
 
 let mapStateToProps = (state) => {
@@ -1226,15 +1210,16 @@ export default connect(
 react-redux 也需要单独安装
 
 - configureStore
-  >configureStore 替代 createStore配置简单,设置默认值也方便
-  src/store/index.js
+
+  > configureStore 替代 createStore 配置简单,设置默认值也方便
+  > src/store/index.js
 
   ```js
   // 引入
   import { configureStore } from "@reduxjs/toolkit";
   import counterSlice from "../pages/basic/counterSlice";
   import mySlice from "../pages/mySlice";
-  
+
   export default configureStore({
     reducer: {
       rootCounter: counterSlice,
@@ -1243,24 +1228,24 @@ react-redux 也需要单独安装
   });
   ```
 
-这里 reduer 直接合并成一个唯一的根root了,原有的 `combineReducers` 这个合并函数就用不到了
+这里 reduer 直接合并成一个唯一的根 root 了,原有的 `combineReducers` 这个合并函数就用不到了
 注意自己配置的 reducer 的 key 值 和 对应的 value 值
 
 - 根组件配置 store
 
 ```js
-入口index.js
+入口index.js;
 
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import store from './store'
-import {Provider} from 'react-redux'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import store from "./store";
+import { Provider } from "react-redux";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-   <Provider store={store}>
-         <App />
+    <Provider store={store}>
+      <App />
     </Provider>
   </React.StrictMode>
 );
@@ -1284,20 +1269,20 @@ root.render(
   > createSlice 对 actions、Reducer 的一个封装。
 
   - 创建 slice
-     使用 createSlice 方法创建一个 slice。每一个 slice 里面包含了 reducer 和 actions，可以实现模块化的封装。
-     所有的相关操作都独立在一个文件中完成。
+    使用 createSlice 方法创建一个 slice。每一个 slice 里面包含了 reducer 和 actions，可以实现模块化的封装。
+    所有的相关操作都独立在一个文件中完成。
 
   - 关键属性:
     - `name`：命名空间，可以自动的把每一个 action 进行独立，解决了 action 的 type 出现同名的文件。在使用的时候默认会把使用 `name/actionName`
     - `initialState`：state 数据的初始值
   - reducers
-     定义的 action。由于内置了 immutable 插件，可以直接使用赋值的方式进行数据的改变，不需要每一次都返回一个新的 state 数据。
+    定义的 action。由于内置了 immutable 插件，可以直接使用赋值的方式进行数据的改变，不需要每一次都返回一个新的 state 数据。
   - 导出
-     counterSlice.actions 导出所有的修改函数方便页面使用
-     counterSlice.reducer 导出 reducer 在 store 里面使用
-     具体 reducer 函数的参数
-     参数 1: 当前 slice 的 state 数据
-     参数 2: 对象{type:"",payload:传参}
+    counterSlice.actions 导出所有的修改函数方便页面使用
+    counterSlice.reducer 导出 reducer 在 store 里面使用
+    具体 reducer 函数的参数
+    参数 1: 当前 slice 的 state 数据
+    参数 2: 对象{type:"",payload:传参}
 
 type:counterSpace/decrement
 type 就是之前的 actions 用 switc/case 来匹配很麻烦,现在简洁了
@@ -1324,8 +1309,8 @@ export const counterSlice = createSlice({
   name: "counterSpace", // 命名空间，在调用action的时候会默认的设置为action的前缀,保证唯一.不重名
   initialState,
   reducers: {
-// reducer函数 state当前组件的数据
-//第二个参数为{payload:{},type:"""} 想想旧写法或者vuex
+    // reducer函数 state当前组件的数据
+    //第二个参数为{payload:{},type:"""} 想想旧写法或者vuex
     increment(state) {
       state.counter += 100;
     },
@@ -1336,7 +1321,7 @@ export const counterSlice = createSlice({
     },
     updateUser(state, { payload }) {
       console.log("updateUser-------payload", payload);
-// 引用类型 注意 赋值的写法
+      // 引用类型 注意 赋值的写法
       state.user = {
         ...state.user,
         ...payload,
@@ -1354,7 +1339,6 @@ export const selectCount = (state) => state.rootCounter.counter;
 export const selectUser = (state) => state.rootCounter.user;
 
 export default counterSlice.reducer;
-
 ```
 
 - 页面使用
@@ -1362,7 +1346,7 @@ export default counterSlice.reducer;
 
 ```js
 // 这样写太长了 麻烦
- const counter = useSelector(state=>state.rootCouter.counter);
+const counter = useSelector((state) => state.rootCouter.counter);
 ```
 
 rootCouter 这个 key 来源于 根 store 里面配置的 reducer，这样写太长了，麻烦。在这个 slice 里面我做了统一处理
@@ -1490,11 +1474,11 @@ createSlice({
       </ul>
 ```
 
-##### 集中式状态管理工具Mobx
+##### 集中式状态管理工具 Mobx
 
->简单：编写无模板的极简代码
->轻松实现最优渲染：依赖自动追踪最小渲染优化
->自由：可移植，测试
+> 简单：编写无模板的极简代码
+> 轻松实现最优渲染：依赖自动追踪最小渲染优化
+> 自由：可移植，测试
 
 ###### 安装
 
@@ -1507,52 +1491,48 @@ npm install mobx mobx-react
 - stroe/counter.js
 
 ```js
-import {makeAutoObservable,computed} from 'mobx'
-class CounterStore{
+import { makeAutoObservable, computed } from "mobx";
+class CounterStore {
   //定义数据
-  count=0
-  constructor(){
+  count = 0;
+  constructor() {
     //把数据弄成响应式
-    makeAutoObservable(this,
-   {
-  count_2:computed,//标记为计算属性
-   } 
-    )
+    makeAutoObservable(this, {
+      count_2: computed, //标记为计算属性
+    });
   }
   //修改数据
-  addCount=()=>{
-    this.conut++
-  }
+  addCount = () => {
+    this.conut++;
+  };
 
-  get count_2(){
-    return this.count*10
+  get count_2() {
+    return this.count * 10;
   }
 }
 //实例化，导出
-const counterStore=new CounterStore()
-export default counterStore
-
+const counterStore = new CounterStore();
+export default counterStore;
 ```
 
 - App.js
 
 ```jsx
 //导入store
-import counterStore from './store/counter.js'
+import counterStore from "./store/counter.js";
 //导入中间件，链接mobx，react,完成响应式
-import {observer} from 'mobx-react'
-function App(){
+import { observer } from "mobx-react";
+function App() {
   return (
     <div>
-    {counterSotre.count}
-    {counterSotre.count_2}
+      {counterSotre.count}
+      {counterSotre.count_2}
 
-    <button onClick={counterStore.addCount}>add</button>
+      <button onClick={counterStore.addCount}>add</button>
     </div>
-  )
+  );
 }
-export default observer(App)
-
+export default observer(App);
 ```
 
 ###### 模块化
@@ -1561,92 +1541,88 @@ export default observer(App)
 
 ```js
 //组合模块
-import {CounterStore} from './counter.Store.js'
-import React from 'react'
+import { CounterStore } from "./counter.Store.js";
+import React from "react";
 
 //声明rootStore
-class RootStore{
-  constructor(){
-    this.counterStore=new CounterSotre()
-
+class RootStore {
+  constructor() {
+    this.counterStore = new CounterSotre();
   }
 }
 //实例化根store
-const rootStore=new RootStore()
+const rootStore = new RootStore();
 //使用context进行透传．也可以直接导出包一层observer
 //查找机制：优先从Provider标签中value,若找不到则找createContext()方法中的传递过来的默认参数
-const context=React.createContext(rootStore)
-const useStore=()=>React.useContext(context)
-export {useStore}
-
-
+const context = React.createContext(rootStore);
+const useStore = () => React.useContext(context);
+export { useStore };
 ```
 
 - store/counter.Stroe.js
 
 ```js
-import {makeAutoObservable,computed} from 'mobx'
-class CounterStore{
+import { makeAutoObservable, computed } from "mobx";
+class CounterStore {
   //定义数据
-  count=0
-  constructor(){
+  count = 0;
+  constructor() {
     //把数据弄成响应式
-    makeAutoObservable(this,
-   {
-  count_2:computed,//标记为计算属性
-   } 
-    )
+    makeAutoObservable(this, {
+      count_2: computed, //标记为计算属性
+    });
   }
   //修改数据
-  addCount=()=>{
-    this.conut++
-  }
+  addCount = () => {
+    this.conut++;
+  };
 
-  get count_2(){
-    return this.count*10
+  get count_2() {
+    return this.count * 10;
   }
 }
 //实例化，导出
-export default CounterStore
-
+export default CounterStore;
 ```
 
- App.js
+App.js
 
 ```jsx
 //导入store
-import {useStore} from './store/index.js'
-import {observer} from 'mobx-react'
-function App(){
-  const rootStore=useStore()
+import { useStore } from "./store/index.js";
+import { observer } from "mobx-react";
+function App() {
+  const rootStore = useStore();
 
   return (
     <div>
-    {rootStore.counterSotre.count}
-    {rootStore.counterSotre.count_2}
+      {rootStore.counterSotre.count}
+      {rootStore.counterSotre.count_2}
 
-    <button onClick={rootStore.counterStore.addCount}>add</button>
+      <button onClick={rootStore.counterStore.addCount}>add</button>
     </div>
-  )
+  );
 }
 
-export default observer(App)
-
+export default observer(App);
 ```
 
 ##### 解构赋值
 
 ```js
-let obj={a:{b:1}}
-const {a}=obj;
-const {a:{b}}=obj;//连续解构赋值
-const {a:{b:value}}=obj;//连续解构赋值+重命名
-
+let obj = { a: { b: 1 } };
+const { a } = obj;
+const {
+  a: { b },
+} = obj; //连续解构赋值
+const {
+  a: { b: value },
+} = obj; //连续解构赋值+重命名
 ```
 
 ##### 高阶组件
 
->把一个组件当成另一个组件的参数传入，然后返回新的组件
+> 把一个组件当成另一个组件的参数传入，然后返回新的组件
 
 ```jsx
 function AuthComponent({children}){
@@ -1693,36 +1669,38 @@ arr.push( {[type]:e.target.value})
 ```
 
 ```js
-function sum(a,b,c){return a+b+c}
+function sum(a, b, c) {
+  return a + b + c;
+}
 
-function sum2(a){
-return (b)=>{
-return (c)=>{
-return a+b+c
+function sum2(a) {
+  return (b) => {
+    return (c) => {
+      return a + b + c;
+    };
+  };
 }
-}
-}
-sum(1)(2)(3)
+sum(1)(2)(3);
 ```
 
-### useState和setState到底是同步还是异步
+### useState 和 setState 到底是同步还是异步
 
 #### 18.x
 
 均为异步
 
-#### 18.x以下
+#### 18.x 以下
 
-##### 在正常的react的事件流里（如onClick等）
+##### 在正常的 react 的事件流里（如 onClick 等）
 
-- setState和useState是异步执行的（不会立即更新state的结果）
-- 多次执行setState和useState，只会调用一次重新渲染render
-不同的是，setState会进行state的合并，而useState则不会
+- setState 和 useState 是异步执行的（不会立即更新 state 的结果）
+- 多次执行 setState 和 useState，只会调用一次重新渲染 render
+  不同的是，setState 会进行 state 的合并，而 useState 则不会
 
-##### 在setTimeout，Promise.then等异步事件中
+##### 在 setTimeout，Promise.then 等异步事件中
 
-- setState和useState是同步执行的（立即更新state的结果）
-- 多次执行setState和useState，每一次的执行setState和useState，都会调用一次render
+- setState 和 useState 是同步执行的（立即更新 state 的结果）
+- 多次执行 setState 和 useState，每一次的执行 setState 和 useState，都会调用一次 render
 
 #### 前端发请求
 
@@ -1745,18 +1723,21 @@ return res.json()
 写法
 
 ```js
-state={a:1}
+state = { a: 1 };
 
-对象式setState
-this.setState({a:2})
-this.setState({a:2},()=>{
-//状态更新以及页面也更新后，才调用
-})
+对象式setState;
+this.setState({ a: 2 });
+this.setState({ a: 2 }, () => {
+  //状态更新以及页面也更新后，才调用
+});
 
-函数式setState
-this.setState((state,props)=>{
-return {a:1}},()=>{})
-
+函数式setState;
+this.setState(
+  (state, props) => {
+    return { a: 1 };
+  },
+  () => {}
+);
 ```
 
 #### lazyLoad
@@ -1782,22 +1763,29 @@ export default class Demo extend Component{
 #### Hooks
 
 > hook 是 16.8 的新特性，可以让你在函数组件中使用 state 以及其他 react 特性
->hook 本质是一套能够使函数组件更强大，灵活的‘钩子’(某一时刻下自动执行的函数)
->解决组件逻辑复用的问题：hook出现前，react先后尝试了mixins、HOC高阶组件、render-props等模式，但各自都有对应的问题。如mixin的数据来源不明，高阶组件的嵌套问题
->解决了类式组件自身的问题：如属性过多，生命周期、this指向
+> hook 本质是一套能够使函数组件更强大，灵活的‘钩子’(某一时刻下自动执行的函数)
+> 解决组件逻辑复用的问题：hook 出现前，react 先后尝试了 mixins、HOC 高阶组件、render-props 等模式，但各自都有对应的问题。如 mixin 的数据来源不明，高阶组件的嵌套问题
+> 解决了类式组件自身的问题：如属性过多，生命周期、this 指向
 
 ##### state
 
-useState返回的值是数组
+useState 返回的值是数组
 
 ```jsx
-import React from 'react'
-function Test(){
-  const [a,set]=React.useState(123) //初始化会调用一次，下次调用时，会缓存数据，不会覆盖
+import React from "react";
+function Test() {
+  const [a, set] = React.useState(123); //初始化会调用一次，下次调用时，会缓存数据，不会覆盖
   //不能在if/for/函数体中写（react会按照hooks调用顺序识别每一个hook）
-  let add1=()=>{set(456)}
-  let add2=()=>{set((a)=>{return a+1})}
-  return (<div>{a}</div>)}
+  let add1 = () => {
+    set(456);
+  };
+  let add2 = () => {
+    set((a) => {
+      return a + 1;
+    });
+  };
+  return <div>{a}</div>;
+}
 ```
 
 ##### effect
@@ -1827,24 +1815,24 @@ return (<div>a</div>)
 
 ```
 
-在React通知到Renderer渲染器后，渲染器又分了三个子阶段来处理：
+在 React 通知到 Renderer 渲染器后，渲染器又分了三个子阶段来处理：
 
-beforeMutation阶段（渲染视图前）
-mutation阶段（渲染试图）
-layout阶段（渲染视图后）
-渲染器会在mutation阶段完成后， 在layout阶段同步的调用useLayoutEffect，在子组件嵌套中于是如此。在类组件中，调用的是componentDidMount生命周期函数。也就是说，在useLayoutEffect中，无论是否有重新触发setState，也不会在当前渲染里，重新更新界面。
-而在整个渲染器渲染阶段（其实也叫commit）渲染完成后，react才会异步的执行useEffect。当在useEffect中如果有setState，则会重新触发渲染器，更新界面。
+beforeMutation 阶段（渲染视图前）
+mutation 阶段（渲染试图）
+layout 阶段（渲染视图后）
+渲染器会在 mutation 阶段完成后， 在 layout 阶段同步的调用 useLayoutEffect，在子组件嵌套中于是如此。在类组件中，调用的是 componentDidMount 生命周期函数。也就是说，在 useLayoutEffect 中，无论是否有重新触发 setState，也不会在当前渲染里，重新更新界面。
+而在整个渲染器渲染阶段（其实也叫 commit）渲染完成后，react 才会异步的执行 useEffect。当在 useEffect 中如果有 setState，则会重新触发渲染器，更新界面。
 
 结论：
 
-useLayoutEffect的是在渲染器执行当前渲染界面任务时，同步执行。
-在当前一轮的Reconciler任务调度过程中，在渲染器执行完当前任务后，才会异步调用useEffect。
-useLayoutEffect先于useEffect执行，并且子组件优先执行。
-componentDidMount()完全等价于useLayoutEffect( fn , [ ] )，但是不等价于useEffect( fn , [ ] )。
+useLayoutEffect 的是在渲染器执行当前渲染界面任务时，同步执行。
+在当前一轮的 Reconciler 任务调度过程中，在渲染器执行完当前任务后，才会异步调用 useEffect。
+useLayoutEffect 先于 useEffect 执行，并且子组件优先执行。
+componentDidMount()完全等价于 useLayoutEffect( fn , [ ] )，但是不等价于 useEffect( fn , [ ] )。
 
 ##### ref
->
->获取dom元素获取组件对象
+
+> 获取 dom 元素获取组件对象
 
 ```jsx
 import React form 'react'
@@ -1879,20 +1867,27 @@ return (
 类式组件
 
 ```jsx
-const CountContext=React.createContext()//创建一个上下文,必须所有组件都访问得到
-class A extends Component{
-state={a:1}
-render(){
-return (<CountContext.Provider value={this.state.a}><B/></CountContext.Provider>)}
+const CountContext = React.createContext(); //创建一个上下文,必须所有组件都访问得到
+class A extends Component {
+  state = { a: 1 };
+  render() {
+    return (
+      <CountContext.Provider value={this.state.a}>
+        <B />
+      </CountContext.Provider>
+    );
+  }
 }
-class B extends Component{
-render(){
-return (<C/>)}
+class B extends Component {
+  render() {
+    return <C />;
+  }
 }
-class C extends Component{
-static contextType=CountContext//声明接收context
-render(){
-return (this.context)}
+class C extends Component {
+  static contextType = CountContext; //声明接收context
+  render() {
+    return this.context;
+  }
 }
 ```
 
@@ -1950,8 +1945,8 @@ this.setState(obj)//浅比较，数据不会更新
 ```
 
 #### render Props
->
->组件标签内可以直接写多个文本，标签、函数、jsx,会传入到组件prpos中的chidren属性中
+
+> 组件标签内可以直接写多个文本，标签、函数、jsx,会传入到组件 prpos 中的 chidren 属性中
 > vue 中的插槽
 
 ```jsx
@@ -2027,21 +2022,21 @@ redux、dva
 - conText
 
 ```js
-生产者-消费者模式
+生产者 - 消费者模式;
 ```
 
 - 搭配
-父子：props
-兄弟: 集中式管理、消息订阅发布，借助父组件
-祖孙: 集中式管理、消息订阅发布、context（开发用的少，封装插件用得多）
+  父子：props
+  兄弟: 集中式管理、消息订阅发布，借助父组件
+  祖孙: 集中式管理、消息订阅发布、context（开发用的少，封装插件用得多）
 
-### 关闭eslint
+### 关闭 eslint
 
 第一步：执行以下命令：
 
 `npm run eject`
 
-第二步：在package.json 中修改代码
+第二步：在 package.json 中修改代码
 
 ```json
 "eslintConfig": {
@@ -2121,6 +2116,10 @@ function Counter() {
   });
   const prevCount = prevCountRef.current;
 
-  return <h1>Now: {count}, before: {prevCount}</h1>;
+  return (
+    <h1>
+      Now: {count}, before: {prevCount}
+    </h1>
+  );
 }
 ```

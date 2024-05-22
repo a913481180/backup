@@ -90,10 +90,10 @@ uni-app 有两种页面路由跳转方式：使用 navigator 组件跳转、调�
 |重加载 |页面全部出栈，只留下新的页面 |调用 API uni.reLaunch 、使用组件 `<navigator open-type="reLaunch"/>`|
 
 ## pages.json 文件
-pages.json 文件用来对 uni-app 进行全局配置，决定页面文件的路径、窗口样式、原生的导航栏、底部的原生tabbar 等。
 
-它类似微信小程序中app.json的页面管理部分。注意定位权限申请等原属于app.json的内容，在uni-app中是在manifest中配置。
+pages.json 文件用来对 uni-app 进行全局配置，决定页面文件的路径、窗口样式、原生的导航栏、底部的原生 tabbar 等。
 
+它类似微信小程序中 app.json 的页面管理部分。注意定位权限申请等原属于 app.json 的内容，在 uni-app 中是在 manifest 中配置。
 
 ## 组件
 

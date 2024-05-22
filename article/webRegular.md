@@ -5,7 +5,6 @@ categories:
   - web
 ---
 
-
 ## 一、命名规范
 
 ### 1.项目命名
@@ -47,11 +46,11 @@ logout / login / err / res`
 `daZhePromotion 打折 / getPingFen 获得评分 / let 年龄 = 3
 AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 
-## 二、HTML规范
+## 二、HTML 规范
 
 ### 1.声明规范
 
-#### 1.1声明文档类型
+#### 1.1 声明文档类型
 
 文档类型声明位于`HTML`文档的第一行，大小写必须遵守。
 
@@ -59,7 +58,7 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 
 反例：`<!doctype html>`
 
-#### 1.2声明charset
+#### 1.2 声明 charset
 
 必须在文档中声明编码集`charset` ，且文件本身编码需要保持一致，推荐都使用`utf-8`。制定字符编码的`meta`必须是`head`中的第一个元素。
 
@@ -69,19 +68,19 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 </head>
 ```
 
-#### 1.3声明meta
+#### 1.3 声明 meta
 
 在`head`中声明，跟随在`charset`之后，且自闭合标签。
 
 ```html
 <head>
-	<meta charset="utf-8" />
-	<meta name="keywords" content="your keywords" />
-	<meta name="description" content="this is a description" />
+  <meta charset="utf-8" />
+  <meta name="keywords" content="your keywords" />
+  <meta name="description" content="this is a description" />
 </head>
 ```
 
-#### 1.4声明title
+#### 1.4 声明 title
 
 必须声明`title`，且紧随最后一个`meta`之后。
 
@@ -94,7 +93,7 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 </head>
 ```
 
-#### 1.5声明link
+#### 1.5 声明 link
 
 引入了外部样式，紧随`title`之后，同时网站的标签也需要设置`icon`图标。
 
@@ -109,7 +108,7 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 </head>
 ```
 
-#### 1.6声明script
+#### 1.6 声明 script
 
 由于 `js` 加载会阻塞页面渲染，`script` 元素需要声明在 `body` 标签的尾部，并且是需要闭合标签的。
 
@@ -119,7 +118,7 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 </body>
 ```
 
-#### 1.7模板示例
+#### 1.7 模板示例
 
 以下是一个整合后 `html` 代码规范示例：
 
@@ -143,24 +142,24 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 
 ### 2.代码规范
 
-#### 2.1代码缩进
+#### 2.1 代码缩进
 
-缩进使用soft tab（4个空格）
+缩进使用 soft tab（4 个空格）
 
 ```html
 <body>
-    <div>代码为4个空格缩进</div>
+  <div>代码为4个空格缩进</div>
 </body>
 ```
 
-#### 2.2标签命名
+#### 2.2 标签命名
 
 标签元素名统一小写，不可大小写混合，必须有结尾标签相呼应。
 
 正例：`<div></div>`
 反例：`<DIV></DIV>`
 
-#### 2.3属性命名
+#### 2.3 属性命名
 
 标签属性和自定义属性采用`kebab-case`命名，字母小写，以短横分隔单词，并且必须是双引号。
 
@@ -178,7 +177,7 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 <div dataId="1" dataUserName="xiaoming"></div>
 ```
 
-#### 2.4属性顺序
+#### 2.4 属性顺序
 
 标签的属性需要按照顺序来书写，以下规则是极力推荐使用的。
 
@@ -210,7 +209,7 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 `checked`
 `selected`
 
-#### 2.5语义化标签
+#### 2.5 语义化标签
 
 `html` 中包含了大量的语义化标签，推荐开发中合理的使用语义化的标签，便于页面结构化，易于阅读，更好的便于网页内容抓取。
 
@@ -242,7 +241,7 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 | time    | 时间       |
 | mark    | 文本标记   |
 
-#### 2.6结构顺序
+#### 2.6 结构顺序
 
 除了使用语义化标签，一个网页还需要遵守一定的结构和顺序，自上而下，从左到右，保持一定的顺序。
 
@@ -262,7 +261,7 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 </div>
 ```
 
-#### 2.7图片alt不为空
+#### 2.7 图片 alt 不为空
 
 `<img>`标签的 `alt `属性指定了替代文本，在图像无法显示时候替代的文案显示。
 
@@ -305,13 +304,13 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 </body>
 ```
 
-## 三、CSS规范
+## 三、CSS 规范
 
 ### 1.声明规范
 
 #### 1.1 link 标签 引入 css
 
-使用 link 标签引入外部css，写在 head 中。
+使用 link 标签引入外部 css，写在 head 中。
 
 ```html
 <head>
@@ -356,7 +355,6 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 }
 ```
 
-
 反例：
 
 ```css
@@ -382,7 +380,6 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 }
 ```
 
-
 反例：
 
 ```css
@@ -403,7 +400,6 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
   font-size: 18px;
 }
 ```
-
 
 反例：
 
@@ -531,17 +527,17 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 }
 ```
 
-#### 2.9 禁止使用“*”选择元素
+#### 2.9 禁止使用“\*”选择元素
 
-不能使用*选择器来给元素设置样式，这样会使所有的元素都起作用。
+不能使用\*选择器来给元素设置样式，这样会使所有的元素都起作用。
 
 反例：
 
 ```css
 /* 不能这样写 */
-{
-	padding: 0;
-	margin: 0;
+ {
+  padding: 0;
+  margin: 0;
 }
 ```
 
@@ -553,7 +549,10 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 
 ```css
 /* 不能这样写 */
-.text-red { font-size:18px;color:red; }
+.text-red {
+  font-size: 18px;
+  color: red;
+}
 ```
 
 非必须避免使用 !important ，因为会强制设置为优先级最高，滥用出现问题导致代码难以维护。
@@ -616,11 +615,11 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 
 第一种：
 
-推荐采用 BEM 命名规范，BEM 命名就是通过 块(block)、元素(element)、修饰符(modifier)来连接组合元素之间的关系，例如： type-block__element--modifier。
+推荐采用 BEM 命名规范，BEM 命名就是通过 块(block)、元素(element)、修饰符(modifier)来连接组合元素之间的关系，例如： type-block\_\_element--modifier。
 该命名虽然能比较透明的展示出结构，但是也会有缺点，命名过于严格，类名太长，不易维护。
 
 - 单中划线：连接某个块与下面的子模块。
-- __ 双下划线：连接块和块的子元素。
+- \_\_ 双下划线：连接块和块的子元素。
 - – 双中划线：描述该块或者子元素的一种状态。
 
 ```css+html
@@ -691,8 +690,8 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 
 #### 3.1 单行注释
 
-单行注释以 /* 开头，以 */ 结束，注意前后各空一格。
-在 less 或者 scss 中也可以使用双斜杠 // 作为单行注释*
+单行注释以 /_ 开头，以 _/ 结束，注意前后各空一格。
+在 less 或者 scss 中也可以使用双斜杠 // 作为单行注释\*
 
 ```css
 /* 单行注释 */
@@ -702,20 +701,20 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 
 #### 3.2 多行注释
 
-多行需要换行，每行前面没有 * 号，每行对齐前面空一格。
+多行需要换行，每行前面没有 \* 号，每行对齐前面空一格。
 
 ```css
 /*
   多行注释1
   多行注释2
  */
- .tabs {
+.tabs {
 }
 ```
 
 #### 3.3 块注释
 
-- 块注释以 /* 开头，以 */ 结束，前后各空一格。
+- 块注释以 /_ 开头，以 _/ 结束，前后各空一格。
 
 - 块注释用于划分某个模块的标记，需要写上块描述。
 
@@ -744,7 +743,7 @@ AbstractClass 缩写为 AbsClass / CalculateAmount 缩写为 CaAmount`
 ```
 
 4.5 文件注释
-文件注释以 /** 开头，以 */ 结束。
+文件注释以 /\*_ 开头，以 _/ 结束。
 
 ```
 /**
@@ -863,8 +862,6 @@ siteinfoCredits // 信誉
 siteinfoLegal   // 法律信息
 ```
 
-
-
 ## 四、JavaScript 规范
 
 ### 1. 命名规范
@@ -879,14 +876,14 @@ siteinfoLegal   // 法律信息
 <script src="//cdn.com/render-dom.min.js"></script>
 ```
 
-#### 1.2文件命名
+#### 1.2 文件命名
 
 全部采用 `kebab-case` 命名，字母小写，以短横分隔单词。
 
 正例：`render-dom.js / home.js / get-user-info.js`
 反例：`renderDom.js / Home.js / getUserInfo.js`
 
-#### 1.3声明变量
+#### 1.3 声明变量
 
 - 变量名使用 `camelCase` 驼峰命名。
 - 不能以数字，特殊符号开头。
@@ -900,7 +897,7 @@ var userName = "小红";
 let tableTitle = "表格标题";
 ```
 
-#### 1.4声明常量
+#### 1.4 声明常量
 
 常量名使用全部大写命名，多个单词中间用`_`下划线分隔。
 
@@ -924,17 +921,17 @@ const APPROVETYPE = { DOING: 1, APPROVED: 2 };
 
 形参本身是可以任意定义的，统一是为了更方便地复用/合并代码。
 
-| 参数       | 描述        | 示例                          |
-| ---------- | ----------- | ----------------------------- |
-| i          | 索引        | switchTab(i){}                |
-| i,v        | 值          | list.forEach((i,v) =>{})      |
-| e          | 事件        | onInput(e){}                  |
-| obj        | 对象        | for(let obj of userList){}    |
-| arr        | 数组        | let arr = []                  |
-| fun        | 函数        | callback(fun){}               |
-| item       | 列表项      | list.map(item => {})          |
-| item,index | vue遍历数组 | v-for="(item,index) in arr"   |
-| key,value  | 键值对      | for(let [key,value] of arr){} |
+| 参数       | 描述         | 示例                          |
+| ---------- | ------------ | ----------------------------- |
+| i          | 索引         | switchTab(i){}                |
+| i,v        | 值           | list.forEach((i,v) =>{})      |
+| e          | 事件         | onInput(e){}                  |
+| obj        | 对象         | for(let obj of userList){}    |
+| arr        | 数组         | let arr = []                  |
+| fun        | 函数         | callback(fun){}               |
+| item       | 列表项       | list.map(item => {})          |
+| item,index | vue 遍历数组 | v-for="(item,index) in arr"   |
+| key,value  | 键值对       | for(let [key,value] of arr){} |
 
 #### 1.6 函数命名
 
@@ -1027,10 +1024,9 @@ collect 收集 | aggregate 聚集
 
 ### 2.代码规范
 
-#### 2.1代码缩进
+#### 2.1 代码缩进
 
 统一使用 `4` 个缩进
-
 
 #### 2.2 代码行最大字符数
 
@@ -1043,7 +1039,7 @@ collect 收集 | aggregate 聚集
 
 ```
 let userId = 2;
-let userName = "小红";	
+let userName = "小红";
 ```
 
 #### 2.4 多个变量声明简写
@@ -1082,7 +1078,6 @@ let id = 2,
 let str = `我叫${name}，性别${sex}，我今年${age}岁了。`;
 ```
 
-
 反例：
 
 ```
@@ -1095,7 +1090,7 @@ let str = "我叫" + name + "，性别" + sex + "，我今年" + age + "岁了�
 
 #### 2.6 this 自身引用的命名
 
-对上下文this的引用只能使用'_this', 'that', 'self'其中一个来命名；
+对上下文 this 的引用只能使用'\_this', 'that', 'self'其中一个来命名；
 
 ```
 let self = this;
@@ -1148,7 +1143,6 @@ let user = {
 };
 ```
 
-
 反例：
 
 ```
@@ -1187,7 +1181,6 @@ let user = {
 };
 let copy = { ...user, age };
 ```
-
 
 浅拷贝数组
 
@@ -1228,7 +1221,6 @@ let user = {
 function addUser(user) {}
 ```
 
-
 反例：
 
 ```
@@ -1256,7 +1248,6 @@ function foo2() {}
 function foo3() {}
 ```
 
-
 反例：
 
 ```
@@ -1277,7 +1268,6 @@ function main() {
 let div = document.getElementById("div");
 div && div.append("child");
 ```
-
 
 反例：
 
@@ -1355,20 +1345,26 @@ async function login() {
   console.log(user, menu);
 }
 ```
-#### 2.20  undefined 判断
+
+#### 2.20 undefined 判断
+
 永远不要直接使用 undefined 进行变量判断；使用 typeof 和字符串’undefined’对变量进行判断。
 正例：
+
 ```
 if (typeof person === 'undefined') {
 ... }
 ```
 
 反例：
+
 ```
 if (person === undefined) {
 ... }
 ```
+
 #### 2.22 null
+
 适用场景：
 
 初始化一个将来可能被赋值为对象的变量
@@ -1377,7 +1373,7 @@ if (person === undefined) {
 作为一个返回对象的函数的返回值
 不适用场景：
 
-不要用null来判断函数调用时有无传参
+不要用 null 来判断函数调用时有无传参
 不要与未初始化的变量做比较
 
 #### 2.21 eslint 和 Prettier 代码格式化
@@ -1430,7 +1426,7 @@ function addUser() {}
 function updateUser() {}
 ```
 
-#### 3.4方法注释
+#### 3.4 方法注释
 
 方法注释以 `/**` 开头，以 `*/` 结束，方法注释要使用`注释标签`说明方法的参数，返回结果等等内容。
 
@@ -1447,15 +1443,15 @@ function getUserInfo(id) {}
 
 | 标签         | 语法                           |
 | ------------ | ------------------------------ |
-| @description | @description描述说明           |
+| @description | @description 描述说明          |
 | @param       | @param{参数类型}参数说明       |
 | @returns     | @returns{返回类型}返回结果说明 |
-| @author      | @author作者                    |
+| @author      | @author 作者                   |
 | @version     | @version 版本号                |
 | @example     | @example 示例代码              |
 | @todo        | @todo 待办的内容描述           |
 
-#### 3.5文件注释
+#### 3.5 文件注释
 
 ```
 /**
@@ -1465,7 +1461,7 @@ function getUserInfo(id) {}
  */
 ```
 
-#### 3.6版权注释
+#### 3.6 版权注释
 
 ```
 /*!
@@ -1475,7 +1471,7 @@ function getUserInfo(id) {}
  */
 ```
 
-## 五、Vue项目规范
+## 五、Vue 项目规范
 
 ### 1.项目目录
 
@@ -1551,7 +1547,6 @@ base-config.vue
 search-button-clear.vue
 ```
 
-
 反例：
 
 **以下命名是不规范的，快看有没有中招**
@@ -1577,7 +1572,6 @@ components/
 └─ base-table.vue
 ```
 
-
 反例：
 
 ```
@@ -1597,7 +1591,6 @@ components/
 ├─ the-header.vue
 └─ the-footer.vue
 ```
-
 
 反例：
 
@@ -1619,7 +1612,6 @@ components/
 ├─ todo-list-item.vue
 └─ todo-list-item-button.vue
 ```
-
 
 反例：
 
@@ -1647,7 +1639,7 @@ src/views/user-info
 ##### 2.2.2 全局公用
 
 统一放到工程目录的 src/components 下面，目录名称采用 PascalCase 帕斯卡命名，并且每个公用组件目录必须有 index.vue 入口文件和 README.md 文件 Api 说明文档。
-在编写 README.md 文档时也需要注意，Api 文档中Attribute属性 和Event事件的命名都是要用`kebab-case`命名，不能用驼峰命名。
+在编写 README.md 文档时也需要注意，Api 文档中 Attribute 属性 和 Event 事件的命名都是要用`kebab-case`命名，不能用驼峰命名。
 
 ```
 src/components/
@@ -1661,9 +1653,9 @@ src/components/
 
 #### 2.3 组件使用
 
-自定义组件的使用按照以下规范，除了在Dom模板中用`kebab-case`命名，其他都是用PascalCase 帕斯卡命名。
+自定义组件的使用按照以下规范，除了在 Dom 模板中用`kebab-case`命名，其他都是用 PascalCase 帕斯卡命名。
 
-如果是用 viewUI，element-ui，ant-vue等 UI 框架中的组件则按照官方示例的命名规则使用。
+如果是用 viewUI，element-ui，ant-vue 等 UI 框架中的组件则按照官方示例的命名规则使用。
 
 ##### 2.3.1 单文件组件中使用
 
@@ -1679,7 +1671,7 @@ src/components/
 
 ##### 2.3.2 字符串模板中使用
 
-在字符串模板template 中使用组件，采用 PascalCase 帕斯卡命名，如果组件中没有内容则需要自闭合标签。
+在字符串模板 template 中使用组件，采用 PascalCase 帕斯卡命名，如果组件中没有内容则需要自闭合标签。
 
 ```
 Vue Vue({
@@ -1689,7 +1681,7 @@ Vue Vue({
 
 ##### 2.3.3 JS/JSX 中使用
 
-在 JS/JSX 的` render `函数中使用组件，采用 PascalCase 帕斯卡命名，如果组件中没有内容则需要自闭合标签。
+在 JS/JSX 的`render`函数中使用组件，采用 PascalCase 帕斯卡命名，如果组件中没有内容则需要自闭合标签。
 
 ```
 new Vue({
@@ -1842,8 +1834,8 @@ new Vue({
 #### 3.4 选项变量命名
 
 主要针对的是单选框，复选框，下拉框，选项卡等元素数据。
-常见的词汇有：title， name，label，field，text，id，key，value，children，index，nodes等。
-其中 title，name，label，text，field作为选项显示名，id，key，value 用于唯一标识，children，nodes用于包含子节点内容。
+常见的词汇有：title， name，label，field，text，id，key，value，children，index，nodes 等。
+其中 title，name，label，text，field 作为选项显示名，id，key，value 用于唯一标识，children，nodes 用于包含子节点内容。
 
 - 场景：复选 / 单选 / 下拉
 
@@ -1896,7 +1888,6 @@ new Vue({
 /api/user/delete/${id}
 ```
 
-
 前端对应的接口方法命名用 `getXxx，addXxx，updateXxx，deleteXxx `这几种命名形式，并且一定要写注释，注释格式为`模块名-方法`描述，如下示例：
 
 ```
@@ -1936,7 +1927,7 @@ export const deleteUser = (params) => {
 };
 ```
 
-#### 3.6传参属性命名
+#### 3.6 传参属性命名
 
 - 场景：普通 attribute
   属性类型是 String，Number，Boolean，Object，Array，Date 这几种数据类型，采用 `名词` 或者 `名词+修饰词` 形式。
@@ -1969,7 +1960,7 @@ export const deleteUser = (params) => {
 
 - 场景：绑定事件监听
   绑定的事件名采用`kebab-case`命名，字母小写，以短横分隔单词。因为在 `Dom 模板`中的事件监听，由于 `HTML `中是不区分大小写的，`Vue `会自动转换事件监听为全小写，所以推荐 始终使用` kebab-case` 的命名。
-  事件的命名采用 `动词形式`，事件绑定本身就是 `v-on`指令，不能写成`v-on:on-close`，所以绑定的事件统一都不用` on-xx `的形式。
+  事件的命名采用 `动词形式`，事件绑定本身就是 `v-on`指令，不能写成`v-on:on-close`，所以绑定的事件统一都不用`on-xx`的形式。
 
 ```
 {
@@ -2317,7 +2308,6 @@ const res = await getUserInfo();
 }
 ```
 
-
 增删改，详情等返回非数组结果
 
 ```
@@ -2330,7 +2320,7 @@ const res = await getUserInfo();
 
 3.10 模板结构顺序
 在 `HTML 规范` 的 `结构顺序` 这一章节，已经大致描述了编写页面的结构和顺序，在 `Vue 模板`中也一样，自上而下，从左到右，保持一定的顺序。
-`Vue 模板`中，采用了` 容器 `和 `盒子 `结合的语义化结构，先划分不同的容器空间，每个容器里再划分具体的盒子内容。
+`Vue 模板`中，采用了`容器`和 `盒子 `结合的语义化结构，先划分不同的容器空间，每个容器里再划分具体的盒子内容。
 
 ```
 <template>
@@ -2751,13 +2741,13 @@ export default {
 
 ##### 4.5 v-if 和 v-show 选择
 
-`v-if `和` v-show `都可以用于显示隐藏效果，但是本质上还是有区别的。
+`v-if `和`v-show`都可以用于显示隐藏效果，但是本质上还是有区别的。
 `v-if` 是惰性的，只有条件成立时候才渲染，比较适合根据条件显示隐藏的；
 `v-show` 是不管条件真假，直接就会被渲染上，比较适合频繁切换的场景。
 
-##### 4.6避免` v-if` 和 `v-for` 一起使用
+##### 4.6 避免` v-if` 和 `v-for` 一起使用
 
-永远不要把 `v-if `和 `v-for` 同时用在同一个元素上，`v-for` 的优先级比 `v-if` 高，所以会导致先循环遍历，然后依次根据` v-if `的判断显示隐藏，会比较浪费性能。
+永远不要把 `v-if `和 `v-for` 同时用在同一个元素上，`v-for` 的优先级比 `v-if` 高，所以会导致先循环遍历，然后依次根据`v-if`的判断显示隐藏，会比较浪费性能。
 
 ```
 <template>
@@ -3164,7 +3154,7 @@ export default {};
 
 ##### 4.17 组件的 name 必须大写
 
-声明组件的 `name`使用PascalCase 帕斯卡命名，尽量每个组件页面都写，方便 `vue` 识别，或者在使用` keep-alive` 时候做缓存。
+声明组件的 `name`使用 PascalCase 帕斯卡命名，尽量每个组件页面都写，方便 `vue` 识别，或者在使用` keep-alive` 时候做缓存。
 
 正例：
 
@@ -3173,7 +3163,6 @@ export default {
   name: "UserInfo",
 };
 ```
-
 
 反例：
 
@@ -3186,7 +3175,7 @@ export default {
 };
 ```
 
-##### 4.18自闭合组件
+##### 4.18 自闭合组件
 
 在`单文件组件`、`字符串模板`和 `JSX `中没有内容的组件应该是自闭合的，但在` DOM 模板`里不要这样做。
 
@@ -3205,7 +3194,6 @@ Vue Vue({
   template:`<UserInfo :user-detail="userDetail" />`
 });
 ```
-
 
 在 JS/JSX 中
 
@@ -3230,7 +3218,7 @@ new Vue({
 </body>
 ```
 
-##### 4.19组件选项中的空行
+##### 4.19 组件选项中的空行
 
 有时候 props 或者 computed 中有很多选项，中间间隔挨着就会不容易区分，这时候就需要添加空行来让代码更加可观一些。添加合理的空行也适用于在 filters，data，methods 中。
 
@@ -3342,7 +3330,7 @@ export default {
 
 ##### 4.22 避免使用 $parent 操作父组件
 
-不能直接使用$parent 访问父组件的上下文，这种做法是不被允许的。可以改为 $emit ，.sync同步 ，props 传参，vue bus` 方式操作父组件的属性和方法。
+不能直接使用$parent 访问父组件的上下文，这种做法是不被允许的。可以改为 $emit ，.sync 同步 ，props 传参，vue bus` 方式操作父组件的属性和方法。
 
 ##### 4.23 尽量不要手动操作 Dom
 
@@ -3536,9 +3524,10 @@ export default {
 };
 ```
 
-
 #### 5. 注释说明
+
 整理必须加注释的地方
+
 - 公共组件使用说明
 - api 目录的接口 js 文件必须加注释
 - store 中的 state, mutation, action 等必须加注释
@@ -3547,9 +3536,10 @@ export default {
 - vue 文件的 data, 非常见单词要加注释
 
 #### 6 其他
-1) 尽量不要手动操作 DOM
-因使用 vue 框架，所以在项目开发中尽量使用 vue 的数据驱动更新 DOM，尽量（不到万不得
-已）不要手动操作 DOM，包括：增删改 dom 元素、以及更改样式、添加事件等。
-2) 删除无用代码
-因使用了 git/svn 等代码版本工具，对于无用代码必须及时删除，例如：一些调试的 console 语
-句、无用的弃用功能代码。
+
+1. 尽量不要手动操作 DOM
+   因使用 vue 框架，所以在项目开发中尽量使用 vue 的数据驱动更新 DOM，尽量（不到万不得
+   已）不要手动操作 DOM，包括：增删改 dom 元素、以及更改样式、添加事件等。
+2. 删除无用代码
+   因使用了 git/svn 等代码版本工具，对于无用代码必须及时删除，例如：一些调试的 console 语
+   句、无用的弃用功能代码。

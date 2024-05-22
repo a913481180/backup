@@ -200,32 +200,32 @@ npx 是 npm5.2 版本新增的一个命令，如果 npm 版本没到 v5.2，请�
 yarn 配置源：
 
 ```bash
-// 查询源
+# 查询源
 yarn config get registry
 
-// 更换国内源
+# 更换国内源
 yarn config set registry https://registry.npmmirror.com
 
-// 恢复官方源
+# 恢复官方源
 yarn config set registry https://registry.yarnpkg.com
 
-// 删除注册表
+# 删除注册表
 yarn config delete registry
 ```
 
 npm 与 yarn 命令对比：
 
-| npm 命令                           | yarn 命令                        | 说明                                                                           |
-| ---------------------------------- | -------------------------------- | ------------------------------------------------------------------------------ | ---------------------------- |
-| npm install                        | yarn install                     | 安装依赖,安装时，如果 node_modules 中有相应的包则不会重新下载 --force 可以强制 |
-| npm install [package@版本号]       | yarn add [package@版本号]        | 指定版本安装一个包                                                             |
-| npm install [package] --save       | yarn add [package]               | 安装一个包,--save 是 yarn 默认的                                               |
-| npm install -g [package]           | yarn global add [package@版本号] | 指定版本安装一个包                                                             |
-| npm install --save-dev [package]   | yarn add --dev [package]         | 安装包作为开发依赖项，简写`-D`                                                 |
-| npm uninstall [package]            | yarn remove [package]            | 卸载一个包                                                                     |
-| npm uninstall --save-dev [package] | yarn remove [package]            | 卸载开发依赖包                                                                 |
-| npm update                         | yarn upgrade                     | 更新的依赖关系                                                                 |
-| npm update [package]               | yarn upgrade [package]           | 更新包，npm 可以通过 ‘--save                                                   | --save-dev’ 指定升级哪类依赖 |
+| npm 命令                           | yarn 命令                        | 说明                                                          |
+| ---------------------------------- | -------------------------------- | ------------------------------------------------------------- |
+| npm install                        | yarn install                     | 如果 node_modules 中有相应的包则不会重新下载 可以--force 强制 |
+| npm install [package@版本号]       | yarn add [package@版本号]        | 指定版本安装一个包                                            |
+| npm install [package] --save       | yarn add [package]               | 安装一个包,--save 是 yarn 默认的                              |
+| npm install -g [package]           | yarn global add [package@版本号] | 指定版本安装一个包                                            |
+| npm install --save-dev [package]   | yarn add --dev [package]         | 安装包作为开发依赖项，简写`-D`                                |
+| npm uninstall [package]            | yarn remove [package]            | 卸载一个包                                                    |
+| npm uninstall --save-dev [package] | yarn remove [package]            | 卸载开发依赖包                                                |
+| npm update                         | yarn upgrade                     | 更新的依赖关系                                                |
+| npm update [package]               | yarn upgrade [package]           | 更新包，npm 可以通过 `--save\| --save-dev` 指定升级哪类依赖   |
 
 ## PNPM
 
