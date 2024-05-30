@@ -507,10 +507,154 @@ console.log([...testStr].length);
 
 合成 Emoji 只有以下几种类型:肤色，键帽，使用\u200D 拼接多个 Emoji 为一个。
 
-方案1：先解构再截取，最后再拼接：
+方案 1：先解构再截取，最后再拼接：
+
 ```js
-const article = '123456789 '
-const subject = [...article].slice(0, 10).join('') // '123456789 '
+const article = "123456789 ";
+const subject = [...article].slice(0, 10).join(""); // '123456789 '
 ```
 
-方案2：考虑emoji的情况，根据合成Emoji的特定语法一点点识别
+方案 2：考虑 emoji 的情况，根据合成 Emoji 的特定语法一点点识别
+
+## lottie
+
+> Lottie 是一个面向 Android、iOS、Web 和 Windows 的库，它解析导出为带有 bodymovin 的 json 的 AE（Adobe After Effects）动画，并在移动和 Web 上以本地方式呈现这些动画。
+
+### web 使用
+
+#### 安装
+
+npm:`https://www.npmjs.com/package/lottie-web`
+首先是根据需求引用 lottie 库，官方给出的下载地址：https://cdnjs.com/libraries/bodymovin
+
+```html
+<script>
+  <div id="app"><!-- 动画容器 --></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.5.6/lottie.min.js"></script>
+var animation = bodymovin.loadAnimation({
+  container: document.getElementById('app'), 	// 渲染动画的容器元素，必须填
+  // animationData	动画数据（和path参数二选一）
+  path: 'assets/lottie-1.json', // 动画数据json文件的路径（和animationData参数二选一），必须填
+  renderer: 'canvas', 	// 渲染方式，'svg'/'canvas'/'html'（轻量版仅svg渲染），必须填
+  loop: true, // 一直循环？，选填
+  autoplay: true, // 自动播放？，选填
+  name: "lottie-1", // 命名，选填
+})
+</script>
+```
+
+#### 方法
+
+配置完动画后，我们可以拿到动画实例并通过实例方法进行控制：
+
+- `play()`：播放动画，从当前停止帧开始
+- `stop()`：终止动画，回到第 0 帧
+- `pause()`：暂停动画，停止在当前帧
+- `setLocationHref(href)`：href 作为 location.href，当你在 Safari 中遇到不带符号的掩码问题时，它非常有用。
+- `setSpeed(speed)`：设置动画速度（1 是正常速度）。speed 参数为速度，number。
+- `goToAndStop(value, isFrame)`：动画跨越到某进度并停止。value 为进度数值,number；isFrame 定义第一个参数（value）是基于时间的值还是基于帧的（默认为 false）。
+- `setDirection(direction)`：设置动画播放顺序（顺序播放/倒叙播放）。direction 参数表明顺序，1 为顺序，-1 为倒叙。
+- `playSegments(segments, forceFlag)`：播放动画片段。segments 参数可以包含两个将用作动画第一帧和最后一帧的数值，或者可以包含一系列数组，每个数组都有 2 个数值，array。forceFlag 表示是否立即强制播放该片段，如果设置为 false，它将等待当前段完成。如果为 true，它将立即播放此片段，boolean。如 `animation.playSegments([10,20], false);` // 播放完之前的片段，播放 10-20 帧、`animation.playSegments([[0,5],[10,18]], true);` // 直接播放 0-5 帧和 10-18 帧
+- `setSubframe(useSubFrames)`：useSubFrames 参数如果为 false，则将尊重原始的 AE fps。如果为 true，它将使用中间值在每个 RequestAnimationFrame 上更新。默认值为 true, boolean。
+- `destory()`：删除该动画，移除相应的元素标签等。在 unmount 的时候，需要调用该方法
+- `getDuration(inFrames)`，获取动画持续时间。inFrames 参数为 true，则返回以帧为单位的持续时间；如果为 false，则返回以秒为单位的持续时间。
+
+#### 事件
+
+在使用中可能也需要监听一些事件：
+
+`complete`: 播放完成（循环播放下不会触发）
+`loopComplete`: 当前循环下播放（循环播放/非循环播放）结束时触发
+`enterFrame`: 每进入一帧就会触发，播放时每一帧都会触发一次，stop 方法也会触发
+`segmentStart`: 播放指定片段时触发，playSegments、resetSegments 等方法刚开始播放指定片段时会发出，如果 playSegments 播放多个片段，多个片段最开始都会触发。
+`data_ready`: 动画数据 json 文件加载完毕触发
+`data_fail`：动画数据 json 文件加载失败触发
+`loaded_images`：当所有图片加载成功/失败时触发
+`DOMLoaded`: 动画相关的 dom 已经被添加到 html 后触发
+`destroy`: 将在动画删除时触发
+使用如：
+
+```js
+// 上例的animation实例
+animation.addEventListener("data_ready", function () {
+  console.log("animation data file has loaded");
+});
+```
+
+### lottie.json 关键字段
+
+- ip：起始帧
+- op：结束帧
+- w：宽
+- h：高
+- v：版本
+- fr：频率/帧率
+- ddd
+- nm
+- tiny
+- fonts：字体
+  - list
+    - fontConfig
+- asset：资源,图片资源信息集合，这里放置的是 制作动画时引用的图片资源。
+  - assetConfig
+    - id
+    - w：宽
+    - h：高
+    - u：路径
+    - p：名称
+    - e
+- layers：图层，这里可以获取到多少图层，每个图层的开始帧 结束帧等。
+  - layerConfig
+    - st：开始帧
+    - ip：起始帧
+    - op：结束帧
+    - nm：名字文本
+    - ind：图层 id
+    - ty：图层类型
+    - ks：动画
+    - shapes：元素集合，可以获取到每个图层都包含多个动画元素。
+
+### 动态修改 Lottie 中的文本
+
+- 动态替换里面的占位符
+  lottie.json 内部描述了动画的所有细节，自然也就包含了动画中的那段文本，如果我们能找到相应的字段进行修改，也就可以实现文本替换了
+  ```js
+  fetch("xxx.json")
+    .then((resp) => resp.text())
+    .then((text) => {
+      // 简单演示替换
+      const newJSON = text.replace("${days}", "3");
+      lottie.loadAnimation({
+        animationData: JSON.parse(newJSON),
+        container: document.getElementById("app"),
+        loop: true,
+      });
+    });
+  ```
+  缺点：需要设计师在 AE 中写入 ${days} 这样明确的占位符.无法做到「运行时」修改，也就是 lottie 解析播放后就无法再修改文本了，
+- 修改 JS 对象
+  “getKeyPath”是 Lottie-web 库中的一个函数，其作用是返回符合指定名称的所有属性路径。动画文件中的属性路径是指导出文件中存在的层次结构路径，每一层级都有一个名称或标记。
+  渲染的 dom 节点有个 id 为 "amount" 的唯一标识，那么我们就可以通用 getkeyPath 通过这个唯一 id 获取到对象，最终通过 js 修改的方式如下：
+  ```js
+  anim.addEventListener("DOMLoaded", () => {
+    const api = lottie_api.createAnimationApi(anim);
+    const elements = api.getKeyPath("#amount"); // 查找对象
+    elements.getElements()[0].setText("1.02");
+  });
+  ```
+  getkeyPath 不仅可以通过 id 标识查找到节点，还可以通过".calssName" 查找。elements.getElements() 可以获取到所有满足条件的 JS 对象，因为 lottie 中图层的名称并不唯一，有时候可能会找到多个对象就需要有一定的约定去规范这种图层命名的方式。
+
+缺点是图层命名需要有一定的规范，同时需要了解如何找到这个图层的名称。
+
+### 注意事项
+
+#### 下面这些效果，lottie 暂不支持：
+
+- 描边动效目前不支持，（会导致 lottie 性能问题，所以后来 lottie 去掉了对该属性的支持）。
+- merge Path(合并路径)Android 只支持 4.4 以上，iOS 都不支持.
+
+#### 遵循下面的方案，会使 json 文件减小：
+
+- 尽量减少图层个数。每个图层都会导出成相应的 json 数据，图层减少能从很大程度上减小 json 大小。
+- 尽可能所有的图层都是在 AE 里面画出来的，而不是从其他软件引入的。如果是其他软件引入的，很可能导致描述这个图形的 json 部分变得很大。

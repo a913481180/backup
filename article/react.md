@@ -28,8 +28,7 @@ categories:
 
 ```jsx
 <script type="text/babel">
-  /*此处要写babel*/ //创建虚拟dom const Vdom=(<h1>hello</h1>)/*不用引号*/
-  //渲染虚拟DOM到页面 ReactDOM.render(Vdom,document.getElementById('test'));
+  /*此处要写babel*/ //创建虚拟dom const Vdom=(<h1>hello</h1>)/*不用引号*/ //渲染虚拟DOM到页面 ReactDOM.render(Vdom,document.getElementById('test'));
 </script>
 ```
 
@@ -2123,3 +2122,10 @@ function Counter() {
   );
 }
 ```
+
+#### React 报错之 Cannot assign to 'current' because it is a read-only property
+
+其实在 useRef 的类型定义中已经给出了答案`Usage note: if you need the result of useRef to be directly mutable, include | null in the type of the generic argument.`
+如果需要直接修改 useRef 的结果，则在泛型参数的类型中包含 | null 就可以了
+比如说，`const ref = useRef<string | null>(null) `。
+注意，如果你不直接赋值给它的 current 属性，你不必在 ref 的类型中包含 null。
