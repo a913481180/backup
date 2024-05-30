@@ -617,8 +617,9 @@ animation.addEventListener("data_ready", function () {
 
 ### 动态修改 Lottie 中的文本
 
-- 动态替换里面的占位符
+- 修改 json 数据
   lottie.json 内部描述了动画的所有细节，自然也就包含了动画中的那段文本，如果我们能找到相应的字段进行修改，也就可以实现文本替换了
+
   ```js
   fetch("xxx.json")
     .then((resp) => resp.text())
@@ -632,20 +633,112 @@ animation.addEventListener("data_ready", function () {
       });
     });
   ```
+
   缺点：需要设计师在 AE 中写入 ${days} 这样明确的占位符.无法做到「运行时」修改，也就是 lottie 解析播放后就无法再修改文本了，
+
 - 修改 JS 对象
-  “getKeyPath”是 Lottie-web 库中的一个函数，其作用是返回符合指定名称的所有属性路径。动画文件中的属性路径是指导出文件中存在的层次结构路径，每一层级都有一个名称或标记。
-  渲染的 dom 节点有个 id 为 "amount" 的唯一标识，那么我们就可以通用 getkeyPath 通过这个唯一 id 获取到对象，最终通过 js 修改的方式如下：
-  ```js
-  anim.addEventListener("DOMLoaded", () => {
-    const api = lottie_api.createAnimationApi(anim);
-    const elements = api.getKeyPath("#amount"); // 查找对象
-    elements.getElements()[0].setText("1.02");
-  });
-  ```
-  getkeyPath 不仅可以通过 id 标识查找到节点，还可以通过".calssName" 查找。elements.getElements() 可以获取到所有满足条件的 JS 对象，因为 lottie 中图层的名称并不唯一，有时候可能会找到多个对象就需要有一定的约定去规范这种图层命名的方式。
+
+通过修改 lottie 解析后的运行时 JS 对象，理论上一样可以修改文本，官方其实提供了相应的 API，
+
+第一个参数表示如何替换文本，t 表示文本内容，这里还可以传入 s 修改大小，fc 修改颜色
+第二个参数表示替换指定关键帧的文本，文本可以有关键帧，在动画过程中展示不同的文本，如果没有关键帧可以省略这个参数
+
+```js
+anim.addEventListener("DOMLoaded", () => {
+  anim.renderer.elements[0].elements[0].updateDocumentData({ t: "拾亿" }, 0);
+});
+```
+
+如果设计师在 AE 图层命名时尾部加入 #xxx ，那么生成的 svg 元素就会有一个 id 属性为 xxx，
+“getKeyPath”是 Lottie-web 库中的一个函数，其作用是返回符合指定名称的所有属性路径。动画文件中的属性路径是指导出文件中存在的层次结构路径，每一层级都有一个名称或标记。
+渲染的 dom 节点有个 id 为 "amount" 的唯一标识，那么我们就可以通用 getkeyPath 通过这个唯一 id 获取到对象，最终通过 js 修改的方式如下：
+
+```js
+anim.addEventListener("DOMLoaded", () => {
+  const api = lottie_api.createAnimationApi(anim);
+  const elements = api.getKeyPath("#amount"); // 查找对象
+  //  const elements = api.getKeyPath("comp1,textnode");  // 其实就是图层名称的拼接，这个 lottie 内部有两层结构，第一层是「合成」，名称叫 comp1，文本位于 comp1 的内部，名称叫做 textnode
+  elements.getElements()[0].setText("1.02");
+  // setText() 方法可以传入第二个入参替换指定关键帧中的文案，这与 updateDocumentData 一致，因为底层调用的就是 updateDocumentData
+});
+```
+
+getkeyPath 不仅可以通过 id 标识查找到节点，还可以通过".calssName" 查找。elements.getElements() 可以获取到所有满足条件的 JS 对象，因为 lottie 中图层的名称并不唯一，有时候可能会找到多个对象就需要有一定的约定去规范这种图层命名的方式。
 
 缺点是图层命名需要有一定的规范，同时需要了解如何找到这个图层的名称。
+
+- 修改 svg 节点
+
+如果设计师在 AE 图层命名时尾部加入 `#xxx`，那么生成的 svg 元素就会有一个 id 属性为 `xxx`，
+
+```js
+anim.addEventListener("DOMLoaded", () => {
+  const element = document.getElementById("J_txt");
+  element.querySelector("tspan").innerHTML = "拾亿";
+});
+```
+
+> canvas 模式的问题
+>
+> > 最上面提到先忽略 canvas 模式，那么这个模式有什么问题吗？这里又涉及到 lottie 的底层实现了。由于在 canvas 模式下绘制文本是很慢的，作者考虑后放弃了 drawText 的实现，转而在导出 json 时抽取字体库中的字形（Glyphs）路径放入文件，canvas 模式下通过路径绘图来画出文本.所以上述方案中的 方案三 肯定无法支持 canvas 模式，而 方案一/二 要支持则依赖于导出 JSON 时，要替换的文本字形是否已经存在于 JSON 中，因此从实际出发，一般 canvas 模式下就比较难实现替换文本了。从 AE 导出 lottie 时都记得去掉「Glyphs」这个选项，并且指定具体的 font family，记得把这件事告诉你的设计师小伙伴
+
+### 动态修改 Lottie 中的图片
+
+- 修改 json 数据
+  所有的图片都会被放置到 json 的 assets 数组中，并用 p 字段标识相应地址（http 或 base64）
+
+  ```js
+  const resp = await fetch(
+    "https://gw.alipayobjects.com/os/sage/9d72da30-ce87-4ba7-8951-1907759320b5/data.json"
+  );
+  const json = await resp.json();
+  // 找到对应 json 节点直接替换 p 属性
+  const asset = json.assets.find((a) => a.id === "7");
+  asset.p =
+    "https://gw.alipayobjects.com/mdn/rms_91e1e4/afts/img/A*2mfsTo-gbDgAAAAAAAAAAABkARQnAQ";
+  lottie.loadAnimation({
+    container: mountNode,
+    animationData: json,
+  });
+  ```
+
+  - 修改 JS 对象
+    相比修改文本，要修改图片略麻烦一些，主要是 lottie-web 本身并没有直接提供类似 updateDocumentData 这样的方法，不过只要知道实现原理，找到解法并不难
+
+通过阅读 lottie-web 源码，可以发现 svg 和 canvas 模式下，图片的实现不一样（svg, canvas），所以我们的修改方案也需要判断先判断 renderer 模式
+
+```js
+anim.addEventListener('DOMLoaded', () => {
+  if (anim.renderer.rendererType === 'canvas') {
+    // canvas 模式下的图片替换
+    anim.renderer.elements[0].elements[8].img.src = 「'https://gw.alipayobjects.com/mdn/rms_91e1e4/afts/img/A*2mfsTo-gbDgAAAAAAAAAAABkARQnAQ';
+  } else {
+    // svg 模式下的图片替换，前两个参数为固定值
+    anim.renderer.elements[0].elements[8].innerElem.setAttributeNS(
+      'http://www.w3.org/1999/xlink',
+      'href',
+      'https://gw.alipayobjects.com/mdn/rms_91e1e4/afts/img/A*2mfsTo-gbDgAAAAAAAAAAABkARQnAQ'
+    );
+  }
+});
+```
+
+注意，在 canvas 模式下替换的图片需要保持与原图片尺寸一致，否则实际动画效果会有问题；svg 模式下则受益于 svg image 元素的特性不需要如此强的约束
+
+- 修改 svg 节点
+
+与文本同理，仅限于 svg 渲染模式，只需要设计师在图层命名时，尾部加入 #xxx 即可，这样生成的 svg 元素就会有一个 id 属性为 xxx
+那么通过 DOM API 找到元素修改属性即可
+
+```js
+anim.addEventListener("DOMLoaded", () => {
+  const element = document.getElementById("xxx");
+  element.querySelector("image").href =
+    "https://gw.alipayobjects.com/mdn/rms_91e1e4/afts/img/A*2mfsTo-gbDgAAAAAAAAAAABkARQnAQ";
+});
+```
+
+动态修改 lottie 中的图片，与动态修改文本大同小异，只是 JSON 结构的属性、JS 对象的 API 有所不同，另外图片不像文本，在 canvas 模式下可以正常使用，lottie 导出时也没有特殊的要求.设计师导出是不是要选择把图片资源包含在 json 文件里，就导出一个 json 文件，而不是导出的一个 json 文件+图片资源文件夹
 
 ### 注意事项
 
@@ -658,3 +751,19 @@ animation.addEventListener("data_ready", function () {
 
 - 尽量减少图层个数。每个图层都会导出成相应的 json 数据，图层减少能从很大程度上减小 json 大小。
 - 尽可能所有的图层都是在 AE 里面画出来的，而不是从其他软件引入的。如果是其他软件引入的，很可能导致描述这个图形的 json 部分变得很大。
+
+#### 坑点
+
+- 记得在 lottie 动画 DOMLoaded 之后再调用 playSegments，否则会播放完整段动画后才播放片段，这可以说是 lottie 实现的一个小 bug，但也是新手最常遇到的问题
+- 动画是否循环由初始化动画时的 loop 属性决定，如果初始化时设为 false，那么 playSegements 的片段只会播放一遍。可以在播放前通过 animation.loop=true 再设置，不过这个属性不见于官方文档
+- addEventListener 的返回值是一个函数，用于移除事件监听
+- Lottie 文档中有提到过 setSubFrame ,设置为 true 时会在每次 requestAnimationFrame 时更新界面（可以做到 60fps），关闭时按照 AE 原始帧率来播放，那么自然低 fps 时性能会好很多，但是也可能出现卡顿
+  但是在动效幅度不那么大的情况下，其实未必需要 60fps，下面就是 AE 设计时 24fps 的 Lottie 在是否开启 subFrame 下的对比，如果不是很仔细看的话，差别并不大,而相应的 Performance 却有较大的差别.通常情况下，可以默认将 setSubframe 置为 false，以 AE 设计阶段的帧率为准；毕竟设计师自己在 AE 内预览时就是按照设定帧率，「小幅度」的动作其实 20~30 帧是够用的，不会有明显视觉上的卡顿，而页面性能则会好很多。
+  甚至在某些情况下，是一定要关闭这个选项的，一些动画在设计时精确地指定了每一个帧的属性，但是如果前端播放时使用了 60fps，反而可能会出现一些不正确的补间动画而导致闪烁之类的问题
+
+- Lottie 动画播放的基本原理
+
+先将每一个动画元素实例化为[animationItem](http://link.zhihu.com/?target=https%3A//github.com/airbnb/lottie-web/blob/master/player/js/animation/AnimationItem.js)
+
+requestAnimationFrame 每次触发时，调用每一个元素的 advanceTime() -> setCurrentRawFrameValue() -> gotoFrame() 计算出要更新的属性值
+最终调用 renderer 的 renderFrame() 来更新界面
