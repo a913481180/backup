@@ -658,3 +658,45 @@ animation.addEventListener("data_ready", function () {
 
 - 尽量减少图层个数。每个图层都会导出成相应的 json 数据，图层减少能从很大程度上减小 json 大小。
 - 尽可能所有的图层都是在 AE 里面画出来的，而不是从其他软件引入的。如果是其他软件引入的，很可能导致描述这个图形的 json 部分变得很大。
+
+## 移动端 300ms 延迟
+
+在十几年前，当时的网页基本上都是为 PC 设备所设计的，没有什么移动端适配的概念，导致字体看起来非常小，阅读困难。
+
+为了处理这种情况，苹果的工程师们想了各种应对方案，其中最为出名的，当属双击缩放（double tap to zoom）。通过双击，在放大比例和原始比例之间进行切换。
+
+如果判断用户是点击还是双击呢？苹果的逻辑如下：
+
+在用户点击完此处第一次后，如果 300ms 内没有在此处进行第二次点击，就认为是一个纯点击操作。
+
+这就是 300ms 延迟的来源，移动浏览器 会在 touchend 和 click 事件之间，等待 300 - 350 ms，判断用户是否会进行双击手势用以缩放文字。
+
+在 chrome32+（2014 年发行）的浏览器版本中，如果 viewport meta 标签设置了布局视口的宽度等于理想视口的宽度，那么，就相当等于告知浏览器：“我这个网页是专门针对移动端做过适配的，不是那种字跟蚂蚁一样大小的网页，所以，我不需要双击缩放这种操作，赶紧把 300ms 延迟给我关了”。
+
+如果我们设置 user-scalable=no,相当等于斩钉截铁地告诉浏览器：“我这网页已经完全没有缩放可言”，浏览器收到指示，不止在 chrome32+的版本，在所有的版本中都会移除 300ms 延迟。
+`<meta name="viewport" content="user-scalable=no" />`
+或者
+
+```css
+html {
+  touch-action: manipulation; // IE11+
+  -ms-touch-action: manipulation; // IE10
+}
+```
+
+或
+`<meta name="viewport" content="width=device-width" />`
+
+除了 chrome32+，其他诸如 firefox,IE/Edge 等等主流浏览器均在 2014 年-2015 年年做了跟进，相继修复了这个问题。
+
+而作为始作俑者的 iOS,在 2016 年 3 月发布的 iOS9.3 中，也修复了这个问题。
+
+不过要注意 ⚠️，现在的 webview 开发(确切来说是 iOS8 以后)，绝大部分 iOS 的 WebView 版本都会选用 WKWebView，在 WKWebView 中，300ms 延迟的问题已经得到解决，但是之前的老式 UIWebView 中这个问题仍然存在。实际上，UIWebView 不仅存在不少 bug，官方也放弃对其进行维护，并强烈推荐开发者使用 WKWebView 进行开发。
+
+Android WebView 中 300ms 的延迟问题和移动端浏览器解决思路一致。
+
+fastClick 的实现原理吧，MDN 上 同时支持触屏事件和鼠标事件 也有提到。
+
+移动端，当用户点击屏幕时，会依次触发 touchstart，touchmove(0 次或多次)，touchend，mousemove，mousedown，mouseup，click。 touchmove 。只有当手指在屏幕发生移动的时候才会触发 touchmove 事件。在 touchstart ，touchmove 或者 touchend 事件中的任意一个调用 event.preventDefault，mouse 事件 以及 click 事件将不会触发。
+
+fastClick 在 touchend 阶段 调用 event.preventDefault，然后通过 document.createEvent 创建一个 MouseEvents，然后 通过 event​Target​.dispatch​Event 触发对应目标元素上绑定的 click 事件。
