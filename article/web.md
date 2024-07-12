@@ -518,7 +518,9 @@ const subject = [...article].slice(0, 10).join(""); // '123456789 '
 
 ## lottie
 
+> https://lottiefiles.com/popular
 > Lottie 是一个面向 Android、iOS、Web 和 Windows 的库，它解析导出为带有 bodymovin 的 json 的 AE（Adobe After Effects）动画，并在移动和 Web 上以本地方式呈现这些动画。
+> 在 AE 中使用 bodymovin 插件导出 json 时需要注意不要勾选 Glyphs，最后渲染的动画要使用矢量图才能够做到动态更新
 
 ### web 使用
 
@@ -751,6 +753,22 @@ anim.addEventListener("DOMLoaded", () => {
 #### 坑点
 
 - 记得在 lottie 动画 DOMLoaded 之后再调用 playSegments，否则会播放完整段动画后才播放片段，这可以说是 lottie 实现的一个小 bug，但也是新手最常遇到的问题
+
+```js
+const animation = lottie.loadAnimation({
+  container: document.getElementById("app"), // the dom element
+  loop: true,
+  autoplay: false,
+  path: "https://assets5.lottiefiles.com/packages/lf20_QPewua.json",
+});
+
+animation.addEventListener("DOMLoaded", () => {
+  animation.playSegments([180, 206], true);
+});
+```
+
+- 在制作 AE 动画时，将图层命名为.svgClass 格式，前端加载该动画后，相应的图层的 class 会被设置为 svgClass，可以通过 dom 方法获取这些元素并做相应的操作；
+
 - 动画是否循环由初始化动画时的 loop 属性决定，如果初始化时设为 false，那么 playSegements 的片段只会播放一遍。可以在播放前通过 animation.loop=true 再设置，不过这个属性不见于官方文档
 - addEventListener 的返回值是一个函数，用于移除事件监听
 - Lottie 文档中有提到过 setSubFrame ,设置为 true 时会在每次 requestAnimationFrame 时更新界面（可以做到 60fps），关闭时按照 AE 原始帧率来播放，那么自然低 fps 时性能会好很多，但是也可能出现卡顿
