@@ -3,6 +3,8 @@ title: JS实例
 date: 2021-05-22 20:22:11
 categories:
   - web
+tags:
+  - web
 ---
 
 ## UUID

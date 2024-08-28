@@ -3,6 +3,8 @@ title: 全栈项目
 date: 2022-01-12 20:11:33
 categories:
   - web
+tags:
+  - web
 ---
 
 # 全栈

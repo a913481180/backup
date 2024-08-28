@@ -3,6 +3,8 @@ title: JavaScript语法
 date: 2021-05-22 21:23:11
 categories:
   - web
+tags:
+  - web
 ---
 
 ## JavaScript

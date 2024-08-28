@@ -3,6 +3,8 @@ title: AJax
 date: 2021-02-12 20:10:33
 categories:
   - web
+tags:
+  - web
 ---
 
 AJAX 全称为“Asynchronous JavaScript and XML”（异步 JavaScript 和 XML），是一种创建交互式网页应用的网页开发技术。通过在后台与服务器进行少量数据交换，Ajax 可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。而传统的网页(不使用 Ajax)如果需要更新内容，必需重载整个网页面。
@@ -238,11 +240,7 @@ form 表单点击提交数据后需跳转页面，ajax 为异步进行的数据�
 `enctype`提交数据的格式，默认`application/x-www-form-urlencoded`
 
 ```html
-<form
-  action="post.php"
-  method="post"
-  enctype="application/x-www-from-urlencoded"
->
+<form action="post.php" method="post" enctype="application/x-www-from-urlencoded">
   <input type="text" name="username" placeholder="name" />
   <input type="text" name="age" placeholder="age" />
   <input type="text" name="password" placeholder="" />
@@ -733,11 +731,7 @@ a 与 b 不同域只能通过 hash 值单向通信，b 与 c 也不同域也只�
 1）a.html：`(<http://www.baidu1.com/a.html>)`
 
 ```html
-<iframe
-  id="iframe"
-  src="http://www.baidu2.com/b.html"
-  style="display:none;"
-></iframe>
+<iframe id="iframe" src="http://www.baidu2.com/b.html" style="display:none;"></iframe>
 <script>
   var iframe = document.getElementById("iframe");
 
@@ -756,11 +750,7 @@ a 与 b 不同域只能通过 hash 值单向通信，b 与 c 也不同域也只�
 2）b.html：`(http://www.baidu2.com/b.html)`
 
 ```html
-<iframe
-  id="iframe"
-  src="http://www.baidu1.com/c.html"
-  style="display:none;"
-></iframe>
+<iframe id="iframe" src="http://www.baidu1.com/c.html" style="display:none;"></iframe>
 <script>
   var iframe = document.getElementById("iframe");
 
@@ -775,9 +765,7 @@ a 与 b 不同域只能通过 hash 值单向通信，b 与 c 也不同域也只�
   // 监听b.html传来的hash值
   window.onhashchange = function () {
     // 再通过操作同域a.html的js回调，将结果传回
-    window.parent.parent.onCallback(
-      "hello: " + location.hash.replace("#user=", "")
-    );
+    window.parent.parent.onCallback("hello: " + location.hash.replace("#user=", ""));
   };
 </script>
 ```
@@ -856,11 +844,7 @@ onmessage：接收
 1）a.html：`(<http://www.baidu1.com/a.html>)`
 
 ```html
-<iframe
-  id="iframe"
-  src="http://www.baidu2.com/b.html"
-  style="display:none;"
-></iframe>
+<iframe id="iframe" src="http://www.baidu2.com/b.html" style="display:none;"></iframe>
 <script>
   var iframe = document.getElementById("iframe");
   iframe.onload = function () {
@@ -868,10 +852,7 @@ onmessage：接收
       name: "aym",
     };
     // 向domain2传送跨域数据
-    iframe.contentWindow.postMessage(
-      JSON.stringify(data),
-      "http://www.baidu2.com"
-    );
+    iframe.contentWindow.postMessage(JSON.stringify(data), "http://www.baidu2.com");
   };
 
   // 接受baidu2返回数据
@@ -900,10 +881,7 @@ onmessage：接收
         data.number = 16;
 
         // 处理后再发回baidu1
-        window.parent.postMessage(
-          JSON.stringify(data),
-          "http://www.baidu1.com"
-        );
+        window.parent.postMessage(JSON.stringify(data), "http://www.baidu1.com");
       }
     },
     false

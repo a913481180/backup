@@ -5,6 +5,7 @@ categores:
   - linux
 tags:
   - system
+  - linux
 ---
 
 ## 安装
@@ -152,18 +153,21 @@ deb-src https://mirrors.163.com/debian/ bullseye-backports main non-free contrib
     - `-r sound:local`：同步声音
     - `-r disk:share=/home`：win10 网上邻居虚拟一个映射盘，ubuntu 挂载到远程主机上
 - nodejs
-  - 拷贝解压
 
-```bash
- VERSION=v10.15.0
- DISTRO=linux-x64
- sudo mkdir -p /usr/local/lib/nodejs
- sudo tar -xJvf node-$VERSION-$DISTRO.tar.xz -C /usr/local/lib/nodejs
-```
+  - 下载 nodejs 二进制包拷贝到服务器上进行解压
+    ```bash
+     sudo mkdir -p /usr/local/lib/nodejs
+     sudo tar -xJvf node-v18.20.4-linux-x64.tar.xz -C /usr/local/lib/nodejs
+    ```
 
 - 环境变量
   编辑文件`vim ~/.profile`
-  添加`export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH`
+  添加
+  ```bash
+  VERSION=v18.20.4
+  DISTRO=linux-x64
+  export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH
+  ```
   刷新：`source ~/.profile`
 - google chrome
   `https://www.google.cn/intl/zh-CN/chrome/`

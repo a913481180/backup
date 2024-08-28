@@ -1,10 +1,11 @@
 ---
 title: react Native
-date: 2021-01-09 20:00:00
+date: 2023-01-09 20:00:00
 categories:
   - web
 tags:
   - app
+  - web
 ---
 
 # React Native 0.71

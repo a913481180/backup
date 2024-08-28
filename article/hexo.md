@@ -3,6 +3,8 @@ title: hexo搭建博客
 date: 2019-10-11 22:11:22
 categories:
   - blog
+tags:
+  - web
 ---
 
 ## 安装 nodejs

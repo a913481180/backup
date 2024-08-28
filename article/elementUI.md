@@ -3,6 +3,8 @@ title: element UI
 date: 2021-11-12 20:23:33
 categories:
   - web
+tags:
+  - web
 ---
 
 ## element 的表单校验输入框有值但校验未通过

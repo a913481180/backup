@@ -3,6 +3,8 @@ title: Three.js
 date: 2022-10-01 10:12:33
 categories:
   - web
+tags:
+  - web
 ---
 
 ## 开始

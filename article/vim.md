@@ -3,6 +3,8 @@ title: Vim常用操作
 date: 2020-12-01 20:00:00
 categories:
   - linux
+tags:
+  - linux
 ---
 
 ## 常用功能键

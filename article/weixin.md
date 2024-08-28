@@ -3,6 +3,8 @@ title: 微信小程序
 date: 2020-01-11 20:22:22
 categories:
   - web
+tags:
+  - web
 ---
 
 ## 常见问题
