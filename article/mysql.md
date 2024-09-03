@@ -5,6 +5,7 @@ categories:
   - database
 tags:
   - 数据库
+  - linux
 ---
 
 # MySql

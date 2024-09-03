@@ -3,6 +3,8 @@ title: 前端规范
 date: 2020-11-11 20:33:33
 categories:
   - web
+tags:
+  - web
 ---
 
 ## 一、命名规范

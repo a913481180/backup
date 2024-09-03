@@ -5,6 +5,7 @@ categories:
   - web
 tags:
   - vue
+  - web
 ---
 
 > 一套用于构建用户界面的渐进式 javascrip 框架

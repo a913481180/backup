@@ -3,6 +3,8 @@ title: TypeScript
 date: 2022-06-01 20:00:00
 categories:
   - web
+tags:
+  - web
 ---
 
 # TypeScript

@@ -3,6 +3,9 @@ title: vue3
 date: 2020-11-12 20:33:30
 categories:
   - web
+tags:
+  - vue
+  - web
 ---
 
 ## 安装

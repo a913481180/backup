@@ -3,6 +3,8 @@ title: uni-App
 date: 2020-01-22 23:33:33
 categores:
   - web
+tags:
+  - web
 ---
 
 # uniApp

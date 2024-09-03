@@ -3,6 +3,8 @@ title: ranger
 date: 2020-12-09 20:00:00
 categories:
   - linux
+tags:
+  - linux
 ---
 
 ## 下面列出常用操作的快捷键

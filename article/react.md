@@ -1,8 +1,10 @@
 ---
 title: react
-date: 2022-12-09 20:00:00
+date: 2024-12-09 20:00:00
 categories:
   - linux
+tags:
+  - web
 ---
 
 ## 浏览器中编写

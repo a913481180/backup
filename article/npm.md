@@ -1,10 +1,10 @@
 ---
 title: 前端包管理工具
-date: 2022-06-11 20:22:22
+date: 2024-06-11 20:22:22
 categories:
   - linux
 tags:
-  - 前端
+  - web
 ---
 
 ## NPM

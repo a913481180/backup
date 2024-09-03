@@ -3,6 +3,9 @@ title: nginx
 date: 2022-08-11 20:22:22
 categories:
   - linux
+tags:
+  - linux
+  - web
 ---
 
 # Nginx
@@ -284,3 +287,8 @@ server{
   proxy_send_timeout 300s;
   proxy_read_timeout 300s;
 ```
+
+### 500
+
+- 资源路径是否写对
+- 是否有读取权限

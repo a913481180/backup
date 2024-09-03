@@ -5,6 +5,7 @@ categories:
   - linux
 tags:
   - system
+  - linux
 ---
 
 ### could not retrieve mirrorlist 解决

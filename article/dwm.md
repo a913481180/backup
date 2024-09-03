@@ -3,6 +3,8 @@ title: dwm
 date: 2020-10-11 22:11:33
 categories:
   - linux
+tags:
+  - linux
 ---
 
 ## 补丁

@@ -4,7 +4,7 @@ date: 2021-01-01 10:12:33
 categories:
   - web
 tags:
-  - 前端
+  - web
 ---
 
 ## DOM（文档对象模型 document object model）
