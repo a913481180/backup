@@ -343,7 +343,7 @@ app/
     page.js
 ```
 
-槽作为道具传递给共享的父布局。在上面的例子中，`app/layout.js` 中的组件现在接受`@analytics`和`@team` ，并且可以将它们与 `children` 并行渲染:
+槽作为prop传递给共享的父布局。在上面的例子中，`app/layout.js` 中的组件现在接受`@analytics`和`@team` ，并且可以将它们与 `children` 并行渲染:
 `app/layout.tsx`
 
 ```tsx
