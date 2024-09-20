@@ -174,7 +174,7 @@ export default function Page() {
 }
 ```
 
-Next.js 应用路由器的默认行为是滚动到新路由的顶部，或者保持滚动位置，以便向前和向后导航。如果你想禁用此行为，你可以将 scroll={false}传递给<Link>组件，或者将 scroll: false 传递给 router.push()或 router.replace()。
+Next.js 应用路由器的默认行为是滚动到新路由的顶部，或者保持滚动位置，以便向前和向后导航。如果你想禁用此行为，你可以将 scroll={false}传递给`<Link>`组件，或者将 scroll: false 传递给 router.push()或 router.replace()。
 
 ```tsx
 // next/link

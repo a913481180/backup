@@ -1400,3 +1400,65 @@ this.resizeHandler = () => {
 
 window.addEventListener("resize", this.resizeHandler);
 ```
+
+### CSS 实现 文字渐变色 的两种方式
+
+- background-clip 属性 规定背景的绘制区域
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      span {
+        background: linear-gradient(to right, red, blue);
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+    </style>
+  </head>
+
+  <body>
+    <span>前端简单说</span>
+  </body>
+</html>
+```
+
+- mask 属性，让元素的某一部分显示或隐藏。
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+
+<style type="text/css">
+    h1{
+        position: relative;
+        color: yellow;
+    }
+    h1:before{
+        content: attr(text);
+        position: absolute;
+        z-index: 10;
+        color:pink;
+        -webkit-mask:linear-gradient(to left, red, transparent );
+    }
+</style>
+</style>
+</head>
+
+<body>
+    <h1 text="前端简单说">前端简单说</h1>
+</body>
+
+</html>
+```
+
+### 常用正则
+
+- 匹配中文汉字
+  `[\u4e00-\u9fa5]`
+- 匹配中文标点
+  `[\u3002|\uff1f|\uff01|\uff0c|\u3001|\uff1b|\uff1a|\u201c|\u201d|\u2018|\u2019|\uff08|\uff09|\u300a|\u300b|\u3008|\u3009|\u3010|\u3011|\u300e|\u300f|\u300c|\u300d|\ufe43|\ufe44|\u3014|\u3015|\u2026|\u2014|\uff5e|\ufe4f|\uffe5]/`
