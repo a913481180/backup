@@ -1462,3 +1462,67 @@ window.addEventListener("resize", this.resizeHandler);
   `[\u4e00-\u9fa5]`
 - 匹配中文标点
   `[\u3002|\uff1f|\uff01|\uff0c|\u3001|\uff1b|\uff1a|\u201c|\u201d|\u2018|\u2019|\uff08|\uff09|\u300a|\u300b|\u3008|\u3009|\u3010|\u3011|\u300e|\u300f|\u300c|\u300d|\ufe43|\ufe44|\u3014|\u3015|\u2026|\u2014|\uff5e|\ufe4f|\uffe5]/`
+
+### 前端预览图片的两种方式：转 Base64 预览或转本地 blob 的 URL 预览
+
+方案一 FileReader 的 readAsDataURL 方法
+FileReader 之所以能读出图片的 Base64 的值
+是因为 readAsDataURL 方法本身就可以将图片的二进制数据转化为 Base64 编码
+并将编码后的字符串以 Data URL 的形式返回以供使用
+
+```js
+const fileInput = document.getElementById("fileInput");
+const previewImage = document.getElementById("previewImage");
+fileInput.addEventListener("change", function () {
+  const file = fileInput.files[0];
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const base64String = e.target.result;
+    previewImage.src = base64String;
+    console.log("图片读取的Base64的值为--->", base64String);
+  };
+  reader.readAsDataURL(file);
+});
+```
+
+URL.createObjectURL 方法
+
+createObjectURL 是 JS 自带的一个函数，它可以将 Blob、File 等二进制文件转为浏览器可直接显示的 URL 地址，从而方便进行展
+
+```js
+const fileInput = document.getElementById("fileInput");
+const previewImage = document.getElementById("previewImage");
+fileInput.addEventListener("change", function () {
+  const file = fileInput.files[0];
+  let tempUrl = window.URL.createObjectURL(file);
+  console.log("blob--->", tempUrl); // blob:http://127.0.0.1:5500/84d2e951-33dc-4fea-840a-f3d8f3396766
+  previewImage.src = tempUrl;
+});
+```
+
+### 如何将 HTMLElement 转换为 React 元素
+
+1.
+
+```tsx
+let sub = document.createElement("p");
+sub.innerText = "Not React";
+let main = React.createElement("div", { dangerouslySetInnerHTML: { __html: sub.outerHTML } });
+
+React.render(main, document.getElementById("app"));
+```
+
+2.
+
+```tsx
+class Container extends React.Component {
+  render() {
+    return <div ref={(ref) => ref.appendChild(this.props.child)}></div>;
+  }
+}
+
+const para = document.createElement("p");
+para.innerText = "Hello world!";
+
+<Container child={para} />;
+```

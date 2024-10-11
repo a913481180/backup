@@ -307,11 +307,7 @@ function createUserId(name: string, id: number, age?: number): string {
 }
 
 // 默认参数
-function createUserId(
-  name: string = "semlinker",
-  id: number,
-  age?: number
-): string {
+function createUserId(name: string = "semlinker", id: number, age?: number): string {
   return name + id;
 }
 
@@ -1192,7 +1188,7 @@ tsc --init
 
 - Cannot use JSX unless the '--jsx' flag is provided 报错或 React‘ refers to a UMD global 或者 Cannot use JSX unless the ‘--jsx‘ flag is provided.
   在 tsconfig.json 中加入：
-  "jsx": "react-jsx",
+  `"jsx": "react-jsx"`,
 
 - Cannot find module ‘./index.module.less’ or its corresponding type declarations
 
@@ -1239,4 +1235,58 @@ import type { RootState, AppDispatch } from "./store";
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+```
+
+- 组件定义缺少显示名称 react/display-name
+
+该错误通常是在 React 中使用 forwardRefs 时引起的。
+
+displayName 属性用于为 React devtools 扩展的组件提供描述性名称。
+
+```tsx
+const App = () => {
+  return (
+    <div>
+      <h2>Hello world</h2>
+    </div>
+  );
+};
+
+// 设置显示名称
+App.displayName = "MyApp";
+
+export default App;
+```
+
+- 元素隐式具有 “any“ 类型，因为类型为 “string“ 的表达式不能用于索引类型 “Object“。 在类型 “Object“ 上找不到具有类型为 “string“ 的参数的索引签名
+
+  1.在定义的 Interface 里对其进行声明，如下所示，声明过后，也不会再报错
+
+```ts
+interface DAMNU_ENABLE {
+    ....
+    [key: string]: boolean, // 字段扩展声明
+};
+
+[key: string]: boolean, // 字段扩展声明 声明之后可以用方括号的方式去对象里边的值
+```
+
+2.对其使用 keyof 进行判断
+
+```ts
+export function isValidKey(
+    key: string | number | symbol,
+    object: object
+): key is keyof typeof object {
+    return key in object;
+}
+
+
+for (const key in obejct) {
+	if(isValidKey(key,obejct)){
+		// 处理...
+		obejct[key]
+		....
+	}
+}
 ```
