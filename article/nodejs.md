@@ -1211,7 +1211,7 @@ app.get("/", async (req, res, next) => {
 
 Node 中的全局对象有以下方法，可省略 global：`console.log()`,`setTimeout()`,clearEimeout()`,`setInternal()`,`clearInterval`
 
-## 数据库
+## 数据库 MongoDB
 
 存储数据的仓库：mysql、MongoDB、Oracle
 
@@ -1223,6 +1223,661 @@ Node 中的全局对象有以下方法，可省略 global：`console.log()`,`set
 | collection | 集合，一组数据的集合      |
 | document   | 文档，一条具体的数据      |
 | field      | 字段,文档中的属性名称     |
+
+### debain 安装 MongoDB
+
+#### 准备
+
+确保您有 sudo 权限,系统已经更新到最新版本，您可以通过以下命令进行更新
+
+```bash
+sudo apt update
+sudo apt upgrade -y
+```
+
+#### 导入 MongoDB 公钥
+
+接下来，我们需要添加 MongoDB 的 APT 源，以便我们可以安装它。使用以下命令创建 mongodb-org-6.0.list 文件并将其放在 APT 源列表中：
+
+```bash
+echo "deb [signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg]  bullseye/mongodb-org/6.0/main amd64 Packages" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+```
+
+#### 更新 APT 包列表, 安装 MongoDB
+
+```bash
+sudo apt update
+sudo apt install -y mongodb-org
+```
+
+#### 启动 MongoDB 服务
+
+```bash
+sudo systemctl start mongod
+sudo systemctl enable mongod
+sudo systemctl status mongod
+sudo systemctl stop mongod
+sudo systemctl restart mongod
+sudo systemctl reload mongod
+```
+
+#### MongoDB 的基本配置
+
+### 使用
+
+在 MongoDB 的默认配置中，数据库会在本地 127.0.0.1 上监听，您可以通过 MongoDB Shell 连接数据库。在终端输入以下命令启动 MongoDB Shell：
+
+```bash
+mongo
+```
+
+#### 创建管理员用户
+
+然后使用以下命令切换到 admin 数据库：
+
+```bash
+use admin
+```
+
+接着创建管理员用户：
+
+```bash
+db.createUser({user: "root", pwd: "913481180a/", roles: ["root"]})
+```
+
+在生产环境中，建议您启用 MongoDB 的身份验证功能。默认情况下，MongoDB 的身份验证是关闭的。您可以编辑 MongoDB 的配置文件，启用身份验证。
+
+配置文件通常位于/etc/mongod.conf。使用文本编辑器打开它：
+
+```bash
+sudo vim /etc/mongod.conf
+```
+
+```conf
+# network interfaces
+net:
+  port: 27017
+  bindIp: 127.0.0.1 # 可以根据需要修改为0.0.0.0以允许外部连接
+
+# security
+security:
+  authorization: enabled
+
+```
+
+保存文件并退出编辑器，接着重启 MongoDB 服务以应用更改：
+
+```bash
+sudo systemctl restart mongod
+```
+
+#### 登录 MongoDB 的数据库
+
+```bash
+mongo -u your_username -p your_password --authenticationDatabase your_database
+```
+
+#### 创建一个业务数据库管理员用户
+
+> 开启身份验证后，需 root 用户登录后，再创建用户，不能先创建再开启身份验证
+
+数据库用户角色：read、readWrite；
+数据库管理角色：dbAdmin、dbOwner、userAdmin;
+集群管理角色：clusterAdmin、clusterManager、4. clusterMonitor、hostManage；
+备份恢复角色：backup、restore；
+所有数据库角色：readAnyDatabase、readWriteAnyDatabase、userAdminAnyDatabase、dbAdminAnyDatabase
+超级用户角色：root
+内部角色：\_\_system
+
+```shell
+db.createUser({
+    user:"kkkkk",
+    pwd:"913481180a/",
+    customData:{
+        name:'kk',
+        email:'kk@qq.com',
+        age:18,
+    },
+    roles:[
+        {role:"readWrite",db:"test111"},
+        {role:"readWrite",db:"test112"},
+        'read'// 对其他数据库有只读权限，对test110、db002是读写权限
+    ]
+})
+```
+
+Read：允许用户读取指定数据库
+readWrite：允许用户读写指定数据库
+dbAdmin：允许用户在指定数据库中执行管理函数，如索引创建、删除，查看统计或访问 system.profile
+userAdmin：允许用户向 system.users 集合写入，可以在指定数据库里创建、删除和管理用户
+clusterAdmin：只在 admin 数据库中可用，赋予用户所有分片和复制集相关函数的管理权限。
+readAnyDatabase：只在 admin 数据库中可用，赋予用户所有数据库的读权限
+readWriteAnyDatabase：只在 admin 数据库中可用，赋予用户所有数据库的读写权限
+userAdminAnyDatabase：只在 admin 数据库中可用，赋予用户所有数据库的 userAdmin 权限
+dbAdminAnyDatabase：只在 admin 数据库中可用，赋予用户所有数据库的 dbAdmin 权限。
+root：只在 admin 数据库中可用。超级账号，超级权限
+
+#### 查看创建的用户
+
+`show users` 或 `db.system.users.find()` 或 `db.runCommand({usersInfo:"userName"})`
+
+#### 修改密码
+
+```shell
+use admin
+db.changeUserPassword("username", "xxx")
+```
+
+#### 删除数据库用户
+
+```bash
+    use admin
+    db.dropUser('user001')
+```
+
+#### 创建数据库
+
+当你使用 use 命令来指定一个数据库时，如果该数据库不存在，MongoDB 将自动创建它。
+
+MongoDB 创建数据库的语法格式如下：
+
+```bash
+use DATABASE_NAME
+```
+
+如果数据库不存在，则创建数据库，否则切换到指定数据库。
+查看所有数据库，可以使用 `show dbs` 命令
+
+#### 创建集合
+
+```bash
+use myNewDatabase
+db.createCollection("myNewCollection")
+# options: 可选参数, 指定有关内存大小及索引的选项。
+db.createCollection("myComplexCollection", {
+  capped: true,
+  size: 10485760,
+  max: 5000,
+  validator: { $jsonSchema: {
+    bsonType: "object",
+    required: ["name", "email"],
+    properties: {
+      name: {
+        bsonType: "string",
+        description: "必须为字符串且为必填项"
+      },
+      email: {
+        bsonType: "string",
+        pattern: "^.+@.+$",
+        description: "必须为有效的电子邮件地址"
+      }
+    }
+  }},
+  validationLevel: "strict",
+  validationAction: "error",
+  storageEngine: {
+    wiredTiger: { configString: "block_compressor=zstd" }
+  },
+  collation: { locale: "en", strength: 2 }
+});
+```
+
+果要查看已有集合，可以使用 `show collections` 或 `show tables` 命令：
+删除集合`db.xxxxx.drop()`
+
+#### 插入文档
+
+db.collection.insertOne(document, options)：插入单个文档
+
+```bash
+db.myCollection.insertOne({
+    name: "Alice",
+    age: 25,
+    city: "New York"
+});
+```
+
+db.collection.insertMany(documents, options)：插入多个文档
+
+```bash
+db.myCollection.insertMany([
+    { name: "Bob", age: 30, city: "Los Angeles" },
+    { name: "Charlie", age: 35, city: "Chicago" }
+]);
+```
+
+db.collection.save()：类似于 insertOne()。如果文档存在，则该文档会被更新；如果文档不存在，则会插入一个新文档。
+如果文档包含 \_id 字段且已存在，则该文档会被更新；如果文档不包含 \_id 字段或 \_id 不存在，则会插入一个新文档。
+
+```bash
+db.myCollection.save({
+    _id: ObjectId("60c72b2f9b1d8b5a5f8e2b2d"),
+    name: "David",
+    age: 40,
+    city: "San Francisco"
+});
+```
+
+##### 插入文档时的选项
+
+这些方法的 options 参数通常可以包含以下选项：
+
+ordered（仅适用于 insertMany）：布尔值。如果为 true，则按顺序插入文档，在遇到错误时停止；如果为 false，则尝试插入所有文档，即使遇到错误也继续。默认值为 true。
+writeConcern：指定写操作的确认级别。
+bypassDocumentValidation：布尔值。如果为 true，则忽略集合的文档验证规则。
+
+#### 更新文档
+
+- db.collection.updateOne(filter, update, options)更新匹配过滤器的单个文档。
+  filter：用于查找文档的查询条件。
+  update：指定更新操作的文档或更新操作符。
+  options：可选参数对象，如 upsert、arrayFilters 等。
+
+```bash
+db.myCollection.updateOne(
+    { name: "Alice" },                // 过滤条件
+    { $set: { age: 26 } },            // 更新操作
+    { upsert: false }                 // 可选参数
+);
+```
+
+- db.collection.updateMany(filter, update, options)更新所有匹配过滤器的文档。
+
+```bash
+db.myCollection.updateMany(
+    { age: { $lt: 30 } },             // 过滤条件
+    { $set: { status: "active" } },   // 更新操作
+    { upsert: false }                  // 可选参数
+);
+```
+
+- db.collection.replaceOne(filter, replacement, options)替换匹配过滤器的单个文档，新的文档将完全替换旧的文档。
+  filter：用于查找文档的查询条件。
+  replacement：新的文档，将替换旧的文档。
+  options：可选参数对象，如 upsert 等。
+
+```bash
+db.myCollection.replaceOne(
+    { name: "Bob" },                  // 过滤条件
+    { name: "Bob", age: 31 }          // 新文档
+);
+
+```
+
+- db.collection.findOneAndUpdate(filter, update, options)查找并更新单个文档，可以选择返回更新前或更新后的文档。
+
+```bash
+db.myCollection.findOneAndUpdate(
+    { name: "Charlie" },              // 过滤条件
+    { $set: { age: 36 } },            // 更新操作
+    { returnDocument: "after" }       // 可选参数，返回更新后的文档
+);
+```
+
+##### 选项参数
+
+这些更新方法的 options 参数通常可以包含以下选项：
+
+    upsert：如果没有匹配的文档，是否插入一个新文档。
+    arrayFilters：当更新嵌套数组时，指定应更新的数组元素的条件。
+    collation：指定比较字符串时使用的排序规则。
+    returnDocument：在 findOneAndUpdate 中使用，指定返回更新前 ("before") 或更新后 ("after") 的文档。
+
+#### 删除文档
+
+- db.collection.deleteOne(filter, options)删除匹配过滤器的单个文档。
+
+  filter：用于查找要删除的文档的查询条件。
+  options（可选）：一个可选参数对象。
+
+  ```bash
+   db.myCollection.deleteOne({ name: "Alice" });
+  ```
+
+- db.collection.deleteMany(filter, options)删除所有匹配过滤器的文档。
+
+```bash
+ db.myCollection.deleteMany({ status: "inactive" });
+```
+
+- db.collection.findOneAndDelete(filter, options)查找并删除单个文档，并可以选择返回删除的文档。
+  findOneAndDelete 返回被删除的文档，如果找不到匹配的文档，则返回 null。
+
+```bash
+db.myCollection.findOneAndDelete(
+    { name: "Charlie" },
+    { projection: { name: 1, age: 1 } }
+);
+```
+
+##### 删除操作的选项
+
+这些删除方法的 options 参数通常可以包含以下选项：
+
+    writeConcern：指定写操作的确认级别。
+    collation：指定比较字符串时使用的排序规则。
+    projection（仅适用于 findOneAndDelete）：指定返回的字段。
+    sort（仅适用于 findOneAndDelete）：指定排序顺序以确定要删除的文档。
+
+#### 查询文档
+
+- db.collection.find(query, projection)
+  query：用于查找文档的查询条件。默认为 {}，即匹配所有文档。
+  projection（可选）：指定返回结果中包含或排除的字段。
+
+查找所有文档：
+
+```bash
+ db.myCollection.find();
+```
+
+按条件查找文档：
+
+```bash
+ db.myCollection.find({ age: { $gt: 25 } });
+```
+
+按条件查找文档，并只返回指定字段：
+
+```bash
+db.myCollection.find(
+    { age: { $gt: 25 } },
+    { name: 1, age: 1, _id: 0 }
+);
+```
+
+- db.collection.findOne(query, projection)查找集合中的单个文档。如果找到多个匹配的文档，它只返回第一个。
+
+```bash
+db.myCollection.findOne({ name: "Alice" });
+```
+
+##### 高级查询方法
+
+1、使用比较操作符
+
+MongoDB 支持多种比较操作符，如 `$gt`、`$lt`、`$gte`、`$lte`、`$eq`、`$ne` 等。
+
+查找年龄大于 25 的文档:
+
+```bash
+db.myCollection.find({ age: { $gt: 25 } });
+```
+
+2、使用逻辑操作符
+
+MongoDB 支持多种逻辑操作符，如 `$and`、`$or`、`$not`、`$nor` 等。
+
+查找年龄大于 25 且城市为 "New York" 的文档:
+
+```bash
+db.myCollection.find({
+    $and: [
+        { age: { $gt: 25 } },
+        { city: "New York" }
+    ]
+});
+```
+
+3、使用正则表达式
+
+可以使用正则表达式进行模式匹配查询。
+
+```bash
+db.myCollection.find({ name: /^A/ });
+```
+
+4、投影
+
+投影用于控制查询结果中返回的字段。可以使用包含字段和排除字段两种方式。
+
+只返回名字和年龄字段：
+
+```bash
+db.myCollection.find(
+   { age: { $gt: 25 } },
+   { name: 1, age: 1, _id: 0 }
+)
+```
+
+5、排序
+
+可以对查询结果进行排序。
+
+按年龄降序排序：
+
+```bash
+db.myCollection.find().sort({ age: -1 });
+```
+
+6、限制与跳过
+
+可以对查询结果进行限制和跳过指定数量的文档。
+
+返回前 10 个文档：
+
+```bash
+db.myCollection.find().limit(10);
+```
+
+跳过前 5 个文档，返回接下来的 10 个文档：
+
+```bash
+db.myCollection.find().skip(5).limit(10);
+```
+
+#### 数据备份
+
+mongodump 命令来备份 MongoDB 数据
+`mongodump -h dbhost -d dbname -o dbdirectory`
+
+    -h：
+
+    MongoDB 所在服务器地址，例如：127.0.0.1，当然也可以指定端口号：127.0.0.1:27017
+    -d：
+
+    需要备份的数据库实例，例如：test
+    -o：
+
+    备份的数据存放位置，例如：c:\data\dump，当然该目录需要提前建立，在备份完成后，系统自动在dump目录下建立一个test目录，这个目录里面存放该数据库实例的备份数据。
+
+#### 数据恢复
+
+mongodb 使用 mongorestore 命令来恢复备份的数据。
+`mongorestore -h <hostname><:port> -d dbname <path>`
+
+    --host <:port>, -h <:port>：
+
+    MongoDB所在服务器地址，默认为： localhost:27017
+    --db , -d ：
+
+    需要恢复的数据库实例，例如：test，当然这个名称也可以和备份时候的不一样，比如test2
+    --drop：
+
+    恢复的时候，先删除当前数据，然后恢复备份的数据。就是说，恢复后，备份后添加修改的数据都会被删除，慎用哦！
+    <path>：
+
+    mongorestore 最后的一个参数，设置备份数据所在位置，例如：c:\data\dump\test。
+
+    你不能同时指定 <path> 和 --dir 选项，--dir也可以设置备份目录。
+    --dir：
+
+    指定备份的目录
+
+    你不能同时指定 <path> 和 --dir 选项。
+
+### Prisma
+
+#### 安装
+
+将 Prisma CLI 作为开发依赖项添加到其中,在前面加上 npx 来调用 Prisma CLI,
+
+```bash
+npm install prisma --save-dev
+npx prisma
+```
+
+#### 初始化
+
+通过使用以下命令创建 Prisma 模式 文件来设置 Prisma ORM 项目
+
+```bash
+npx prisma init
+```
+
+此命令执行两项操作
+
+创建一个名为 prisma 的新目录，其中包含一个名为 `schema.prisma` 的文件，该文件包含 Prisma 模式以及您的数据库连接变量和模式模型
+在项目的根目录中创建 `.env` 文件，用于定义环境变量（例如您的数据库连接）
+
+要连接数据库，你需要将 Prisma 架构中 datasource 块的 url 字段设置为数据库的 连接 URL
+
+- `prisma/schema.prisma`
+
+```prisma
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+```
+
+在这种情况下，url 是 通过环境变量设置 的，该变量在 .env 中定义（示例使用 MongoDB Atlas URL）
+
+- `.env`
+
+```env
+DATABASE_URL="mongodb+srv://test:test@cluster0.ns1yp.mongodb.net/myFirstDatabase"
+```
+
+你现在需要调整连接 URL 以指向你自己的数据库。
+
+你的数据库的 连接 URL 格式 取决于你使用的数据库。对于 MongoDB，它如下所示（所有大写部分都是你特定连接详细信息的占位符）
+
+`mongodb://USERNAME:PASSWORD@HOST:PORT/DATABASE`
+
+以下是每个组件的简短说明
+
+USERNAME：你的数据库用户的名称
+PASSWORD：你的数据库用户的密码(密码中的特殊字符可使用编码)
+HOST：运行 mongod（或 mongos）实例的主机
+PORT：你的数据库服务器运行的端口（对于 MongoDB 通常为 27017）
+DATABASE：数据库的名称
+
+如果您看到以下错误：连接器中的错误：`SCRAM 失败：身份验证失败。`，您可以通过 将 `?authSource=admin` 添加到连接字符串的末尾
+
+**!!!因为 prisma 对于增删改有事务，所以必须使用 MongDB 副本集群**
+https://blog.csdn.net/zhuocailing3390/article/details/132031293
+
+#### 更新 Prisma 架构
+
+打开 `prisma/schema.prisma` 文件，并用以下内容替换默认内容
+与关系型数据库（如 PostgreSQL）相比，架构的设置还有一些细微差别。
+
+例如，底层 ID 字段名始终为 \_id，并且必须使用 @map("\_id") 映射。
+
+```prisma
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Post {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  slug     String    @unique
+  title    String
+  body     String
+  author   User      @relation(fields: [authorId], references: [id])
+  authorId String    @db.ObjectId
+  comments Comment[]
+}
+
+model User {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  email   String   @unique
+  name    String?
+  address Address?
+  posts   Post[]
+}
+
+model Comment {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  comment String
+  post    Post   @relation(fields: [postId], references: [id])
+  postId  String @db.ObjectId
+}
+
+// Address is an embedded document
+type Address {
+  street String
+  city   String
+  state  String
+  zip    String
+}
+```
+
+#### 查询数据库
+
+创建一个名为 index.js 的新文件，并添加以下代码
+
+```js
+const { PrismaClient } = require("@prisma/client"); //从 @prisma/client 节点模块导入 PrismaClient 构造函数
+
+const prisma = new PrismaClient(); //实例化 PrismaClient
+
+async function main() {
+  //定义一个名为 main 的 async 函数以向数据库发送查询
+  // ... you will write your Prisma Client queries here
+  //创建
+  await prisma.user.create({
+    data: {
+      name: "Rich",
+      email: "hello@prisma.com",
+      posts: {
+        create: {
+          title: "My first post",
+          body: "Lots of really interesting stuff",
+          slug: "my-first-post",
+        },
+      },
+    },
+  });
+
+  //更新
+  await prisma.post.update({
+    where: {
+      slug: "my-first-post",
+    },
+    data: {
+      comments: {
+        createMany: {
+          data: [{ comment: "Great post!" }, { comment: "Can't wait to read more!" }],
+        },
+      },
+    },
+  });
+  // 查询
+  const allUsers = await prisma.user.findMany({
+    include: {
+      posts: true,
+    },
+  });
+  console.dir(allUsers, { depth: null });
+}
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect(); //在脚本终止时关闭数据库连接
+    process.exit(1);
+  });
+```
 
 ### 第三方包 Mongoose
 

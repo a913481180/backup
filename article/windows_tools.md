@@ -7,6 +7,12 @@ categories:
 
 ## window10 实用软件
 
+### firefox
+
+[地址栏二维码扩展（官方）附加组件管理器](http://mozilla.com.cn/thread-343905-1-1.html)
+
+https://www.crxsoso.com/
+
 ### chrome
 
 插件：
