@@ -1329,7 +1329,7 @@ mongo -u your_username -p your_password --authenticationDatabase your_database
 超级用户角色：root
 内部角色：\_\_system
 
-```shell
+```sql
 db.createUser({
     user:"kkkkk",
     pwd:"913481180a/",
@@ -1363,14 +1363,14 @@ root：只在 admin 数据库中可用。超级账号，超级权限
 
 #### 修改密码
 
-```shell
+```sql
 use admin
 db.changeUserPassword("username", "xxx")
 ```
 
 #### 删除数据库用户
 
-```bash
+```sql
     use admin
     db.dropUser('user001')
 ```
@@ -1381,7 +1381,7 @@ db.changeUserPassword("username", "xxx")
 
 MongoDB 创建数据库的语法格式如下：
 
-```bash
+```sql
 use DATABASE_NAME
 ```
 
@@ -1390,7 +1390,7 @@ use DATABASE_NAME
 
 #### 创建集合
 
-```bash
+```sql
 use myNewDatabase
 db.createCollection("myNewCollection")
 # options: 可选参数, 指定有关内存大小及索引的选项。
@@ -1429,7 +1429,7 @@ db.createCollection("myComplexCollection", {
 
 db.collection.insertOne(document, options)：插入单个文档
 
-```bash
+```sql
 db.myCollection.insertOne({
     name: "Alice",
     age: 25,
@@ -1439,7 +1439,7 @@ db.myCollection.insertOne({
 
 db.collection.insertMany(documents, options)：插入多个文档
 
-```bash
+```sql
 db.myCollection.insertMany([
     { name: "Bob", age: 30, city: "Los Angeles" },
     { name: "Charlie", age: 35, city: "Chicago" }
@@ -1449,7 +1449,7 @@ db.myCollection.insertMany([
 db.collection.save()：类似于 insertOne()。如果文档存在，则该文档会被更新；如果文档不存在，则会插入一个新文档。
 如果文档包含 \_id 字段且已存在，则该文档会被更新；如果文档不包含 \_id 字段或 \_id 不存在，则会插入一个新文档。
 
-```bash
+```sql
 db.myCollection.save({
     _id: ObjectId("60c72b2f9b1d8b5a5f8e2b2d"),
     name: "David",
@@ -1473,7 +1473,7 @@ bypassDocumentValidation：布尔值。如果为 true，则忽略集合的文档
   update：指定更新操作的文档或更新操作符。
   options：可选参数对象，如 upsert、arrayFilters 等。
 
-```bash
+```sql
 db.myCollection.updateOne(
     { name: "Alice" },                // 过滤条件
     { $set: { age: 26 } },            // 更新操作
@@ -1483,7 +1483,7 @@ db.myCollection.updateOne(
 
 - db.collection.updateMany(filter, update, options)更新所有匹配过滤器的文档。
 
-```bash
+```sql
 db.myCollection.updateMany(
     { age: { $lt: 30 } },             // 过滤条件
     { $set: { status: "active" } },   // 更新操作
@@ -1496,7 +1496,7 @@ db.myCollection.updateMany(
   replacement：新的文档，将替换旧的文档。
   options：可选参数对象，如 upsert 等。
 
-```bash
+```sql
 db.myCollection.replaceOne(
     { name: "Bob" },                  // 过滤条件
     { name: "Bob", age: 31 }          // 新文档
@@ -1506,7 +1506,7 @@ db.myCollection.replaceOne(
 
 - db.collection.findOneAndUpdate(filter, update, options)查找并更新单个文档，可以选择返回更新前或更新后的文档。
 
-```bash
+```sql
 db.myCollection.findOneAndUpdate(
     { name: "Charlie" },              // 过滤条件
     { $set: { age: 36 } },            // 更新操作
@@ -1536,17 +1536,18 @@ db.myCollection.findOneAndUpdate(
 
 - db.collection.deleteMany(filter, options)删除所有匹配过滤器的文档。
 
-```bash
+```sql
  db.myCollection.deleteMany({ status: "inactive" });
 ```
 
 - db.collection.findOneAndDelete(filter, options)查找并删除单个文档，并可以选择返回删除的文档。
   findOneAndDelete 返回被删除的文档，如果找不到匹配的文档，则返回 null。
 
-```bash
+```sql
 db.myCollection.findOneAndDelete(
     { name: "Charlie" },
-    { projection: { name: 1, age: 1 } }
+    { projection: { name: 1, age: 1 }
+    }
 );
 ```
 
@@ -1567,19 +1568,19 @@ db.myCollection.findOneAndDelete(
 
 查找所有文档：
 
-```bash
+```sql
  db.myCollection.find();
 ```
 
 按条件查找文档：
 
-```bash
+```sql
  db.myCollection.find({ age: { $gt: 25 } });
 ```
 
 按条件查找文档，并只返回指定字段：
 
-```bash
+```sql
 db.myCollection.find(
     { age: { $gt: 25 } },
     { name: 1, age: 1, _id: 0 }
@@ -1588,7 +1589,7 @@ db.myCollection.find(
 
 - db.collection.findOne(query, projection)查找集合中的单个文档。如果找到多个匹配的文档，它只返回第一个。
 
-```bash
+```sql
 db.myCollection.findOne({ name: "Alice" });
 ```
 
@@ -1600,7 +1601,7 @@ MongoDB 支持多种比较操作符，如 `$gt`、`$lt`、`$gte`、`$lte`、`$eq
 
 查找年龄大于 25 的文档:
 
-```bash
+```sql
 db.myCollection.find({ age: { $gt: 25 } });
 ```
 
@@ -1610,7 +1611,7 @@ MongoDB 支持多种逻辑操作符，如 `$and`、`$or`、`$not`、`$nor` 等�
 
 查找年龄大于 25 且城市为 "New York" 的文档:
 
-```bash
+```sql
 db.myCollection.find({
     $and: [
         { age: { $gt: 25 } },
@@ -1623,7 +1624,7 @@ db.myCollection.find({
 
 可以使用正则表达式进行模式匹配查询。
 
-```bash
+```sql
 db.myCollection.find({ name: /^A/ });
 ```
 
@@ -1633,7 +1634,7 @@ db.myCollection.find({ name: /^A/ });
 
 只返回名字和年龄字段：
 
-```bash
+```sql
 db.myCollection.find(
    { age: { $gt: 25 } },
    { name: 1, age: 1, _id: 0 }
@@ -1646,7 +1647,7 @@ db.myCollection.find(
 
 按年龄降序排序：
 
-```bash
+```sql
 db.myCollection.find().sort({ age: -1 });
 ```
 
@@ -1656,13 +1657,13 @@ db.myCollection.find().sort({ age: -1 });
 
 返回前 10 个文档：
 
-```bash
+```sql
 db.myCollection.find().limit(10);
 ```
 
 跳过前 5 个文档，返回接下来的 10 个文档：
 
-```bash
+```sql
 db.myCollection.find().skip(5).limit(10);
 ```
 
